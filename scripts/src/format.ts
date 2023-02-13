@@ -26,18 +26,19 @@ const packages = (
 ).map(({ path }) => relative(process.cwd(), path));
 
 try {
-  concurrently(
-    packages.map((path) => ({
-      command: `prettier --write --ignore-path .gitignore --config .prettierrc ${path}`,
-      name: `format ${path}`,
-      prefixColor: `#${Math.floor(Math.random() * 16777215).toString(16)}`,
-    })),
-    {
-      group: true,
-      cwd: process.cwd(),
-      maxProcesses: 5,
-    }
-  );
+  packages.length &&
+    concurrently(
+      packages.map((path) => ({
+        command: `prettier --write --ignore-path .gitignore --config .prettierrc ${path}`,
+        name: `format ${path}`,
+        prefixColor: `#${Math.floor(Math.random() * 16777215).toString(16)}`,
+      })),
+      {
+        group: true,
+        cwd: process.cwd(),
+        maxProcesses: 5,
+      }
+    );
 } catch (error) {
   exit(1);
 }

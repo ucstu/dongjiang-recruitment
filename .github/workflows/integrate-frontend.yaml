@@ -129,6 +129,8 @@ jobs:
           key: ${{ runner.os }}-node-pnpm-${{ hashFiles(format('{0}/pnpm-lock.yaml', github.workspace)) }}
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
+      - name: Prepare to Build
+        run: pnpm --filter @dongjiang-recruitment/vite-config run build
       - name: Build Project
         run: |
           bash -c '[ '${{ matrix.package-name }}' == 'applicant-interface' ] && \
