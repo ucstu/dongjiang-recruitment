@@ -150,6 +150,8 @@ jobs:
         with:
           context: ${{ env.WORKING_DIRECTORY }}
           file: ${{ github.workspace }}/backend/Dockerfile.node
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
           push: false
           tags: |
             ${{ inputs.environment == 'production' && format('{0}-{1}:{2}', env.PRODUCT_PREFIX, matrix.package-name, 'latest') || format('{0}-{1}:{2}', env.PRODUCT_PREFIX, matrix.package-name, inputs.temp-tag) }}

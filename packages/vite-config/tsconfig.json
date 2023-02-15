@@ -1,6 +1,6 @@
 {
   "extends": "@dongjiang-recruitment/typescript-config/base.json",
-  "include": ["src/**/*"],
+  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],
   "compilerOptions": {
     "preserveValueImports": false,
     "declarationDir": "types",

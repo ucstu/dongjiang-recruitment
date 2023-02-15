@@ -3,6 +3,19 @@ export {};
 declare global {
   const EffectScope: typeof import("vue")["EffectScope"];
   const acceptHMRUpdate: typeof import("pinia")["acceptHMRUpdate"];
+  const applicantAttentionRecordService: typeof import("@dongjiang-recruitment/request-hooks")["applicantAttentionRecordService"];
+  const applicantDeliveryRecordService: typeof import("@dongjiang-recruitment/request-hooks")["applicantDeliveryRecordService"];
+  const applicantEducationExperienceService: typeof import("@dongjiang-recruitment/request-hooks")["applicantEducationExperienceService"];
+  const applicantGarnerRecordService: typeof import("@dongjiang-recruitment/request-hooks")["applicantGarnerRecordService"];
+  const applicantInspectionRecordService: typeof import("@dongjiang-recruitment/request-hooks")["applicantInspectionRecordService"];
+  const applicantJobExpectationService: typeof import("@dongjiang-recruitment/request-hooks")["applicantJobExpectationService"];
+  const applicantProjectExperienceService: typeof import("@dongjiang-recruitment/request-hooks")["applicantProjectExperienceService"];
+  const applicantService: typeof import("@dongjiang-recruitment/request-hooks")["applicantService"];
+  const applicantWorkExperienceService: typeof import("@dongjiang-recruitment/request-hooks")["applicantWorkExperienceService"];
+  const authenticationService: typeof import("@dongjiang-recruitment/request-hooks")["authenticationService"];
+  const commonService: typeof import("@dongjiang-recruitment/request-hooks")["commonService"];
+  const companyPositionInformationService: typeof import("@dongjiang-recruitment/request-hooks")["companyPositionInformationService"];
+  const companyService: typeof import("@dongjiang-recruitment/request-hooks")["companyService"];
   const computed: typeof import("vue")["computed"];
   const createApp: typeof import("vue")["createApp"];
   const createPinia: typeof import("pinia")["createPinia"];
@@ -20,6 +33,9 @@ declare global {
   const isReactive: typeof import("vue")["isReactive"];
   const isReadonly: typeof import("vue")["isReadonly"];
   const isRef: typeof import("vue")["isRef"];
+  const managerAccountGroupService: typeof import("@dongjiang-recruitment/request-hooks")["managerAccountGroupService"];
+  const managerAccountService: typeof import("@dongjiang-recruitment/request-hooks")["managerAccountService"];
+  const managerAccountauthoritiesService: typeof import("@dongjiang-recruitment/request-hooks")["managerAccountauthoritiesService"];
   const mapActions: typeof import("pinia")["mapActions"];
   const mapGetters: typeof import("pinia")["mapGetters"];
   const mapState: typeof import("pinia")["mapState"];
@@ -64,6 +80,8 @@ declare global {
   const onUnload: typeof import("@dcloudio/uni-app")["onUnload"];
   const onUnmounted: typeof import("vue")["onUnmounted"];
   const onUpdated: typeof import("vue")["onUpdated"];
+  const personnelInspectionRecordService: typeof import("@dongjiang-recruitment/request-hooks")["personnelInspectionRecordService"];
+  const personnelService: typeof import("@dongjiang-recruitment/request-hooks")["personnelService"];
   const provide: typeof import("vue")["provide"];
   const reactive: typeof import("vue")["reactive"];
   const readonly: typeof import("vue")["readonly"];
