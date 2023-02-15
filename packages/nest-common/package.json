@@ -1,0 +1,36 @@
+{
+  "name": "@dongjiang-recruitment/nest-common",
+  "version": "1.0.0",
+  "description": "nest common",
+  "main": "dist/index.js",
+  "source": "src/index.ts",
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "nest"
+  ],
+  "scripts": {
+    "dev": "tsc --watch",
+    "build": "tsc"
+  },
+  "dependencies": {
+    "@nestjs/config": "^2.3.1",
+    "@nestjs/typeorm": "^9.0.1",
+    "js-yaml": "^4.1.0",
+    "pg": "^8.9.0",
+    "typeorm": "^0.3.12"
+  },
+  "devDependencies": {
+    "@dongjiang-recruitment/eslint-config": "workspace:^1.0.0",
+    "@dongjiang-recruitment/typescript-config": "workspace:^1.0.0",
+    "@types/js-yaml": "^4.0.5",
+    "@types/node": "^18.13.0",
+    "typescript": "^4.9.5"
+  },
+  "peerDependencies": {
+    "@nestjs/common": "^9.0.0"
+  },
+  "author": "ucstu",
+  "license": "MIT"
+}
