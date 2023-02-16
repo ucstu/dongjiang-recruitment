@@ -51,44 +51,36 @@ try {
 
 const packages = (
   JSON.parse(
-    execSync(`pnpm m ls --json --depth=-1 --filter ${filter}`).toString() ||
+    execSync(`pnpm m ls --json --depth=-1 --filter "${filter}"`).toString() ||
       "[]"
   ) as Array<Package>
 ).map(({ path }) => relative(process.cwd(), path));
 
-try {
-  packages.length &&
-    concurrently(
-      packages.map((path) => {
-        const activeLinters = linterConfigs.filter(({ configFiles }) =>
-          configFiles.some((configFile) => existsSync(`${path}/${configFile}`))
-        );
+packages.length &&
+  concurrently(
+    packages.map((path) => {
+      const activeLinters = linterConfigs.filter(({ configFiles }) =>
+        configFiles.some((configFile) => existsSync(`${path}/${configFile}`))
+      );
 
-        const langs = activeLinters.map(({ lintName: language }) => language);
-        const commands = activeLinters.map(({ lintCommand }) => lintCommand);
-        const prefixColors = activeLinters.map(
-          ({ prefixColor }) => prefixColor
-        );
+      const langs = activeLinters.map(({ lintName: language }) => language);
+      const commands = activeLinters.map(({ lintCommand }) => lintCommand);
+      const prefixColors = activeLinters.map(({ prefixColor }) => prefixColor);
 
-        return {
-          command: activeLinters.length
-            ? `concurrently --prefix-colors "${prefixColors.join(",")}" ` +
-              `--names "${langs
-                .map((lang) => `lint-fix ${lang}`)
-                .join(",")}" ` +
-              `"${commands.join('" "')}" `
-            : `node -e "console.log('\x1b[31m%s\x1b[0m', 'Warning: No linter config found in ${path}')"`,
-          cwd: relative(process.cwd(), path),
-          name: `lint-fix ${path}`,
-          prefixColor: `#${Math.floor(Math.random() * 16777215).toString(16)}`,
-        };
-      }),
-      {
-        group: true,
-        cwd: process.cwd(),
-        maxProcesses: 5,
-      }
-    );
-} catch (error) {
-  exit(1);
-}
+      return {
+        command: activeLinters.length
+          ? `concurrently --prefix-colors "${prefixColors.join(",")}" ` +
+            `--names "${langs.map((lang) => `lint-fix ${lang}`).join(",")}" ` +
+            `"${commands.join('" "')}" `
+          : `node -e "console.log('\x1b[31m%s\x1b[0m', 'Warning: No linter config found in ${path}')"`,
+        cwd: relative(process.cwd(), path),
+        name: `lint-fix ${path}`,
+        prefixColor: `#${Math.floor(Math.random() * 16777215).toString(16)}`,
+      };
+    }),
+    {
+      group: true,
+      cwd: process.cwd(),
+      maxProcesses: 5,
+    }
+  ).result.catch(() => exit(1));

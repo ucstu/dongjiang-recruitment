@@ -10,13 +10,11 @@
   },
   "dependencies": {
     "@vueuse/core": "^9.12.0",
-    "axios": "^1.3.2",
     "naive-ui": "^2.34.3",
     "normalize.css": "^8.0.1",
     "pinia": "^2.0.30",
     "vfonts": "^0.0.3",
     "vue": "^3.2.47",
-    "vue-request": "^1.2.4",
     "vue-router": "^4.1.6"
   },
   "devDependencies": {

@@ -1,7 +1,7 @@
 import databaseConfig, { DatabaseConfig } from "./database.config";
 
 export interface Configuration {
-  database: DatabaseConfig
+  database: DatabaseConfig;
 }
 
-export default [databaseConfig]
+export default [databaseConfig];

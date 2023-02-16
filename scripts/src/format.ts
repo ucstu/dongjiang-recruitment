@@ -20,25 +20,21 @@ try {
 }
 const packages = (
   JSON.parse(
-    execSync(`pnpm m ls --json --depth=-1 --filter ${filter}`).toString() ||
+    execSync(`pnpm m ls --json --depth=-1 --filter "${filter}"`).toString() ||
       "[]"
   ) as Array<Package>
 ).map(({ path }) => relative(process.cwd(), path));
 
-try {
-  packages.length &&
-    concurrently(
-      packages.map((path) => ({
-        command: `prettier --write --ignore-path .gitignore --config .prettierrc ${path}`,
-        name: `format ${path}`,
-        prefixColor: `#${Math.floor(Math.random() * 16777215).toString(16)}`,
-      })),
-      {
-        group: true,
-        cwd: process.cwd(),
-        maxProcesses: 5,
-      }
-    );
-} catch (error) {
-  exit(1);
-}
+packages.length &&
+  concurrently(
+    packages.map((path) => ({
+      command: `prettier --write --ignore-path .gitignore --config .prettierrc ${path}`,
+      name: `format ${path}`,
+      prefixColor: `#${Math.floor(Math.random() * 16777215).toString(16)}`,
+    })),
+    {
+      group: true,
+      cwd: process.cwd(),
+      maxProcesses: 5,
+    }
+  ).result.catch(() => exit(1));

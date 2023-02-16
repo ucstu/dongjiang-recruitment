@@ -27,5 +27,5 @@ export default registerAs<DatabaseConfig>("database", () => {
   }
   return yaml.load(
     readFileSync(YAML_CONFIG_FILENAME, "utf8")
-  ) as DatabaseConfig
+  ) as DatabaseConfig;
 });

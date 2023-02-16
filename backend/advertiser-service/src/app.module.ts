@@ -1,6 +1,6 @@
 import {
   CommonModule,
-  TypeOrmModule
+  TypeOrmModule,
 } from "@dongjiang-recruitment/nest-common";
 import { Module } from "@nestjs/common";
 import { ModuleRef } from "@nestjs/core";

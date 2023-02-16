@@ -14,7 +14,7 @@
   // Use 'forwardPorts' to make a list of ports inside the container available locally.
   // "forwardPorts": [],
   // Use 'postCreateCommand' to run commands after the container is created.
-  "postCreateCommand": "npm i -g pnpm@7.26.3 @nestjs/cli@9.2.0 && pnpm config set store-dir ~/.pnpm-store -g",
+  "postCreateCommand": "npm i -g pnpm@7.27.0 && pnpm config set store-dir ~/.pnpm-store -g",
   // Configure tool-specific properties.
   "customizations": {
     "vscode": {

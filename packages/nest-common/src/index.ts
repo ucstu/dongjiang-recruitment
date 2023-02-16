@@ -11,8 +11,7 @@ import configs from "./configs";
     }),
   ],
 })
-export class CommonModule {
-}
+export class CommonModule {}
 
 export * from "@nestjs/config";
 export * from "@nestjs/typeorm";
