@@ -66,16 +66,20 @@ const prebuildLock = JSON.parse(
 ) as Record<string, string>;
 
 // 列出所有需要重新构建的依赖
-const needRebuildDependencies = JSON.parse(
-  execSync(
-    `pnpm m ls --json --depth=-1 --filter "${dependencyPackages
-      .map((pkg) =>
-        prebuildLock[pkg.name]
-          ? `${pkg.name}[${prebuildLock[pkg.name]}]`
-          : pkg.name
+const needRebuildDependencies = (
+  dependencyPackages.length
+    ? JSON.parse(
+        execSync(
+          `pnpm m ls --json --depth=-1 --filter "${dependencyPackages
+            .map((pkg) =>
+              prebuildLock[pkg.name]
+                ? `${pkg.name}[${prebuildLock[pkg.name]}]`
+                : pkg.name
+            )
+            .join(`" --filter "`)}"`
+        ).toString()
       )
-      .join(`" --filter "`)}"`
-  ).toString() || "[]"
+    : []
 ) as Array<Package>;
 
 // 如果有需要重新构建的依赖，则执行构建
