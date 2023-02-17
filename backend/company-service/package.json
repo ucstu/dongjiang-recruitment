@@ -4,16 +4,17 @@
   "description": "company service",
   "private": true,
   "scripts": {
-    "build": "nest build",
-    "start": "nest start",
-    "start:dev": "nest start --watch",
-    "start:debug": "nest start --debug --watch",
-    "start:prod": "node dist/main",
-    "test": "jest",
-    "test:watch": "jest --watch",
-    "test:cov": "jest --coverage",
-    "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "prebuild": "pnpm -w run prebuild @dongjiang-recruitment/company-service",
+    "build": "pnpm prebuild && nest build",
+    "start": "pnpm prebuild && nest start",
+    "start:dev": "pnpm prebuild && nest start --watch",
+    "start:debug": "pnpm prebuild && nest start --debug --watch",
+    "start:prod": "pnpm prebuild && node dist/main",
+    "test": "pnpm prebuild && jest",
+    "test:watch": "pnpm prebuild && jest --watch",
+    "test:cov": "pnpm prebuild && jest --coverage",
+    "test:debug": "pnpm prebuild && node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
+    "test:e2e": "pnpm prebuild && jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
     "@nestjs/common": "^9.3.9",

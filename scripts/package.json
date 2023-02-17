@@ -9,7 +9,8 @@
   "devDependencies": {
     "@dongjiang-recruitment/eslint-config": "workspace:^1.0.0",
     "@dongjiang-recruitment/typescript-config": "workspace:^1.0.0",
-    "@types/node": "^18.13.0"
+    "@types/node": "^18.13.0",
+    "type-fest": "^3.5.7"
   },
   "author": "ucstu",
   "license": "MIT"

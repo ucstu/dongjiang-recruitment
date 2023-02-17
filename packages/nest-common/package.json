@@ -11,8 +11,9 @@
     "nest"
   ],
   "scripts": {
-    "dev": "tsc --watch",
-    "build": "tsc"
+    "prebuild": "pnpm -w run prebuild @dongjiang-recruitment/nest-common",
+    "dev": "pnpm prebuild && tsc --watch",
+    "build": "pnpm prebuild && tsc"
   },
   "dependencies": {
     "@nestjs/config": "^2.3.1",

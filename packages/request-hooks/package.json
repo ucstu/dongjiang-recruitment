@@ -12,9 +12,10 @@
     "vite"
   ],
   "scripts": {
-    "generate": "ts-node --compiler-options '{\"module\":\"commonjs\"}' ./scripts/generate.ts",
-    "dev": "tsc -w",
-    "build": "tsc"
+    "prebuild": "pnpm -w run prebuild @dongjiang-recruitment/request-hooks",
+    "generate": "pnpm prebuild && ts-node --compiler-options '{\"module\":\"commonjs\"}' ./scripts/generate.ts",
+    "dev": "pnpm prebuild && tsc -w",
+    "build": "pnpm prebuild && tsc"
   },
   "dependencies": {
     "@uni-helper/axios-adapter": "^0.0.7",

@@ -12,8 +12,9 @@
     "vite"
   ],
   "scripts": {
-    "dev": "tsc --watch",
-    "build": "tsc"
+    "prebuild": "pnpm -w run prebuild @dongjiang-recruitment/vite-config",
+    "dev": "pnpm prebuild && tsc --watch",
+    "build": "pnpm prebuild && tsc"
   },
   "dependencies": {
     "@dcloudio/uni-automator": "3.0.0-alpha-3070120230210001",

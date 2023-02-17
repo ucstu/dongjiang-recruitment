@@ -67,6 +67,7 @@
           "vue"
         ],
         "eslint.packageManager": "pnpm",
+        "eslint.workingDirectories": [{ "mode": "auto" }],
         "stylelint.snippet": [
           "css",
           "sass",
