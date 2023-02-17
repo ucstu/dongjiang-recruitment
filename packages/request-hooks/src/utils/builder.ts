@@ -2,10 +2,10 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { MaybeComputedRef } from "@vueuse/core";
-import type {} from "@vueuse/shared";
+import type { } from "@vueuse/shared";
 import { computed, ref } from "vue";
 import { useRequest, type Options, type Service } from "vue-request";
-import type { Entities, QueryResult } from "../interfaces";
+import type { Entries, QueryResult } from "../interfaces";
 import type { ApiClient } from "../request";
 
 type ClientWithHooks = {
@@ -25,7 +25,7 @@ type ClientWithHooks = {
   request: ApiClient["request"];
 };
 
-function getAllProperties<T extends object>(obj: T): Entities<T> {
+function getAllProperties<T extends object>(obj: T): Entries<T> {
   // @ts-ignore
   return (
     // @ts-ignore
@@ -39,7 +39,7 @@ function getAllProperties<T extends object>(obj: T): Entities<T> {
 
 export const buildHooks = (client: ApiClient): ClientWithHooks => {
   // 遍历 client，将 client 中的每个 service 中的普通请求方法替换为 hooks 版本
-  return (Object.entries(client) as unknown as Entities<ApiClient>).reduce(
+  return (Object.entries(client) as unknown as Entries<ApiClient>).reduce(
     (sAcc, [sKey, service]) => {
       if (sKey === "request") return { ...sAcc, request: service };
       return {

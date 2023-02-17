@@ -16,7 +16,7 @@ type ObjectEntry<T extends object> = T extends object
     : never
   : never;
 
-export type Entities<T extends object> = Array<
+export type Entries<T extends object> = Array<
   T extends readonly [unknown, ...unknown[]]
     ? TupleEntry<T>
     : T extends ReadonlyArray<infer U>
