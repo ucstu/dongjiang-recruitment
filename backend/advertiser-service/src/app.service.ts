@@ -5,6 +5,6 @@ import { Injectable } from "@nestjs/common";
 export class AppService {
   constructor(private readonly configService: ConfigService) {}
   getHello(): string {
-    return `Hello World!${this.configService.get<string>("database1")}`;
+    return `Hello World! ${this.configService.get<string>("database.type")}`;
   }
 }

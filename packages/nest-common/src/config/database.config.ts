@@ -1,17 +1,11 @@
 import { registerAs } from "@nestjs/config";
 import * as yaml from "js-yaml";
 import { readFileSync } from "node:fs";
-import { Configuration } from ".";
-import { YAML_CONFIG_FILENAME } from "./common";
-
-export interface DatabaseConfig {
-  type: string;
-  host: string;
-  port: number;
-  username: string;
-  password: string;
-  database: string;
-}
+import {
+  DatabaseConfig,
+  YamlConfiguration,
+  YAML_CONFIG_FILENAME,
+} from "./configuration.yaml";
 
 export default registerAs<DatabaseConfig>("database", () => {
   if (process.env.NODE_ENV === "production") {
@@ -25,6 +19,6 @@ export default registerAs<DatabaseConfig>("database", () => {
     };
   }
   return (
-    yaml.load(readFileSync(YAML_CONFIG_FILENAME, "utf8")) as Configuration
+    yaml.load(readFileSync(YAML_CONFIG_FILENAME, "utf8")) as YamlConfiguration
   ).database;
 });

@@ -20,18 +20,21 @@
     "@nestjs/jwt": "^10.0.2",
     "@nestjs/passport": "^9.0.3",
     "@nestjs/typeorm": "^9.0.1",
+    "dayjs": "^1.11.7",
     "js-yaml": "^4.1.0",
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.1",
-    "passport-local": "^1.0.0",
     "pg": "^8.9.0",
+    "rxjs": "^7.8.0",
     "typeorm": "^0.3.12"
   },
   "devDependencies": {
     "@dongjiang-recruitment/eslint-config": "workspace:^1.0.0",
     "@dongjiang-recruitment/typescript-config": "workspace:^1.0.0",
+    "@types/express": "^4.17.17",
     "@types/js-yaml": "^4.0.5",
     "@types/node": "^18.13.0",
+    "@types/passport": "^1.0.12",
     "@types/passport-jwt": "^3.0.8",
     "typescript": "^4.9.5"
   },
