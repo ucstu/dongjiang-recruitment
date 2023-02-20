@@ -1,6 +1,6 @@
-export type ResourceActions = "CREATE" | "DELETE" | "UPDATE" | "QUERY";
+import { RequestMethod } from "@nestjs/common";
 
 export interface User {
   userId: string;
-  permissions: Array<[string, ResourceActions] | [string, "SELF", string]>;
+  permissions?: Array<[string, RequestMethod]>;
 }

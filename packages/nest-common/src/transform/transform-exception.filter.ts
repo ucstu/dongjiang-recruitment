@@ -11,15 +11,22 @@ import { Response as _Response } from "./response.dto";
 export class TransformExceptionFilter implements ExceptionFilter {
   catch(exception: HttpException, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
-    const response = ctx.getResponse<Response<_Response<never>>>();
-    const request = ctx.getRequest<Request>();
+    const ctxResponse = ctx.getResponse<Response<_Response<never>>>();
+    const ctxRequest = ctx.getRequest<Request>();
 
-    response.status(exception.getStatus()).json({
-      requestId: request.params["reqid"],
+    const exceptionName = exception.name;
+    const exceptionStatus = exception.getStatus();
+    const exceptionResponse = exception.getResponse();
+
+    ctxResponse.status(exception.getStatus()).json({
+      requestId: ctxRequest.params["reqid"],
       timestamp: new Date().toISOString(),
-      status: exception.getStatus(),
-      message: exception.name,
-      error: exception.message,
+      status: exceptionStatus,
+      message: exceptionName,
+      error:
+        typeof exceptionResponse === "string"
+          ? exceptionResponse
+          : (exceptionResponse["message"] as Array<string>),
     });
   }
 }

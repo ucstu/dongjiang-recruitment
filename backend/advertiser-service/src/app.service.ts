@@ -1,4 +1,4 @@
-import { ConfigService } from "@dongjiang-recruitment/nest-common";
+import { ConfigService } from "@dongjiang-recruitment/nest-common/dist/config";
 import { Injectable } from "@nestjs/common";
 
 @Injectable()

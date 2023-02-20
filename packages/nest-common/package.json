@@ -4,8 +4,40 @@
   "description": "nest common",
   "main": "dist/index.js",
   "source": "src/index.ts",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./dist/auth": {
+      "require": "./dist/auth/index.js",
+      "types": "./dist/auth/index.d.ts"
+    },
+    "./dist/config": {
+      "require": "./dist/config/index.js",
+      "types": "./dist/config/index.d.ts"
+    },
+    "./dist/transform": {
+      "require": "./dist/transform/index.js",
+      "types": "./dist/transform/index.d.ts"
+    },
+    "./dist/typeorm": {
+      "require": "./dist/typeorm/index.js",
+      "types": "./dist/typeorm/index.d.ts"
+    },
+    "./dist/validation": {
+      "require": "./dist/validation/index.js",
+      "types": "./dist/validation/index.d.ts"
+    }
+  },
   "files": [
-    "dist"
+    "dist",
+    "dist/auth",
+    "dist/config",
+    "dist/transform",
+    "dist/typeorm",
+    "dist/validation"
   ],
   "keywords": [
     "nest"
@@ -20,6 +52,8 @@
     "@nestjs/jwt": "^10.0.2",
     "@nestjs/passport": "^9.0.3",
     "@nestjs/typeorm": "^9.0.1",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.0",
     "dayjs": "^1.11.7",
     "js-yaml": "^4.1.0",
     "passport": "^0.6.0",

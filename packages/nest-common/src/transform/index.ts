@@ -15,4 +15,4 @@ import { TransformNormalInterceptor } from "./transform-normal.interceptor";
     },
   ],
 })
-export default class {}
+export default class TransformModule {}

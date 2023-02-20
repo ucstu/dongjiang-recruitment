@@ -1,11 +1,14 @@
 import { Module } from "@nestjs/common";
 import { ConfigType } from "@nestjs/config";
-import { TypeOrmModule, TypeOrmModuleOptions } from "@nestjs/typeorm";
+import {
+  TypeOrmModule as _TypeOrmModule,
+  TypeOrmModuleOptions,
+} from "@nestjs/typeorm";
 import _databaseConfig from "../config/database.config";
 
 @Module({
   imports: [
-    TypeOrmModule.forRootAsync({
+    _TypeOrmModule.forRootAsync({
       inject: [_databaseConfig.KEY],
       useFactory(databaseConfig: ConfigType<typeof _databaseConfig>) {
         return {
@@ -20,7 +23,7 @@ import _databaseConfig from "../config/database.config";
     }),
   ],
 })
-export default class {}
+export default class TypeOrmModule {}
 
 export * from "@nestjs/typeorm";
 export * from "typeorm";

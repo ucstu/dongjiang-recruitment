@@ -11,6 +11,9 @@
     "ghcr.io/devcontainers/features/python:1": {},
     "ghcr.io/rjfmachado/devcontainer-features/cloud-native:1": {}
   },
+  "containerEnv": {
+    "TZ": "${localEnv:TZ}"
+  },
   // Use 'forwardPorts' to make a list of ports inside the container available locally.
   // "forwardPorts": [],
   // Use 'postCreateCommand' to run commands after the container is created.

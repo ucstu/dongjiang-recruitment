@@ -4,38 +4,67 @@ import { JwtModule } from "@nestjs/jwt";
 import { PassportModule } from "@nestjs/passport";
 import { ConfigType } from "../config";
 import _authorizationConfig from "../config/authorization.config";
+import { AUTO_GUARD_KEY } from "./jwt.dec";
 import { JwtAuthGuard } from "./jwt.guard";
 import { JwtAuthInterceptor } from "./jwt.interceptor";
 import { JwtStrategy } from "./jwt.strategy";
 
-@Module({
-  imports: [
-    PassportModule,
-    JwtModule.registerAsync({
-      inject: [_authorizationConfig.KEY],
-      useFactory(authorizationConfig: ConfigType<typeof _authorizationConfig>) {
-        return {
-          secret: authorizationConfig.secret,
-          signOptions: {
-            expiresIn: authorizationConfig.expiresIn,
-          },
-        };
-      },
-    }),
-  ],
-  providers: [
-    JwtStrategy,
-    {
-      provide: APP_GUARD,
-      useClass: JwtAuthGuard,
+export interface AuthOption {
+  autoGuard?: boolean;
+}
+
+const commonImports = [
+  PassportModule,
+  JwtModule.registerAsync({
+    inject: [_authorizationConfig.KEY],
+    useFactory(authorizationConfig: ConfigType<typeof _authorizationConfig>) {
+      return {
+        secret: authorizationConfig.secret,
+        signOptions: {
+          expiresIn: authorizationConfig.expiresIn,
+        },
+      };
     },
+  }),
+];
+
+const commonProviders = [
+  JwtStrategy,
+  {
+    provide: APP_GUARD,
+    useClass: JwtAuthGuard,
+  },
+  {
+    provide: APP_INTERCEPTOR,
+    useClass: JwtAuthInterceptor,
+  },
+];
+
+@Module({
+  imports: [...commonImports],
+  providers: [
+    ...commonProviders,
     {
-      provide: APP_INTERCEPTOR,
-      useClass: JwtAuthInterceptor,
+      provide: AUTO_GUARD_KEY,
+      useValue: true,
     },
   ],
 })
-export default class {}
+export default class AuthModule {
+  static forRoot(option?: AuthOption) {
+    return {
+      module: AuthModule,
+      imports: [...commonImports],
+      providers: [
+        ...commonProviders,
+        {
+          provide: AUTO_GUARD_KEY,
+          useValue: option?.autoGuard ?? true,
+        },
+      ],
+    };
+  }
+}
 
 export * from "@nestjs/jwt";
 export * from "@nestjs/passport";
@@ -60,7 +89,7 @@ export {
   Profile,
   serializeUser,
   session,
-  SessionOptions as AuthSessionOptions,
+  SessionOptions,
   SessionStrategy,
   SessionStrategyOptions,
   strategies,
