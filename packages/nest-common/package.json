@@ -18,6 +18,10 @@
       "require": "./dist/config/index.js",
       "types": "./dist/config/index.d.ts"
     },
+    "./dist/decorator": {
+      "require": "./dist/decorator/index.js",
+      "types": "./dist/decorator/index.d.ts"
+    },
     "./dist/transform": {
       "require": "./dist/transform/index.js",
       "types": "./dist/transform/index.d.ts"

@@ -1,3 +1,8 @@
+import { Public } from "@dongjiang-recruitment/nest-common/dist/auth";
+import {
+  Page,
+  Pagination,
+} from "@dongjiang-recruitment/nest-common/dist/decorator";
 import {
   Body,
   Controller,
@@ -21,8 +26,9 @@ export class AdvertiserController {
   }
 
   @Get()
-  findAll() {
-    return this.advertiserService.findAll();
+  @Public()
+  findAll(@Page() page: Pagination) {
+    return this.advertiserService.findAll(page);
   }
 
   @Get(":id")
