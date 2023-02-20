@@ -77,7 +77,7 @@ const needRebuildDependencies = (
                 : pkg.name
             )
             .join(`" --filter "`)}"`
-        ).toString()
+        ).toString() || "[]"
       )
     : []
 ) as Array<Package>;
