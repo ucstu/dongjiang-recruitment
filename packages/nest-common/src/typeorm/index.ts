@@ -12,6 +12,8 @@ import _databaseConfig from "../config/database.config";
       inject: [_databaseConfig.KEY],
       useFactory(databaseConfig: ConfigType<typeof _databaseConfig>) {
         return {
+          synchronize: true,
+          autoLoadEntities: true,
           type: databaseConfig.type,
           host: databaseConfig.host,
           port: databaseConfig.port,

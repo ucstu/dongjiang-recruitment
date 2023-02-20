@@ -14,23 +14,36 @@ export class AdvertiserService {
     private advertiserRepository: Repository<AdvertiserInformation>
   ) {}
 
-  create(createAdvertiserDto: CreateAdvertiserDto) {
-    return this.advertiserRepository.save(createAdvertiserDto);
+  async create(createAdvertiserDto: CreateAdvertiserDto) {
+    return await this.advertiserRepository.insert(createAdvertiserDto);
   }
 
-  findAll() {
-    return this.advertiserRepository.find();
+  async findAll() {
+    return await this.advertiserRepository.find({
+      skip: 1,
+      take: 5,
+    });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} advertiser`;
+  async findOne(id: string) {
+    return await this.advertiserRepository.findOne({
+      where: {
+        advertiserInformationId: id,
+      },
+    });
   }
 
-  update(id: number, updateAdvertiserDto: UpdateAdvertiserDto) {
-    return `This action updates a #${id} advertiser`;
+  async update(id: string, updateAdvertiserDto: UpdateAdvertiserDto) {
+    await this.advertiserRepository.update(id, {
+      ...updateAdvertiserDto,
+      advertiserInformationId: id,
+    });
+    return await this.findOne(id);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} advertiser`;
+  async remove(id: string) {
+    const removed = await this.findOne(id);
+    await this.advertiserRepository.delete(id);
+    return removed;
   }
 }

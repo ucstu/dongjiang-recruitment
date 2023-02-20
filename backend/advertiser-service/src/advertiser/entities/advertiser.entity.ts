@@ -13,7 +13,7 @@ export class AdvertiserInformation {
   /**
    * 广告信息ID
    */
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn("uuid")
   advertiserInformationId: string;
   /**
    * 图片地址
@@ -42,7 +42,7 @@ export class AdvertiserInformation {
   /**
    * 已缴费用
    */
-  @Column()
+  @Column({ type: "decimal" })
   payed: number;
   /**
    * 投放位置
