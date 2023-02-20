@@ -98,7 +98,7 @@ export namespace CompanyInformation {
    * {1:未融资,2:天使轮,3:A轮,4:B轮,5:C轮,6:D轮及以上,7:上市公司,8:不需要融资}
    */
   export enum financingStage {
-    Unfinanced = 1,
+    NoFinanced = 1,
     AngelWheel = 2,
     ARound = 3,
     BRound = 4,

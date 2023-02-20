@@ -97,7 +97,7 @@ export namespace ApplicantInformation {
    * {0:未知,1:大专,2:本科,3:硕士,4:博士}
    */
   export enum education {
-    Unknow = 0,
+    Unknown = 0,
     JuniorCollege = 1,
     Undergraduate = 2,
     Postgraduate = 3,
@@ -108,7 +108,7 @@ export namespace ApplicantInformation {
    * {1:随时入职,2:2周内入职,3:1月内入职}
    */
   export enum jobStatus {
-    Unknow = 0,
+    Unknown = 0,
     AnyTime = 1,
     TwoWeeks = 2,
     OneMoth = 3,

@@ -19,7 +19,7 @@ export const $DeliveryRecord = {
       description: `更新时间`,
       isRequired: true,
     },
-    userInformationIdinterview: {
+    userInformationId: {
       type: "string",
       description: `用户信息ID`,
       isRequired: true,

@@ -21,7 +21,7 @@ export type DeliveryRecord = {
   /**
    * 用户信息ID
    */
-  userInformationIdinterview: string;
+  userInformationId: string;
   /**
    * {1:待查看,2:已查看,3:通过筛选,4:约面试,5:不合适}
    */
@@ -45,7 +45,7 @@ export namespace DeliveryRecord {
    * {1:待查看,2:已查看,3:通过筛选,4:约面试,5:不合适}
    */
   export enum status {
-    Unviewed = 1,
+    UnViewed = 1,
     Viewed = 2,
     PassFilter = 3,
     Interview = 4,
