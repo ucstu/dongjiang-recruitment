@@ -2,41 +2,69 @@
 /* tslint:disable */
 /* eslint-disable */
 import { execSync } from "node:child_process";
-import fs, { existsSync } from "node:fs";
-import { rmdir } from "node:fs/promises";
+import {
+  existsSync,
+  readdirSync,
+  readFileSync,
+  rmdirSync,
+  writeFileSync,
+} from "node:fs";
 
-const json = JSON.parse(fs.readFileSync("openapi.json").toString());
+const json = JSON.parse(readFileSync("openapi.json").toString());
 
 const fix = (json: { [x: string]: any }) => {
   const keys = Object.keys(json);
-  if (keys.includes("x-apifox")) {
+  if (keys.some((key) => key === "x-apifox")) {
     json["x-enum-varnames"] = Object.values(
       json["x-apifox"]["enumDescriptions"]
     );
   } else {
     for (const key of keys) {
-      if (typeof json[key] === "object") {
+      if (typeof json[key] === "object" && json[key] !== null) {
         fix(json[key]);
       }
     }
   }
-  if (keys.includes("title") && !keys.includes("description")) {
+  if (
+    keys.some((key) => key === "title") &&
+    !keys.some((key) => key === "description")
+  ) {
     json["description"] = json["title"];
   }
 };
 
 fix(json);
 
-fs.writeFileSync("openapi.json", JSON.stringify(json, null, 2));
+writeFileSync("openapi.json", JSON.stringify(json, null, 2));
 execSync("pnpm prettier --write openapi.json");
-new Promise(async (resolve) => {
-  existsSync("request") && (await rmdir("request", { recursive: true }));
-  existsSync("types") && (await rmdir("types", { recursive: true }));
-  existsSync("dist") && (await rmdir("dist", { recursive: true }));
-  resolve(void 0);
-}).then(() => {
-  execSync(
-    "pnpm openapi -i openapi.json -o request -c axios --name ApiClient --useOptions --exportSchemas true"
+
+existsSync("src/request") && rmdirSync("src/request", { recursive: true });
+existsSync("types") && rmdirSync("types", { recursive: true });
+existsSync("dist") && rmdirSync("dist", { recursive: true });
+execSync(
+  "pnpm openapi -i openapi.json -o src/request -c axios --name ApiClient --useOptions --exportSchemas true"
+);
+
+const replace = (content: string): string => {
+  const matchResult =
+    /(sort\?: Array<)string(>,\n\s*\}\): CancelablePromise<\{[\s\S]*?body: \{[\s\S]*?: Array<)(\w.*?)(>;)/g.exec(
+      content
+    );
+  if (!matchResult) return content;
+  return replace(
+    content.replace(
+      matchResult[0],
+      `${matchResult[1]}\`\${keyof ${matchResult[3]}},\${"asc" | "desc"}\`${matchResult[2]}${matchResult[3]}${matchResult[4]}`
+    )
   );
-  execSync("pnpm prettier --write request");
-});
+};
+
+const servicesPath = "src/request/services";
+const services = readdirSync(servicesPath);
+for (const service of services) {
+  const servicePath = `${servicesPath}/${service}`;
+  const serviceContent = readFileSync(servicePath).toString();
+  writeFileSync(servicePath, replace(serviceContent));
+}
+
+execSync("pnpm prettier --write src/request");

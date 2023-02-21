@@ -3,10 +3,10 @@
 /* eslint-disable */
 import type { AccountAuthority } from "../models/AccountAuthority";
 
-import type { BaseHttpRequest } from "../core/BaseHttpRequest";
 import type { CancelablePromise } from "../core/CancelablePromise";
+import type { BaseHttpRequest } from "../core/BaseHttpRequest";
 
-export class ManagerAccountauthoritiesService {
+export class ManagerAccountAuthoritiesService {
   constructor(public readonly httpRequest: BaseHttpRequest) {}
 
   /**
@@ -60,10 +60,35 @@ export class ManagerAccountauthoritiesService {
      */
     sort?: Array<`${keyof AccountAuthority},${"asc" | "desc"}`>;
   }): CancelablePromise<{
+    /**
+     * 请求ID
+     */
+    requestId?: string;
+    /**
+     * 响应时间
+     */
     timestamp: string;
+    /**
+     * 响应编码
+     */
     status: number;
+    /**
+     * 响应信息
+     */
     message: string;
-    body: Array<AccountAuthority>;
+    /**
+     * 响应体
+     */
+    body: {
+      /**
+       * 记录总数
+       */
+      totalCount: number;
+      /**
+       * 账号权限
+       */
+      accountAuthorities: Array<AccountAuthority>;
+    };
   }> {
     return this.httpRequest.request({
       method: "GET",

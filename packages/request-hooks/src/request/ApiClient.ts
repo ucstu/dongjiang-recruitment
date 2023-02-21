@@ -5,6 +5,7 @@ import type { BaseHttpRequest } from "./core/BaseHttpRequest";
 import type { OpenAPIConfig } from "./core/OpenAPI";
 import { AxiosHttpRequest } from "./core/AxiosHttpRequest";
 
+import { AdvertiserService } from "./services/AdvertiserService";
 import { ApplicantService } from "./services/ApplicantService";
 import { ApplicantAttentionRecordService } from "./services/ApplicantAttentionRecordService";
 import { ApplicantDeliveryRecordService } from "./services/ApplicantDeliveryRecordService";
@@ -19,7 +20,7 @@ import { CommonService } from "./services/CommonService";
 import { CompanyService } from "./services/CompanyService";
 import { CompanyPositionInformationService } from "./services/CompanyPositionInformationService";
 import { ManagerAccountService } from "./services/ManagerAccountService";
-import { ManagerAccountauthoritiesService } from "./services/ManagerAccountauthoritiesService";
+import { ManagerAccountAuthoritiesService } from "./services/ManagerAccountAuthoritiesService";
 import { ManagerAccountGroupService } from "./services/ManagerAccountGroupService";
 import { PersonnelService } from "./services/PersonnelService";
 import { PersonnelInspectionRecordService } from "./services/PersonnelInspectionRecordService";
@@ -27,6 +28,7 @@ import { PersonnelInspectionRecordService } from "./services/PersonnelInspection
 type HttpRequestConstructor = new (config: OpenAPIConfig) => BaseHttpRequest;
 
 export class ApiClient {
+  public readonly advertiser: AdvertiserService;
   public readonly applicant: ApplicantService;
   public readonly applicantAttentionRecord: ApplicantAttentionRecordService;
   public readonly applicantDeliveryRecord: ApplicantDeliveryRecordService;
@@ -41,7 +43,7 @@ export class ApiClient {
   public readonly company: CompanyService;
   public readonly companyPositionInformation: CompanyPositionInformationService;
   public readonly managerAccount: ManagerAccountService;
-  public readonly managerAccountauthorities: ManagerAccountauthoritiesService;
+  public readonly managerAccountAuthorities: ManagerAccountAuthoritiesService;
   public readonly managerAccountGroup: ManagerAccountGroupService;
   public readonly personnel: PersonnelService;
   public readonly personnelInspectionRecord: PersonnelInspectionRecordService;
@@ -64,6 +66,7 @@ export class ApiClient {
       ENCODE_PATH: config?.ENCODE_PATH,
     });
 
+    this.advertiser = new AdvertiserService(this.request);
     this.applicant = new ApplicantService(this.request);
     this.applicantAttentionRecord = new ApplicantAttentionRecordService(
       this.request
@@ -94,7 +97,7 @@ export class ApiClient {
       this.request
     );
     this.managerAccount = new ManagerAccountService(this.request);
-    this.managerAccountauthorities = new ManagerAccountauthoritiesService(
+    this.managerAccountAuthorities = new ManagerAccountAuthoritiesService(
       this.request
     );
     this.managerAccountGroup = new ManagerAccountGroupService(this.request);

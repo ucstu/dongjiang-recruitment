@@ -3,8 +3,8 @@
 /* eslint-disable */
 import type { JobExpectation } from "../models/JobExpectation";
 
-import type { BaseHttpRequest } from "../core/BaseHttpRequest";
 import type { CancelablePromise } from "../core/CancelablePromise";
+import type { BaseHttpRequest } from "../core/BaseHttpRequest";
 
 export class ApplicantJobExpectationService {
   constructor(public readonly httpRequest: BaseHttpRequest) {}

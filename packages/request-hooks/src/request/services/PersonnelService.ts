@@ -3,8 +3,8 @@
 /* eslint-disable */
 import type { PersonnelInformation } from "../models/PersonnelInformation";
 
-import type { BaseHttpRequest } from "../core/BaseHttpRequest";
 import type { CancelablePromise } from "../core/CancelablePromise";
+import type { BaseHttpRequest } from "../core/BaseHttpRequest";
 
 export class PersonnelService {
   constructor(public readonly httpRequest: BaseHttpRequest) {}
@@ -109,7 +109,7 @@ export class PersonnelService {
     /**
      * 排序方式，eg：["createdAt,desc"]
      */
-    sort?: Array<`${keyof PersonnelInformation} ${"asc" | "desc"}`>;
+    sort?: Array<`${keyof PersonnelInformation},${"asc" | "desc"}`>;
   }): CancelablePromise<{
     /**
      * 处理时间

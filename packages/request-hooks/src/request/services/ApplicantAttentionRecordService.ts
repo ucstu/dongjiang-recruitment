@@ -3,8 +3,8 @@
 /* eslint-disable */
 import type { AttentionRecord } from "../models/AttentionRecord";
 
-import type { BaseHttpRequest } from "../core/BaseHttpRequest";
 import type { CancelablePromise } from "../core/CancelablePromise";
+import type { BaseHttpRequest } from "../core/BaseHttpRequest";
 
 export class ApplicantAttentionRecordService {
   constructor(public readonly httpRequest: BaseHttpRequest) {}

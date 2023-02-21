@@ -3,8 +3,8 @@
 /* eslint-disable */
 import type { ProjectExperience } from "../models/ProjectExperience";
 
-import type { BaseHttpRequest } from "../core/BaseHttpRequest";
 import type { CancelablePromise } from "../core/CancelablePromise";
+import type { BaseHttpRequest } from "../core/BaseHttpRequest";
 
 export class ApplicantProjectExperienceService {
   constructor(public readonly httpRequest: BaseHttpRequest) {}

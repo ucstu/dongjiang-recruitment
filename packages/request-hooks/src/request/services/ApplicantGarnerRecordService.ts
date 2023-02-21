@@ -3,8 +3,8 @@
 /* eslint-disable */
 import type { GarnerRecord } from "../models/GarnerRecord";
 
-import type { BaseHttpRequest } from "../core/BaseHttpRequest";
 import type { CancelablePromise } from "../core/CancelablePromise";
+import type { BaseHttpRequest } from "../core/BaseHttpRequest";
 
 export class ApplicantGarnerRecordService {
   constructor(public readonly httpRequest: BaseHttpRequest) {}

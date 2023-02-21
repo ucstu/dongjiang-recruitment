@@ -3,8 +3,8 @@
 /* eslint-disable */
 import type { AccountInformation } from "../models/AccountInformation";
 
-import type { BaseHttpRequest } from "../core/BaseHttpRequest";
 import type { CancelablePromise } from "../core/CancelablePromise";
+import type { BaseHttpRequest } from "../core/BaseHttpRequest";
 
 export class ManagerAccountService {
   constructor(public readonly httpRequest: BaseHttpRequest) {}
@@ -165,15 +165,34 @@ export class ManagerAccountService {
      */
     sort?: Array<`${keyof AccountInformation},${"asc" | "desc"}`>;
   }): CancelablePromise<{
+    /**
+     * 请求ID
+     */
+    requestId?: string;
+    /**
+     * 响应时间
+     */
     timestamp: string;
+    /**
+     * 响应编码
+     */
     status: number;
+    /**
+     * 响应信息
+     */
     message: string;
+    /**
+     * 响应体
+     */
     body: {
+      /**
+       * 记录总数
+       */
       totalCount: number;
       /**
        * 账号信息
        */
-      accountInformations: AccountInformation;
+      accountInformations: Array<AccountInformation>;
     };
   }> {
     return this.httpRequest.request({

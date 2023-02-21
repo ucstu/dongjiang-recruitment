@@ -6,8 +6,8 @@ import type { CompanyInformation } from "../models/CompanyInformation";
 import type { DeliveryRecord } from "../models/DeliveryRecord";
 import type { PositionInformation } from "../models/PositionInformation";
 
-import type { BaseHttpRequest } from "../core/BaseHttpRequest";
 import type { CancelablePromise } from "../core/CancelablePromise";
+import type { BaseHttpRequest } from "../core/BaseHttpRequest";
 
 export class CompanyService {
   constructor(public readonly httpRequest: BaseHttpRequest) {}
@@ -610,7 +610,7 @@ export class CompanyService {
     /**
      * 排序方式，eg：["date,desc"]
      */
-    sort?: Array<string>;
+    sort?: Array<`${keyof ApplicantInspectionRecord},${"asc" | "desc"}`>;
   }): CancelablePromise<{
     /**
      * 处理时间

@@ -2,10 +2,10 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { ApplicantInformation } from "../models/ApplicantInformation";
-
-import type { BaseHttpRequest } from "../core/BaseHttpRequest";
-import type { CancelablePromise } from "../core/CancelablePromise";
 import type { PersonnelInspectionRecord } from "../models/PersonnelInspectionRecord";
+
+import type { CancelablePromise } from "../core/CancelablePromise";
+import type { BaseHttpRequest } from "../core/BaseHttpRequest";
 
 export class ApplicantService {
   constructor(public readonly httpRequest: BaseHttpRequest) {}

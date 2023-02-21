@@ -4,8 +4,8 @@
 import type { ApplicantInspectionRecord } from "../models/ApplicantInspectionRecord";
 import type { PersonnelInspectionRecord } from "../models/PersonnelInspectionRecord";
 
-import type { BaseHttpRequest } from "../core/BaseHttpRequest";
 import type { CancelablePromise } from "../core/CancelablePromise";
+import type { BaseHttpRequest } from "../core/BaseHttpRequest";
 
 export class PersonnelInspectionRecordService {
   constructor(public readonly httpRequest: BaseHttpRequest) {}

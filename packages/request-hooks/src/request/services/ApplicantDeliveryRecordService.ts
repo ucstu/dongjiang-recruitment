@@ -3,8 +3,8 @@
 /* eslint-disable */
 import type { DeliveryRecord } from "../models/DeliveryRecord";
 
-import type { BaseHttpRequest } from "../core/BaseHttpRequest";
 import type { CancelablePromise } from "../core/CancelablePromise";
+import type { BaseHttpRequest } from "../core/BaseHttpRequest";
 
 export class ApplicantDeliveryRecordService {
   constructor(public readonly httpRequest: BaseHttpRequest) {}

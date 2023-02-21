@@ -3,8 +3,8 @@
 /* eslint-disable */
 import type { PositionInformation } from "../models/PositionInformation";
 
-import type { BaseHttpRequest } from "../core/BaseHttpRequest";
 import type { CancelablePromise } from "../core/CancelablePromise";
+import type { BaseHttpRequest } from "../core/BaseHttpRequest";
 
 export class CompanyPositionInformationService {
   constructor(public readonly httpRequest: BaseHttpRequest) {}
@@ -261,7 +261,7 @@ export class CompanyPositionInformationService {
     /**
      * 排序方式，eg：["createdAt,desc"]
      */
-    sort?: Array<`${keyof PositionInformation} ${"asc" | "desc"}`>;
+    sort?: Array<`${keyof PositionInformation},${"asc" | "desc"}`>;
   }): CancelablePromise<{
     /**
      * 处理时间
