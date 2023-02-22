@@ -31,21 +31,21 @@ export class AdvertiserController {
     return this.advertiserService.findAll(page);
   }
 
-  @Get(":id")
-  findOne(@Param("id") id: string) {
-    return this.advertiserService.findOne(id);
+  @Get(":advertiserid")
+  findOne(@Param("advertiserid") advertiserid: string) {
+    return this.advertiserService.findOne(advertiserid);
   }
 
-  @Put(":id")
+  @Put(":advertiserid")
   update(
-    @Param("id") id: string,
+    @Param("advertiserid") advertiserid: string,
     @Body() updateAdvertiserDto: UpdateAdvertiserDto
   ) {
-    return this.advertiserService.update(id, updateAdvertiserDto);
+    return this.advertiserService.update(advertiserid, updateAdvertiserDto);
   }
 
-  @Delete(":id")
-  remove(@Param("id") id: string) {
-    return this.advertiserService.remove(id);
+  @Delete(":advertiserid")
+  remove(@Param("advertiserid") advertiserid: string) {
+    return this.advertiserService.remove(advertiserid);
   }
 }

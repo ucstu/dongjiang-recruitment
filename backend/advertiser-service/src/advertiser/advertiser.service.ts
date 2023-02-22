@@ -17,7 +17,7 @@ import { AdvertiserInformation } from "./entities/advertiser.entity";
 export class AdvertiserService {
   constructor(
     @InjectRepository(AdvertiserInformation)
-    private advertiserRepository: Repository<AdvertiserInformation>
+    private readonly advertiserRepository: Repository<AdvertiserInformation>
   ) {}
 
   async create(createAdvertiserDto: CreateAdvertiserDto) {
@@ -39,29 +39,29 @@ export class AdvertiserService {
     }
   }
 
-  async findOne(id: string) {
+  async findOne(advertiserid: string) {
     const advertiserInformation = await this.advertiserRepository.findOne({
       where: {
-        advertiserInformationId: id,
+        advertiserInformationId: advertiserid,
       },
     });
     if (!advertiserInformation) throw new NotFoundException();
     return advertiserInformation;
   }
 
-  async update(id: string, updateAdvertiserDto: UpdateAdvertiserDto) {
-    const { affected } = await this.advertiserRepository.update(id, {
+  async update(advertiserid: string, updateAdvertiserDto: UpdateAdvertiserDto) {
+    const { affected } = await this.advertiserRepository.update(advertiserid, {
       ...updateAdvertiserDto,
-      advertiserInformationId: id,
+      advertiserInformationId: advertiserid,
     });
     if (!affected) throw new NotFoundException();
-    return await this.findOne(id);
+    return await this.findOne(advertiserid);
   }
 
-  async remove(id: string) {
-    const removed = await this.findOne(id);
+  async remove(advertiserid: string) {
+    const removed = await this.findOne(advertiserid);
     if (!removed) throw new NotFoundException();
-    await this.advertiserRepository.delete(id);
+    await this.advertiserRepository.delete(advertiserid);
     return removed;
   }
 }

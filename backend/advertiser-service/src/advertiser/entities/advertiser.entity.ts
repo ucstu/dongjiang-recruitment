@@ -1,7 +1,10 @@
 import {
   Column,
+  CreateDateColumn,
+  DeleteDateColumn,
   Entity,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from "@dongjiang-recruitment/nest-common/dist/typeorm";
 import { IsNotEmpty } from "@dongjiang-recruitment/nest-common/dist/validation";
 
@@ -11,55 +14,41 @@ import { IsNotEmpty } from "@dongjiang-recruitment/nest-common/dist/validation";
 @Entity()
 export class AdvertiserInformation {
   /**
-   * 广告信息ID
+   * 广告商信息ID
    */
   @PrimaryGeneratedColumn("uuid")
   advertiserInformationId: string;
   /**
-   * 图片地址
+   * 创建时间
    */
-  @IsNotEmpty()
-  @Column()
-  banner: string;
+  @CreateDateColumn()
+  createdAt: Date;
   /**
-   * 结束时间
+   * 更新时间
    */
-  @IsNotEmpty()
-  @Column()
-  endTime: string;
+  @UpdateDateColumn()
+  updatedAt: Date;
   /**
-   * 广告名称
+   * 删除时间
    */
-  @IsNotEmpty()
+  @DeleteDateColumn()
+  deletedAt?: Date;
+  /**
+   * Logo地址
+   */
   @Column()
+  @IsNotEmpty()
+  logoUrl: string;
+  /**
+   * 广告商名称
+   */
+  @Column()
+  @IsNotEmpty()
   name: string;
   /**
    * 网页地址
    */
-  @IsNotEmpty()
   @Column()
+  @IsNotEmpty()
   pageUrl: string;
-  /**
-   * 已缴费用
-   */
-  @Column({ type: "decimal" })
-  payed: number;
-  /**
-   * 投放位置
-   */
-  @IsNotEmpty()
-  @Column()
-  position: number;
-  /**
-   * 开始时间
-   */
-  @IsNotEmpty()
-  @Column()
-  startTime: string;
-  /**
-   * 投放状态
-   */
-  @IsNotEmpty()
-  @Column()
-  status: number;
 }
