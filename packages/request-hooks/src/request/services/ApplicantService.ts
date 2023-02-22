@@ -89,6 +89,43 @@ export class ApplicantService {
   }
 
   /**
+   * 删除用户信息
+   * 删除用户信息的接口
+   * @returns any 成功
+   * @throws ApiError
+   */
+  public deleteUserInformation({
+    userInfoId,
+  }: {
+    /**
+     * 用户信息ID
+     */
+    userInfoId: string;
+  }): CancelablePromise<{
+    /**
+     * 处理时间
+     */
+    timestamp: string;
+    /**
+     * 响应状态
+     */
+    status: number;
+    /**
+     * 状态描述
+     */
+    message: string;
+    body: ApplicantInformation;
+  }> {
+    return this.httpRequest.request({
+      method: "DELETE",
+      url: "/userInfos/{userInfoId}",
+      path: {
+        userInfoId: userInfoId,
+      },
+    });
+  }
+
+  /**
    * 查询所有用户信息
    * 查询所有用户信息得接口
    * @returns any 成功
@@ -146,6 +183,104 @@ export class ApplicantService {
         size: size,
         sort: sort,
       },
+    });
+  }
+
+  /**
+   * 增加用户信息
+   * 增加用户信息的接口
+   * @returns any 成功
+   * @throws ApiError
+   */
+  public addUserInformation({
+    requestBody,
+  }: {
+    requestBody?: {
+      /**
+       * 头像地址
+       */
+      avatarUrl: string;
+      /**
+       * 姓
+       */
+      firstName: string;
+      /**
+       * 名
+       */
+      lastName: string;
+      /**
+       * 生日
+       */
+      dateOfBirth: string;
+      /**
+       * 性别
+       */
+      sex: string;
+      /**
+       * 年龄
+       */
+      age: number;
+      /**
+       * 所在城市
+       */
+      cityName: string;
+      /**
+       * 电子邮箱
+       */
+      email: string;
+      /**
+       * {1:没有工作经验,2:在校/应届,3:3年一下,4:3-5年,5:5-10年,6:10年以上}
+       */
+      workingYears: 1 | 2 | 3 | 4 | 5 | 6;
+      /**
+       * {0:未知,1:大专,2:本科,3:硕士,4:博士}
+       */
+      education: 0 | 1 | 2 | 3 | 4;
+      /**
+       * 个人优势
+       */
+      personalAdvantage: string;
+      /**
+       * 社交主页
+       */
+      socialHomepage: string;
+      /**
+       * {1:随时入职,2:2周内入职,3:1月内入职}
+       */
+      jobStatus: 0 | 1 | 2 | 3;
+      /**
+       * 图片作品
+       */
+      pictureWorks: Array<string>;
+      /**
+       * {1:实名,2:匿名}
+       */
+      privacySettings: 1 | 2;
+    };
+  }): CancelablePromise<{
+    /**
+     * 请求ID
+     */
+    requestId?: string;
+    /**
+     * 响应时间
+     */
+    timestamp: string;
+    /**
+     * 响应编码
+     */
+    status: number;
+    /**
+     * 响应信息
+     */
+    message: string;
+    body: ApplicantInformation;
+  }> {
+    return this.httpRequest.request({
+      method: "POST",
+      url: "/userInfos",
+      body: requestBody,
+      mediaType: "application/json",
     });
   }
 

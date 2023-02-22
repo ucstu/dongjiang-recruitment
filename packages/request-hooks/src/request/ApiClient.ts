@@ -5,7 +5,9 @@ import type { BaseHttpRequest } from "./core/BaseHttpRequest";
 import type { OpenAPIConfig } from "./core/OpenAPI";
 import { AxiosHttpRequest } from "./core/AxiosHttpRequest";
 
+import { AccountService } from "./services/AccountService";
 import { AdvertiserService } from "./services/AdvertiserService";
+import { AdvertiserAdvertiseService } from "./services/AdvertiserAdvertiseService";
 import { ApplicantService } from "./services/ApplicantService";
 import { ApplicantAttentionRecordService } from "./services/ApplicantAttentionRecordService";
 import { ApplicantDeliveryRecordService } from "./services/ApplicantDeliveryRecordService";
@@ -15,7 +17,6 @@ import { ApplicantInspectionRecordService } from "./services/ApplicantInspection
 import { ApplicantJobExpectationService } from "./services/ApplicantJobExpectationService";
 import { ApplicantProjectExperienceService } from "./services/ApplicantProjectExperienceService";
 import { ApplicantWorkExperienceService } from "./services/ApplicantWorkExperienceService";
-import { AuthenticationService } from "./services/AuthenticationService";
 import { CommonService } from "./services/CommonService";
 import { CompanyService } from "./services/CompanyService";
 import { CompanyPositionInformationService } from "./services/CompanyPositionInformationService";
@@ -28,7 +29,9 @@ import { PersonnelInspectionRecordService } from "./services/PersonnelInspection
 type HttpRequestConstructor = new (config: OpenAPIConfig) => BaseHttpRequest;
 
 export class ApiClient {
+  public readonly account: AccountService;
   public readonly advertiser: AdvertiserService;
+  public readonly advertiserAdvertise: AdvertiserAdvertiseService;
   public readonly applicant: ApplicantService;
   public readonly applicantAttentionRecord: ApplicantAttentionRecordService;
   public readonly applicantDeliveryRecord: ApplicantDeliveryRecordService;
@@ -38,7 +41,6 @@ export class ApiClient {
   public readonly applicantJobExpectation: ApplicantJobExpectationService;
   public readonly applicantProjectExperience: ApplicantProjectExperienceService;
   public readonly applicantWorkExperience: ApplicantWorkExperienceService;
-  public readonly authentication: AuthenticationService;
   public readonly common: CommonService;
   public readonly company: CompanyService;
   public readonly companyPositionInformation: CompanyPositionInformationService;
@@ -66,7 +68,9 @@ export class ApiClient {
       ENCODE_PATH: config?.ENCODE_PATH,
     });
 
+    this.account = new AccountService(this.request);
     this.advertiser = new AdvertiserService(this.request);
+    this.advertiserAdvertise = new AdvertiserAdvertiseService(this.request);
     this.applicant = new ApplicantService(this.request);
     this.applicantAttentionRecord = new ApplicantAttentionRecordService(
       this.request
@@ -90,7 +94,6 @@ export class ApiClient {
     this.applicantWorkExperience = new ApplicantWorkExperienceService(
       this.request
     );
-    this.authentication = new AuthenticationService(this.request);
     this.common = new CommonService(this.request);
     this.company = new CompanyService(this.request);
     this.companyPositionInformation = new CompanyPositionInformationService(

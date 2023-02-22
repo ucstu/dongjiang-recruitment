@@ -3,15 +3,23 @@
 /* eslint-disable */
 
 /**
- * 广告信息
+ * 广告商信息
  */
 export type AdvertiserInformation = {
   /**
-   * 广告信息ID
+   * 广告商信息ID
    */
   advertiserInformationId: string;
   /**
-   * 广告名称
+   * 创建时间
+   */
+  createdAt: string;
+  /**
+   * 修改时间
+   */
+  updatedAt: string;
+  /**
+   * 广告商名称
    */
   name: string;
   /**
@@ -19,44 +27,7 @@ export type AdvertiserInformation = {
    */
   pageUrl: string;
   /**
-   * 图片地址
+   * Logo地址
    */
-  banner: string;
-  /**
-   * 投放位置
-   */
-  position: AdvertiserInformation.position;
-  /**
-   * 投放状态
-   */
-  status: AdvertiserInformation.status;
-  /**
-   * 已缴费用
-   */
-  payed: number;
-  /**
-   * 开始时间
-   */
-  startTime: string;
-  /**
-   * 结束时间
-   */
-  endTime: string;
+  logoUrl: string;
 };
-
-export namespace AdvertiserInformation {
-  /**
-   * 投放位置
-   */
-  export enum position {
-    Master = 1,
-  }
-
-  /**
-   * 投放状态
-   */
-  export enum status {
-    Active = 1,
-    Inactive = 2,
-  }
-}

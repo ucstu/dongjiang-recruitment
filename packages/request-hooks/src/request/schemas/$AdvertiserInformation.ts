@@ -2,16 +2,26 @@
 /* tslint:disable */
 /* eslint-disable */
 export const $AdvertiserInformation = {
-  description: `广告信息`,
+  description: `广告商信息`,
   properties: {
     advertiserInformationId: {
       type: "string",
-      description: `广告信息ID`,
+      description: `广告商信息ID`,
+      isRequired: true,
+    },
+    createdAt: {
+      type: "string",
+      description: `创建时间`,
+      isRequired: true,
+    },
+    updatedAt: {
+      type: "string",
+      description: `修改时间`,
       isRequired: true,
     },
     name: {
       type: "string",
-      description: `广告名称`,
+      description: `广告商名称`,
       isRequired: true,
     },
     pageUrl: {
@@ -19,32 +29,9 @@ export const $AdvertiserInformation = {
       description: `网页地址`,
       isRequired: true,
     },
-    banner: {
+    logoUrl: {
       type: "string",
-      description: `图片地址`,
-      isRequired: true,
-    },
-    position: {
-      type: "Enum",
-      isRequired: true,
-    },
-    status: {
-      type: "Enum",
-      isRequired: true,
-    },
-    payed: {
-      type: "number",
-      description: `已缴费用`,
-      isRequired: true,
-    },
-    startTime: {
-      type: "string",
-      description: `开始时间`,
-      isRequired: true,
-    },
-    endTime: {
-      type: "string",
-      description: `结束时间`,
+      description: `Logo地址`,
       isRequired: true,
     },
   },

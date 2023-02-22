@@ -19,27 +19,28 @@ export type AccountInformation = {
    */
   updatedAt: string;
   /**
-   * {1:用户,2:HR}
-   */
-  accountType: AccountInformation.accountType;
-  /**
    * 用户名
    */
   userName: string;
   /**
    * 详细信息ID
    */
-  fullInformationId: string;
+  fullInformationId: {
+    /**
+     * 管理员信息
+     */
+    manager: string;
+    /**
+     * 求职者信息
+     */
+    applicant: string;
+    /**
+     * 人事信息
+     */
+    personnel: string;
+    /**
+     * 广告商信息
+     */
+    advertiser: string;
+  };
 };
-
-export namespace AccountInformation {
-  /**
-   * {1:用户,2:HR}
-   */
-  export enum accountType {
-    Manager = 0,
-    Applicant = 1,
-    Personnel = 2,
-    Advertiser = 3,
-  }
-}

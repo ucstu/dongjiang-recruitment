@@ -11,8 +11,9 @@ export type { OpenAPIConfig } from "./core/OpenAPI";
 
 export type { AccountAuthority } from "./models/AccountAuthority";
 export type { AccountGroup } from "./models/AccountGroup";
-export { AccountInformation } from "./models/AccountInformation";
-export { AdvertiserInformation } from "./models/AdvertiserInformation";
+export type { AccountInformation } from "./models/AccountInformation";
+export type { AdvertiserInformation } from "./models/AdvertiserInformation";
+export { AdvertisingInformation } from "./models/AdvertisingInformation";
 export { ApplicantInformation } from "./models/ApplicantInformation";
 export type { ApplicantInspectionRecord } from "./models/ApplicantInspectionRecord";
 export type { AreaInformations } from "./models/AreaInformations";
@@ -39,6 +40,7 @@ export { $AccountAuthority } from "./schemas/$AccountAuthority";
 export { $AccountGroup } from "./schemas/$AccountGroup";
 export { $AccountInformation } from "./schemas/$AccountInformation";
 export { $AdvertiserInformation } from "./schemas/$AdvertiserInformation";
+export { $AdvertisingInformation } from "./schemas/$AdvertisingInformation";
 export { $ApplicantInformation } from "./schemas/$ApplicantInformation";
 export { $ApplicantInspectionRecord } from "./schemas/$ApplicantInspectionRecord";
 export { $AreaInformations } from "./schemas/$AreaInformations";
@@ -61,7 +63,9 @@ export { $PositionTypes } from "./schemas/$PositionTypes";
 export { $ProjectExperience } from "./schemas/$ProjectExperience";
 export { $WorkExperience } from "./schemas/$WorkExperience";
 
+export { AccountService } from "./services/AccountService";
 export { AdvertiserService } from "./services/AdvertiserService";
+export { AdvertiserAdvertiseService } from "./services/AdvertiserAdvertiseService";
 export { ApplicantService } from "./services/ApplicantService";
 export { ApplicantAttentionRecordService } from "./services/ApplicantAttentionRecordService";
 export { ApplicantDeliveryRecordService } from "./services/ApplicantDeliveryRecordService";
@@ -71,7 +75,6 @@ export { ApplicantInspectionRecordService } from "./services/ApplicantInspection
 export { ApplicantJobExpectationService } from "./services/ApplicantJobExpectationService";
 export { ApplicantProjectExperienceService } from "./services/ApplicantProjectExperienceService";
 export { ApplicantWorkExperienceService } from "./services/ApplicantWorkExperienceService";
-export { AuthenticationService } from "./services/AuthenticationService";
 export { CommonService } from "./services/CommonService";
 export { CompanyService } from "./services/CompanyService";
 export { CompanyPositionInformationService } from "./services/CompanyPositionInformationService";

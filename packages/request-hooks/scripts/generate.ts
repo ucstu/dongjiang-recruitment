@@ -6,7 +6,7 @@ import {
   existsSync,
   readdirSync,
   readFileSync,
-  rmdirSync,
+  rmSync,
   writeFileSync,
 } from "node:fs";
 
@@ -38,9 +38,9 @@ fix(json);
 writeFileSync("openapi.json", JSON.stringify(json, null, 2));
 execSync("pnpm prettier --write openapi.json");
 
-existsSync("src/request") && rmdirSync("src/request", { recursive: true });
-existsSync("types") && rmdirSync("types", { recursive: true });
-existsSync("dist") && rmdirSync("dist", { recursive: true });
+existsSync("src/request") && rmSync("src/request", { recursive: true });
+existsSync("types") && rmSync("types", { recursive: true });
+existsSync("dist") && rmSync("dist", { recursive: true });
 execSync(
   "pnpm openapi -i openapi.json -o src/request -c axios --name ApiClient --useOptions --exportSchemas true"
 );

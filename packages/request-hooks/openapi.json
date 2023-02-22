@@ -7,7 +7,7 @@
   },
   "tags": [
     {
-      "name": "Authentication"
+      "name": "Account"
     },
     {
       "name": "Applicant"
@@ -64,6 +64,9 @@
       "name": "Advertiser"
     },
     {
+      "name": "Advertiser/Advertise"
+    },
+    {
       "name": "Common"
     }
   ],
@@ -71,12 +74,12 @@
     "/accountInfos": {
       "post": {
         "summary": "注册账号",
-        "x-apifox-folder": "Authentication",
+        "x-apifox-folder": "Account",
         "x-apifox-status": "developing",
         "deprecated": false,
         "description": "这是注册账号使用的接口",
         "operationId": "RegisterAccount",
-        "tags": ["Authentication"],
+        "tags": ["Account"],
         "parameters": [],
         "requestBody": {
           "content": {
@@ -97,15 +100,16 @@
                   "accountType": {
                     "type": "number",
                     "title": "账号类型",
-                    "enum": [1, 2],
+                    "enum": [1, 2, 3],
                     "x-apifox": {
                       "enumDescriptions": {
-                        "1": "用户",
-                        "2": "HR"
+                        "1": "Applicant",
+                        "2": "Personnel",
+                        "3": "Advertiser"
                       }
                     },
-                    "description": "{1:用户,2:HR}",
-                    "x-enum-varnames": ["用户", "HR"]
+                    "description": "{0:Manager,1:Applicant,2:Personnel,3:Advertiser}",
+                    "x-enum-varnames": ["Applicant", "Personnel", "Advertiser"]
                   },
                   "password": {
                     "type": "string",
@@ -174,16 +178,20 @@
                   "1": {
                     "summary": "成功示例 ",
                     "value": {
-                      "timestamp": "1981-10-10 09:56:20",
+                      "timestamp": "2010-04-28 10:56:45",
                       "status": 201,
                       "message": "Created",
                       "body": {
-                        "accountInformationId": "EfBBeCCb-5fda-Ad54-56B1-5f2d9fFc2E63",
-                        "createdAt": "2000-04-17 07:06:34",
-                        "updatedAt": "2009-12-08 16:49:29",
-                        "accountType": 1,
-                        "userName": "y.wvsr@uzjvrwv.sl",
-                        "fullInformationId": "3b648e36-8AF3-deAD-63f0-Ce5E8354bBF0"
+                        "accountInformationId": "1979E2Dc-BECF-FA2e-FcdF-c9d4e5c990F5",
+                        "userName": "s.woixmdp@ghxfsam.bt",
+                        "createdAt": "2015-07-12 04:57:40",
+                        "updatedAt": "1997-11-15 09:18:41",
+                        "fullInformationId": {
+                          "manager": "Eb8A7Bf7-DECA-AFD7-88D6-C6b11f5A7c6D",
+                          "applicant": "b4dcE92E-6f3e-3eae-8496-3ab50F90eF13",
+                          "personnel": "F6E553a1-3ff6-2AdE-cBB4-C13bae6CE8Dd",
+                          "advertiser": "13B3eEb9-5ED7-91E6-a02D-5EBFfAeb7CeD"
+                        }
                       }
                     }
                   }
@@ -198,12 +206,12 @@
     "/accountInfos/login": {
       "post": {
         "summary": "登录账号",
-        "x-apifox-folder": "Authentication",
+        "x-apifox-folder": "Account",
         "x-apifox-status": "developing",
         "deprecated": false,
         "description": "这是一个用来登录的接口",
         "operationId": "LoginAccount",
-        "tags": ["Authentication"],
+        "tags": ["Account"],
         "parameters": [],
         "requestBody": {
           "content": {
@@ -286,18 +294,22 @@
                   "1": {
                     "summary": "成功示例 ",
                     "value": {
-                      "timestamp": "2005-08-04 02:17:59",
+                      "timestamp": "2017-08-27 23:18:41",
                       "status": 200,
                       "message": "OK",
                       "body": {
                         "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiIxMjM0NTY3ODkwIiwidXR5cGUiOjF9.Oedr-nY-f8Rdk4Y5MPEk5T2GuVwVUY_MusC5RBXfauc",
                         "accountInformation": {
-                          "accountInformationId": "fe7CB00e-e2D2-9DdE-F850-EfcEa7d5f68b",
-                          "createdAt": "1982-01-16 17:04:40",
-                          "updatedAt": "2010-06-04 15:03:57",
-                          "accountType": 2,
-                          "userName": "w.lbzyplnx@ulzulwcet.sc",
-                          "fullInformationId": "467FcDf1-0a8a-AfD0-dA41-EFbDbe1e7E8f"
+                          "accountInformationId": "6EAeEfad-db95-Dd36-2fcc-5dFFE2fB5C35",
+                          "userName": "f.ottmixitl@oymvd.ve",
+                          "createdAt": "1999-10-20 13:21:53",
+                          "updatedAt": "2016-07-31 18:07:03",
+                          "fullInformationId": {
+                            "manager": "7ADBb45C-08D9-b440-16dE-fec42dbFda92",
+                            "applicant": "F5d86cB8-60E2-5eDC-8dfD-EAeE302C7F4e",
+                            "personnel": "A8257b9b-8F7D-CB95-4ddE-F6ccf6eb7CFb",
+                            "advertiser": "f4B3253d-3d43-FFeF-64e3-32BAc6a5afb4"
+                          }
                         }
                       }
                     }
@@ -313,12 +325,12 @@
     "/accountInfos/{accountInfoId}": {
       "delete": {
         "summary": "注销账号",
-        "x-apifox-folder": "Authentication",
+        "x-apifox-folder": "Account",
         "x-apifox-status": "developing",
         "deprecated": false,
         "description": "注销账号的接口",
         "operationId": "DestroyAccount",
-        "tags": ["Authentication"],
+        "tags": ["Account"],
         "parameters": [
           {
             "name": "accountInfoId",
@@ -379,16 +391,20 @@
                   "1": {
                     "summary": "成功示例 ",
                     "value": {
-                      "timestamp": "2005-08-28 12:09:27",
+                      "timestamp": "2017-08-03 09:03:26",
                       "status": 200,
                       "message": "OK",
                       "body": {
-                        "accountInformationId": "36dEa287-1AdC-7A2A-EA0b-D6A9ECcEcDFb",
-                        "createdAt": "2019-10-07 11:17:27",
-                        "updatedAt": "1987-10-16 02:13:11",
-                        "accountType": 1,
-                        "userName": "r.ckqmpbq@swznlnjf.gi",
-                        "fullInformationId": "c1744cFe-94E8-6BC3-efcE-dC752cacE7E7"
+                        "accountInformationId": "efc4eBd9-c4E8-eD1f-bf2D-a9A0b2b5DA6B",
+                        "userName": "o.mnfr@oyggnek.tv",
+                        "createdAt": "2000-08-29 08:39:41",
+                        "updatedAt": "1987-01-27 20:07:01",
+                        "fullInformationId": {
+                          "manager": "dE1Ae9f1-cbB9-2C8E-96EA-74e3a7e9a8Fd",
+                          "applicant": "b3B4BBAf-7fe4-EbDF-FD4B-9bC286deC9bf",
+                          "personnel": "e1aAb4F6-3b2C-86DF-7eDd-e827eD8567b9",
+                          "advertiser": "5C37a747-d4bf-A68a-4dDC-54cc94e25c0B"
+                        }
                       }
                     }
                   }
@@ -401,12 +417,12 @@
       },
       "put": {
         "summary": "修改密码",
-        "x-apifox-folder": "Authentication",
+        "x-apifox-folder": "Account",
         "x-apifox-status": "developing",
         "deprecated": false,
         "description": "修改密码的接口",
         "operationId": "ChangePassword",
-        "tags": ["Authentication"],
+        "tags": ["Account"],
         "parameters": [
           {
             "name": "accountInfoId",
@@ -485,16 +501,20 @@
                   "1": {
                     "summary": "成功示例 ",
                     "value": {
-                      "timestamp": "1997-11-04 00:39:33",
+                      "timestamp": "1978-08-26 21:47:20",
                       "status": 200,
                       "message": "OK",
                       "body": {
-                        "accountInformationId": "dCa9D02F-Db0e-FE3f-b8aD-e74d973D28f4",
-                        "createdAt": "1989-12-30 21:07:56",
-                        "updatedAt": "1995-11-18 07:48:33",
-                        "accountType": 1,
-                        "userName": "p.pyqte@cnqunqf.li",
-                        "fullInformationId": "878F34db-fD57-9b16-eDe7-Cc084cDb9d2E"
+                        "accountInformationId": "F66Bec4B-50Ec-Cb1c-f5dC-bD8842cf71ec",
+                        "userName": "m.hiqcnmw@eosgmqsfn.sk",
+                        "createdAt": "1994-12-31 12:24:08",
+                        "updatedAt": "1994-03-09 05:38:04",
+                        "fullInformationId": {
+                          "manager": "fC4752E6-D90f-d242-4fb1-8394cE7eAeE9",
+                          "applicant": "ed7728B3-febd-7EcC-F2cc-27719aDe199F",
+                          "personnel": "c8bAb786-e3cA-79F9-fBAF-549e7FF4DC52",
+                          "advertiser": "9b1d0cFA-7D5e-F9b3-4592-49Fac5fB3Ef7"
+                        }
                       }
                     }
                   }
@@ -1512,6 +1532,99 @@
           }
         },
         "x-run-in-apifox'": "https://www.apifox.cn/web/project/743652/apis/api-15154535-run"
+      },
+      "delete": {
+        "summary": "删除用户信息",
+        "x-apifox-folder": "Applicant",
+        "x-apifox-status": "developing",
+        "deprecated": false,
+        "description": "删除用户信息的接口",
+        "operationId": "DeleteUserInformation",
+        "tags": ["Applicant"],
+        "parameters": [
+          {
+            "name": "userInfoId",
+            "in": "path",
+            "description": "用户信息ID",
+            "required": true,
+            "example": "{% mock 'guid' %}",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "timestamp": {
+                      "type": "string",
+                      "title": "处理时间",
+                      "description": "处理时间"
+                    },
+                    "status": {
+                      "type": "integer",
+                      "title": "响应状态",
+                      "description": "响应状态"
+                    },
+                    "message": {
+                      "type": "string",
+                      "title": "状态描述",
+                      "description": "状态描述"
+                    },
+                    "body": {
+                      "$ref": "#/components/schemas/ApplicantInformation",
+                      "x-apifox-overrides": {}
+                    }
+                  },
+                  "required": ["timestamp", "status", "message", "body"],
+                  "x-apifox-ignore-properties": [],
+                  "x-apifox-orders": ["timestamp", "status", "message", "body"]
+                },
+                "examples": {
+                  "1": {
+                    "summary": "成功示例 ",
+                    "value": {
+                      "timestamp": "1973-10-29 05:15:21",
+                      "status": 200,
+                      "message": "OK",
+                      "body": {
+                        "firstName": "易",
+                        "lastName": "秀英",
+                        "dateOfBirth": "1986-09-04",
+                        "sex": "存",
+                        "age": 38,
+                        "cityName": "昌吉回族自治州",
+                        "email": "n.trynvg@spehqleut.io",
+                        "workingYears": 2,
+                        "education": 3,
+                        "personalAdvantage": "不保志命角米用几等细目入白。",
+                        "socialHomepage": "http://xmb.pe/ofep",
+                        "pictureWorks": [
+                          "http://dummyimage.com/160x600",
+                          "http://dummyimage.com/468x60",
+                          "http://dummyimage.com/120x90",
+                          "http://dummyimage.com/250x250"
+                        ],
+                        "privacySettings": 2,
+                        "avatarUrl": "http://dummyimage.com/120x60",
+                        "applicantInformationId": "8f64E132-72DC-CcfD-79Fe-747C774E945e",
+                        "createdAt": "2022-08-06 03:06:16",
+                        "updatedAt": "1988-03-30 23:46:51",
+                        "jobStatus": 2
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/743652/apis/api-64036024-run"
       }
     },
     "/userInfos": {
@@ -1680,6 +1793,302 @@
           }
         },
         "x-run-in-apifox'": "https://www.apifox.cn/web/project/743652/apis/api-15154348-run"
+      },
+      "post": {
+        "summary": "增加用户信息",
+        "x-apifox-folder": "Applicant",
+        "x-apifox-status": "developing",
+        "deprecated": false,
+        "description": "增加用户信息的接口",
+        "operationId": "AddUserInformation",
+        "tags": ["Applicant"],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "x-apifox-refs": {
+                  "01GSVTKSGDM5GZ13QMW6NJS62Y": {
+                    "$ref": "#/components/schemas/ApplicantInformation",
+                    "x-apifox-overrides": {}
+                  }
+                },
+                "x-apifox-orders": ["01GSVTKSGDM5GZ13QMW6NJS62Y"],
+                "properties": {
+                  "avatarUrl": {
+                    "type": "string",
+                    "title": "头像地址",
+                    "description": "头像地址"
+                  },
+                  "firstName": {
+                    "type": "string",
+                    "title": "姓",
+                    "description": "姓"
+                  },
+                  "lastName": {
+                    "type": "string",
+                    "title": "名",
+                    "description": "名"
+                  },
+                  "dateOfBirth": {
+                    "type": "string",
+                    "title": "生日",
+                    "pattern": "^((((19|20)\\d{2})-(0?[13-9]|1[012])-(0?[1-9]|[12]\\d|30))|(((19|20)\\d{2})-(0?[13578]|1[02])-31)|(((19|20)\\d{2})-0?2-(0?[1-9]|1\\d|2[0-8]))|((((19|20)([13579][26]|[2468][048]|0[48]))|(2000))-0?2-29))$",
+                    "description": "生日"
+                  },
+                  "sex": {
+                    "type": "string",
+                    "title": "性别",
+                    "description": "性别"
+                  },
+                  "age": {
+                    "type": "integer",
+                    "title": "年龄",
+                    "description": "年龄"
+                  },
+                  "cityName": {
+                    "type": "string",
+                    "title": "所在城市",
+                    "description": "所在城市"
+                  },
+                  "email": {
+                    "type": "string",
+                    "title": "电子邮箱",
+                    "description": "电子邮箱"
+                  },
+                  "workingYears": {
+                    "type": "integer",
+                    "title": "工作年限",
+                    "description": "{1:没有工作经验,2:在校/应届,3:3年一下,4:3-5年,5:5-10年,6:10年以上}",
+                    "enum": [1, 2, 3, 4, 5, 6],
+                    "x-apifox": {
+                      "enumDescriptions": {
+                        "1": "NoExperience",
+                        "2": "InSchoolOrFreshGraduate",
+                        "3": "Under3Year",
+                        "4": "With3To5Year",
+                        "5": "With5To10Year",
+                        "6": "MoreThen10Year"
+                      }
+                    },
+                    "x-enum-varnames": [
+                      "NoExperience",
+                      "InSchoolOrFreshGraduate",
+                      "Under3Year",
+                      "With3To5Year",
+                      "With5To10Year",
+                      "MoreThen10Year"
+                    ]
+                  },
+                  "education": {
+                    "type": "integer",
+                    "title": "学历状态",
+                    "description": "{0:未知,1:大专,2:本科,3:硕士,4:博士}",
+                    "enum": [0, 1, 2, 3, 4],
+                    "x-apifox": {
+                      "enumDescriptions": {
+                        "0": "Unknown",
+                        "1": "JuniorCollege",
+                        "2": "Undergraduate",
+                        "3": "Postgraduate",
+                        "4": "Doctor"
+                      }
+                    },
+                    "x-enum-varnames": [
+                      "Unknown",
+                      "JuniorCollege",
+                      "Undergraduate",
+                      "Postgraduate",
+                      "Doctor"
+                    ]
+                  },
+                  "personalAdvantage": {
+                    "type": "string",
+                    "title": "个人优势",
+                    "description": "个人优势"
+                  },
+                  "socialHomepage": {
+                    "type": "string",
+                    "title": "社交主页",
+                    "description": "社交主页"
+                  },
+                  "jobStatus": {
+                    "type": "integer",
+                    "title": "求职状态",
+                    "description": "{1:随时入职,2:2周内入职,3:1月内入职}",
+                    "enum": [0, 1, 2, 3],
+                    "x-apifox": {
+                      "enumDescriptions": {
+                        "0": "Unknown",
+                        "1": "AnyTime",
+                        "2": "TwoWeeks",
+                        "3": "OneMoth"
+                      }
+                    },
+                    "x-enum-varnames": [
+                      "Unknown",
+                      "AnyTime",
+                      "TwoWeeks",
+                      "OneMoth"
+                    ]
+                  },
+                  "pictureWorks": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "title": "图片作品",
+                    "description": "图片作品"
+                  },
+                  "privacySettings": {
+                    "type": "integer",
+                    "title": "隐私设置",
+                    "description": "{1:实名,2:匿名}",
+                    "enum": [1, 2],
+                    "x-apifox": {
+                      "enumDescriptions": {
+                        "1": "RealName",
+                        "2": "Anonymous"
+                      }
+                    },
+                    "x-enum-varnames": ["RealName", "Anonymous"]
+                  }
+                },
+                "required": [
+                  "avatarUrl",
+                  "firstName",
+                  "lastName",
+                  "dateOfBirth",
+                  "sex",
+                  "age",
+                  "cityName",
+                  "email",
+                  "workingYears",
+                  "education",
+                  "personalAdvantage",
+                  "socialHomepage",
+                  "jobStatus",
+                  "pictureWorks",
+                  "privacySettings"
+                ],
+                "x-apifox-ignore-properties": [
+                  "avatarUrl",
+                  "firstName",
+                  "lastName",
+                  "dateOfBirth",
+                  "sex",
+                  "age",
+                  "cityName",
+                  "email",
+                  "workingYears",
+                  "education",
+                  "personalAdvantage",
+                  "socialHomepage",
+                  "jobStatus",
+                  "pictureWorks",
+                  "privacySettings"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "x-apifox-refs": {
+                    "01GSVTMTMFK8CJNEPZPRS0N51D": {
+                      "$ref": "#/components/schemas/BaseResponse",
+                      "x-apifox-overrides": {
+                        "body": {
+                          "$ref": "#/components/schemas/AdvertisingInformation",
+                          "x-apifox-overrides": {
+                            "advertiserInformationId": null
+                          }
+                        }
+                      },
+                      "required": ["body"]
+                    }
+                  },
+                  "x-apifox-orders": ["01GSVTMTMFK8CJNEPZPRS0N51D"],
+                  "properties": {
+                    "requestId": {
+                      "type": "string",
+                      "title": "请求ID",
+                      "description": "请求ID"
+                    },
+                    "timestamp": {
+                      "type": "string",
+                      "title": "响应时间",
+                      "description": "响应时间"
+                    },
+                    "status": {
+                      "type": "integer",
+                      "title": "响应编码",
+                      "description": "响应编码"
+                    },
+                    "message": {
+                      "type": "string",
+                      "title": "响应信息",
+                      "description": "响应信息"
+                    },
+                    "body": {
+                      "$ref": "#/components/schemas/ApplicantInformation",
+                      "x-apifox-overrides": {}
+                    }
+                  },
+                  "required": ["timestamp", "status", "message", "body"],
+                  "x-apifox-ignore-properties": [
+                    "requestId",
+                    "timestamp",
+                    "status",
+                    "message",
+                    "body"
+                  ]
+                },
+                "examples": {
+                  "1": {
+                    "summary": "成功示例 ",
+                    "value": {
+                      "timestamp": "1981-12-08 01:20:51",
+                      "status": 353,
+                      "message": "Xlyis Dhql Zqdkfmnmew Bqk",
+                      "body": {
+                        "firstName": "刘",
+                        "lastName": "敏",
+                        "dateOfBirth": "1986-04-15",
+                        "sex": "内",
+                        "age": 49,
+                        "cityName": "大连市",
+                        "email": "z.jpcpozhdf@dnszoqhe.kn",
+                        "workingYears": 4,
+                        "education": 1,
+                        "personalAdvantage": "现对法委正育气得受成少离属身我。",
+                        "socialHomepage": "http://poabqr.tf/dpwpupbr",
+                        "pictureWorks": [
+                          "http://dummyimage.com/120x600",
+                          "http://dummyimage.com/120x600"
+                        ],
+                        "privacySettings": 2,
+                        "avatarUrl": "http://dummyimage.com/468x60",
+                        "applicantInformationId": "e3ee052c-f0A4-BE39-FfA9-A13F8dbff6Bb",
+                        "createdAt": "2014-05-31 11:40:06",
+                        "updatedAt": "2012-09-03 13:40:39",
+                        "jobStatus": 1
+                      },
+                      "requestId": "5577dAEE-afeb-b2FA-fF56-55Dc23b2A7bc"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/743652/apis/api-64035668-run"
       }
     },
     "/companyInfos/{companyInfoId}/positionInfos": {
@@ -2994,14 +3403,14 @@
                 "x-apifox-overrides": {}
               },
               "example": {
-                "hrInformationId": "ef4bC44c-C1Cf-6d32-dCaC-FD28f2B5Fc1e",
-                "createdAt": "2000-07-03 18:56:57",
-                "updatedAt": "2011-01-08 14:49:58",
-                "companyInformationId": "f7D61cE6-1B08-cfdF-703c-1CABA9Bd7A3b",
-                "avatarUrl": "http://dummyimage.com/120x240",
-                "hrName": "罗霞",
-                "postName": "角劳具律",
-                "acceptEmail": "h.hmepcb@zyjsysx.ua"
+                "hrName": "姜静",
+                "postName": "查连中",
+                "acceptEmail": "f.jwyowo@dnbrbxmczp.sb",
+                "avatarUrl": "http://dummyimage.com/720x300",
+                "personnelInformationId": "ffaBafc7-d54d-5e99-ABcE-2F7664734F2F",
+                "createdAt": "2003-07-29 04:52:03",
+                "updatedAt": "1993-08-30 15:48:24",
+                "companyInformationId": "15fBF6F7-497f-BEea-BB5e-7ADA8D2aB2B1"
               }
             }
           }
@@ -3141,6 +3550,84 @@
           }
         },
         "x-run-in-apifox'": "https://www.apifox.cn/web/project/743652/apis/api-15154494-run"
+      },
+      "delete": {
+        "summary": "删除人管信息",
+        "x-apifox-folder": "Personnel",
+        "x-apifox-status": "developing",
+        "deprecated": false,
+        "description": "删除人管信息使用的接口",
+        "operationId": "DeleteHrInformation",
+        "tags": ["Personnel"],
+        "parameters": [
+          {
+            "name": "hrInfoId",
+            "in": "path",
+            "description": "HR信息ID",
+            "required": true,
+            "example": "{% mock 'guid' %}",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "timestamp": {
+                      "type": "string",
+                      "title": "处理时间",
+                      "description": "处理时间"
+                    },
+                    "status": {
+                      "type": "integer",
+                      "title": "响应状态",
+                      "description": "响应状态"
+                    },
+                    "message": {
+                      "type": "string",
+                      "title": "状态描述",
+                      "description": "状态描述"
+                    },
+                    "body": {
+                      "$ref": "#/components/schemas/PersonnelInformation",
+                      "x-apifox-overrides": {}
+                    }
+                  },
+                  "required": ["timestamp", "status", "message", "body"],
+                  "x-apifox-ignore-properties": [],
+                  "x-apifox-orders": ["timestamp", "status", "message", "body"]
+                },
+                "examples": {
+                  "1": {
+                    "summary": "成功示例 ",
+                    "value": {
+                      "timestamp": "1973-01-12 15:45:13",
+                      "status": 200,
+                      "message": "OK",
+                      "body": {
+                        "hrInformationId": "3BfeF329-EA36-7ee8-e983-4BC5cf8fcF6B",
+                        "createdAt": "2013-12-03 04:01:48",
+                        "updatedAt": "1988-10-26 21:17:38",
+                        "companyInformationId": "d684A6EB-fdB3-Ade1-fFAb-6102fd9d5e5B",
+                        "avatarUrl": "http://dummyimage.com/180x150",
+                        "hrName": "熊敏",
+                        "postName": "自现观程型",
+                        "acceptEmail": "j.rdv@vgerrdid.gd"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/743652/apis/api-64026755-run"
       }
     },
     "/userInfos/{userInfoId}/jobExpectations": {
@@ -8598,12 +9085,12 @@
     "/accountInfos/forget": {
       "put": {
         "summary": "忘记密码",
-        "x-apifox-folder": "Authentication",
+        "x-apifox-folder": "Account",
         "x-apifox-status": "developing",
         "deprecated": false,
         "description": "忘记密码的接口",
         "operationId": "ForgetPassword",
-        "tags": ["Authentication"],
+        "tags": ["Account"],
         "parameters": [],
         "requestBody": {
           "content": {
@@ -8677,16 +9164,20 @@
                   "1": {
                     "summary": "成功示例 ",
                     "value": {
-                      "timestamp": "2019-01-16 12:15:21",
+                      "timestamp": "1982-12-21 21:52:47",
                       "status": 200,
                       "message": "OK",
                       "body": {
-                        "accountInformationId": "9ACA0CE4-5d1D-93dd-5eCA-162cA5A6b1AE",
-                        "createdAt": "2002-04-29 00:09:45",
-                        "updatedAt": "1988-01-28 10:49:39",
-                        "accountType": 1,
-                        "userName": "i.lkdww@wczhxdeo.gi",
-                        "fullInformationId": "dbDD2cB5-3DFD-e3B4-93ca-2bD3eED6a9c8"
+                        "accountInformationId": "B5AdcFe6-68d9-dDf7-4A8E-4E37b330bcbc",
+                        "userName": "x.txwyt@cahmb.name",
+                        "createdAt": "2020-08-12 22:10:21",
+                        "updatedAt": "1980-04-16 10:50:25",
+                        "fullInformationId": {
+                          "manager": "Cde82C3c-63C3-fdd5-dC5b-82b3F6642fa6",
+                          "applicant": "BCf1F296-Dc9E-FDbb-3DFf-84AD5BDD3A75",
+                          "personnel": "423D5C77-3Fe2-Ae8c-3b6A-c035D6D6F61d",
+                          "advertiser": "2ffcd6Ae-3d08-94bb-dcEb-68cdBfc5B2b0"
+                        }
                       }
                     }
                   }
@@ -9543,6 +10034,138 @@
           }
         },
         "x-run-in-apifox'": "https://www.apifox.cn/web/project/743652/apis/api-18306371-run"
+      },
+      "post": {
+        "summary": "增加人管信息",
+        "x-apifox-folder": "Personnel",
+        "x-apifox-status": "developing",
+        "deprecated": false,
+        "description": "增加人管信息使用的接口",
+        "operationId": "AddHrInformation",
+        "tags": ["Personnel"],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "x-apifox-overrides": {},
+                "type": "object",
+                "x-apifox-refs": {
+                  "01GSVRQXDG04N5R3DK080NC6VS": {
+                    "$ref": "#/components/schemas/PersonnelInformation",
+                    "x-apifox-overrides": {}
+                  }
+                },
+                "x-apifox-orders": ["01GSVRQXDG04N5R3DK080NC6VS"],
+                "properties": {
+                  "companyInformationId": {
+                    "type": "string",
+                    "title": "公司信息ID",
+                    "description": "公司信息ID"
+                  },
+                  "avatarUrl": {
+                    "type": "string",
+                    "title": "头像地址",
+                    "description": "头像地址"
+                  },
+                  "hrName": {
+                    "type": "string",
+                    "title": "HR姓名",
+                    "description": "HR姓名"
+                  },
+                  "postName": {
+                    "type": "string",
+                    "title": "职位名称",
+                    "description": "职位名称"
+                  },
+                  "acceptEmail": {
+                    "type": "string",
+                    "title": "电子邮箱",
+                    "description": "电子邮箱"
+                  }
+                },
+                "required": [
+                  "companyInformationId",
+                  "avatarUrl",
+                  "hrName",
+                  "postName",
+                  "acceptEmail"
+                ],
+                "x-apifox-ignore-properties": [
+                  "companyInformationId",
+                  "avatarUrl",
+                  "hrName",
+                  "postName",
+                  "acceptEmail"
+                ]
+              },
+              "example": {
+                "companyInformationId": "563A7C65-8dAC-8714-7b4c-7d662A354E0d",
+                "avatarUrl": "http://dummyimage.com/728x90",
+                "hrName": "尹勇",
+                "postName": "区并真做题",
+                "acceptEmail": "k.cpjgcvgddo@fbpk.sk"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "timestamp": {
+                      "type": "string",
+                      "title": "处理时间",
+                      "description": "处理时间"
+                    },
+                    "status": {
+                      "type": "integer",
+                      "title": "响应状态",
+                      "description": "响应状态"
+                    },
+                    "message": {
+                      "type": "string",
+                      "title": "状态描述",
+                      "description": "状态描述"
+                    },
+                    "body": {
+                      "$ref": "#/components/schemas/PersonnelInformation",
+                      "x-apifox-overrides": {}
+                    }
+                  },
+                  "required": ["timestamp", "status", "message", "body"],
+                  "x-apifox-ignore-properties": [],
+                  "x-apifox-orders": ["timestamp", "status", "message", "body"]
+                },
+                "examples": {
+                  "1": {
+                    "summary": "成功示例 ",
+                    "value": {
+                      "timestamp": "1998-01-06 23:41:02",
+                      "status": 200,
+                      "message": "OK",
+                      "body": {
+                        "hrName": "万军",
+                        "postName": "种通本以育片",
+                        "acceptEmail": "o.xkmiw@cbxph.cq",
+                        "avatarUrl": "http://dummyimage.com/728x90",
+                        "personnelInformationId": "aD5eFd4D-5eb1-4ee5-c7cF-af9b186EFdD6",
+                        "createdAt": "2016-02-09 11:18:39",
+                        "updatedAt": "1989-12-07 15:30:12",
+                        "companyInformationId": "FcA2Dd2d-3581-CCda-dCCa-efbDFf99Cbe8"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/743652/apis/api-64026753-run"
       }
     },
     "/hrInfos/{hrInfoId}/inspectionRecords/{inspectionRecordId}": {
@@ -11918,16 +12541,26 @@
         "x-run-in-apifox'": "https://www.apifox.cn/web/project/743652/apis/api-24707115-run"
       }
     },
-    "/advertisers": {
+    "/advertisers/{advertiserid}/advertise": {
       "post": {
         "summary": "增加广告信息",
-        "x-apifox-folder": "Advertiser",
+        "x-apifox-folder": "Advertiser/Advertise",
         "x-apifox-status": "developing",
         "deprecated": false,
         "description": "",
-        "operationId": "AddAdvertiserInformation",
-        "tags": ["Advertiser"],
-        "parameters": [],
+        "operationId": "AddAdvertisingInformation",
+        "tags": ["Advertiser/Advertise"],
+        "parameters": [
+          {
+            "name": "advertiserid",
+            "in": "path",
+            "description": "广告商ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -11935,7 +12568,7 @@
                 "type": "object",
                 "x-apifox-refs": {
                   "01GSQ3C43EZHW9AAA3CPKWDPTT": {
-                    "$ref": "#/components/schemas/AdvertiserInformation",
+                    "$ref": "#/components/schemas/AdvertisingInformation",
                     "x-apifox-overrides": {
                       "advertiserInformationId": null
                     }
@@ -11943,6 +12576,21 @@
                 },
                 "x-apifox-orders": ["01GSQ3C43EZHW9AAA3CPKWDPTT"],
                 "properties": {
+                  "advertisingInformationId": {
+                    "type": "string",
+                    "title": "广告信息ID",
+                    "description": "广告信息ID"
+                  },
+                  "createdAt": {
+                    "type": "string",
+                    "title": "创建时间",
+                    "description": "创建时间"
+                  },
+                  "updatedAt": {
+                    "type": "string",
+                    "title": "修改时间",
+                    "description": "修改时间"
+                  },
                   "name": {
                     "type": "string",
                     "title": "广告名称",
@@ -11967,8 +12615,8 @@
                       }
                     },
                     "title": "投放位置",
-                    "x-enum-varnames": ["Master"],
-                    "description": "投放位置"
+                    "description": "{1:Master}",
+                    "x-enum-varnames": ["Master"]
                   },
                   "status": {
                     "type": "integer",
@@ -11980,12 +12628,20 @@
                       }
                     },
                     "title": "投放状态",
-                    "x-enum-varnames": ["Active", "Inactive"],
-                    "description": "投放状态"
+                    "description": "{1:Active,2:Expired}",
+                    "x-enum-varnames": ["Active", "Inactive"]
                   },
                   "payed": {
                     "type": "number",
                     "title": "已缴费用",
+                    "enum": [1, 2],
+                    "x-apifox": {
+                      "enumDescriptions": {
+                        "1": "Active",
+                        "2": "Expired"
+                      }
+                    },
+                    "x-enum-varnames": ["Active", "Expired"],
                     "description": "已缴费用"
                   },
                   "startTime": {
@@ -12000,6 +12656,9 @@
                   }
                 },
                 "required": [
+                  "advertisingInformationId",
+                  "createdAt",
+                  "updatedAt",
                   "name",
                   "pageUrl",
                   "banner",
@@ -12010,6 +12669,9 @@
                   "endTime"
                 ],
                 "x-apifox-ignore-properties": [
+                  "advertisingInformationId",
+                  "createdAt",
+                  "updatedAt",
                   "name",
                   "pageUrl",
                   "banner",
@@ -12045,7 +12707,7 @@
                       "$ref": "#/components/schemas/BaseResponse",
                       "x-apifox-overrides": {
                         "body": {
-                          "$ref": "#/components/schemas/AdvertiserInformation",
+                          "$ref": "#/components/schemas/AdvertisingInformation",
                           "x-apifox-overrides": {
                             "advertiserInformationId": null
                           }
@@ -12077,7 +12739,7 @@
                       "description": "响应信息"
                     },
                     "body": {
-                      "$ref": "#/components/schemas/AdvertiserInformation",
+                      "$ref": "#/components/schemas/AdvertisingInformation",
                       "x-apifox-overrides": {
                         "advertiserInformationId": null
                       }
@@ -12091,6 +12753,30 @@
                     "message",
                     "body"
                   ]
+                },
+                "examples": {
+                  "1": {
+                    "summary": "成功示例",
+                    "value": {
+                      "timestamp": "2009-06-15 15:30:04",
+                      "status": 435,
+                      "message": "Kruapktt Hrdjntsc Wqfdgxipo Kbpqj Httcse Djuc",
+                      "body": {
+                        "advertisingInformationId": "b4ACE824-596e-5cB6-B1Ab-B6C9eF2EA179",
+                        "name": "史色料则间开",
+                        "pageUrl": "http://nrwyx.ug/gwgtoso",
+                        "banner": "http://dummyimage.com/120x60",
+                        "position": 1,
+                        "status": 1,
+                        "payed": 3637473776551582.5,
+                        "startTime": "1974-05-14 05:02:26",
+                        "endTime": "2020-10-04 10:39:15",
+                        "createdAt": "1980-07-08 20:13:06",
+                        "updatedAt": "2010-12-19 13:59:53"
+                      },
+                      "requestId": "0DcbC9D8-f9dB-C7eD-fc76-6dcd1d8d24bd"
+                    }
+                  }
                 }
               }
             }
@@ -12100,13 +12786,22 @@
       },
       "get": {
         "summary": "查询所有广告信息",
-        "x-apifox-folder": "Advertiser",
+        "x-apifox-folder": "Advertiser/Advertise",
         "x-apifox-status": "developing",
         "deprecated": false,
         "description": "",
-        "operationId": "GetAllAdvertiserInformation",
-        "tags": ["Advertiser"],
+        "operationId": "GetAllAdvertisingInformation",
+        "tags": ["Advertiser/Advertise"],
         "parameters": [
+          {
+            "name": "advertiserid",
+            "in": "path",
+            "description": "广告商ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
           {
             "name": "page",
             "in": "query",
@@ -12214,10 +12909,10 @@
                           "title": "记录总数",
                           "description": "记录总数"
                         },
-                        "advertisers": {
+                        "advertise": {
                           "type": "array",
                           "items": {
-                            "$ref": "#/components/schemas/AdvertiserInformation",
+                            "$ref": "#/components/schemas/AdvertisingInformation",
                             "x-apifox-overrides": {
                               "advertiserInformationId": null
                             }
@@ -12227,8 +12922,8 @@
                         }
                       },
                       "title": "响应体",
-                      "x-apifox-orders": ["totalCount", "advertisers"],
-                      "required": ["totalCount", "advertisers"],
+                      "x-apifox-orders": ["totalCount", "advertise"],
+                      "required": ["totalCount", "advertise"],
                       "x-apifox-ignore-properties": [],
                       "description": "响应体"
                     }
@@ -12246,70 +12941,41 @@
                   "1": {
                     "summary": "成功示例",
                     "value": {
-                      "timestamp": "2011-02-15 06:48:44",
-                      "status": 327,
-                      "message": "Mderokfbrk Etqdkr Tcdcucpso Peyfbhx Tecscq",
+                      "timestamp": "1971-08-12 21:29:04",
+                      "status": 378,
+                      "message": "Erxdb Dvpvx Ybebqnvjw",
                       "body": {
-                        "totalCount": 68,
-                        "advertisers": [
+                        "totalCount": 85,
+                        "advertise": [
                           {
-                            "advertiserInformationId": "bFf967d2-B766-b6EE-cC53-A7c1DE1D9Aa8",
-                            "name": "许产革三",
-                            "pageUrl": "http://mkfqnrur.uk/jrsuqniex",
-                            "banner": "http://dummyimage.com/120x90",
-                            "position": 1,
-                            "status": 2,
-                            "payed": 7796561384742585,
-                            "startTime": "2003-07-09 05:25:05",
-                            "endTime": "1992-08-26 09:00:28"
-                          },
-                          {
-                            "advertiserInformationId": "C221c649-752a-Bf9B-2ac8-e0FcFC243Eac",
-                            "name": "其求通机",
-                            "pageUrl": "http://hesj.cn/ndynbuv",
-                            "banner": "http://dummyimage.com/160x600",
-                            "position": 1,
-                            "status": 1,
-                            "payed": 7640826805319939,
-                            "startTime": "1989-11-06 14:30:36",
-                            "endTime": "1985-11-27 14:46:19"
-                          },
-                          {
-                            "advertiserInformationId": "27AcbCD5-f5Ae-5Ffd-8cFB-e5b8EAD2FEf8",
-                            "name": "子志北期",
-                            "pageUrl": "http://phvchavdt.jp/kciadm",
-                            "banner": "http://dummyimage.com/120x240",
-                            "position": 1,
-                            "status": 1,
-                            "payed": 3690799796681051,
-                            "startTime": "1976-01-16 14:12:19",
-                            "endTime": "1974-11-14 10:31:12"
-                          },
-                          {
-                            "advertiserInformationId": "Cc4F1a4e-8Ac3-CE37-94D9-bec8941B6c86",
-                            "name": "县单少被",
-                            "pageUrl": "http://ohizggzw.uk/ynrbpkm",
+                            "advertisingInformationId": "3AebAB10-3fD4-fF58-5C9E-Cd9a5f5a2A46",
+                            "name": "支构书什",
+                            "pageUrl": "http://peeviuc.be/alis",
                             "banner": "http://dummyimage.com/720x300",
                             "position": 1,
-                            "status": 2,
-                            "payed": 8368602605496772,
-                            "startTime": "2020-06-15 09:57:10",
-                            "endTime": "1992-10-10 13:11:14"
+                            "status": 1,
+                            "payed": 3928924538777442,
+                            "startTime": "2017-03-31 07:00:08",
+                            "endTime": "1989-01-18 05:03:28",
+                            "createdAt": "2014-05-17 21:59:56",
+                            "updatedAt": "2008-11-19 10:54:59"
                           },
                           {
-                            "advertiserInformationId": "8C7D86C8-F2FE-e51e-9CDF-CC4eDD2e4fEC",
-                            "name": "界太当当只",
-                            "pageUrl": "http://wytch.bh/dnls",
-                            "banner": "http://dummyimage.com/336x280",
+                            "advertisingInformationId": "E87c318a-C62c-3fB7-fEfa-BCAEa3c765e2",
+                            "name": "且率求可老型",
+                            "pageUrl": "http://iqymmqu.com.cn/rsjmgromvg",
+                            "banner": "http://dummyimage.com/468x60",
                             "position": 1,
-                            "status": 2,
-                            "payed": 415637039174342.7,
-                            "startTime": "1975-11-08 02:04:19",
-                            "endTime": "2012-03-01 15:55:50"
+                            "status": 1,
+                            "payed": 3267917602389716.5,
+                            "startTime": "2013-09-04 02:05:22",
+                            "endTime": "1984-08-17 13:17:59",
+                            "createdAt": "2003-04-19 20:21:11",
+                            "updatedAt": "1985-03-28 14:43:51"
                           }
                         ]
                       },
-                      "requestId": "30a75fC3-FFEf-eb9C-b090-88a7FCCF4eac"
+                      "requestId": "4d54bACA-14D9-6F6d-AfDF-5847f24eecAC"
                     }
                   }
                 }
@@ -12320,20 +12986,29 @@
         "x-run-in-apifox'": "https://www.apifox.cn/web/project/743652/apis/api-63576331-run"
       }
     },
-    "/advertisers/{:advertiserid}": {
+    "/advertisers/{advertiserid}/advertise/{advertiseid}": {
       "delete": {
         "summary": "删除广告信息",
-        "x-apifox-folder": "Advertiser",
+        "x-apifox-folder": "Advertiser/Advertise",
         "x-apifox-status": "developing",
         "deprecated": false,
         "description": "",
-        "operationId": "DeleteAdvertiserInformation",
-        "tags": ["Advertiser"],
+        "operationId": "DeleteAdvertisingInformation",
+        "tags": ["Advertiser/Advertise"],
         "parameters": [
           {
-            "name": ":advertiserid",
+            "name": "advertiserid",
             "in": "path",
-            "description": "",
+            "description": "广告商ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "advertiseid",
+            "in": "path",
+            "description": "广告信息ID",
             "required": true,
             "schema": {
               "type": "string"
@@ -12352,7 +13027,7 @@
                       "$ref": "#/components/schemas/BaseResponse",
                       "x-apifox-overrides": {
                         "body": {
-                          "$ref": "#/components/schemas/AdvertiserInformation",
+                          "$ref": "#/components/schemas/AdvertisingInformation",
                           "x-apifox-overrides": {
                             "advertiserInformationId": null
                           }
@@ -12384,7 +13059,7 @@
                       "description": "响应信息"
                     },
                     "body": {
-                      "$ref": "#/components/schemas/AdvertiserInformation",
+                      "$ref": "#/components/schemas/AdvertisingInformation",
                       "x-apifox-overrides": {
                         "advertiserInformationId": null
                       }
@@ -12403,21 +13078,23 @@
                   "1": {
                     "summary": "成功示例",
                     "value": {
-                      "requestId": "24DFAe9d-03BC-DAC0-B1DD-F07D9611cCD0",
-                      "timestamp": "2003-03-27 07:05:11",
-                      "status": 203,
-                      "message": "Nvmgvr Rgmxt Goteb Yskxbxtfp",
+                      "timestamp": "1971-06-01 04:33:07",
+                      "status": 437,
+                      "message": "Pggpvc Yvsdworxhl Uprhjpwbw Lvcbqqbx Ymqapbuyt Ltskeekie",
                       "body": {
-                        "advertiserInformationId": "25b6d68F-43df-E854-4f96-CcfFf744d6d3",
-                        "name": "快会走农想",
-                        "pageUrl": "http://nekhfin.io/siouw",
-                        "banner": "http://dummyimage.com/125x125",
+                        "advertisingInformationId": "bFf7CAd8-d17e-bb22-8D34-48BB7cD629fc",
+                        "name": "整白么分",
+                        "pageUrl": "http://hwqpk.ua/dchmiyth",
+                        "banner": "http://dummyimage.com/160x600",
                         "position": 1,
-                        "status": 2,
-                        "payed": 553038866829238.75,
-                        "startTime": "1976-03-08 11:09:04",
-                        "endTime": "2009-06-19 06:49:46"
-                      }
+                        "status": 1,
+                        "payed": 3544263085400198.5,
+                        "startTime": "2001-08-02 16:09:44",
+                        "endTime": "1987-11-09 09:16:56",
+                        "createdAt": "1978-08-20 21:40:29",
+                        "updatedAt": "1974-01-07 19:43:47"
+                      },
+                      "requestId": "CDB4475C-1440-eb54-cB84-99fd29De545A"
                     }
                   }
                 }
@@ -12429,17 +13106,26 @@
       },
       "put": {
         "summary": "修改广告信息",
-        "x-apifox-folder": "Advertiser",
+        "x-apifox-folder": "Advertiser/Advertise",
         "x-apifox-status": "developing",
         "deprecated": false,
         "description": "",
-        "operationId": "UpdateAdvertiserInformation",
-        "tags": ["Advertiser"],
+        "operationId": "UpdateAdvertisingInformation",
+        "tags": ["Advertiser/Advertise"],
         "parameters": [
           {
-            "name": ":advertiserid",
+            "name": "advertiserid",
             "in": "path",
-            "description": "",
+            "description": "广告商ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "advertiseid",
+            "in": "path",
+            "description": "广告信息ID",
             "required": true,
             "schema": {
               "type": "string"
@@ -12450,21 +13136,23 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/AdvertiserInformation",
+                "$ref": "#/components/schemas/AdvertisingInformation",
                 "x-apifox-overrides": {
                   "advertiserInformationId": null
                 }
               },
               "example": {
-                "advertiserInformationId": "5E41e6Ba-f78c-4B27-aabC-3FA491D71748",
-                "name": "太新回这火次",
-                "pageUrl": "http://siloj.lr/bidsmabx",
-                "banner": "http://dummyimage.com/720x300",
+                "advertisingInformationId": "7E20fD2A-9999-3FF1-1206-28B7e7F93B86",
+                "name": "题那造主以处克",
+                "pageUrl": "http://luyt.pg/iwumlc",
+                "banner": "http://dummyimage.com/125x125",
                 "position": 1,
-                "status": 1,
-                "payed": 3661836569011814.5,
-                "startTime": "1995-01-21 10:25:56",
-                "endTime": "2018-08-08 14:00:58"
+                "status": 2,
+                "payed": 5418965140107495,
+                "startTime": "1977-03-26 15:21:19",
+                "endTime": "2017-02-17 21:02:03",
+                "createdAt": "2003-01-14 04:10:52",
+                "updatedAt": "2021-08-19 20:39:32"
               }
             }
           }
@@ -12481,7 +13169,7 @@
                       "$ref": "#/components/schemas/BaseResponse",
                       "x-apifox-overrides": {
                         "body": {
-                          "$ref": "#/components/schemas/AdvertiserInformation",
+                          "$ref": "#/components/schemas/AdvertisingInformation",
                           "x-apifox-overrides": {
                             "advertiserInformationId": null
                           }
@@ -12513,7 +13201,7 @@
                       "description": "响应信息"
                     },
                     "body": {
-                      "$ref": "#/components/schemas/AdvertiserInformation",
+                      "$ref": "#/components/schemas/AdvertisingInformation",
                       "x-apifox-overrides": {
                         "advertiserInformationId": null
                       }
@@ -12532,21 +13220,23 @@
                   "1": {
                     "summary": "成功示例",
                     "value": {
-                      "requestId": "3e73F5f6-ac3e-A3Ca-Fd9c-FEDed100c1dC",
-                      "timestamp": "2004-08-15 11:03:49",
-                      "status": 360,
-                      "message": "Mndrjpnll Fivuglqu Blcggovfo Onjtxb Bkvp Nvnu",
+                      "timestamp": "2007-04-01 04:37:17",
+                      "status": 369,
+                      "message": "Bofqvxzs Lkxpk Uwilg Tcgwayojy",
                       "body": {
-                        "advertiserInformationId": "2465077C-bCC4-DDDd-6D32-dC4B16e41689",
-                        "name": "料证温住至交即",
-                        "pageUrl": "http://angcpibu.中国互联.公司/wohg",
-                        "banner": "http://dummyimage.com/160x600",
+                        "advertisingInformationId": "23DBc3Eb-1D7C-8c89-9ccc-53bcbcc5365f",
+                        "name": "同金保员类业",
+                        "pageUrl": "http://wdek.mil/qqgg",
+                        "banner": "http://dummyimage.com/300x600",
                         "position": 1,
-                        "status": 2,
-                        "payed": 8330555657162611,
-                        "startTime": "2009-04-08 21:53:14",
-                        "endTime": "1992-05-06 12:56:01"
-                      }
+                        "status": 1,
+                        "payed": 5884208347109873,
+                        "startTime": "2022-06-28 19:27:08",
+                        "endTime": "1984-08-18 02:54:24",
+                        "createdAt": "1999-03-12 11:17:27",
+                        "updatedAt": "1973-08-04 23:49:19"
+                      },
+                      "requestId": "cD8b83E4-3B6c-2f2E-d6eF-dfBFD12C4EDA"
                     }
                   }
                 }
@@ -12555,24 +13245,31 @@
           }
         },
         "x-run-in-apifox'": "https://www.apifox.cn/web/project/743652/apis/api-63576127-run"
-      }
-    },
-    "/advertisers/{advertiserid}": {
+      },
       "get": {
         "summary": "查询广告信息",
-        "x-apifox-folder": "Advertiser",
+        "x-apifox-folder": "Advertiser/Advertise",
         "x-apifox-status": "developing",
         "deprecated": false,
         "description": "",
-        "operationId": "GetAdvertiserInformation",
-        "tags": ["Advertiser"],
+        "operationId": "GetAdvertisingInformation",
+        "tags": ["Advertiser/Advertise"],
         "parameters": [
           {
             "name": "advertiserid",
             "in": "path",
-            "description": "广告信息ID",
+            "description": "广告商ID",
             "required": true,
             "example": "{% mock 'guid' %}",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "advertiseid",
+            "in": "path",
+            "description": "广告信息ID",
+            "required": true,
             "schema": {
               "type": "string"
             }
@@ -12590,7 +13287,7 @@
                       "$ref": "#/components/schemas/BaseResponse",
                       "x-apifox-overrides": {
                         "body": {
-                          "$ref": "#/components/schemas/AdvertiserInformation",
+                          "$ref": "#/components/schemas/AdvertisingInformation",
                           "x-apifox-overrides": {
                             "advertiserInformationId": null
                           }
@@ -12622,7 +13319,7 @@
                       "description": "响应信息"
                     },
                     "body": {
-                      "$ref": "#/components/schemas/AdvertiserInformation",
+                      "$ref": "#/components/schemas/AdvertisingInformation",
                       "x-apifox-overrides": {
                         "advertiserInformationId": null
                       }
@@ -12641,21 +13338,23 @@
                   "1": {
                     "summary": "成功示例",
                     "value": {
-                      "requestId": "eBBdDded-3F99-1Fff-a16f-9745F2aa3394",
-                      "timestamp": "2019-01-31 03:21:59",
-                      "status": 484,
-                      "message": "Cqgccst Ulqiwie Jvveublcj Etoefuyqc Exmosgu Iezslxfoe Vbx",
+                      "timestamp": "2011-03-31 00:06:12",
+                      "status": 437,
+                      "message": "Dbtldhwcf Kortzw Crbexxny Lqfknudxu Wgz Vgrzgfj",
                       "body": {
-                        "advertiserInformationId": "EcdEA79d-cD9C-BFDf-59CD-84C1EcaD5ed6",
-                        "name": "工极油维",
-                        "pageUrl": "http://svms.km/kngofqzh",
-                        "banner": "http://dummyimage.com/336x280",
+                        "advertisingInformationId": "8F87bB19-3e62-acCF-2FD4-b4c87e7081eB",
+                        "name": "方商界它了",
+                        "pageUrl": "http://jartrbi.tv/kkhisseef",
+                        "banner": "http://dummyimage.com/120x90",
                         "position": 1,
                         "status": 1,
-                        "payed": 3017284730243018.5,
-                        "startTime": "1974-06-19 16:44:19",
-                        "endTime": "2014-01-20 05:55:05"
-                      }
+                        "payed": 6909138953359386,
+                        "startTime": "1985-12-26 14:12:28",
+                        "endTime": "1997-08-28 03:23:15",
+                        "createdAt": "1999-11-21 19:50:32",
+                        "updatedAt": "2006-07-19 17:29:56"
+                      },
+                      "requestId": "bA4EfE15-a445-716F-54F4-B4Ae28E2396a"
                     }
                   }
                 }
@@ -12665,10 +13364,807 @@
         },
         "x-run-in-apifox'": "https://www.apifox.cn/web/project/743652/apis/api-63580905-run"
       }
+    },
+    "/advertisers": {
+      "post": {
+        "summary": "增加广告商信息",
+        "x-apifox-folder": "Advertiser",
+        "x-apifox-status": "developing",
+        "deprecated": false,
+        "description": "",
+        "operationId": "AddAdvertiserInformation",
+        "tags": ["Advertiser"],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "x-apifox-refs": {
+                  "01GSVSQF8A3HM75YFPZ9ZXJVT9": {
+                    "$ref": "#/components/schemas/AdvertiserInformation",
+                    "x-apifox-overrides": {
+                      "advertiserInformationId": null,
+                      "createdAt": null,
+                      "updatedAt": null
+                    }
+                  }
+                },
+                "x-apifox-orders": ["01GSVSQF8A3HM75YFPZ9ZXJVT9"],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "title": "广告商名称",
+                    "description": "广告商名称"
+                  },
+                  "pageUrl": {
+                    "type": "string",
+                    "title": "网页地址",
+                    "description": "网页地址"
+                  },
+                  "logoUrl": {
+                    "type": "string",
+                    "title": "Logo地址",
+                    "description": "Logo地址"
+                  }
+                },
+                "required": ["name", "pageUrl", "logoUrl"],
+                "x-apifox-ignore-properties": ["name", "pageUrl", "logoUrl"]
+              },
+              "example": {
+                "name": "人记点情料利",
+                "pageUrl": "http://ipfniwtc.kp/bagdkit",
+                "logoUrl": "http://dummyimage.com/336x280"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "x-apifox-refs": {
+                    "01GSVSR9C6V4XZBTMN86TJE4DR": {
+                      "$ref": "#/components/schemas/BaseResponse",
+                      "x-apifox-overrides": {
+                        "body": {
+                          "$ref": "#/components/schemas/AdvertisingInformation",
+                          "x-apifox-overrides": {
+                            "advertiserInformationId": null
+                          }
+                        }
+                      },
+                      "required": ["body"]
+                    }
+                  },
+                  "x-apifox-orders": ["01GSVSR9C6V4XZBTMN86TJE4DR"],
+                  "properties": {
+                    "requestId": {
+                      "type": "string",
+                      "title": "请求ID",
+                      "description": "请求ID"
+                    },
+                    "timestamp": {
+                      "type": "string",
+                      "title": "响应时间",
+                      "description": "响应时间"
+                    },
+                    "status": {
+                      "type": "integer",
+                      "title": "响应编码",
+                      "description": "响应编码"
+                    },
+                    "message": {
+                      "type": "string",
+                      "title": "响应信息",
+                      "description": "响应信息"
+                    },
+                    "body": {
+                      "$ref": "#/components/schemas/AdvertiserInformation",
+                      "x-apifox-overrides": {
+                        "advertiserInformationId": null,
+                        "createdAt": null,
+                        "updatedAt": null
+                      }
+                    }
+                  },
+                  "required": ["timestamp", "status", "message", "body"],
+                  "x-apifox-ignore-properties": [
+                    "requestId",
+                    "timestamp",
+                    "status",
+                    "message",
+                    "body"
+                  ]
+                },
+                "examples": {
+                  "1": {
+                    "summary": "成功示例",
+                    "value": {
+                      "timestamp": "1970-11-04 14:55:05",
+                      "status": 355,
+                      "message": "Ltboue Gxbrracb Iuhn Pmbbcnszlf Zlyj Nmmgvuumdm",
+                      "body": {
+                        "advertiserInformationId": "3AeD98bD-67e5-bF1c-eFfB-c6AD5af79E6A",
+                        "name": "为张效见干压",
+                        "pageUrl": "http://jjplbm.pn/pggsshj",
+                        "logoUrl": "http://dummyimage.com/720x300",
+                        "createdAt": "2014-03-22 07:15:11",
+                        "updatedAt": "2019-04-01 15:55:44"
+                      },
+                      "requestId": "0cc3FA22-4063-129b-c669-2F21C3932FD0"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/743652/apis/api-64031711-run"
+      },
+      "get": {
+        "summary": "查询所有广告商信息",
+        "x-apifox-folder": "Advertiser",
+        "x-apifox-status": "developing",
+        "deprecated": false,
+        "description": "",
+        "operationId": "GetAllAdvertiserInformation",
+        "tags": ["Advertiser"],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "当前页，eg：0",
+            "required": false,
+            "example": "{% mock 'integer', 0, 5 %}",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "description": "页大小，eg：5",
+            "required": false,
+            "example": "{% mock 'integer', 1, 20 %}",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "description": "排序方式，eg：[\"createdAt,desc\"]",
+            "required": false,
+            "example": ["createdAt,desc"],
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "x-apifox-refs": {
+                    "01GSVT6H4STHMN8KZPND38ZWP9": {
+                      "$ref": "#/components/schemas/PageResponse",
+                      "x-apifox-overrides": {
+                        "body": {
+                          "type": "object",
+                          "properties": {
+                            "totalCount": {
+                              "type": "integer",
+                              "title": "记录总数",
+                              "description": "记录总数"
+                            },
+                            "accountInformations": {
+                              "type": "array",
+                              "items": {
+                                "title": "账号信息",
+                                "$ref": "#/components/schemas/AccountInformation",
+                                "x-apifox-overrides": {},
+                                "description": "账号信息"
+                              },
+                              "title": "账号信息",
+                              "description": "账号信息"
+                            }
+                          },
+                          "title": "响应体",
+                          "x-apifox-orders": [
+                            "totalCount",
+                            "accountInformations"
+                          ],
+                          "required": ["totalCount", "accountInformations"],
+                          "description": "响应体"
+                        }
+                      },
+                      "required": ["body"]
+                    }
+                  },
+                  "x-apifox-orders": ["01GSVT6H4STHMN8KZPND38ZWP9"],
+                  "properties": {
+                    "requestId": {
+                      "type": "string",
+                      "title": "请求ID",
+                      "description": "请求ID"
+                    },
+                    "timestamp": {
+                      "type": "string",
+                      "title": "响应时间",
+                      "description": "响应时间"
+                    },
+                    "status": {
+                      "type": "integer",
+                      "title": "响应编码",
+                      "description": "响应编码"
+                    },
+                    "message": {
+                      "type": "string",
+                      "title": "响应信息",
+                      "description": "响应信息"
+                    },
+                    "body": {
+                      "type": "object",
+                      "properties": {
+                        "totalCount": {
+                          "type": "integer",
+                          "title": "记录总数",
+                          "description": "记录总数"
+                        },
+                        "advertisers": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/AdvertiserInformation",
+                            "x-apifox-overrides": {
+                              "advertiserInformationId": null,
+                              "createdAt": null,
+                              "updatedAt": null
+                            }
+                          },
+                          "title": "当页内容",
+                          "description": "当页内容"
+                        }
+                      },
+                      "title": "响应体",
+                      "x-apifox-orders": ["totalCount", "advertisers"],
+                      "required": ["totalCount", "advertisers"],
+                      "x-apifox-ignore-properties": [],
+                      "description": "响应体"
+                    }
+                  },
+                  "required": ["timestamp", "status", "message", "body"],
+                  "x-apifox-ignore-properties": [
+                    "requestId",
+                    "timestamp",
+                    "status",
+                    "message",
+                    "body"
+                  ]
+                },
+                "examples": {
+                  "1": {
+                    "summary": "成功示例",
+                    "value": {
+                      "timestamp": "1987-02-28 11:16:10",
+                      "status": 252,
+                      "message": "Xhbgt Tcjcol Ejlofkbcm",
+                      "body": {
+                        "totalCount": 71,
+                        "advertisers": [
+                          {
+                            "advertiserInformationId": "77196d94-44C6-be5d-81cB-5DA6Bd94B15b",
+                            "name": "次用决",
+                            "pageUrl": "http://eljiexmys.nc/vhfuttymk",
+                            "logoUrl": "http://dummyimage.com/720x300",
+                            "createdAt": "2013-03-28 01:10:03",
+                            "updatedAt": "2000-10-05 06:25:47"
+                          },
+                          {
+                            "advertiserInformationId": "d0C6bA49-75bD-4cE5-f8bd-1CbedB9A69Eb",
+                            "name": "造速线劳手族",
+                            "pageUrl": "http://lfygteenk.si/neqqtz",
+                            "logoUrl": "http://dummyimage.com/336x280",
+                            "createdAt": "1994-11-08 21:25:32",
+                            "updatedAt": "1976-01-13 08:10:32"
+                          },
+                          {
+                            "advertiserInformationId": "5Cb2BD88-B412-6cF8-cACb-101a53e8b45a",
+                            "name": "有受然铁后",
+                            "pageUrl": "http://knsodkbww.mv/jcnqlyy",
+                            "logoUrl": "http://dummyimage.com/250x250",
+                            "createdAt": "1973-02-25 17:10:27",
+                            "updatedAt": "2000-11-10 22:12:52"
+                          },
+                          {
+                            "advertiserInformationId": "D1e345F3-d112-fF05-9be2-25EC35DeDD9f",
+                            "name": "党两族点",
+                            "pageUrl": "http://kxv.gd/dozpoldib",
+                            "logoUrl": "http://dummyimage.com/120x600",
+                            "createdAt": "2005-12-27 04:33:41",
+                            "updatedAt": "1988-11-23 14:41:55"
+                          },
+                          {
+                            "advertiserInformationId": "BE837b5b-14f4-6FF9-356C-9CF4d8FfdbF3",
+                            "name": "且值都系群",
+                            "pageUrl": "http://npky.km/qhxcb",
+                            "logoUrl": "http://dummyimage.com/336x280",
+                            "createdAt": "2015-06-30 15:53:59",
+                            "updatedAt": "1999-05-09 03:06:46"
+                          }
+                        ]
+                      },
+                      "requestId": "56a3dE5e-15c2-B6FD-e141-AAf02EE9ACda"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/743652/apis/api-64031718-run"
+      }
+    },
+    "/advertisers/{advertiserid}": {
+      "delete": {
+        "summary": "删除广告商信息",
+        "x-apifox-folder": "Advertiser",
+        "x-apifox-status": "developing",
+        "deprecated": false,
+        "description": "",
+        "operationId": "DeleteAdvertiserInformation",
+        "tags": ["Advertiser"],
+        "parameters": [
+          {
+            "name": "advertiserid",
+            "in": "path",
+            "description": "广告商ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "x-apifox-refs": {
+                    "01GSVSR9C6V4XZBTMN86TJE4DR": {
+                      "$ref": "#/components/schemas/BaseResponse",
+                      "x-apifox-overrides": {
+                        "body": {
+                          "$ref": "#/components/schemas/AdvertisingInformation",
+                          "x-apifox-overrides": {
+                            "advertiserInformationId": null
+                          }
+                        }
+                      },
+                      "required": ["body"]
+                    }
+                  },
+                  "x-apifox-orders": ["01GSVSR9C6V4XZBTMN86TJE4DR"],
+                  "properties": {
+                    "requestId": {
+                      "type": "string",
+                      "title": "请求ID",
+                      "description": "请求ID"
+                    },
+                    "timestamp": {
+                      "type": "string",
+                      "title": "响应时间",
+                      "description": "响应时间"
+                    },
+                    "status": {
+                      "type": "integer",
+                      "title": "响应编码",
+                      "description": "响应编码"
+                    },
+                    "message": {
+                      "type": "string",
+                      "title": "响应信息",
+                      "description": "响应信息"
+                    },
+                    "body": {
+                      "$ref": "#/components/schemas/AdvertiserInformation",
+                      "x-apifox-overrides": {
+                        "advertiserInformationId": null,
+                        "createdAt": null,
+                        "updatedAt": null
+                      }
+                    }
+                  },
+                  "required": ["timestamp", "status", "message", "body"],
+                  "x-apifox-ignore-properties": [
+                    "requestId",
+                    "timestamp",
+                    "status",
+                    "message",
+                    "body"
+                  ]
+                },
+                "examples": {
+                  "1": {
+                    "summary": "成功示例",
+                    "value": {
+                      "timestamp": "1970-11-04 14:55:05",
+                      "status": 355,
+                      "message": "Ltboue Gxbrracb Iuhn Pmbbcnszlf Zlyj Nmmgvuumdm",
+                      "body": {
+                        "advertiserInformationId": "3AeD98bD-67e5-bF1c-eFfB-c6AD5af79E6A",
+                        "name": "为张效见干压",
+                        "pageUrl": "http://jjplbm.pn/pggsshj",
+                        "logoUrl": "http://dummyimage.com/720x300",
+                        "createdAt": "2014-03-22 07:15:11",
+                        "updatedAt": "2019-04-01 15:55:44"
+                      },
+                      "requestId": "0cc3FA22-4063-129b-c669-2F21C3932FD0"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/743652/apis/api-64031714-run"
+      },
+      "put": {
+        "summary": "修改广告商信息",
+        "x-apifox-folder": "Advertiser",
+        "x-apifox-status": "developing",
+        "deprecated": false,
+        "description": "",
+        "operationId": "UpdateAdvertiserInformation",
+        "tags": ["Advertiser"],
+        "parameters": [
+          {
+            "name": "advertiserid",
+            "in": "path",
+            "description": "广告商ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "x-apifox-refs": {
+                  "01GSVSQF8A3HM75YFPZ9ZXJVT9": {
+                    "$ref": "#/components/schemas/AdvertiserInformation",
+                    "x-apifox-overrides": {
+                      "advertiserInformationId": null,
+                      "createdAt": null,
+                      "updatedAt": null
+                    }
+                  }
+                },
+                "x-apifox-orders": ["01GSVSQF8A3HM75YFPZ9ZXJVT9"],
+                "properties": {
+                  "advertiserInformationId": {
+                    "type": "string",
+                    "title": "广告商信息ID",
+                    "description": "广告商信息ID"
+                  },
+                  "createdAt": {
+                    "type": "string",
+                    "title": "创建时间",
+                    "description": "创建时间"
+                  },
+                  "updatedAt": {
+                    "type": "string",
+                    "title": "修改时间",
+                    "description": "修改时间"
+                  },
+                  "name": {
+                    "type": "string",
+                    "title": "广告商名称",
+                    "description": "广告商名称"
+                  },
+                  "pageUrl": {
+                    "type": "string",
+                    "title": "网页地址",
+                    "description": "网页地址"
+                  },
+                  "logoUrl": {
+                    "type": "string",
+                    "title": "Logo地址",
+                    "description": "Logo地址"
+                  }
+                },
+                "required": [
+                  "advertiserInformationId",
+                  "createdAt",
+                  "updatedAt",
+                  "name",
+                  "pageUrl",
+                  "logoUrl"
+                ],
+                "x-apifox-ignore-properties": [
+                  "advertiserInformationId",
+                  "createdAt",
+                  "updatedAt",
+                  "name",
+                  "pageUrl",
+                  "logoUrl"
+                ]
+              },
+              "example": {
+                "advertiserInformationId": "B4Ae99b9-f876-Dd41-caf7-3cf9CC319b51",
+                "createdAt": "2001-01-18 12:07:43",
+                "updatedAt": "2015-12-26 06:21:57",
+                "name": "看高书据清反",
+                "pageUrl": "http://vvkcfuqc.tf/gozcj",
+                "logoUrl": "http://dummyimage.com/120x60"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "x-apifox-refs": {
+                    "01GSVSR9C6V4XZBTMN86TJE4DR": {
+                      "$ref": "#/components/schemas/BaseResponse",
+                      "x-apifox-overrides": {
+                        "body": {
+                          "$ref": "#/components/schemas/AdvertisingInformation",
+                          "x-apifox-overrides": {
+                            "advertiserInformationId": null
+                          }
+                        }
+                      },
+                      "required": ["body"]
+                    }
+                  },
+                  "x-apifox-orders": ["01GSVSR9C6V4XZBTMN86TJE4DR"],
+                  "properties": {
+                    "requestId": {
+                      "type": "string",
+                      "title": "请求ID",
+                      "description": "请求ID"
+                    },
+                    "timestamp": {
+                      "type": "string",
+                      "title": "响应时间",
+                      "description": "响应时间"
+                    },
+                    "status": {
+                      "type": "integer",
+                      "title": "响应编码",
+                      "description": "响应编码"
+                    },
+                    "message": {
+                      "type": "string",
+                      "title": "响应信息",
+                      "description": "响应信息"
+                    },
+                    "body": {
+                      "$ref": "#/components/schemas/AdvertiserInformation",
+                      "x-apifox-overrides": {
+                        "advertiserInformationId": null,
+                        "createdAt": null,
+                        "updatedAt": null
+                      }
+                    }
+                  },
+                  "required": ["timestamp", "status", "message", "body"],
+                  "x-apifox-ignore-properties": [
+                    "requestId",
+                    "timestamp",
+                    "status",
+                    "message",
+                    "body"
+                  ]
+                },
+                "examples": {
+                  "1": {
+                    "summary": "成功示例",
+                    "value": {
+                      "timestamp": "1970-11-04 14:55:05",
+                      "status": 355,
+                      "message": "Ltboue Gxbrracb Iuhn Pmbbcnszlf Zlyj Nmmgvuumdm",
+                      "body": {
+                        "advertiserInformationId": "3AeD98bD-67e5-bF1c-eFfB-c6AD5af79E6A",
+                        "name": "为张效见干压",
+                        "pageUrl": "http://jjplbm.pn/pggsshj",
+                        "logoUrl": "http://dummyimage.com/720x300",
+                        "createdAt": "2014-03-22 07:15:11",
+                        "updatedAt": "2019-04-01 15:55:44"
+                      },
+                      "requestId": "0cc3FA22-4063-129b-c669-2F21C3932FD0"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/743652/apis/api-64032109-run"
+      },
+      "get": {
+        "summary": "查询广告商信息",
+        "x-apifox-folder": "Advertiser",
+        "x-apifox-status": "developing",
+        "deprecated": false,
+        "description": "",
+        "operationId": "GetAdvertiserInformation",
+        "tags": ["Advertiser"],
+        "parameters": [
+          {
+            "name": "advertiserid",
+            "in": "path",
+            "description": "广告商ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "x-apifox-refs": {
+                    "01GSVSR9C6V4XZBTMN86TJE4DR": {
+                      "$ref": "#/components/schemas/BaseResponse",
+                      "x-apifox-overrides": {
+                        "body": {
+                          "$ref": "#/components/schemas/AdvertisingInformation",
+                          "x-apifox-overrides": {
+                            "advertiserInformationId": null
+                          }
+                        }
+                      },
+                      "required": ["body"]
+                    }
+                  },
+                  "x-apifox-orders": ["01GSVSR9C6V4XZBTMN86TJE4DR"],
+                  "properties": {
+                    "requestId": {
+                      "type": "string",
+                      "title": "请求ID",
+                      "description": "请求ID"
+                    },
+                    "timestamp": {
+                      "type": "string",
+                      "title": "响应时间",
+                      "description": "响应时间"
+                    },
+                    "status": {
+                      "type": "integer",
+                      "title": "响应编码",
+                      "description": "响应编码"
+                    },
+                    "message": {
+                      "type": "string",
+                      "title": "响应信息",
+                      "description": "响应信息"
+                    },
+                    "body": {
+                      "$ref": "#/components/schemas/AdvertiserInformation",
+                      "x-apifox-overrides": {
+                        "advertiserInformationId": null,
+                        "createdAt": null,
+                        "updatedAt": null
+                      }
+                    }
+                  },
+                  "required": ["timestamp", "status", "message", "body"],
+                  "x-apifox-ignore-properties": [
+                    "requestId",
+                    "timestamp",
+                    "status",
+                    "message",
+                    "body"
+                  ]
+                },
+                "examples": {
+                  "1": {
+                    "summary": "成功示例",
+                    "value": {
+                      "timestamp": "1979-07-30 15:01:33",
+                      "status": 200,
+                      "message": "Jobqtenisr Ozlrs Sodi Mskneir",
+                      "body": {
+                        "advertiserInformationId": "55ae5E5b-c1ae-FDE6-7Cc0-b03AAaED35Bf",
+                        "name": "省里制家本",
+                        "pageUrl": "http://smtss.rw/kpbv",
+                        "logoUrl": "http://dummyimage.com/728x90",
+                        "createdAt": "1994-01-27 18:43:00",
+                        "updatedAt": "1986-01-02 07:54:51"
+                      },
+                      "requestId": "Abeef203-8F95-E852-4cc9-E5437C15D33b"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/743652/apis/api-64032114-run"
+      }
     }
   },
   "components": {
     "schemas": {
+      "AdvertiserInformation": {
+        "type": "object",
+        "properties": {
+          "advertiserInformationId": {
+            "type": "string",
+            "title": "广告商信息ID",
+            "description": "广告商信息ID"
+          },
+          "createdAt": {
+            "type": "string",
+            "title": "创建时间",
+            "description": "创建时间"
+          },
+          "updatedAt": {
+            "type": "string",
+            "title": "修改时间",
+            "description": "修改时间"
+          },
+          "name": {
+            "type": "string",
+            "title": "广告商名称",
+            "description": "广告商名称"
+          },
+          "pageUrl": {
+            "type": "string",
+            "title": "网页地址",
+            "description": "网页地址"
+          },
+          "logoUrl": {
+            "type": "string",
+            "title": "Logo地址",
+            "description": "Logo地址"
+          }
+        },
+        "title": "广告商信息",
+        "x-apifox-orders": [
+          "advertiserInformationId",
+          "createdAt",
+          "updatedAt",
+          "name",
+          "pageUrl",
+          "logoUrl"
+        ],
+        "required": [
+          "advertiserInformationId",
+          "name",
+          "pageUrl",
+          "logoUrl",
+          "createdAt",
+          "updatedAt"
+        ],
+        "x-apifox-ignore-properties": [],
+        "x-apifox-folder": "",
+        "description": "广告商信息"
+      },
       "PageResponse": {
         "type": "object",
         "properties": {
@@ -12774,13 +14270,23 @@
         "x-apifox-folder": "",
         "description": "基础响应"
       },
-      "AdvertiserInformation": {
+      "AdvertisingInformation": {
         "type": "object",
         "properties": {
-          "advertiserInformationId": {
+          "advertisingInformationId": {
             "type": "string",
             "title": "广告信息ID",
             "description": "广告信息ID"
+          },
+          "createdAt": {
+            "type": "string",
+            "title": "创建时间",
+            "description": "创建时间"
+          },
+          "updatedAt": {
+            "type": "string",
+            "title": "修改时间",
+            "description": "修改时间"
           },
           "name": {
             "type": "string",
@@ -12806,8 +14312,8 @@
               }
             },
             "title": "投放位置",
-            "x-enum-varnames": ["Master"],
-            "description": "投放位置"
+            "description": "{1:Master}",
+            "x-enum-varnames": ["Master"]
           },
           "status": {
             "type": "integer",
@@ -12819,12 +14325,20 @@
               }
             },
             "title": "投放状态",
-            "x-enum-varnames": ["Active", "Inactive"],
-            "description": "投放状态"
+            "description": "{1:Active,2:Expired}",
+            "x-enum-varnames": ["Active", "Inactive"]
           },
           "payed": {
             "type": "number",
             "title": "已缴费用",
+            "enum": [1, 2],
+            "x-apifox": {
+              "enumDescriptions": {
+                "1": "Active",
+                "2": "Expired"
+              }
+            },
+            "x-enum-varnames": ["Active", "Expired"],
             "description": "已缴费用"
           },
           "startTime": {
@@ -12840,7 +14354,9 @@
         },
         "title": "广告信息",
         "x-apifox-orders": [
-          "advertiserInformationId",
+          "advertisingInformationId",
+          "createdAt",
+          "updatedAt",
           "name",
           "pageUrl",
           "banner",
@@ -12851,7 +14367,7 @@
           "endTime"
         ],
         "required": [
-          "advertiserInformationId",
+          "advertisingInformationId",
           "name",
           "pageUrl",
           "banner",
@@ -12859,7 +14375,9 @@
           "status",
           "payed",
           "startTime",
-          "endTime"
+          "endTime",
+          "createdAt",
+          "updatedAt"
         ],
         "x-apifox-ignore-properties": [],
         "x-apifox-folder": "",
@@ -13008,41 +14526,50 @@
             "title": "更新时间",
             "description": "更新时间"
           },
-          "accountType": {
-            "type": "integer",
-            "title": "账号类型",
-            "description": "{1:用户,2:HR}",
-            "enum": [0, 1, 2, 3],
-            "x-apifox": {
-              "enumDescriptions": {
-                "0": "Manager",
-                "1": "Applicant",
-                "2": "Personnel",
-                "3": "Advertiser"
-              }
-            },
-            "x-enum-varnames": [
-              "Manager",
-              "Applicant",
-              "Personnel",
-              "Advertiser"
-            ]
-          },
           "userName": {
             "type": "string",
             "title": "用户名",
             "description": "用户名"
           },
           "fullInformationId": {
-            "type": "string",
+            "type": "object",
+            "properties": {
+              "manager": {
+                "type": "string",
+                "title": "管理员信息",
+                "description": "管理员信息"
+              },
+              "applicant": {
+                "type": "string",
+                "title": "求职者信息",
+                "description": "求职者信息"
+              },
+              "personnel": {
+                "type": "string",
+                "title": "人事信息",
+                "description": "人事信息"
+              },
+              "advertiser": {
+                "type": "string",
+                "title": "广告商信息",
+                "description": "广告商信息"
+              }
+            },
             "title": "详细信息ID",
+            "x-apifox-orders": [
+              "manager",
+              "applicant",
+              "personnel",
+              "advertiser"
+            ],
+            "required": ["manager", "applicant", "personnel", "advertiser"],
+            "x-apifox-ignore-properties": [],
             "description": "详细信息ID"
           }
         },
         "required": [
           "accountInformationId",
           "userName",
-          "accountType",
           "createdAt",
           "updatedAt",
           "fullInformationId"
@@ -13051,7 +14578,6 @@
           "accountInformationId",
           "createdAt",
           "updatedAt",
-          "accountType",
           "userName",
           "fullInformationId"
         ],

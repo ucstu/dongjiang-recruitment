@@ -6,7 +6,7 @@ import type { AccountInformation } from "../models/AccountInformation";
 import type { CancelablePromise } from "../core/CancelablePromise";
 import type { BaseHttpRequest } from "../core/BaseHttpRequest";
 
-export class AuthenticationService {
+export class AccountService {
   constructor(public readonly httpRequest: BaseHttpRequest) {}
 
   /**
@@ -28,9 +28,9 @@ export class AuthenticationService {
        */
       verificationCode: string;
       /**
-       * {1:用户,2:HR}
+       * {0:Manager,1:Applicant,2:Personnel,3:Advertiser}
        */
-      accountType: 1 | 2;
+      accountType: 1 | 2 | 3;
       /**
        * 密码
        */

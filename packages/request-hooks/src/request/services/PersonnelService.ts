@@ -88,6 +88,43 @@ export class PersonnelService {
   }
 
   /**
+   * 删除人管信息
+   * 删除人管信息使用的接口
+   * @returns any 成功
+   * @throws ApiError
+   */
+  public deleteHrInformation({
+    hrInfoId,
+  }: {
+    /**
+     * HR信息ID
+     */
+    hrInfoId: string;
+  }): CancelablePromise<{
+    /**
+     * 处理时间
+     */
+    timestamp: string;
+    /**
+     * 响应状态
+     */
+    status: number;
+    /**
+     * 状态描述
+     */
+    message: string;
+    body: PersonnelInformation;
+  }> {
+    return this.httpRequest.request({
+      method: "DELETE",
+      url: "/hrInfos/{hrInfoId}",
+      path: {
+        hrInfoId: hrInfoId,
+      },
+    });
+  }
+
+  /**
    * 查询所有人管信息
    * 查询所有人管信息用的接口
    * @returns any 成功
@@ -145,6 +182,60 @@ export class PersonnelService {
         size: size,
         sort: sort,
       },
+    });
+  }
+
+  /**
+   * 增加人管信息
+   * 增加人管信息使用的接口
+   * @returns any 成功
+   * @throws ApiError
+   */
+  public addHrInformation({
+    requestBody,
+  }: {
+    requestBody?: {
+      /**
+       * 公司信息ID
+       */
+      companyInformationId: string;
+      /**
+       * 头像地址
+       */
+      avatarUrl: string;
+      /**
+       * HR姓名
+       */
+      hrName: string;
+      /**
+       * 职位名称
+       */
+      postName: string;
+      /**
+       * 电子邮箱
+       */
+      acceptEmail: string;
+    };
+  }): CancelablePromise<{
+    /**
+     * 处理时间
+     */
+    timestamp: string;
+    /**
+     * 响应状态
+     */
+    status: number;
+    /**
+     * 状态描述
+     */
+    message: string;
+    body: PersonnelInformation;
+  }> {
+    return this.httpRequest.request({
+      method: "POST",
+      url: "/hrInfos",
+      body: requestBody,
+      mediaType: "application/json",
     });
   }
 }
