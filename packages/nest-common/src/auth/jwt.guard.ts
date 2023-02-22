@@ -9,8 +9,8 @@ import { getNeedPermissions } from "./utill";
 @Injectable()
 export class JwtAuthGuard extends AuthGuard("jwt") {
   constructor(
-    private reflector: Reflector,
-    @Inject(AUTO_GUARD_KEY) private autoGuard: boolean
+    private readonly reflector: Reflector,
+    @Inject(AUTO_GUARD_KEY) private readonly autoGuard: boolean
   ) {
     super();
   }

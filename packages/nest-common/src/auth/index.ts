@@ -2,8 +2,10 @@ import { Module } from "@nestjs/common";
 import { APP_GUARD, APP_INTERCEPTOR } from "@nestjs/core";
 import { JwtModule } from "@nestjs/jwt";
 import { PassportModule } from "@nestjs/passport";
-import { ConfigType } from "../config";
-import _authorizationConfig from "../config/authorization.config";
+import {
+  authorizationConfig as _authorizationConfig,
+  ConfigType,
+} from "../config";
 import { AUTO_GUARD_KEY } from "./jwt.dec";
 import { JwtAuthGuard } from "./jwt.guard";
 import { JwtAuthInterceptor } from "./jwt.interceptor";

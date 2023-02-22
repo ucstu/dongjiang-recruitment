@@ -20,7 +20,27 @@ export interface AuthorizationConfig {
   expiresIn: string;
 }
 
+export interface MailerConfig {
+  host: string;
+  port: number;
+  secure: boolean;
+  domain: string;
+  auth: {
+    user: string;
+    pass: string;
+  };
+}
+
+export interface RedisConfig {
+  host: string;
+  port: number;
+  database: number;
+  password: string;
+}
+
 export interface YamlConfiguration {
   database: DatabaseConfig;
   authorization: AuthorizationConfig;
+  mailer: MailerConfig;
+  redis: RedisConfig;
 }

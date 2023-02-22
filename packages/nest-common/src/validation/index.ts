@@ -12,6 +12,5 @@ import { ValidationPipe } from "./validation.pipe";
 })
 export default class ValidationModule {}
 
-export * from "class-transformer";
 export * from "class-validator";
 export * from "./validation.pipe";

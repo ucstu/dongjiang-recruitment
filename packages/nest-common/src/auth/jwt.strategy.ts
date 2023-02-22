@@ -28,7 +28,9 @@ interface JwtPayload {
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(
     @Inject(_authorizationConfig.KEY)
-    private authorizationConfig: ConfigType<typeof _authorizationConfig>
+    private readonly authorizationConfig: ConfigType<
+      typeof _authorizationConfig
+    >
   ) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),

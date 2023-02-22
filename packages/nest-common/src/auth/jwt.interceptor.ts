@@ -12,7 +12,7 @@ import { User } from "./user.dto";
 
 @Injectable()
 export class JwtAuthInterceptor<T> implements NestInterceptor<T, T> {
-  constructor(private reflector: Reflector) {}
+  constructor(private readonly reflector: Reflector) {}
 
   intercept(context: ExecutionContext, next: CallHandler): Observable<T> {
     return next.handle().pipe(
