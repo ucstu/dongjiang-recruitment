@@ -2,7 +2,7 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { MaybeComputedRef } from "@vueuse/core";
-import type { } from "@vueuse/shared";
+import type {} from "@vueuse/shared";
 import { computed, ref } from "vue";
 import { useRequest, type Options, type Service } from "vue-request";
 import type { Entries, QueryResult } from "../interfaces";
