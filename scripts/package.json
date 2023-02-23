@@ -6,11 +6,26 @@
   "keywords": [
     "vite"
   ],
+  "bin": {
+    "s-format": "bin/format.js",
+    "s-lint-fix": "bin/lint-fix.js",
+    "s-lint-staged": "bin/lint-staged.js",
+    "s-prebuild": "bin/prebuild.js",
+    "s-vue-tsc-files": "bin/vue-tsc-files.js"
+  },
+  "scripts": {
+    "dev": "tsc -w",
+    "build": "tsc"
+  },
   "devDependencies": {
     "@dongjiang-recruitment/eslint-config": "workspace:^1.0.0",
     "@dongjiang-recruitment/typescript-config": "workspace:^1.0.0",
     "@types/node": "^18.13.0",
-    "type-fest": "^3.5.7"
+    "type-fest": "^3.5.7",
+    "typescript": "^4.9.5"
+  },
+  "peerDependencies": {
+    "vue-tsc": "^1.1.7"
   },
   "author": "ucstu",
   "license": "MIT"

@@ -14,9 +14,9 @@ const branch = execSync("echo -n $(git symbolic-ref --short -q HEAD)");
 let filter = process.argv[2];
 try {
   execSync("git log");
-  filter ||= `...@dongjiang-recruitment/**[${branch.toString()}]`;
+  filter ||= `@dongjiang-recruitment/**[${branch.toString()}]`;
 } catch (error) {
-  filter ||= `...@dongjiang-recruitment/**`;
+  filter ||= `@dongjiang-recruitment/**`;
 }
 
 const packages = (
