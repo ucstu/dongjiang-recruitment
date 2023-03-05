@@ -3,11 +3,24 @@
     <image class="logo" src="/static/logo.png" />
     <view class="text-area">
       <text class="title">{{ title }}</text>
+      <input v-model="page" type="number" placeholder="页数" />
+      <button @click="refresh">请求</button>
     </view>
   </view>
 </template>
 
 <script setup lang="ts">
+const page = ref<number>(1);
+
+const { refresh } = applicantService.useGetAllUserInformation(
+  () => ({
+    size: 10,
+    page: page.value,
+  }),
+  {
+    manual: true,
+  }
+);
 const title = ref("Hello");
 </script>
 

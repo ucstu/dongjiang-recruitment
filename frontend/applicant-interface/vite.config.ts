@@ -5,7 +5,35 @@ import { mergeConfig } from "vite";
 export default mergeConfig(
   uniConfig({
     autoImport: {
-      imports: ["vue", "pinia", "uni-app"],
+      imports: [
+        "vue",
+        "pinia",
+        "uni-app",
+        {
+          "@dongjiang-recruitment/request-hooks": [
+            "accountService",
+            "advertiserAdvertiseService",
+            "advertiserService",
+            "applicantAttentionRecordService",
+            "applicantDeliveryRecordService",
+            "applicantEducationExperienceService",
+            "applicantGarnerRecordService",
+            "applicantInspectionRecordService",
+            "applicantService",
+            "applicantJobExpectationService",
+            "applicantProjectExperienceService",
+            "applicantWorkExperienceService",
+            "commonService",
+            "companyPositionInformationService",
+            "companyService",
+            "managerAccountService",
+            "managerAccountGroupService",
+            "managerAccountAuthoritiesService",
+            "personnelInspectionRecordService",
+            "personnelService",
+          ],
+        },
+      ],
     },
   }),
   {
