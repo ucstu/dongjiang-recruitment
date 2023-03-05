@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "vite config",
   "main": "dist/index.js",
-  "types": "types/index.d.ts",
+  "types": "dist/index.d.ts",
   "source": "src/index.ts",
   "files": [
     "dist"
@@ -12,9 +12,8 @@
     "vite"
   ],
   "scripts": {
-    "prebuild": "pnpm -w run prebuild @dongjiang-recruitment/vite-config",
-    "dev": "pnpm prebuild && tsc --watch",
-    "build": "pnpm prebuild && tsc"
+    "dev": "tsc --watch",
+    "build": "tsc"
   },
   "dependencies": {
     "@dcloudio/uni-automator": "3.0.0-alpha-3070120230210001",

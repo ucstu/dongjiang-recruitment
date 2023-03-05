@@ -31,7 +31,7 @@ const lintStagedConfigPath = `${process.cwd()}/.lintstagedrc`;
 packages.length &&
   concurrently(
     packages.map((path) => ({
-      command: `lint-staged --config ${lintStagedConfigPath}`,
+      command: `s-prebuild && lint-staged --config ${lintStagedConfigPath}`,
       cwd: relative(process.cwd(), path),
       name: `lint-staged ${path}`,
       prefixColor: `#${Math.floor(Math.random() * 16777215).toString(16)}`,

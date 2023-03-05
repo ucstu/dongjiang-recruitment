@@ -17,12 +17,12 @@ import {
 
 import * as bcrypt from "bcrypt";
 
-const ACCOUNT_TYPE_URL_MAP = {
-  [CreateAccountInformationDto.AccountType.Advertiser]: "advertisers",
-  [CreateAccountInformationDto.AccountType.Applicant]: "userInfos",
-  [CreateAccountInformationDto.AccountType.Manager]: "",
-  [CreateAccountInformationDto.AccountType.Personnel]: "hrInfos",
-};
+// const ACCOUNT_TYPE_URL_MAP = {
+//   [CreateAccountInformationDto.AccountType.Advertiser]: "advertisers",
+//   [CreateAccountInformationDto.AccountType.Applicant]: "userInfos",
+//   [CreateAccountInformationDto.AccountType.Manager]: "",
+//   [CreateAccountInformationDto.AccountType.Personnel]: "hrInfos",
+// };
 
 const STATIC_FULL_INFORMATION_ID = {
   advertiser: null,

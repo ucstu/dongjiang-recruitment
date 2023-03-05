@@ -4,10 +4,9 @@
   "description": "personnel interface",
   "private": true,
   "scripts": {
-    "prebuild": "pnpm -w run prebuild @dongjiang-recruitment/personnel-interface",
-    "dev": "pnpm prebuild && vite",
-    "build": "pnpm prebuild && vite build",
-    "preview": "pnpm prebuild && vite preview"
+    "dev": "s-prebuild && vite",
+    "build": "s-prebuild && vite build",
+    "preview": "s-prebuild && vite preview"
   },
   "dependencies": {
     "@vueuse/core": "^9.12.0",

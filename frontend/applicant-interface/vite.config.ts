@@ -11,7 +11,6 @@ export default mergeConfig(
         "uni-app",
         {
           "@dongjiang-recruitment/request-hooks": [
-            "request",
             "accountService",
             "advertiserAdvertiseService",
             "advertiserService",

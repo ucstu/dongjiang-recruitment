@@ -3,6 +3,9 @@ export {};
 declare global {
   const EffectScope: typeof import("vue")["EffectScope"];
   const acceptHMRUpdate: typeof import("pinia")["acceptHMRUpdate"];
+  const accountService: typeof import("@dongjiang-recruitment/request-hooks")["accountService"];
+  const advertiserAdvertiseService: typeof import("@dongjiang-recruitment/request-hooks")["advertiserAdvertiseService"];
+  const advertiserService: typeof import("@dongjiang-recruitment/request-hooks")["advertiserService"];
   const applicantAttentionRecordService: typeof import("@dongjiang-recruitment/request-hooks")["applicantAttentionRecordService"];
   const applicantDeliveryRecordService: typeof import("@dongjiang-recruitment/request-hooks")["applicantDeliveryRecordService"];
   const applicantEducationExperienceService: typeof import("@dongjiang-recruitment/request-hooks")["applicantEducationExperienceService"];
@@ -12,7 +15,6 @@ declare global {
   const applicantProjectExperienceService: typeof import("@dongjiang-recruitment/request-hooks")["applicantProjectExperienceService"];
   const applicantService: typeof import("@dongjiang-recruitment/request-hooks")["applicantService"];
   const applicantWorkExperienceService: typeof import("@dongjiang-recruitment/request-hooks")["applicantWorkExperienceService"];
-  const authenticationService: typeof import("@dongjiang-recruitment/request-hooks")["authenticationService"];
   const commonService: typeof import("@dongjiang-recruitment/request-hooks")["commonService"];
   const companyPositionInformationService: typeof import("@dongjiang-recruitment/request-hooks")["companyPositionInformationService"];
   const companyService: typeof import("@dongjiang-recruitment/request-hooks")["companyService"];
@@ -33,9 +35,9 @@ declare global {
   const isReactive: typeof import("vue")["isReactive"];
   const isReadonly: typeof import("vue")["isReadonly"];
   const isRef: typeof import("vue")["isRef"];
+  const managerAccountAuthoritiesService: typeof import("@dongjiang-recruitment/request-hooks")["managerAccountAuthoritiesService"];
   const managerAccountGroupService: typeof import("@dongjiang-recruitment/request-hooks")["managerAccountGroupService"];
   const managerAccountService: typeof import("@dongjiang-recruitment/request-hooks")["managerAccountService"];
-  const managerAccountauthoritiesService: typeof import("@dongjiang-recruitment/request-hooks")["managerAccountauthoritiesService"];
   const mapActions: typeof import("pinia")["mapActions"];
   const mapGetters: typeof import("pinia")["mapGetters"];
   const mapState: typeof import("pinia")["mapState"];

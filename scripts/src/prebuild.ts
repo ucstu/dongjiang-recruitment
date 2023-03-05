@@ -1,7 +1,19 @@
 import { execSync } from "node:child_process";
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
+import lockfile from "proper-lockfile";
 import type { PackageJson } from "type-fest";
+
+const lockTheFile = (path: string) => {
+  while (lockfile.checkSync(path)) {
+    execSync("sleep 1");
+  }
+  lockfile.lockSync(path);
+};
+
+const unlockTheFile = (path: string) => {
+  lockfile.unlockSync(path);
+};
 
 interface Package {
   name: string;
@@ -26,10 +38,13 @@ const { dependencies, devDependencies } = JSON.parse(
 const dependencyPackages = Object.keys({ ...dependencies, ...devDependencies })
   .filter((dependency) => allPackages.find((pkg) => pkg.name === dependency))
   .map((dependency) => ({
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     ...allPackages.find((pkg) => pkg.name === dependency)!,
   }))
   .filter((dependency) =>
-    dependency.path.replace(process.cwd(), "").startsWith("/packages")
+    dependency.path
+      .replace(resolve(__dirname, "../../"), "")
+      .startsWith("/packages/")
   )
   .filter(
     (dependency) =>
@@ -51,6 +66,8 @@ if (!existsSync(resolve(gitDir, "prebuild-lock.json"))) {
     JSON.stringify({}, null, 2)
   );
 }
+
+lockTheFile(resolve(gitDir, "prebuild-lock.json"));
 
 // 获取 prebuild-lock.json 中的内容
 const prebuildLock = JSON.parse(
@@ -82,23 +99,23 @@ if (needRebuildDependencies.length) {
     "[scripts prebuild] ",
     `Building dependencies: ${needRebuildDependencies
       .map((pkg) => pkg.name)
-      .join(", ")}\n`
+      .join(", ")}`
   );
 
-  // 执行构建
   execSync(
     `pnpm --filter ${needRebuildDependencies
       .map((pkg) => pkg.name)
-      .join(" --filter ")} m run build`,
+      .join(" --filter ")} build`,
     {
       stdio: "inherit",
     }
   );
 
   // 更新 prebuild-lock.json
-  needRebuildDependencies.forEach((dependency) => {
-    prebuildLock[dependency.name] = currentHash;
+  needRebuildDependencies.forEach((pkg) => {
+    prebuildLock[pkg.name] = currentHash;
   });
+
   // 写入 prebuild-lock.json
   writeFileSync(
     resolve(gitDir, "prebuild-lock.json"),
@@ -109,6 +126,8 @@ if (needRebuildDependencies.length) {
   console.log(
     "\x1b[34m%s\x1b[0m\x1b[32m%s\x1b[0m",
     "[scripts prebuild] ",
-    "No dependencies need to be rebuild.\n"
+    "No dependencies need to be rebuild."
   );
 }
+
+unlockTheFile(resolve(gitDir, "prebuild-lock.json"));

@@ -11,14 +11,14 @@ import { map, Observable } from "rxjs";
 import { Response as _Response } from "./response.dto";
 
 export class TransformNormalInterceptor<T>
-  implements NestInterceptor<T, _Response<Record<string, any>>>
+  implements NestInterceptor<T, _Response<Record<string, unknown>>>
 {
   intercept(
     context: ExecutionContext,
     next: CallHandler
-  ): Observable<_Response<Record<string, any>>> {
+  ): Observable<_Response<Record<string, unknown>>> {
     return next.handle().pipe(
-      map<T, _Response<Record<string, any>>>((data) => {
+      map<T, _Response<Record<string, unknown>>>((data) => {
         const ctx = context.switchToHttp();
         const response = ctx.getResponse<Response<_Response<T>>>();
         const request = ctx.getRequest<Request>();

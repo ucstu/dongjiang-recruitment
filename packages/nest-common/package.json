@@ -59,9 +59,8 @@
     "nest"
   ],
   "scripts": {
-    "prebuild": "pnpm -w run prebuild @dongjiang-recruitment/nest-common",
-    "dev": "pnpm prebuild && cpy \"src/**/*.hbs\" \"dist\" --cwd && tsc -w",
-    "build": "pnpm prebuild && cpy \"src/**/*.hbs\" \"dist\" --cwd && tsc"
+    "dev": "cpy \"src/**/*.hbs\" \"dist\" --cwd && tsc -w",
+    "build": "cpy \"src/**/*.hbs\" \"dist\" --cwd && tsc"
   },
   "dependencies": {
     "@liaoliaots/nestjs-redis": "^9.0.5",

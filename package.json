@@ -5,12 +5,13 @@
   "private": true,
   "engines": {
     "node": ">=18.13.0",
-    "pnpm": ">=7.26.3"
+    "pnpm": ">=7.27.0"
   },
   "scripts": {
     "preinstall": "npx only-allow pnpm",
     "lint-staged": "s-lint-staged",
     "lint-fix": "s-lint-fix",
+    "up-version": "s-up-version",
     "format": "s-format"
   },
   "devDependencies": {

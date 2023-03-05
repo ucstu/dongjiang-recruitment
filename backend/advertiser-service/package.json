@@ -4,17 +4,16 @@
   "description": "advertiser service",
   "private": true,
   "scripts": {
-    "prebuild": "pnpm -w run prebuild @dongjiang-recruitment/advertiser-service",
-    "build": "pnpm prebuild && nest build",
-    "start": "pnpm prebuild && nest start",
-    "start:dev": "pnpm prebuild && nest start --watch",
-    "start:debug": "pnpm prebuild && nest start --debug --watch",
-    "start:prod": "pnpm prebuild && node dist/main",
-    "test": "pnpm prebuild && jest",
-    "test:watch": "pnpm prebuild && jest --watch",
-    "test:cov": "pnpm prebuild && jest --coverage",
-    "test:debug": "pnpm prebuild && node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "pnpm prebuild && jest --config ./test/jest-e2e.json"
+    "build": "s-prebuild && nest build && pnpx @vercel/ncc build dist/main.js -o dist/ncc",
+    "start": "s-prebuild && nest start",
+    "start:dev": "s-prebuild && nest start --watch",
+    "start:debug": "s-prebuild && nest start --debug --watch",
+    "start:prod": "s-prebuild && node dist/main",
+    "test": "s-prebuild && jest",
+    "test:watch": "s-prebuild && jest --watch",
+    "test:cov": "s-prebuild && jest --coverage",
+    "test:debug": "s-prebuild && node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
+    "test:e2e": "s-prebuild && jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
     "@dongjiang-recruitment/nest-common": "workspace:^1.0.0",

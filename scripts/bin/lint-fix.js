@@ -36,9 +36,9 @@ const branch = (0, node_child_process_1.execSync)(
 let filter = process.argv[2];
 try {
   (0, node_child_process_1.execSync)("git log");
-  filter ||= `...@dongjiang-recruitment/**[${branch.toString()}]`;
+  filter ||= `@dongjiang-recruitment/**[${branch.toString()}]`;
 } catch (error) {
-  filter ||= `...@dongjiang-recruitment/**`;
+  filter ||= `@dongjiang-recruitment/**`;
 }
 const packages = JSON.parse(
   (0, node_child_process_1.execSync)(
@@ -58,10 +58,12 @@ packages.length &&
       const prefixColors = activeLinters.map(({ prefixColor }) => prefixColor);
       return {
         command: activeLinters.length
-          ? `concurrently --prefix-colors "${prefixColors.join(",")}" ` +
+          ? `s-prebuild && concurrently --prefix-colors "${prefixColors.join(
+              ","
+            )}" ` +
             `--names "${langs.map((lang) => `lint-fix ${lang}`).join(",")}" ` +
             `"${commands.join('" "')}" `
-          : `node -e "console.log('\x1b[31m%s\x1b[0m', 'Warning: No linter config found in ${path}')"`,
+          : `node -e "console.log('\x1b[33m%s\x1b[0m', 'Warning: No linter config found in ${path}')"`,
         cwd: (0, node_path_1.relative)(process.cwd(), path),
         name: `lint-fix ${path}`,
         prefixColor: `#${Math.floor(Math.random() * 16777215).toString(16)}`,

@@ -1,8 +1,23 @@
 "use strict";
+var __importDefault =
+  (this && this.__importDefault) ||
+  function (mod) {
+    return mod && mod.__esModule ? mod : { default: mod };
+  };
 Object.defineProperty(exports, "__esModule", { value: true });
 const node_child_process_1 = require("node:child_process");
 const node_fs_1 = require("node:fs");
 const node_path_1 = require("node:path");
+const proper_lockfile_1 = __importDefault(require("proper-lockfile"));
+const lockTheFile = (path) => {
+  while (proper_lockfile_1.default.checkSync(path)) {
+    (0, node_child_process_1.execSync)("sleep 1");
+  }
+  proper_lockfile_1.default.lockSync(path);
+};
+const unlockTheFile = (path) => {
+  proper_lockfile_1.default.unlockSync(path);
+};
 // 列出 monorepo 中所有的包
 const allPackages = JSON.parse(
   (0, node_child_process_1.execSync)(
@@ -19,10 +34,13 @@ const { dependencies, devDependencies } = JSON.parse(
 const dependencyPackages = Object.keys({ ...dependencies, ...devDependencies })
   .filter((dependency) => allPackages.find((pkg) => pkg.name === dependency))
   .map((dependency) => ({
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     ...allPackages.find((pkg) => pkg.name === dependency),
   }))
   .filter((dependency) =>
-    dependency.path.replace(process.cwd(), "").startsWith("/packages")
+    dependency.path
+      .replace((0, node_path_1.resolve)(__dirname, "../../"), "")
+      .startsWith("/packages/")
   )
   .filter(
     (dependency) =>
@@ -51,6 +69,7 @@ if (
     JSON.stringify({}, null, 2)
   );
 }
+lockTheFile((0, node_path_1.resolve)(gitDir, "prebuild-lock.json"));
 // 获取 prebuild-lock.json 中的内容
 const prebuildLock = JSON.parse(
   (0, node_fs_1.readFileSync)(
@@ -79,20 +98,19 @@ if (needRebuildDependencies.length) {
     "[scripts prebuild] ",
     `Building dependencies: ${needRebuildDependencies
       .map((pkg) => pkg.name)
-      .join(", ")}\n`
+      .join(", ")}`
   );
-  // 执行构建
   (0, node_child_process_1.execSync)(
     `pnpm --filter ${needRebuildDependencies
       .map((pkg) => pkg.name)
-      .join(" --filter ")} m run build`,
+      .join(" --filter ")} build`,
     {
       stdio: "inherit",
     }
   );
   // 更新 prebuild-lock.json
-  needRebuildDependencies.forEach((dependency) => {
-    prebuildLock[dependency.name] = currentHash;
+  needRebuildDependencies.forEach((pkg) => {
+    prebuildLock[pkg.name] = currentHash;
   });
   // 写入 prebuild-lock.json
   (0, node_fs_1.writeFileSync)(
@@ -104,6 +122,7 @@ if (needRebuildDependencies.length) {
   console.log(
     "\x1b[34m%s\x1b[0m\x1b[32m%s\x1b[0m",
     "[scripts prebuild] ",
-    "No dependencies need to be rebuild.\n"
+    "No dependencies need to be rebuild."
   );
 }
+unlockTheFile((0, node_path_1.resolve)(gitDir, "prebuild-lock.json"));

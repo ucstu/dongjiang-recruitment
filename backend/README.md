@@ -3,7 +3,7 @@
 ## 📃 相关地址
 
 东江人才招聘-用户端：[演示地址](https://djyh.ucstu.com) [项目目录](../../tree/master/frontend/applicant-interface)
-东江人才招聘-HR端：[演示地址](https://djhr.ucstu.com) [项目目录](../../tree/master/frontend/personnel-interface)
+东江人才招聘-HR 端：[演示地址](https://djhr.ucstu.com) [项目目录](../../tree/master/frontend/personnel-interface)
 东江人才招聘-管理端：[演示地址](https://djadmin.ucstu.com) [项目目录](../../tree/master/frontend/manager-interface)
 东江人才招聘-后端：[项目目录](../../tree/master/backend)
 
