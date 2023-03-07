@@ -47,7 +47,8 @@ module.exports = async ({ github, context, core, fetch }) => {
       break;
     case "pull_request":
       currentBranch = context.payload.pull_request.base.ref;
-      currentEnvironment = "staging";
+      currentEnvironment =
+        currentBranch === "master" ? "staging" : currentBranch;
       changedFiles = (
         await github.rest.repos.compareCommits({
           owner: context.repo.owner,
@@ -87,7 +88,9 @@ module.exports = async ({ github, context, core, fetch }) => {
   const needRelease =
     currentEnvironment === "production" &&
     (!hasSuccessRun || currentVersion !== previousVersion);
-  const needPublish = Object.keys(changedPackages).length !== 0;
+  const needPublish =
+    Object.keys(changedPackages).length !== 0 &&
+    !(context.eventName === "pull_request" && currentBranch === "develop");
   const needDeploy = needPublish || needRelease;
   const publishVersion = needRelease ? currentVersion : currentEnvironment;
 

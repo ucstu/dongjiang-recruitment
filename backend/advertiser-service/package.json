@@ -4,7 +4,7 @@
   "description": "advertiser service",
   "private": true,
   "scripts": {
-    "build": "s-prebuild && nest build && pnpx @vercel/ncc build dist/main.js -o dist/ncc",
+    "build": "s-prebuild && nest build",
     "start": "s-prebuild && nest start",
     "start:dev": "s-prebuild && nest start --watch",
     "start:debug": "s-prebuild && nest start --debug --watch",

@@ -27,7 +27,10 @@
         },
         "deploy": {
           "name": "deploy",
-          "domain": "advertiser.backend.ucstu.com"
+          "sub-type": "kubernetes",
+          "port": 3000,
+          "path": "/advertiser",
+          "domain": "api.djrecruitment.ucstu.com"
         }
       }
     },
@@ -54,7 +57,10 @@
         },
         "deploy": {
           "name": "deploy",
-          "domain": "advertiser.backend.ucstu.com"
+          "sub-type": "kubernetes",
+          "port": 3000,
+          "path": "/applicant",
+          "domain": "api.djrecruitment.ucstu.com"
         }
       }
     },
@@ -81,7 +87,10 @@
         },
         "deploy": {
           "name": "deploy",
-          "domain": "advertiser.backend.ucstu.com"
+          "sub-type": "kubernetes",
+          "port": 3000,
+          "path": "/authentication",
+          "domain": "api.djrecruitment.ucstu.com"
         }
       }
     },
@@ -108,7 +117,10 @@
         },
         "deploy": {
           "name": "deploy",
-          "domain": "advertiser.backend.ucstu.com"
+          "sub-type": "kubernetes",
+          "port": 3000,
+          "path": "/common",
+          "domain": "api.djrecruitment.ucstu.com"
         }
       }
     },
@@ -135,7 +147,10 @@
         },
         "deploy": {
           "name": "deploy",
-          "domain": "advertiser.backend.ucstu.com"
+          "sub-type": "kubernetes",
+          "port": 3000,
+          "path": "/company",
+          "domain": "api.djrecruitment.ucstu.com"
         }
       }
     },
@@ -162,7 +177,10 @@
         },
         "deploy": {
           "name": "deploy",
-          "domain": "manager.ucstu.com"
+          "sub-type": "kubernetes",
+          "port": 80,
+          "path": "/",
+          "domain": "applicant.djrecruitment.ucstu.com"
         }
       }
     },
@@ -189,7 +207,10 @@
         },
         "deploy": {
           "name": "deploy",
-          "domain": "manager.ucstu.com"
+          "sub-type": "kubernetes",
+          "port": 80,
+          "path": "/",
+          "domain": "manager.djrecruitment.ucstu.com"
         }
       }
     },
@@ -216,7 +237,10 @@
         },
         "deploy": {
           "name": "deploy",
-          "domain": "manager.ucstu.com"
+          "sub-type": "kubernetes",
+          "port": 80,
+          "path": "/",
+          "domain": "personnel.djrecruitment.ucstu.com"
         }
       }
     }
