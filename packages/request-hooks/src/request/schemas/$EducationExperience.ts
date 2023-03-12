@@ -4,7 +4,7 @@
 export const $EducationExperience = {
   description: `教育经历`,
   properties: {
-    educationExperienceId: {
+    id: {
       type: "string",
       description: `教育经历ID`,
       isRequired: true,
@@ -17,6 +17,11 @@ export const $EducationExperience = {
     updatedAt: {
       type: "string",
       description: `更新时间`,
+      isRequired: true,
+    },
+    deletedAt: {
+      type: "string",
+      description: `移除时间`,
       isRequired: true,
     },
     schoolName: {

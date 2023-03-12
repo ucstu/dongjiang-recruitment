@@ -35,8 +35,11 @@ spec:
               cpu: 100m
               memory: 100Mi
             limits:
-              cpu: 100m
-              memory: 100Mi
+              cpu: 1024m
+              memory: 1024Mi
+          env:
+            - name: NODE_ENV
+              value: production
           ports:
             - containerPort: $APP_PORT
               name: http
@@ -81,14 +84,13 @@ metadata:
   namespace: dongjiang-recruitment
   name: $APP_NAME
   annotations:
-    cert-manager.io/cluster-issuer: letsencrypt
     external-dns.alpha.kubernetes.io/hostname: $APP_DOMAIN
     external-dns.alpha.kubernetes.io/cloudflare-proxied: "true"
 spec:
   tls:
     - hosts:
         - $APP_DOMAIN
-      secretName: $APP_NAME-tls
+      secretName: $SECRET_NAME
   rules:
     - host: $APP_DOMAIN
       http:

@@ -4,7 +4,7 @@
 export const $ProjectExperience = {
   description: `项目经历`,
   properties: {
-    projectExperienceId: {
+    id: {
       type: "string",
       description: `项目经历ID`,
       isRequired: true,
@@ -12,10 +12,17 @@ export const $ProjectExperience = {
     createdAt: {
       type: "string",
       description: `创建时间`,
+      isRequired: true,
     },
     updatedAt: {
       type: "string",
       description: `更新时间`,
+      isRequired: true,
+    },
+    deletedAt: {
+      type: "string",
+      description: `移除时间`,
+      isRequired: true,
     },
     projectName: {
       type: "string",

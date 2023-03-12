@@ -9,7 +9,7 @@ export type EducationExperience = {
   /**
    * 教育经历ID
    */
-  educationExperienceId: string;
+  id: string;
   /**
    * 创建时间
    */
@@ -18,6 +18,10 @@ export type EducationExperience = {
    * 更新时间
    */
   updatedAt: string;
+  /**
+   * 移除时间
+   */
+  deletedAt: string;
   /**
    * 学校名称
    */

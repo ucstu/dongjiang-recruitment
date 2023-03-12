@@ -4,7 +4,7 @@
 export const $JobExpectation = {
   description: `求职期望`,
   properties: {
-    jobExpectationId: {
+    id: {
       type: "string",
       description: `求职期望ID`,
       isRequired: true,
@@ -17,6 +17,11 @@ export const $JobExpectation = {
     updatedAt: {
       type: "string",
       description: `更新时间`,
+      isRequired: true,
+    },
+    deletedAt: {
+      type: "string",
+      description: `移除时间`,
       isRequired: true,
     },
     positionType: {

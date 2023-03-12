@@ -10,221 +10,52 @@ export class ApplicantGarnerRecordService {
   constructor(public readonly httpRequest: BaseHttpRequest) {}
 
   /**
-   * 增加收藏记录
-   * 增加收藏记录的接口
+   * 添加收藏记录
    * @returns any 成功
    * @throws ApiError
    */
   public addGarnerRecord({
-    userInfoId,
+    applicantId,
     requestBody,
   }: {
     /**
-     * 用户信息ID
+     * 求职者ID
      */
-    userInfoId: string;
+    applicantId: string;
     requestBody?: {
       /**
-       * 用户信息ID
+       * 求职者ID
        */
-      userInformationId: string;
+      applicantId: string;
       /**
-       * 公司信息ID
+       * 公司ID
        */
-      companyInformationId: string;
+      companyId: string;
       /**
-       * 职位信息ID
+       * 职位ID
        */
-      positionInformationId: string;
+      positionId: string;
     };
   }): CancelablePromise<{
     /**
-     * 处理时间
+     * 响应时间
      */
     timestamp: string;
     /**
-     * 响应状态
-     */
-    status: number;
-    /**
-     * 状态描述
+     * 响应
      */
     message: string;
     /**
-     * 收藏记录
+     * 响应编码
      */
+    status: number;
     body: GarnerRecord;
   }> {
     return this.httpRequest.request({
       method: "POST",
-      url: "/userInfos/{userInfoId}/garnerRecords",
+      url: "/applicant/{applicantId}/garnerRecords",
       path: {
-        userInfoId: userInfoId,
-      },
-      body: requestBody,
-      mediaType: "application/json",
-    });
-  }
-
-  /**
-   * 查询所有收藏记录
-   * 查询所有收藏记录的接口
-   * @returns any 成功
-   * @throws ApiError
-   */
-  public getAllGarnerRecord({
-    userInfoId,
-    page,
-    size,
-    sort,
-  }: {
-    /**
-     * 用户信息ID
-     */
-    userInfoId: string;
-    /**
-     * 当前页，eg：0
-     */
-    page?: number;
-    /**
-     * 页大小，eg：5
-     */
-    size?: number;
-    /**
-     * 排序方式，eg：["createdAt,desc"]
-     */
-    sort?: Array<`${keyof GarnerRecord},${"asc" | "desc"}`>;
-  }): CancelablePromise<{
-    /**
-     * 处理时间
-     */
-    timestamp: string;
-    /**
-     * 响应状态
-     */
-    status: number;
-    /**
-     * 状态描述
-     */
-    message: string;
-    /**
-     * 响应结果
-     */
-    body: {
-      /**
-       * 记录总数
-       */
-      totalCount: number;
-      /**
-       * 收藏记录列表
-       */
-      garnerRecords: Array<GarnerRecord>;
-    };
-  }> {
-    return this.httpRequest.request({
-      method: "GET",
-      url: "/userInfos/{userInfoId}/garnerRecords",
-      path: {
-        userInfoId: userInfoId,
-      },
-      query: {
-        page: page,
-        size: size,
-        sort: sort,
-      },
-    });
-  }
-
-  /**
-   * 删除收藏记录
-   * 删除收藏记录的接口
-   * @returns any 成功
-   * @throws ApiError
-   */
-  public deleteGarnerRecord({
-    userInfoId,
-    garnerRecordId,
-  }: {
-    /**
-     * 用户信息ID
-     */
-    userInfoId: string;
-    /**
-     * 收藏记录ID
-     */
-    garnerRecordId: string;
-  }): CancelablePromise<{
-    /**
-     * 处理时间
-     */
-    timestamp: string;
-    /**
-     * 响应状态
-     */
-    status: number;
-    /**
-     * 状态描述
-     */
-    message: string;
-    /**
-     * 收藏记录
-     */
-    body: GarnerRecord;
-  }> {
-    return this.httpRequest.request({
-      method: "DELETE",
-      url: "/userInfos/{userInfoId}/garnerRecords/{garnerRecordId}",
-      path: {
-        userInfoId: userInfoId,
-        garnerRecordId: garnerRecordId,
-      },
-    });
-  }
-
-  /**
-   * 修改收藏记录
-   * 修改收藏记录的接口
-   * @returns any 成功
-   * @throws ApiError
-   */
-  public updateGarnerRecord({
-    userInfoId,
-    garnerRecordId,
-    requestBody,
-  }: {
-    /**
-     * 用户信息ID
-     */
-    userInfoId: string;
-    /**
-     * 收藏记录ID
-     */
-    garnerRecordId: string;
-    requestBody?: GarnerRecord;
-  }): CancelablePromise<{
-    /**
-     * 处理时间
-     */
-    timestamp: string;
-    /**
-     * 响应状态
-     */
-    status: number;
-    /**
-     * 状态描述
-     */
-    message: string;
-    /**
-     * 收藏记录
-     */
-    body: GarnerRecord;
-  }> {
-    return this.httpRequest.request({
-      method: "PUT",
-      url: "/userInfos/{userInfoId}/garnerRecords/{garnerRecordId}",
-      path: {
-        userInfoId: userInfoId,
-        garnerRecordId: garnerRecordId,
+        applicantId: applicantId,
       },
       body: requestBody,
       mediaType: "application/json",
@@ -233,46 +64,161 @@ export class ApplicantGarnerRecordService {
 
   /**
    * 查询收藏记录
-   * 查询收藏记录的接口
+   * @returns any 成功
+   * @throws ApiError
+   */
+  public queryGarnerRecord({
+    applicantId,
+    query,
+    page,
+    size,
+    sort,
+  }: {
+    /**
+     * 求职者ID
+     */
+    applicantId: string;
+    /**
+     * 查询条件
+     */
+    query?: string;
+    /**
+     * 当前页数
+     */
+    page?: number;
+    /**
+     * 页面大小
+     */
+    size?: number;
+    /**
+     * 排序方式
+     */
+    sort?: Array<`${keyof GarnerRecord},${"asc" | "desc"}`>;
+  }): CancelablePromise<{
+    /**
+     * 响应时间
+     */
+    timestamp: string;
+    /**
+     * 响应
+     */
+    message: string;
+    /**
+     * 响应编码
+     */
+    status: number;
+    /**
+     * 分页结果
+     */
+    body: {
+      /**
+       * 收藏记录总数
+       */
+      total: number;
+      /**
+       * 当页收藏记录
+       */
+      items: Array<GarnerRecord>;
+    };
+  }> {
+    return this.httpRequest.request({
+      method: "GET",
+      url: "/applicant/{applicantId}/garnerRecords",
+      path: {
+        applicantId: applicantId,
+      },
+      query: {
+        query: query,
+        page: page,
+        size: size,
+        sort: sort,
+      },
+    });
+  }
+
+  /**
+   * 移除收藏记录
+   * @returns any 成功
+   * @throws ApiError
+   */
+  public removeGarnerRecord({
+    applicantId,
+    id,
+  }: {
+    /**
+     * 求职者ID
+     */
+    applicantId: string;
+    /**
+     * 收藏记录ID
+     */
+    id: string;
+  }): CancelablePromise<{
+    /**
+     * 响应时间
+     */
+    timestamp: string;
+    /**
+     * 响应
+     */
+    message: string;
+    /**
+     * 响应编码
+     */
+    status: number;
+    /**
+     * 收藏记录ID
+     */
+    body: string;
+  }> {
+    return this.httpRequest.request({
+      method: "DELETE",
+      url: "/applicant/{applicantId}/garnerRecords/{id}",
+      path: {
+        applicantId: applicantId,
+        id: id,
+      },
+    });
+  }
+
+  /**
+   * 获取收藏记录
    * @returns any 成功
    * @throws ApiError
    */
   public getGarnerRecord({
-    userInfoId,
-    garnerRecordId,
+    applicantId,
+    id,
   }: {
     /**
-     * 用户信息ID
+     * 求职者ID
      */
-    userInfoId: string;
+    applicantId: string;
     /**
      * 收藏记录ID
      */
-    garnerRecordId: string;
+    id: string;
   }): CancelablePromise<{
     /**
-     * 处理时间
+     * 响应时间
      */
     timestamp: string;
     /**
-     * 响应状态
-     */
-    status: number;
-    /**
-     * 状态描述
+     * 响应
      */
     message: string;
     /**
-     * 收藏记录
+     * 响应编码
      */
+    status: number;
     body: GarnerRecord;
   }> {
     return this.httpRequest.request({
       method: "GET",
-      url: "/userInfos/{userInfoId}/garnerRecords/{garnerRecordId}",
+      url: "/applicant/{applicantId}/garnerRecords/{id}",
       path: {
-        userInfoId: userInfoId,
-        garnerRecordId: garnerRecordId,
+        applicantId: applicantId,
+        id: id,
       },
     });
   }

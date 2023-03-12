@@ -1,6 +1,7 @@
 module.exports = async ({ github, context, core, fetch }) => {
   const { readFileSync } = require("node:fs");
   const { resolve } = require("node:path");
+  const { minimatch } = require("minimatch");
 
   const monoRepoConfig = JSON.parse(
     readFileSync(
@@ -12,6 +13,7 @@ module.exports = async ({ github, context, core, fetch }) => {
     )
   );
 
+  const globalFiles = monoRepoConfig.global.files;
   let changedPackages = monoRepoConfig.packages;
 
   let changedFiles = [];
@@ -62,10 +64,14 @@ module.exports = async ({ github, context, core, fetch }) => {
   }
   changedPackages =
     Object.fromEntries(
-      Object.entries(changedPackages).filter(
-        ([key, { workspace }]) =>
-          changedFiles.some(({ filename }) => filename.startsWith(workspace)) ||
-          !hasSuccessRun
+      Object.entries(changedPackages).filter(([key, { workspace }]) =>
+        // 检测文件是否在工作区内或者匹配glob pattern
+        changedFiles.some(
+          ({ filename }) =>
+            !hasSuccessRun ||
+            globalFiles.some((pattern) => minimatch(filename, pattern)) ||
+            filename.startsWith(workspace)
+        )
       )
     ) || {};
 

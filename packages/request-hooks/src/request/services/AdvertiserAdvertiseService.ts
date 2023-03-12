@@ -1,7 +1,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { AdvertisingInformation } from "../models/AdvertisingInformation";
+import type { Advertise } from "../models/Advertise";
 
 import type { CancelablePromise } from "../core/CancelablePromise";
 import type { BaseHttpRequest } from "../core/BaseHttpRequest";
@@ -10,11 +10,11 @@ export class AdvertiserAdvertiseService {
   constructor(public readonly httpRequest: BaseHttpRequest) {}
 
   /**
-   * 增加广告信息
+   * 添加广告
    * @returns any 成功
    * @throws ApiError
    */
-  public addAdvertisingInformation({
+  public addAdvertise({
     advertiserid,
     requestBody,
   }: {
@@ -24,19 +24,7 @@ export class AdvertiserAdvertiseService {
     advertiserid: string;
     requestBody?: {
       /**
-       * 广告信息ID
-       */
-      advertisingInformationId: string;
-      /**
-       * 创建时间
-       */
-      createdAt: string;
-      /**
-       * 修改时间
-       */
-      updatedAt: string;
-      /**
-       * 广告名称
+       * 名称
        */
       name: string;
       /**
@@ -70,22 +58,18 @@ export class AdvertiserAdvertiseService {
     };
   }): CancelablePromise<{
     /**
-     * 请求ID
-     */
-    requestId?: string;
-    /**
      * 响应时间
      */
     timestamp: string;
     /**
+     * 响应
+     */
+    message: string;
+    /**
      * 响应编码
      */
     status: number;
-    /**
-     * 响应信息
-     */
-    message: string;
-    body: AdvertisingInformation;
+    body: Advertise;
   }> {
     return this.httpRequest.request({
       method: "POST",
@@ -99,12 +83,13 @@ export class AdvertiserAdvertiseService {
   }
 
   /**
-   * 查询所有广告信息
+   * 查询广告
    * @returns any 成功
    * @throws ApiError
    */
-  public getAllAdvertisingInformation({
+  public queryAdvertise({
     advertiserid,
+    query,
     page,
     size,
     sort,
@@ -114,46 +99,46 @@ export class AdvertiserAdvertiseService {
      */
     advertiserid: string;
     /**
-     * 当前页，eg：0
+     * 查询条件
+     */
+    query?: string;
+    /**
+     * 当前页数
      */
     page?: number;
     /**
-     * 页大小，eg：5
+     * 页面大小
      */
     size?: number;
     /**
-     * 排序方式，eg：["createdAt,desc"]
+     * 排序方式
      */
-    sort?: Array<`${keyof AdvertisingInformation},${"asc" | "desc"}`>;
+    sort?: Array<`${keyof Advertise},${"asc" | "desc"}`>;
   }): CancelablePromise<{
-    /**
-     * 请求ID
-     */
-    requestId?: string;
     /**
      * 响应时间
      */
     timestamp: string;
     /**
+     * 响应
+     */
+    message: string;
+    /**
      * 响应编码
      */
     status: number;
     /**
-     * 响应信息
-     */
-    message: string;
-    /**
-     * 响应体
+     * 分页结果
      */
     body: {
       /**
-       * 记录总数
+       * 广告总数
        */
-      totalCount: number;
+      total: number;
       /**
-       * 广告信息
+       * 当页广告
        */
-      advertise: Array<AdvertisingInformation>;
+      items: Array<Advertise>;
     };
   }> {
     return this.httpRequest.request({
@@ -163,6 +148,7 @@ export class AdvertiserAdvertiseService {
         advertiserid: advertiserid,
       },
       query: {
+        query: query,
         page: page,
         size: size,
         sort: sort,
@@ -171,59 +157,58 @@ export class AdvertiserAdvertiseService {
   }
 
   /**
-   * 删除广告信息
+   * 移除广告
    * @returns any 成功
    * @throws ApiError
    */
-  public deleteAdvertisingInformation({
+  public removeAdvertise({
     advertiserid,
-    advertiseid,
+    id,
   }: {
     /**
      * 广告商ID
      */
     advertiserid: string;
     /**
-     * 广告信息ID
+     * 广告ID
      */
-    advertiseid: string;
+    id: string;
   }): CancelablePromise<{
-    /**
-     * 请求ID
-     */
-    requestId?: string;
     /**
      * 响应时间
      */
     timestamp: string;
     /**
+     * 响应
+     */
+    message: string;
+    /**
      * 响应编码
      */
     status: number;
     /**
-     * 响应信息
+     * 广告ID
      */
-    message: string;
-    body: AdvertisingInformation;
+    body: string;
   }> {
     return this.httpRequest.request({
       method: "DELETE",
-      url: "/advertisers/{advertiserid}/advertise/{advertiseid}",
+      url: "/advertisers/{advertiserid}/advertise/{id}",
       path: {
         advertiserid: advertiserid,
-        advertiseid: advertiseid,
+        id: id,
       },
     });
   }
 
   /**
-   * 修改广告信息
+   * 修改广告
    * @returns any 成功
    * @throws ApiError
    */
-  public updateAdvertisingInformation({
+  public updateAdvertise({
     advertiserid,
-    advertiseid,
+    id,
     requestBody,
   }: {
     /**
@@ -231,35 +216,31 @@ export class AdvertiserAdvertiseService {
      */
     advertiserid: string;
     /**
-     * 广告信息ID
+     * 广告ID
      */
-    advertiseid: string;
-    requestBody?: AdvertisingInformation;
+    id: string;
+    requestBody?: Advertise;
   }): CancelablePromise<{
-    /**
-     * 请求ID
-     */
-    requestId?: string;
     /**
      * 响应时间
      */
     timestamp: string;
     /**
+     * 响应
+     */
+    message: string;
+    /**
      * 响应编码
      */
     status: number;
-    /**
-     * 响应信息
-     */
-    message: string;
-    body: AdvertisingInformation;
+    body: Advertise;
   }> {
     return this.httpRequest.request({
       method: "PUT",
-      url: "/advertisers/{advertiserid}/advertise/{advertiseid}",
+      url: "/advertisers/{advertiserid}/advertise/{id}",
       path: {
         advertiserid: advertiserid,
-        advertiseid: advertiseid,
+        id: id,
       },
       body: requestBody,
       mediaType: "application/json",
@@ -267,47 +248,43 @@ export class AdvertiserAdvertiseService {
   }
 
   /**
-   * 查询广告信息
+   * 获取广告
    * @returns any 成功
    * @throws ApiError
    */
-  public getAdvertisingInformation({
+  public getAdvertise({
     advertiserid,
-    advertiseid,
+    id,
   }: {
     /**
      * 广告商ID
      */
     advertiserid: string;
     /**
-     * 广告信息ID
+     * 广告ID
      */
-    advertiseid: string;
+    id: string;
   }): CancelablePromise<{
-    /**
-     * 请求ID
-     */
-    requestId?: string;
     /**
      * 响应时间
      */
     timestamp: string;
     /**
+     * 响应
+     */
+    message: string;
+    /**
      * 响应编码
      */
     status: number;
-    /**
-     * 响应信息
-     */
-    message: string;
-    body: AdvertisingInformation;
+    body: Advertise;
   }> {
     return this.httpRequest.request({
       method: "GET",
-      url: "/advertisers/{advertiserid}/advertise/{advertiseid}",
+      url: "/advertisers/{advertiserid}/advertise/{id}",
       path: {
         advertiserid: advertiserid,
-        advertiseid: advertiseid,
+        id: id,
       },
     });
   }

@@ -10,28 +10,27 @@ export class ApplicantJobExpectationService {
   constructor(public readonly httpRequest: BaseHttpRequest) {}
 
   /**
-   * 增加求职期望
-   * 增加求职期望的接口
+   * 添加求职期望
    * @returns any 成功
    * @throws ApiError
    */
   public addJobExpectation({
-    userInfoId,
+    applicantId,
     requestBody,
   }: {
     /**
-     * 用户信息ID
+     * 求职者ID
      */
-    userInfoId: string;
+    applicantId: string;
     requestBody?: {
       /**
        * {1:全职,2:兼职,3:实习}
        */
-      positionType: 0 | 1 | 2 | 3;
+      positionType: 1 | 2 | 3;
       /**
        * 细分标签
        */
-      directionTags?: Array<string>;
+      directionTags: Array<string>;
       /**
        * 职位名称
        */
@@ -51,27 +50,24 @@ export class ApplicantJobExpectationService {
     };
   }): CancelablePromise<{
     /**
-     * 处理时间
+     * 响应时间
      */
     timestamp: string;
     /**
-     * 响应状态
-     */
-    status: number;
-    /**
-     * 状态描述
+     * 响应
      */
     message: string;
     /**
-     * 求职期望
+     * 响应编码
      */
+    status: number;
     body: JobExpectation;
   }> {
     return this.httpRequest.request({
       method: "POST",
-      url: "/userInfos/{userInfoId}/jobExpectations",
+      url: "/applicant/{applicantId}/jobExpectations",
       path: {
-        userInfoId: userInfoId,
+        applicantId: applicantId,
       },
       body: requestBody,
       mediaType: "application/json",
@@ -79,67 +75,72 @@ export class ApplicantJobExpectationService {
   }
 
   /**
-   * 查询所有求职期望
-   * 查询所有求职期望的接口
+   * 查询求职期望
    * @returns any 成功
    * @throws ApiError
    */
-  public getAllJobExpectation({
-    userInfoId,
+  public queryJobExpectation({
+    applicantId,
+    query,
     page,
     size,
     sort,
   }: {
     /**
-     * 用户信息ID
+     * 求职者ID
      */
-    userInfoId: string;
+    applicantId: string;
     /**
-     * 当前页，eg：0
+     * 查询条件
+     */
+    query?: string;
+    /**
+     * 当前页数
      */
     page?: number;
     /**
-     * 页大小，eg：5
+     * 页面大小
      */
     size?: number;
     /**
-     * 排序方式，eg：["createdAt,desc"]
+     * 排序方式
      */
     sort?: Array<`${keyof JobExpectation},${"asc" | "desc"}`>;
   }): CancelablePromise<{
     /**
-     * 处理时间
+     * 响应时间
      */
     timestamp: string;
     /**
-     * 响应状态
-     */
-    status: number;
-    /**
-     * 状态描述
+     * 响应
      */
     message: string;
     /**
-     * 响应结果
+     * 响应编码
+     */
+    status: number;
+    /**
+     * 分页结果
      */
     body: {
       /**
-       * 记录总数
+       * 求职期望总数
        */
-      totalCount: number;
+      total: number;
       /**
-       * 求职期望列表
+       * 当页求职期望
        */
-      jobExpectations: Array<JobExpectation>;
+      items: Array<JobExpectation>;
     };
   }> {
     return this.httpRequest.request({
       method: "GET",
-      url: "/userInfos/{userInfoId}/jobExpectations",
+      url: "/applicant/{applicantId}/jobExpectations",
       path: {
-        userInfoId: userInfoId,
+        applicantId: applicantId,
       },
       query: {
+        query: query,
         page: page,
         size: size,
         sort: sort,
@@ -148,141 +149,132 @@ export class ApplicantJobExpectationService {
   }
 
   /**
-   * 删除求职期望
-   * 删除求职期望的接口
+   * 移除求职期望
    * @returns any 成功
    * @throws ApiError
    */
-  public deleteJobExpectation({
-    userInfoId,
-    jobExpectationId,
+  public removeJobExpectation({
+    applicantId,
+    id,
   }: {
     /**
-     * 用户信息ID
+     * 求职者ID
      */
-    userInfoId: string;
+    applicantId: string;
     /**
      * 求职期望ID
      */
-    jobExpectationId: string;
+    id: string;
   }): CancelablePromise<{
     /**
-     * 处理时间
+     * 响应时间
      */
     timestamp: string;
     /**
-     * 响应状态
-     */
-    status: number;
-    /**
-     * 状态描述
+     * 响应
      */
     message: string;
     /**
-     * 求职期望
+     * 响应编码
      */
-    body: JobExpectation;
+    status: number;
+    /**
+     * 求职期望ID
+     */
+    body: string;
   }> {
     return this.httpRequest.request({
       method: "DELETE",
-      url: "/userInfos/{userInfoId}/jobExpectations/{jobExpectationId}",
+      url: "/applicant/{applicantId}/jobExpectations/{id}",
       path: {
-        userInfoId: userInfoId,
-        jobExpectationId: jobExpectationId,
+        applicantId: applicantId,
+        id: id,
       },
     });
   }
 
   /**
-   * 查询求职期望
-   * 查询求职期望的接口
+   * 获取求职期望
    * @returns any 成功
    * @throws ApiError
    */
   public getJobExpectation({
-    userInfoId,
-    jobExpectationId,
+    applicantId,
+    id,
   }: {
     /**
-     * 用户信息ID
+     * 求职者ID
      */
-    userInfoId: string;
+    applicantId: string;
     /**
      * 求职期望ID
      */
-    jobExpectationId: string;
+    id: string;
   }): CancelablePromise<{
     /**
-     * 处理时间
+     * 响应时间
      */
     timestamp: string;
     /**
-     * 响应状态
-     */
-    status: number;
-    /**
-     * 状态描述
+     * 响应
      */
     message: string;
     /**
-     * 求职期望
+     * 响应编码
      */
+    status: number;
     body: JobExpectation;
   }> {
     return this.httpRequest.request({
       method: "GET",
-      url: "/userInfos/{userInfoId}/jobExpectations/{jobExpectationId}",
+      url: "/applicant/{applicantId}/jobExpectations/{id}",
       path: {
-        userInfoId: userInfoId,
-        jobExpectationId: jobExpectationId,
+        applicantId: applicantId,
+        id: id,
       },
     });
   }
 
   /**
    * 修改求职期望
-   * 修改求职期望的接口
    * @returns any 成功
    * @throws ApiError
    */
   public updateJobExpectation({
-    userInfoId,
-    jobExpectationId,
+    applicantId,
+    id,
     requestBody,
   }: {
     /**
-     * 用户信息ID
+     * 求职者ID
      */
-    userInfoId: string;
+    applicantId: string;
     /**
      * 求职期望ID
      */
-    jobExpectationId: string;
+    id: string;
     requestBody?: JobExpectation;
   }): CancelablePromise<{
     /**
-     * 处理时间
+     * 响应时间
      */
     timestamp: string;
     /**
-     * 响应状态
-     */
-    status: number;
-    /**
-     * 状态描述
+     * 响应
      */
     message: string;
     /**
-     * 求职期望
+     * 响应编码
      */
+    status: number;
     body: JobExpectation;
   }> {
     return this.httpRequest.request({
       method: "PUT",
-      url: "/userInfos/{userInfoId}/jobExpectations/{jobExpectationId}",
+      url: "/applicant/{applicantId}/jobExpectations/{id}",
       path: {
-        userInfoId: userInfoId,
-        jobExpectationId: jobExpectationId,
+        applicantId: applicantId,
+        id: id,
       },
       body: requestBody,
       mediaType: "application/json",

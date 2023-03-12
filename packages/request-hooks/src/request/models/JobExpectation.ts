@@ -9,7 +9,7 @@ export type JobExpectation = {
   /**
    * 求职期望ID
    */
-  jobExpectationId: string;
+  id: string;
   /**
    * 创建时间
    */
@@ -18,6 +18,10 @@ export type JobExpectation = {
    * 更新时间
    */
   updatedAt: string;
+  /**
+   * 移除时间
+   */
+  deletedAt: string;
   /**
    * {1:全职,2:兼职,3:实习}
    */

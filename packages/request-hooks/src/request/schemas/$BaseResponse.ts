@@ -4,23 +4,19 @@
 export const $BaseResponse = {
   description: `基础响应`,
   properties: {
-    requestId: {
-      type: "string",
-      description: `请求ID`,
-    },
     timestamp: {
       type: "string",
       description: `响应时间`,
       isRequired: true,
     },
+    message: {
+      type: "string",
+      description: `响应`,
+      isRequired: true,
+    },
     status: {
       type: "number",
       description: `响应编码`,
-      isRequired: true,
-    },
-    message: {
-      type: "string",
-      description: `响应信息`,
       isRequired: true,
     },
     body: {

@@ -9,7 +9,7 @@ export type MessageRecord = {
   /**
    * 消息记录ID
    */
-  messageRecordId: string;
+  id: string;
   /**
    * 创建时间
    */

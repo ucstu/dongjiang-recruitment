@@ -4,7 +4,7 @@
 export const $WorkExperience = {
   description: `工作经历`,
   properties: {
-    workExperienceId: {
+    id: {
       type: "string",
       description: `工作经历ID`,
       isRequired: true,
@@ -19,7 +19,12 @@ export const $WorkExperience = {
       description: `更新时间`,
       isRequired: true,
     },
-    corporateName: {
+    deletedAt: {
+      type: "string",
+      description: `移除时间`,
+      isRequired: true,
+    },
+    companyName: {
       type: "string",
       description: `公司名称`,
       isRequired: true,

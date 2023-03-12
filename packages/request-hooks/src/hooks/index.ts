@@ -5,7 +5,10 @@ import { buildHooks } from "../utils";
 const hooks = buildHooks(client);
 const {
   request,
-  accountService,
+  authenticationService,
+  authenticationAccountService,
+  authenticationAuthorityGroupService,
+  authenticationAuthorityService,
   advertiserAdvertiseService,
   advertiserService,
   applicantAttentionRecordService,
@@ -18,18 +21,18 @@ const {
   applicantProjectExperienceService,
   applicantWorkExperienceService,
   commonService,
-  companyPositionInformationService,
   companyService,
-  managerAccountService,
-  managerAccountGroupService,
-  managerAccountAuthoritiesService,
+  companyPositionService,
   personnelInspectionRecordService,
   personnelService,
 } = hooks;
 
 export {
   request,
-  accountService,
+  authenticationService,
+  authenticationAccountService,
+  authenticationAuthorityGroupService,
+  authenticationAuthorityService,
   advertiserAdvertiseService,
   advertiserService,
   applicantAttentionRecordService,
@@ -42,11 +45,8 @@ export {
   applicantProjectExperienceService,
   applicantWorkExperienceService,
   commonService,
-  companyPositionInformationService,
   companyService,
-  managerAccountService,
-  managerAccountGroupService,
-  managerAccountAuthoritiesService,
+  companyPositionService,
   personnelInspectionRecordService,
   personnelService,
 };

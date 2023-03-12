@@ -4,13 +4,14 @@
 export const $PageResponse = {
   description: `分页响应`,
   properties: {
-    requestId: {
-      type: "string",
-      description: `请求ID`,
-    },
     timestamp: {
       type: "string",
       description: `响应时间`,
+      isRequired: true,
+    },
+    message: {
+      type: "string",
+      description: `响应`,
       isRequired: true,
     },
     status: {
@@ -18,17 +19,12 @@ export const $PageResponse = {
       description: `响应编码`,
       isRequired: true,
     },
-    message: {
-      type: "string",
-      description: `响应信息`,
-      isRequired: true,
-    },
     body: {
-      description: `响应体`,
+      description: `分页结果`,
       properties: {
-        totalCount: {
+        total: {
           type: "number",
-          description: `记录总数`,
+          description: `数据总数`,
           isRequired: true,
         },
         items: {

@@ -1,25 +1,24 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { AreaInformations } from "../models/AreaInformations";
-import type { CityInformations } from "../models/CityInformations";
+import type { Areas } from "../models/Areas";
+import type { Cities } from "../models/Cities";
 import type { DirectionTags } from "../models/DirectionTags";
-import type { FilterInformation } from "../models/FilterInformation";
+import type { FilterCriteria } from "../models/FilterCriteria";
 import type { PositionTypes } from "../models/PositionTypes";
 
-import type { BaseHttpRequest } from "../core/BaseHttpRequest";
 import type { CancelablePromise } from "../core/CancelablePromise";
+import type { BaseHttpRequest } from "../core/BaseHttpRequest";
 
 export class CommonService {
   constructor(public readonly httpRequest: BaseHttpRequest) {}
 
   /**
-   * 查询地区信息
-   * 查询地区信息的接口
+   * 获取地区
    * @returns any 成功
    * @throws ApiError
    */
-  public getAreaInformations({
+  public getAreas({
     cityName,
   }: {
     /**
@@ -28,25 +27,25 @@ export class CommonService {
     cityName: string;
   }): CancelablePromise<{
     /**
-     * 处理时间
+     * 响应时间
      */
     timestamp: string;
     /**
-     * 响应状态
-     */
-    status: number;
-    /**
-     * 状态描述
+     * 响应
      */
     message: string;
     /**
-     * 地区信息
+     * 响应编码
      */
-    body: AreaInformations;
+    status: number;
+    /**
+     * 地区
+     */
+    body: Areas;
   }> {
     return this.httpRequest.request({
       method: "GET",
-      url: "/areaInformations",
+      url: "/common/areas",
       query: {
         cityName: cityName,
       },
@@ -54,98 +53,7 @@ export class CommonService {
   }
 
   /**
-   * 查询城市信息
-   * 查询城市信息的接口
-   * @returns any 成功
-   * @throws ApiError
-   */
-  public getCityInformations(): CancelablePromise<{
-    /**
-     * 处理时间
-     */
-    timestamp: string;
-    /**
-     * 响应状态
-     */
-    status: number;
-    /**
-     * 状态描述
-     */
-    message: string;
-    /**
-     * 城市信息
-     */
-    body: CityInformations;
-  }> {
-    return this.httpRequest.request({
-      method: "GET",
-      url: "/cityInformations",
-    });
-  }
-
-  /**
-   * 查询筛选信息
-   * 查询筛选信息的接口
-   * @returns any 成功
-   * @throws ApiError
-   */
-  public getFilterInformation(): CancelablePromise<{
-    /**
-     * 处理时间
-     */
-    timestamp: string;
-    /**
-     * 响应状态
-     */
-    status: number;
-    /**
-     * 状态描述
-     */
-    message: string;
-    /**
-     * 筛选信息
-     */
-    body: FilterInformation;
-  }> {
-    return this.httpRequest.request({
-      method: "GET",
-      url: "/filterInformation",
-    });
-  }
-
-  /**
-   * 查询职位类型
-   * 查询职位类型的接口
-   * @returns any 成功
-   * @throws ApiError
-   */
-  public getPositionTypes(): CancelablePromise<{
-    /**
-     * 处理时间
-     */
-    timestamp: string;
-    /**
-     * 响应状态
-     */
-    status: number;
-    /**
-     * 状态描述
-     */
-    message: string;
-    /**
-     * 职位类型
-     */
-    body: PositionTypes;
-  }> {
-    return this.httpRequest.request({
-      method: "GET",
-      url: "/positionTypes",
-    });
-  }
-
-  /**
-   * 查询细分标签
-   * 查询细分标签的接口
+   * 获取细分标签
    * @returns any 成功
    * @throws ApiError
    */
@@ -158,17 +66,17 @@ export class CommonService {
     positionName: string;
   }): CancelablePromise<{
     /**
-     * 处理时间
+     * 响应时间
      */
     timestamp: string;
     /**
-     * 响应状态
-     */
-    status: number;
-    /**
-     * 状态描述
+     * 响应
      */
     message: string;
+    /**
+     * 响应编码
+     */
+    status: number;
     /**
      * 细分标签
      */
@@ -176,7 +84,7 @@ export class CommonService {
   }> {
     return this.httpRequest.request({
       method: "GET",
-      url: "/directionTags",
+      url: "/common/directionTags",
       query: {
         positionName: positionName,
       },
@@ -184,99 +92,202 @@ export class CommonService {
   }
 
   /**
-   * 查询推荐人才
-   * 查询推荐人才的接口
+   * 获取筛选条件
    * @returns any 成功
    * @throws ApiError
    */
-  public getRecommendations(): CancelablePromise<{
+  public getFilterCriteria(): CancelablePromise<{
     /**
-     * 处理时间
+     * 响应时间
      */
     timestamp: string;
     /**
-     * 响应状态
-     */
-    status: number;
-    /**
-     * 状态描述
+     * 响应
      */
     message: string;
     /**
-     * 用户信息ID
+     * 响应编码
      */
-    body: Array<string>;
+    status: number;
+    /**
+     * 筛选条件
+     */
+    body: FilterCriteria;
   }> {
     return this.httpRequest.request({
       method: "GET",
-      url: "/recommendations",
+      url: "/common/filterCriteria",
     });
   }
 
   /**
-   * 查询新版本
-   * 查询最新版本的接口
+   * 获取职位类型
+   * @returns any 成功
+   * @throws ApiError
+   */
+  public getPositionTypes(): CancelablePromise<{
+    /**
+     * 响应时间
+     */
+    timestamp: string;
+    /**
+     * 响应
+     */
+    message: string;
+    /**
+     * 响应编码
+     */
+    status: number;
+    /**
+     * 职位类型
+     */
+    body: PositionTypes;
+  }> {
+    return this.httpRequest.request({
+      method: "GET",
+      url: "/common/positionTypes",
+    });
+  }
+
+  /**
+   * 获取城市
+   * @returns any 成功
+   * @throws ApiError
+   */
+  public getCities(): CancelablePromise<{
+    /**
+     * 响应时间
+     */
+    timestamp: string;
+    /**
+     * 响应
+     */
+    message: string;
+    /**
+     * 响应编码
+     */
+    status: number;
+    /**
+     * 城市
+     */
+    body: Cities;
+  }> {
+    return this.httpRequest.request({
+      method: "GET",
+      url: "/common/cities",
+    });
+  }
+
+  /**
+   * 获取新版本
    * @returns any 成功
    * @throws ApiError
    */
   public getNewVersion(): CancelablePromise<{
     /**
-     * 处理时间
+     * 响应时间
      */
     timestamp: string;
     /**
-     * 响应状态
-     */
-    status: number;
-    /**
-     * 状态描述
+     * 响应
      */
     message: string;
     /**
-     * 版本信息
+     * 响应编码
+     */
+    status: number;
+    /**
+     * 新版本号
      */
     body: number;
   }> {
     return this.httpRequest.request({
       method: "GET",
-      url: "/newVersion",
+      url: "/common/newVersion",
+    });
+  }
+
+  /**
+   * 获取验证码
+   * @returns any 成功
+   * @throws ApiError
+   */
+  public sendVerificationCode({
+    email,
+  }: {
+    /**
+     * 电子邮箱
+     */
+    email: string;
+  }): CancelablePromise<{
+    /**
+     * 响应时间
+     */
+    timestamp: string;
+    /**
+     * 响应
+     */
+    message: string;
+    /**
+     * 响应编码
+     */
+    status: number;
+    /**
+     * 发送状态
+     */
+    body: string;
+  }> {
+    return this.httpRequest.request({
+      method: "GET",
+      url: "/common/verificationCode",
+      query: {
+        email: email,
+      },
     });
   }
 
   /**
    * 上传文件
-   * 上传文件的接口
    * @returns any 成功
    * @throws ApiError
    */
-  public uploadFile({ file }: { file?: File }): CancelablePromise<{
+  public uploadFile({
+    formData,
+  }: {
+    formData?: {
+      /**
+       * 文件
+       */
+      file: Blob;
+    };
+  }): CancelablePromise<{
     /**
-     * 处理时间
+     * 响应时间
      */
     timestamp: string;
     /**
-     * 响应状态
-     */
-    status: number;
-    /**
-     * 状态描述
+     * 响应
      */
     message: string;
     /**
-     * 文件链接
+     * 响应编码
+     */
+    status: number;
+    /**
+     * 文件地址
      */
     body: string;
   }> {
     return this.httpRequest.request({
-      method: "UPLOAD",
-      url: "/files",
-      body: file,
+      method: "POST",
+      url: "/common/files",
+      formData: formData,
+      mediaType: "multipart/form-data",
     });
   }
 
   /**
    * 上传头像
-   * 上传头像使用的接口
    * @returns any 成功
    * @throws ApiError
    */
@@ -291,63 +302,27 @@ export class CommonService {
     };
   }): CancelablePromise<{
     /**
-     * 处理时间
+     * 响应时间
      */
     timestamp: string;
     /**
-     * 响应状态
-     */
-    status: number;
-    /**
-     * 状态描述
+     * 响应
      */
     message: string;
     /**
-     * 头像链接
+     * 响应编码
+     */
+    status: number;
+    /**
+     * 头像地址
      */
     body: string;
   }> {
     return this.httpRequest.request({
       method: "POST",
-      url: "/avatars",
+      url: "/common/avatars",
       formData: formData,
       mediaType: "multipart/form-data",
-    });
-  }
-
-  /**
-   * 获取验证码
-   * 获取验证码的接口
-   * @returns any 成功
-   * @throws ApiError
-   */
-  public sendVerificationCode({
-    email,
-  }: {
-    /**
-     * 电子邮箱
-     */
-    email: string;
-  }): CancelablePromise<{
-    /**
-     * 处理时间
-     */
-    timestamp: string;
-    /**
-     * 响应状态
-     */
-    status: number;
-    /**
-     * 状态描述
-     */
-    message: string;
-  }> {
-    return this.httpRequest.request({
-      method: "GET",
-      url: "/verificationCode",
-      query: {
-        email: email,
-      },
     });
   }
 }

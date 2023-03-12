@@ -9,7 +9,7 @@ export type PersonnelInspectionRecord = {
   /**
    * 人事查看记录ID
    */
-  personnelInspectionRecordId: string;
+  id: string;
   /**
    * 创建时间
    */
@@ -19,11 +19,15 @@ export type PersonnelInspectionRecord = {
    */
   updatedAt: string;
   /**
-   * HR信息ID
+   * 移除时间
    */
-  hrInformationId: string;
+  deletedAt: string;
   /**
-   * 用户信息ID
+   * 人事ID
    */
-  userInformationId: string;
+  personnelId: string;
+  /**
+   * 求职者ID
+   */
+  applicantId: string;
 };

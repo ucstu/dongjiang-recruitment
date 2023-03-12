@@ -10,19 +10,18 @@ export class ApplicantProjectExperienceService {
   constructor(public readonly httpRequest: BaseHttpRequest) {}
 
   /**
-   * 增加项目经历
-   * 增加项目经历的接口
+   * 添加项目经历
    * @returns any 成功
    * @throws ApiError
    */
   public addProjectExperience({
-    userInfoId,
+    applicantId,
     requestBody,
   }: {
     /**
-     * 用户信息ID
+     * 求职者ID
      */
-    userInfoId: string;
+    applicantId: string;
     requestBody?: {
       /**
        * 项目名称
@@ -35,7 +34,7 @@ export class ApplicantProjectExperienceService {
       /**
        * 我的成就
        */
-      achievement?: string;
+      achievement: string;
       /**
        * 开始时间
        */
@@ -47,196 +46,28 @@ export class ApplicantProjectExperienceService {
       /**
        * 项目链接
        */
-      projectLink?: string;
+      projectLink: string;
     };
   }): CancelablePromise<{
     /**
-     * 处理时间
+     * 响应时间
      */
     timestamp: string;
     /**
-     * 响应状态
-     */
-    status: number;
-    /**
-     * 状态描述
+     * 响应
      */
     message: string;
     /**
-     * 项目经历
+     * 响应编码
      */
+    status: number;
     body: ProjectExperience;
   }> {
     return this.httpRequest.request({
       method: "POST",
-      url: "/userInfos/{userInfoId}/projectExperiences",
+      url: "/applicant/{applicantId}/projectExperiences",
       path: {
-        userInfoId: userInfoId,
-      },
-      body: requestBody,
-      mediaType: "application/json",
-    });
-  }
-
-  /**
-   * 查询所有项目经历
-   * 查询所有项目经历的接口
-   * @returns any 成功
-   * @throws ApiError
-   */
-  public getAllProjectExperience({
-    userInfoId,
-    page,
-    size,
-    sort,
-  }: {
-    /**
-     * 用户信息ID
-     */
-    userInfoId: string;
-    /**
-     * 当前页，eg：0
-     */
-    page?: number;
-    /**
-     * 页大小，eg：5
-     */
-    size?: number;
-    /**
-     * 排序方式，eg：["createdAt,desc"]
-     */
-    sort?: Array<`${keyof ProjectExperience},${"asc" | "desc"}`>;
-  }): CancelablePromise<{
-    /**
-     * 处理时间
-     */
-    timestamp: string;
-    /**
-     * 响应状态
-     */
-    status: number;
-    /**
-     * 状态描述
-     */
-    message: string;
-    /**
-     * 响应结果
-     */
-    body: {
-      /**
-       * 记录总数
-       */
-      totalCount: number;
-      /**
-       * 项目经历列表
-       */
-      projectExperiences: Array<ProjectExperience>;
-    };
-  }> {
-    return this.httpRequest.request({
-      method: "GET",
-      url: "/userInfos/{userInfoId}/projectExperiences",
-      path: {
-        userInfoId: userInfoId,
-      },
-      query: {
-        page: page,
-        size: size,
-        sort: sort,
-      },
-    });
-  }
-
-  /**
-   * 删除项目经历
-   * 删除项目经历的接口
-   * @returns any 成功
-   * @throws ApiError
-   */
-  public deleteProjectExperience({
-    userInfoId,
-    projectExperienceId,
-  }: {
-    /**
-     * 用户信息ID
-     */
-    userInfoId: string;
-    /**
-     * 项目经历ID
-     */
-    projectExperienceId: string;
-  }): CancelablePromise<{
-    /**
-     * 处理时间
-     */
-    timestamp: string;
-    /**
-     * 响应状态
-     */
-    status: number;
-    /**
-     * 状态描述
-     */
-    message: string;
-    /**
-     * 项目经历
-     */
-    body: ProjectExperience;
-  }> {
-    return this.httpRequest.request({
-      method: "DELETE",
-      url: "/userInfos/{userInfoId}/projectExperiences/{projectExperienceId}",
-      path: {
-        userInfoId: userInfoId,
-        projectExperienceId: projectExperienceId,
-      },
-    });
-  }
-
-  /**
-   * 修改项目经历
-   * 修改项目经历的接口
-   * @returns any 成功
-   * @throws ApiError
-   */
-  public updateProjectExperience({
-    userInfoId,
-    projectExperienceId,
-    requestBody,
-  }: {
-    /**
-     * 用户信息ID
-     */
-    userInfoId: string;
-    /**
-     * 项目经历ID
-     */
-    projectExperienceId: string;
-    requestBody?: ProjectExperience;
-  }): CancelablePromise<{
-    /**
-     * 处理时间
-     */
-    timestamp: string;
-    /**
-     * 响应状态
-     */
-    status: number;
-    /**
-     * 状态描述
-     */
-    message: string;
-    /**
-     * 项目经历
-     */
-    body: ProjectExperience;
-  }> {
-    return this.httpRequest.request({
-      method: "PUT",
-      url: "/userInfos/{userInfoId}/projectExperiences/{projectExperienceId}",
-      path: {
-        userInfoId: userInfoId,
-        projectExperienceId: projectExperienceId,
+        applicantId: applicantId,
       },
       body: requestBody,
       mediaType: "application/json",
@@ -249,14 +80,180 @@ export class ApplicantProjectExperienceService {
    * @returns any 成功
    * @throws ApiError
    */
+  public queryProjectExperience({
+    applicantId,
+    query,
+    page,
+    size,
+    sort,
+  }: {
+    /**
+     * 求职者ID
+     */
+    applicantId: string;
+    /**
+     * 查询条件
+     */
+    query?: string;
+    /**
+     * 当前页数
+     */
+    page?: number;
+    /**
+     * 页面大小
+     */
+    size?: number;
+    /**
+     * 排序方式
+     */
+    sort?: Array<`${keyof ProjectExperience},${"asc" | "desc"}`>;
+  }): CancelablePromise<{
+    /**
+     * 响应时间
+     */
+    timestamp: string;
+    /**
+     * 响应
+     */
+    message: string;
+    /**
+     * 响应编码
+     */
+    status: number;
+    /**
+     * 分页结果
+     */
+    body: {
+      /**
+       * 项目经历总数
+       */
+      total: number;
+      /**
+       * 当页项目经历
+       */
+      items: Array<ProjectExperience>;
+    };
+  }> {
+    return this.httpRequest.request({
+      method: "GET",
+      url: "/applicant/{applicantId}/projectExperiences",
+      path: {
+        applicantId: applicantId,
+      },
+      query: {
+        query: query,
+        page: page,
+        size: size,
+        sort: sort,
+      },
+    });
+  }
+
+  /**
+   * 修改项目经历
+   * @returns any 成功
+   * @throws ApiError
+   */
+  public updateProjectExperience({
+    applicantId,
+    id,
+    requestBody,
+  }: {
+    /**
+     * 求职者ID
+     */
+    applicantId: string;
+    /**
+     * 项目经历ID
+     */
+    id: string;
+    requestBody?: ProjectExperience;
+  }): CancelablePromise<{
+    /**
+     * 响应时间
+     */
+    timestamp: string;
+    /**
+     * 响应
+     */
+    message: string;
+    /**
+     * 响应编码
+     */
+    status: number;
+    body: ProjectExperience;
+  }> {
+    return this.httpRequest.request({
+      method: "PUT",
+      url: "/applicant/{applicantId}/projectExperiences/{id}",
+      path: {
+        applicantId: applicantId,
+        id: id,
+      },
+      body: requestBody,
+      mediaType: "application/json",
+    });
+  }
+
+  /**
+   * 移除项目经历
+   * @returns any 成功
+   * @throws ApiError
+   */
+  public removeProjectExperience({
+    applicantId,
+    id,
+  }: {
+    /**
+     * 求职者ID
+     */
+    applicantId: string;
+    /**
+     * 项目经历ID
+     */
+    id: string;
+  }): CancelablePromise<{
+    /**
+     * 响应时间
+     */
+    timestamp: string;
+    /**
+     * 响应
+     */
+    message: string;
+    /**
+     * 响应编码
+     */
+    status: number;
+    /**
+     * 项目经历ID
+     */
+    body: string;
+  }> {
+    return this.httpRequest.request({
+      method: "DELETE",
+      url: "/applicant/{applicantId}/projectExperiences/{id}",
+      path: {
+        applicantId: applicantId,
+        id: id,
+      },
+    });
+  }
+
+  /**
+   * 获取项目经历
+   * 获取项目经历的接口
+   * @returns any 成功
+   * @throws ApiError
+   */
   public getProjectExperience({
-    userInfoId,
+    applicantId,
     projectExperienceId,
   }: {
     /**
-     * 用户信息ID
+     * 求职者ID
      */
-    userInfoId: string;
+    applicantId: string;
     /**
      * 项目经历ID
      */
@@ -274,16 +271,13 @@ export class ApplicantProjectExperienceService {
      * 状态描述
      */
     message?: string;
-    /**
-     * 项目经历
-     */
     body?: ProjectExperience;
   }> {
     return this.httpRequest.request({
       method: "GET",
-      url: "/userInfos/{userInfoId}/projectExperiences/{projectExperienceId}",
+      url: "/applicant/{applicantId}/projectExperiences/{projectExperienceId}",
       path: {
-        userInfoId: userInfoId,
+        applicantId: applicantId,
         projectExperienceId: projectExperienceId,
       },
     });

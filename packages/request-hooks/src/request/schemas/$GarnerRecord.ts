@@ -4,7 +4,7 @@
 export const $GarnerRecord = {
   description: `收藏记录`,
   properties: {
-    garnerRecordId: {
+    id: {
       type: "string",
       description: `收藏记录ID`,
       isRequired: true,
@@ -19,19 +19,24 @@ export const $GarnerRecord = {
       description: `更新时间`,
       isRequired: true,
     },
-    userInformationId: {
+    deletedAt: {
       type: "string",
-      description: `用户信息ID`,
+      description: `移除时间`,
       isRequired: true,
     },
-    companyInformationId: {
+    applicantId: {
       type: "string",
-      description: `公司信息ID`,
+      description: `求职者ID`,
       isRequired: true,
     },
-    positionInformationId: {
+    companyId: {
       type: "string",
-      description: `职位信息ID`,
+      description: `公司ID`,
+      isRequired: true,
+    },
+    positionId: {
+      type: "string",
+      description: `职位ID`,
       isRequired: true,
     },
   },

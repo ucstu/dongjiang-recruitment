@@ -3,6 +3,16 @@
     "file": "package.json",
     "pattern": "\"version\": \"([0-9]+\\.[0-9]+\\.[0-9]+)\""
   },
+  "global": {
+    "files": [
+      "package.json",
+      "pnpm-lock.yaml",
+      "pnpm-workspace.yaml",
+      ".github/workflows/*",
+      "packages/**/*",
+      "scripts/**/*"
+    ]
+  },
   "packages": {
     "advertiser-service": {
       "type": "backend",
@@ -30,7 +40,7 @@
           "sub-type": "kubernetes",
           "port": 3000,
           "path": "/advertiser",
-          "domain": "api.djrecruitment.ucstu.com"
+          "domain": "api.djzhaopin.ucstu.com"
         }
       }
     },
@@ -60,7 +70,7 @@
           "sub-type": "kubernetes",
           "port": 3000,
           "path": "/applicant",
-          "domain": "api.djrecruitment.ucstu.com"
+          "domain": "api.djzhaopin.ucstu.com"
         }
       }
     },
@@ -90,7 +100,7 @@
           "sub-type": "kubernetes",
           "port": 3000,
           "path": "/authentication",
-          "domain": "api.djrecruitment.ucstu.com"
+          "domain": "api.djzhaopin.ucstu.com"
         }
       }
     },
@@ -120,7 +130,7 @@
           "sub-type": "kubernetes",
           "port": 3000,
           "path": "/common",
-          "domain": "api.djrecruitment.ucstu.com"
+          "domain": "api.djzhaopin.ucstu.com"
         }
       }
     },
@@ -149,8 +159,38 @@
           "name": "deploy",
           "sub-type": "kubernetes",
           "port": 3000,
-          "path": "/company",
-          "domain": "api.djrecruitment.ucstu.com"
+          "path": "/companies",
+          "domain": "api.djzhaopin.ucstu.com"
+        }
+      }
+    },
+    "personnel-service": {
+      "type": "backend",
+      "name": "personnel-service",
+      "workspace": "backend/personnel-service",
+      "scripts": {
+        "lint": {
+          "name": "lint",
+          "command": "pnpm -w lint-fix ./backend/personnel-service"
+        },
+        "build": {
+          "name": "build",
+          "command": "pnpm run build && pnpx @vercel/ncc build dist/main.js -o bundle -m -s",
+          "artifact": "bundle"
+        },
+        "publish": {
+          "name": "publish",
+          "sub-type": "docker",
+          "artifact": "bundle",
+          "context": "bundle",
+          "docker-file": "../Dockerfile.node"
+        },
+        "deploy": {
+          "name": "deploy",
+          "sub-type": "kubernetes",
+          "port": 3000,
+          "path": "/personnel",
+          "domain": "api.djzhaopin.ucstu.com"
         }
       }
     },
@@ -180,7 +220,7 @@
           "sub-type": "kubernetes",
           "port": 80,
           "path": "/",
-          "domain": "applicant.djrecruitment.ucstu.com"
+          "domain": "applicant.djzhaopin.ucstu.com"
         }
       }
     },
@@ -210,7 +250,7 @@
           "sub-type": "kubernetes",
           "port": 80,
           "path": "/",
-          "domain": "manager.djrecruitment.ucstu.com"
+          "domain": "manager.djzhaopin.ucstu.com"
         }
       }
     },
@@ -240,7 +280,7 @@
           "sub-type": "kubernetes",
           "port": 80,
           "path": "/",
-          "domain": "personnel.djrecruitment.ucstu.com"
+          "domain": "personnel.djzhaopin.ucstu.com"
         }
       }
     }

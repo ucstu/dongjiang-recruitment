@@ -10,233 +10,60 @@ export class ApplicantDeliveryRecordService {
   constructor(public readonly httpRequest: BaseHttpRequest) {}
 
   /**
-   * 增加投递记录
-   * 增加投递记录的接口
+   * 添加投递记录
    * @returns any 成功
    * @throws ApiError
    */
   public addDeliveryRecord({
-    userInfoId,
+    applicantId,
     requestBody,
   }: {
     /**
-     * 用户信息ID
+     * 求职者ID
      */
-    userInfoId: string;
+    applicantId: string;
     requestBody?: {
       /**
-       * 用户信息ID
+       * 求职者ID
        */
-      userInformationId: string;
+      applicantId: string;
       /**
-       * 公司信息ID
+       * {1:待查看,2:已查看,3:通过筛选,4:约面试,5:不合适}
        */
-      companyInformationId: string;
+      status: 1 | 2 | 3 | 4 | 5;
       /**
-       * 职位信息ID
+       * 面试时间
        */
-      positionInformationId: string;
+      interviewTime: string;
+      /**
+       * 公司ID
+       */
+      companyId: string;
+      /**
+       * 职位ID
+       */
+      positionId: string;
     };
   }): CancelablePromise<{
     /**
-     * 处理时间
+     * 响应时间
      */
     timestamp: string;
     /**
-     * 响应状态
-     */
-    status: number;
-    /**
-     * 状态描述
+     * 响应
      */
     message: string;
     /**
-     * 投递记录
+     * 响应编码
      */
+    status: number;
     body: DeliveryRecord;
   }> {
     return this.httpRequest.request({
       method: "POST",
-      url: "/userInfos/{userInfoId}/deliveryRecords",
+      url: "/applicant/{applicantId}/deliveryRecords",
       path: {
-        userInfoId: userInfoId,
-      },
-      body: requestBody,
-      mediaType: "application/json",
-    });
-  }
-
-  /**
-   * 查询所有投递记录
-   * 查询所有投递记录的接口
-   * @returns any 成功
-   * @throws ApiError
-   */
-  public getAllDeliveryRecord({
-    userInfoId,
-    status,
-    interviewTime,
-    page,
-    size,
-    sort,
-  }: {
-    /**
-     * 用户信息ID
-     */
-    userInfoId: string;
-    /**
-     * 投递状态枚举数组，{1:待查看,2:已查看,3:通过筛选,4:约面试,5:不合适}
-     */
-    status: Array<string>;
-    /**
-     * 面试时间，eg：2022-02-03
-     */
-    interviewTime?: string;
-    /**
-     * 当前页，eg：0
-     */
-    page?: number;
-    /**
-     * 页大小，eg：5
-     */
-    size?: number;
-    /**
-     * 排序方式，eg：["createdAt,desc"]
-     */
-    sort?: Array<`${keyof DeliveryRecord},${"asc" | "desc"}`>;
-  }): CancelablePromise<{
-    /**
-     * 处理时间
-     */
-    timestamp: string;
-    /**
-     * 响应状态
-     */
-    status: number;
-    /**
-     * 状态描述
-     */
-    message: string;
-    /**
-     * 响应结果
-     */
-    body: {
-      /**
-       * 记录总数
-       */
-      totalCount: number;
-      /**
-       * 投递记录列表
-       */
-      deliveryRecords: Array<DeliveryRecord>;
-    };
-  }> {
-    return this.httpRequest.request({
-      method: "GET",
-      url: "/userInfos/{userInfoId}/deliveryRecords",
-      path: {
-        userInfoId: userInfoId,
-      },
-      query: {
-        status: status,
-        interviewTime: interviewTime,
-        page: page,
-        size: size,
-        sort: sort,
-      },
-    });
-  }
-
-  /**
-   * 删除投递记录
-   * 删除投递记录的接口
-   * @returns any 成功
-   * @throws ApiError
-   */
-  public deleteDeliveryRecord({
-    userInfoId,
-    deliveryRecordId,
-  }: {
-    /**
-     * 用户信息ID
-     */
-    userInfoId: string;
-    /**
-     * 投递记录ID
-     */
-    deliveryRecordId: string;
-  }): CancelablePromise<{
-    /**
-     * 处理时间
-     */
-    timestamp: string;
-    /**
-     * 响应状态
-     */
-    status: number;
-    /**
-     * 状态描述
-     */
-    message: string;
-    /**
-     * 投递记录
-     */
-    body: DeliveryRecord;
-  }> {
-    return this.httpRequest.request({
-      method: "DELETE",
-      url: "/userInfos/{userInfoId}/deliveryRecords/{deliveryRecordId}",
-      path: {
-        userInfoId: userInfoId,
-        deliveryRecordId: deliveryRecordId,
-      },
-    });
-  }
-
-  /**
-   * 修改投递记录
-   * 修改投递记录的接口
-   * @returns any 成功
-   * @throws ApiError
-   */
-  public updateDeliveryRecord({
-    userInfoId,
-    deliveryRecordId,
-    requestBody,
-  }: {
-    /**
-     * 用户信息ID
-     */
-    userInfoId: string;
-    /**
-     * 投递记录ID
-     */
-    deliveryRecordId: string;
-    requestBody?: DeliveryRecord;
-  }): CancelablePromise<{
-    /**
-     * 处理时间
-     */
-    timestamp: string;
-    /**
-     * 响应状态
-     */
-    status: number;
-    /**
-     * 状态描述
-     */
-    message: string;
-    /**
-     * 投递记录
-     */
-    body: DeliveryRecord;
-  }> {
-    return this.httpRequest.request({
-      method: "PUT",
-      url: "/userInfos/{userInfoId}/deliveryRecords/{deliveryRecordId}",
-      path: {
-        userInfoId: userInfoId,
-        deliveryRecordId: deliveryRecordId,
+        applicantId: applicantId,
       },
       body: requestBody,
       mediaType: "application/json",
@@ -245,46 +72,161 @@ export class ApplicantDeliveryRecordService {
 
   /**
    * 查询投递记录
-   * 查询投递记录的接口
+   * @returns any 成功
+   * @throws ApiError
+   */
+  public queryDeliveryRecord({
+    applicantId,
+    query,
+    page,
+    size,
+    sort,
+  }: {
+    /**
+     * 求职者ID
+     */
+    applicantId: string;
+    /**
+     * 查询条件
+     */
+    query?: string;
+    /**
+     * 当前页数
+     */
+    page?: number;
+    /**
+     * 页面大小
+     */
+    size?: number;
+    /**
+     * 排序方式
+     */
+    sort?: Array<`${keyof DeliveryRecord},${"asc" | "desc"}`>;
+  }): CancelablePromise<{
+    /**
+     * 响应时间
+     */
+    timestamp: string;
+    /**
+     * 响应
+     */
+    message: string;
+    /**
+     * 响应编码
+     */
+    status: number;
+    /**
+     * 分页结果
+     */
+    body: {
+      /**
+       * 投递记录总数
+       */
+      total: number;
+      /**
+       * 当页投递记录
+       */
+      items: Array<DeliveryRecord>;
+    };
+  }> {
+    return this.httpRequest.request({
+      method: "GET",
+      url: "/applicant/{applicantId}/deliveryRecords",
+      path: {
+        applicantId: applicantId,
+      },
+      query: {
+        query: query,
+        page: page,
+        size: size,
+        sort: sort,
+      },
+    });
+  }
+
+  /**
+   * 移除投递记录
+   * @returns any 成功
+   * @throws ApiError
+   */
+  public removeDeliveryRecord({
+    applicantId,
+    id,
+  }: {
+    /**
+     * 求职者ID
+     */
+    applicantId: string;
+    /**
+     * 投递记录ID
+     */
+    id: string;
+  }): CancelablePromise<{
+    /**
+     * 响应时间
+     */
+    timestamp: string;
+    /**
+     * 响应
+     */
+    message: string;
+    /**
+     * 响应编码
+     */
+    status: number;
+    /**
+     * 投递记录ID
+     */
+    body: string;
+  }> {
+    return this.httpRequest.request({
+      method: "DELETE",
+      url: "/applicant/{applicantId}/deliveryRecords/{id}",
+      path: {
+        applicantId: applicantId,
+        id: id,
+      },
+    });
+  }
+
+  /**
+   * 获取投递记录
    * @returns any 成功
    * @throws ApiError
    */
   public getDeliveryRecord({
-    userInfoId,
-    deliveryRecordId,
+    applicantId,
+    id,
   }: {
     /**
-     * 用户信息ID
+     * 求职者ID
      */
-    userInfoId: string;
+    applicantId: string;
     /**
      * 投递记录ID
      */
-    deliveryRecordId: string;
+    id: string;
   }): CancelablePromise<{
     /**
-     * 处理时间
+     * 响应时间
      */
     timestamp: string;
     /**
-     * 响应状态
-     */
-    status: number;
-    /**
-     * 状态描述
+     * 响应
      */
     message: string;
     /**
-     * 投递记录
+     * 响应编码
      */
+    status: number;
     body: DeliveryRecord;
   }> {
     return this.httpRequest.request({
       method: "GET",
-      url: "/userInfos/{userInfoId}/deliveryRecords/{deliveryRecordId}",
+      url: "/applicant/{applicantId}/deliveryRecords/{id}",
       path: {
-        userInfoId: userInfoId,
-        deliveryRecordId: deliveryRecordId,
+        applicantId: applicantId,
+        id: id,
       },
     });
   }

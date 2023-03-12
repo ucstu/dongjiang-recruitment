@@ -9,9 +9,7 @@ export type ApiRequestOptions = {
     | "DELETE"
     | "OPTIONS"
     | "HEAD"
-    | "PATCH"
-    | "UPLOAD"
-    | "DOWNLOAD";
+    | "PATCH";
   readonly url: string;
   readonly path?: Record<string, any>;
   readonly cookies?: Record<string, any>;

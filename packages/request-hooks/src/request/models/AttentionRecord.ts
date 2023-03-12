@@ -9,7 +9,7 @@ export type AttentionRecord = {
   /**
    * 关注记录ID
    */
-  attentionRecordId: string;
+  id: string;
   /**
    * 创建时间
    */
@@ -19,11 +19,15 @@ export type AttentionRecord = {
    */
   updatedAt: string;
   /**
-   * 用户信息ID
+   * 移除时间
    */
-  userInformationId: string;
+  deletedAt: string;
   /**
-   * 公司信息ID
+   * 求职者ID
    */
-  companyInformationId: string;
+  applicantId: string;
+  /**
+   * 公司ID
+   */
+  companyId: string;
 };
