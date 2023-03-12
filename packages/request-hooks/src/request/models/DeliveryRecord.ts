@@ -9,7 +9,7 @@ export type DeliveryRecord = {
   /**
    * 投递记录ID
    */
-  deliveryRecordId: string;
+  id: string;
   /**
    * 创建时间
    */
@@ -17,11 +17,15 @@ export type DeliveryRecord = {
   /**
    * 更新时间
    */
-  updated: string;
+  updatedAt: string;
   /**
-   * 用户信息ID
+   * 移除时间
    */
-  userInformationId: string;
+  deletedAt: string;
+  /**
+   * 求职者ID
+   */
+  applicantId: string;
   /**
    * {1:待查看,2:已查看,3:通过筛选,4:约面试,5:不合适}
    */
@@ -31,13 +35,13 @@ export type DeliveryRecord = {
    */
   interviewTime: string;
   /**
-   * 公司信息ID
+   * 公司ID
    */
-  companyInformationId: string;
+  companyId: string;
   /**
-   * 职位信息ID
+   * 职位ID
    */
-  positionInformationId: string;
+  positionId: string;
 };
 
 export namespace DeliveryRecord {

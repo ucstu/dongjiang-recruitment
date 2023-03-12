@@ -4,7 +4,7 @@
 export const $MessageRecord = {
   description: `消息记录`,
   properties: {
-    messageRecordId: {
+    id: {
       type: "string",
       description: `消息记录ID`,
       isRequired: true,

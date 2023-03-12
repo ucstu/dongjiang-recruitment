@@ -341,6 +341,65 @@ importers:
       tsconfig-paths: 4.1.2
       typescript: 4.9.5
 
+  backend/personnel-service:
+    specifiers:
+      '@dongjiang-recruitment/eslint-config': workspace:^1.0.0
+      '@nestjs/cli': ^9.2.0
+      '@nestjs/common': ^9.3.9
+      '@nestjs/core': ^9.3.9
+      '@nestjs/platform-express': ^9.3.9
+      '@nestjs/schematics': ^9.0.4
+      '@nestjs/testing': ^9.3.9
+      '@types/express': ^4.17.17
+      '@types/jest': 29.4.0
+      '@types/node': 18.13.0
+      '@types/supertest': ^2.0.12
+      '@typescript-eslint/eslint-plugin': ^5.52.0
+      '@typescript-eslint/parser': ^5.52.0
+      eslint: ^8.34.0
+      eslint-config-prettier: ^8.6.0
+      eslint-plugin-prettier: ^4.2.1
+      jest: 29.4.3
+      prettier: ^2.8.4
+      reflect-metadata: ^0.1.13
+      rxjs: ^7.8.0
+      source-map-support: ^0.5.21
+      supertest: ^6.3.3
+      ts-jest: 29.0.5
+      ts-loader: ^9.4.2
+      ts-node: ^10.9.1
+      tsconfig-paths: 4.1.2
+      typescript: ^4.9.5
+    dependencies:
+      '@nestjs/common': 9.3.9
+      '@nestjs/core': 9.3.9
+      '@nestjs/platform-express': 9.3.9_77foi4w27ghy47yutmnzv7krjy
+      reflect-metadata: 0.1.13
+      rxjs: 7.8.0
+    devDependencies:
+      '@dongjiang-recruitment/eslint-config': link:../../packages/eslint-config
+      '@nestjs/cli': 9.2.0
+      '@nestjs/schematics': 9.0.4_typescript@4.9.5
+      '@nestjs/testing': 9.3.9_yqmogfxzeu633isbftgaoi4ho4
+      '@types/express': 4.17.17
+      '@types/jest': 29.4.0
+      '@types/node': 18.13.0
+      '@types/supertest': 2.0.12
+      '@typescript-eslint/eslint-plugin': 5.54.0_6mj2wypvdnknez7kws2nfdgupi
+      '@typescript-eslint/parser': 5.54.0_ycpbpc6yetojsgtrx3mwntkhsu
+      eslint: 8.35.0
+      eslint-config-prettier: 8.6.0_eslint@8.35.0
+      eslint-plugin-prettier: 4.2.1_u2zha4kiojzs42thzpgwygphmy
+      jest: 29.4.3_ucpl6toqp57nqodtp3vxxi6g5a
+      prettier: 2.8.4
+      source-map-support: 0.5.21
+      supertest: 6.3.3
+      ts-jest: 29.0.5_kv2fdk7yz6jlbcjfldgcwh5vp4
+      ts-loader: 9.4.2_hhrrucqyg4eysmfpujvov2ym5u
+      ts-node: 10.9.1_4bewfcp2iebiwuold25d6rgcsy
+      tsconfig-paths: 4.1.2
+      typescript: 4.9.5
+
   frontend/applicant-interface:
     specifiers:
       '@dcloudio/types': ^3.2.11
@@ -4880,7 +4939,7 @@ packages:
     resolution: {integrity: sha512-9K4zoImiZc3HlIp6AVUDE4CWYx22a+lhSZMYNpbjW04+YF0KWj4pJXnEMjdnFTiQibFFmElcsasJXDbdI/EPhA==}
     dependencies:
       '@types/eslint': 8.21.1
-      '@types/estree': 0.0.51
+      '@types/estree': 1.0.0
     dev: true
 
   /@types/eslint/8.21.1:
@@ -11093,7 +11152,7 @@ packages:
     dependencies:
       config-chain: 1.1.13
       editorconfig: 0.15.3
-      glob: 8.0.3
+      glob: 8.1.0
       nopt: 6.0.0
     dev: false
 

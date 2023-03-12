@@ -10,19 +10,18 @@ export class ApplicantEducationExperienceService {
   constructor(public readonly httpRequest: BaseHttpRequest) {}
 
   /**
-   * 增加教育经历
-   * 增加教育经历的接口
+   * 添加教育经历
    * @returns any 成功
    * @throws ApiError
    */
   public addEducationExperience({
-    userInfoId,
+    applicantId,
     requestBody,
   }: {
     /**
-     * 用户信息ID
+     * 求职者ID
      */
-    userInfoId: string;
+    applicantId: string;
     requestBody?: {
       /**
        * 学校名称
@@ -31,7 +30,7 @@ export class ApplicantEducationExperienceService {
       /**
        * {1:大专,2:本科,3:硕士,4:博士}
        */
-      education: 0 | 1 | 2 | 3 | 4;
+      education: 1 | 2 | 3 | 4;
       /**
        * 专业名称
        */
@@ -58,16 +57,13 @@ export class ApplicantEducationExperienceService {
      * 状态描述
      */
     message: string;
-    /**
-     * 教育经历
-     */
     body: EducationExperience;
   }> {
     return this.httpRequest.request({
       method: "POST",
-      url: "/userInfos/{userInfoId}/eduExperiences",
+      url: "/applicant/{applicantId}/eduExperiences",
       path: {
-        userInfoId: userInfoId,
+        applicantId: applicantId,
       },
       body: requestBody,
       mediaType: "application/json",
@@ -75,67 +71,72 @@ export class ApplicantEducationExperienceService {
   }
 
   /**
-   * 查询所有教育经历
-   * 查询所有教育经历的接口
+   * 查询教育经历
    * @returns any 成功
    * @throws ApiError
    */
-  public getAllEducationExperience({
-    userInfoId,
+  public queryEducationExperience({
+    applicantId,
+    query,
     page,
     size,
     sort,
   }: {
     /**
-     * 用户信息ID
+     * 求职者ID
      */
-    userInfoId: string;
+    applicantId: string;
     /**
-     * 当前页，eg：0
+     * 查询条件
+     */
+    query?: string;
+    /**
+     * 当前页数
      */
     page?: number;
     /**
-     * 页大小，eg：5
+     * 页面大小
      */
     size?: number;
     /**
-     * 排序方式，eg：["createdAt,desc"]
+     * 排序方式
      */
     sort?: Array<`${keyof EducationExperience},${"asc" | "desc"}`>;
   }): CancelablePromise<{
     /**
-     * 处理时间
+     * 响应时间
      */
     timestamp: string;
     /**
-     * 响应状态
-     */
-    status: number;
-    /**
-     * 状态描述
+     * 响应
      */
     message: string;
     /**
-     * 响应结果
+     * 响应编码
+     */
+    status: number;
+    /**
+     * 分页结果
      */
     body: {
       /**
-       * 记录总数
+       * 教育经历总数
        */
-      totalCount: number;
+      total: number;
       /**
-       * 教育经历列表
+       * 当页教育经历
        */
-      educationExperiences: Array<EducationExperience>;
+      items: Array<EducationExperience>;
     };
   }> {
     return this.httpRequest.request({
       method: "GET",
-      url: "/userInfos/{userInfoId}/eduExperiences",
+      url: "/applicant/{applicantId}/eduExperiences",
       path: {
-        userInfoId: userInfoId,
+        applicantId: applicantId,
       },
       query: {
+        query: query,
         page: page,
         size: size,
         sort: sort,
@@ -144,144 +145,135 @@ export class ApplicantEducationExperienceService {
   }
 
   /**
-   * 删除教育经历
-   * 删除教育经历的接口
+   * 移除教育经历
    * @returns any 成功
    * @throws ApiError
    */
-  public deleteEducationExperience({
-    userInfoId,
-    eduExperienceId,
+  public removeEducationExperience({
+    applicantId,
+    id,
   }: {
     /**
-     * 用户信息ID
+     * 求职者ID
      */
-    userInfoId: string;
+    applicantId: string;
     /**
      * 教育经历ID
      */
-    eduExperienceId: string;
+    id: string;
   }): CancelablePromise<{
     /**
-     * 处理时间
+     * 响应时间
      */
     timestamp: string;
     /**
-     * 响应状态
-     */
-    status: number;
-    /**
-     * 状态描述
+     * 响应
      */
     message: string;
     /**
-     * 教育经历
+     * 响应编码
      */
-    body: EducationExperience;
+    status: number;
+    /**
+     * 教育经历ID
+     */
+    body: string;
   }> {
     return this.httpRequest.request({
       method: "DELETE",
-      url: "/userInfos/{userInfoId}/eduExperiences/{eduExperienceId}",
+      url: "/applicant/{applicantId}/eduExperiences/{id}",
       path: {
-        userInfoId: userInfoId,
-        eduExperienceId: eduExperienceId,
-      },
-    });
-  }
-
-  /**
-   * 查询教育经历
-   * 查询教育经历的接口
-   * @returns any 成功
-   * @throws ApiError
-   */
-  public getEducationExperience({
-    userInfoId,
-    eduExperienceId,
-  }: {
-    /**
-     * 用户信息ID
-     */
-    userInfoId: string;
-    /**
-     * 教育经历ID
-     */
-    eduExperienceId: string;
-  }): CancelablePromise<{
-    /**
-     * 处理时间
-     */
-    timestamp: string;
-    /**
-     * 响应状态
-     */
-    status: number;
-    /**
-     * 状态描述
-     */
-    message: string;
-    /**
-     * 教育经历
-     */
-    body: EducationExperience;
-  }> {
-    return this.httpRequest.request({
-      method: "GET",
-      url: "/userInfos/{userInfoId}/eduExperiences/{eduExperienceId}",
-      path: {
-        userInfoId: userInfoId,
-        eduExperienceId: eduExperienceId,
+        applicantId: applicantId,
+        id: id,
       },
     });
   }
 
   /**
    * 修改教育经历
-   * 修改教育经历的接口
    * @returns any 成功
    * @throws ApiError
    */
   public updateEducationExperience({
-    userInfoId,
-    eduExperienceId,
+    applicantId,
+    id,
     requestBody,
   }: {
     /**
-     * 用户信息ID
+     * 求职者ID
      */
-    userInfoId: string;
+    applicantId: string;
     /**
      * 教育经历ID
      */
-    eduExperienceId: string;
+    id: string;
     requestBody?: EducationExperience;
   }): CancelablePromise<{
     /**
-     * 处理时间
+     * 响应时间
      */
     timestamp: string;
     /**
-     * 响应状态
-     */
-    status: number;
-    /**
-     * 状态描述
+     * 响应
      */
     message: string;
     /**
-     * 教育经历
+     * 响应编码
      */
+    status: number;
     body: EducationExperience;
   }> {
     return this.httpRequest.request({
       method: "PUT",
-      url: "/userInfos/{userInfoId}/eduExperiences/{eduExperienceId}",
+      url: "/applicant/{applicantId}/eduExperiences/{id}",
       path: {
-        userInfoId: userInfoId,
-        eduExperienceId: eduExperienceId,
+        applicantId: applicantId,
+        id: id,
       },
       body: requestBody,
       mediaType: "application/json",
+    });
+  }
+
+  /**
+   * 获取教育经历
+   * @returns any 成功
+   * @throws ApiError
+   */
+  public getEducationExperience({
+    applicantId,
+    id,
+  }: {
+    /**
+     * 求职者ID
+     */
+    applicantId: string;
+    /**
+     * 教育经历ID
+     */
+    id: string;
+  }): CancelablePromise<{
+    /**
+     * 响应时间
+     */
+    timestamp: string;
+    /**
+     * 响应
+     */
+    message: string;
+    /**
+     * 响应编码
+     */
+    status: number;
+    body: EducationExperience;
+  }> {
+    return this.httpRequest.request({
+      method: "GET",
+      url: "/applicant/{applicantId}/eduExperiences/{id}",
+      path: {
+        applicantId: applicantId,
+        id: id,
+      },
     });
   }
 }

@@ -9,7 +9,7 @@ export type WorkExperience = {
   /**
    * 工作经历ID
    */
-  workExperienceId: string;
+  id: string;
   /**
    * 创建时间
    */
@@ -19,9 +19,13 @@ export type WorkExperience = {
    */
   updatedAt: string;
   /**
+   * 移除时间
+   */
+  deletedAt: string;
+  /**
    * 公司名称
    */
-  corporateName: string;
+  companyName: string;
   /**
    * 公司领域
    */

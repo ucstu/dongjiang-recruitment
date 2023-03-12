@@ -9,7 +9,7 @@ export type GarnerRecord = {
   /**
    * 收藏记录ID
    */
-  garnerRecordId: string;
+  id: string;
   /**
    * 创建时间
    */
@@ -19,15 +19,19 @@ export type GarnerRecord = {
    */
   updatedAt: string;
   /**
-   * 用户信息ID
+   * 移除时间
    */
-  userInformationId: string;
+  deletedAt: string;
   /**
-   * 公司信息ID
+   * 求职者ID
    */
-  companyInformationId: string;
+  applicantId: string;
   /**
-   * 职位信息ID
+   * 公司ID
    */
-  positionInformationId: string;
+  companyId: string;
+  /**
+   * 职位ID
+   */
+  positionId: string;
 };

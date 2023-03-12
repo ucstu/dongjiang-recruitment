@@ -12,7 +12,7 @@
 <script setup lang="ts">
 const page = ref<number>(1);
 
-const { refresh } = applicantService.useGetAllUserInformation(
+const { refresh } = applicantService.useQueryApplicant(
   () => ({
     size: 10,
     page: page.value,

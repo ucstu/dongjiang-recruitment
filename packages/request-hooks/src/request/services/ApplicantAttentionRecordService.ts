@@ -10,217 +10,48 @@ export class ApplicantAttentionRecordService {
   constructor(public readonly httpRequest: BaseHttpRequest) {}
 
   /**
-   * 增加关注记录
-   * 增加关注记录的接口
+   * 添加关注记录
    * @returns any 成功
    * @throws ApiError
    */
   public addAttentionRecord({
-    userInfoId,
+    applicantId,
     requestBody,
   }: {
     /**
-     * 用户信息ID
+     * 求职者ID
      */
-    userInfoId: string;
+    applicantId: string;
     requestBody?: {
       /**
-       * 用户信息ID
+       * 求职者ID
        */
-      userInformationId: string;
+      applicantId: string;
       /**
-       * 公司信息ID
+       * 公司ID
        */
-      companyInformationId: string;
+      companyId: string;
     };
   }): CancelablePromise<{
     /**
-     * 处理时间
+     * 响应时间
      */
     timestamp: string;
     /**
-     * 响应状态
-     */
-    status: number;
-    /**
-     * 状态描述
+     * 响应
      */
     message: string;
     /**
-     * 关注记录
+     * 响应编码
      */
+    status: number;
     body: AttentionRecord;
   }> {
     return this.httpRequest.request({
       method: "POST",
-      url: "/userInfos/{userInfoId}/attentionRecords",
+      url: "/applicant/{applicantId}/attentionRecords",
       path: {
-        userInfoId: userInfoId,
-      },
-      body: requestBody,
-      mediaType: "application/json",
-    });
-  }
-
-  /**
-   * 查询所有关注记录
-   * 查询所有关注记录的接口
-   * @returns any 成功
-   * @throws ApiError
-   */
-  public getAllAttentionRecord({
-    userInfoId,
-    page,
-    size,
-    sort,
-  }: {
-    /**
-     * 用户信息ID
-     */
-    userInfoId: string;
-    /**
-     * 当前页，eg：0
-     */
-    page?: number;
-    /**
-     * 页大小，eg：5
-     */
-    size?: number;
-    /**
-     * 排序方式，eg：["createdAt,desc"]
-     */
-    sort?: Array<`${keyof AttentionRecord},${"asc" | "desc"}`>;
-  }): CancelablePromise<{
-    /**
-     * 处理时间
-     */
-    timestamp: string;
-    /**
-     * 响应状态
-     */
-    status: number;
-    /**
-     * 状态描述
-     */
-    message: string;
-    /**
-     * 响应结果
-     */
-    body: {
-      /**
-       * 记录总数
-       */
-      totalCount: number;
-      /**
-       * 关注记录列表
-       */
-      attentionRecords: Array<AttentionRecord>;
-    };
-  }> {
-    return this.httpRequest.request({
-      method: "GET",
-      url: "/userInfos/{userInfoId}/attentionRecords",
-      path: {
-        userInfoId: userInfoId,
-      },
-      query: {
-        page: page,
-        size: size,
-        sort: sort,
-      },
-    });
-  }
-
-  /**
-   * 删除关注记录
-   * 删除关注记录的接口
-   * @returns any 成功
-   * @throws ApiError
-   */
-  public deleteAttentionRecord({
-    userInfoId,
-    attentionRecordId,
-  }: {
-    /**
-     * 用户信息ID
-     */
-    userInfoId: string;
-    /**
-     * 关注记录ID
-     */
-    attentionRecordId: string;
-  }): CancelablePromise<{
-    /**
-     * 处理时间
-     */
-    timestamp: string;
-    /**
-     * 响应状态
-     */
-    status: number;
-    /**
-     * 状态描述
-     */
-    message: string;
-    /**
-     * 关注记录
-     */
-    body: AttentionRecord;
-  }> {
-    return this.httpRequest.request({
-      method: "DELETE",
-      url: "/userInfos/{userInfoId}/attentionRecords/{attentionRecordId}",
-      path: {
-        userInfoId: userInfoId,
-        attentionRecordId: attentionRecordId,
-      },
-    });
-  }
-
-  /**
-   * 修改关注记录
-   * 修改关注记录的接口
-   * @returns any 成功
-   * @throws ApiError
-   */
-  public updateAttentionRecord({
-    userInfoId,
-    attentionRecordId,
-    requestBody,
-  }: {
-    /**
-     * 用户信息ID
-     */
-    userInfoId: string;
-    /**
-     * 关注记录ID
-     */
-    attentionRecordId: string;
-    requestBody?: AttentionRecord;
-  }): CancelablePromise<{
-    /**
-     * 处理时间
-     */
-    timestamp: string;
-    /**
-     * 响应状态
-     */
-    status: number;
-    /**
-     * 状态描述
-     */
-    message: string;
-    /**
-     * 关注记录
-     */
-    body: AttentionRecord;
-  }> {
-    return this.httpRequest.request({
-      method: "PUT",
-      url: "/userInfos/{userInfoId}/attentionRecords/{attentionRecordId}",
-      path: {
-        userInfoId: userInfoId,
-        attentionRecordId: attentionRecordId,
+        applicantId: applicantId,
       },
       body: requestBody,
       mediaType: "application/json",
@@ -229,46 +60,161 @@ export class ApplicantAttentionRecordService {
 
   /**
    * 查询关注记录
-   * 查询关注记录的接口
+   * @returns any 成功
+   * @throws ApiError
+   */
+  public queryAttentionRecord({
+    applicantId,
+    query,
+    page,
+    size,
+    sort,
+  }: {
+    /**
+     * 求职者ID
+     */
+    applicantId: string;
+    /**
+     * 查询条件
+     */
+    query?: string;
+    /**
+     * 当前页数
+     */
+    page?: number;
+    /**
+     * 页面大小
+     */
+    size?: number;
+    /**
+     * 排序方式
+     */
+    sort?: Array<`${keyof AttentionRecord},${"asc" | "desc"}`>;
+  }): CancelablePromise<{
+    /**
+     * 响应时间
+     */
+    timestamp: string;
+    /**
+     * 响应
+     */
+    message: string;
+    /**
+     * 响应编码
+     */
+    status: number;
+    /**
+     * 分页结果
+     */
+    body: {
+      /**
+       * 关注记录总数
+       */
+      total: number;
+      /**
+       * 当页关注记录
+       */
+      items: Array<AttentionRecord>;
+    };
+  }> {
+    return this.httpRequest.request({
+      method: "GET",
+      url: "/applicant/{applicantId}/attentionRecords",
+      path: {
+        applicantId: applicantId,
+      },
+      query: {
+        query: query,
+        page: page,
+        size: size,
+        sort: sort,
+      },
+    });
+  }
+
+  /**
+   * 移除关注记录
+   * @returns any 成功
+   * @throws ApiError
+   */
+  public removeAttentionRecord({
+    applicantId,
+    id,
+  }: {
+    /**
+     * 求职者ID
+     */
+    applicantId: string;
+    /**
+     * 关注记录ID
+     */
+    id: string;
+  }): CancelablePromise<{
+    /**
+     * 响应时间
+     */
+    timestamp: string;
+    /**
+     * 响应
+     */
+    message: string;
+    /**
+     * 响应编码
+     */
+    status: number;
+    /**
+     * 关注记录ID
+     */
+    body: string;
+  }> {
+    return this.httpRequest.request({
+      method: "DELETE",
+      url: "/applicant/{applicantId}/attentionRecords/{id}",
+      path: {
+        applicantId: applicantId,
+        id: id,
+      },
+    });
+  }
+
+  /**
+   * 获取关注记录
    * @returns any 成功
    * @throws ApiError
    */
   public getAttentionRecord({
-    userInfoId,
-    attentionRecordId,
+    applicantId,
+    id,
   }: {
     /**
-     * 用户信息ID
+     * 求职者ID
      */
-    userInfoId: string;
+    applicantId: string;
     /**
      * 关注记录ID
      */
-    attentionRecordId: string;
+    id: string;
   }): CancelablePromise<{
     /**
-     * 处理时间
+     * 响应时间
      */
     timestamp: string;
     /**
-     * 响应状态
-     */
-    status: number;
-    /**
-     * 状态描述
+     * 响应
      */
     message: string;
     /**
-     * 关注记录
+     * 响应编码
      */
+    status: number;
     body: AttentionRecord;
   }> {
     return this.httpRequest.request({
       method: "GET",
-      url: "/userInfos/{userInfoId}/attentionRecords/{attentionRecordId}",
+      url: "/applicant/{applicantId}/attentionRecords/{id}",
       path: {
-        userInfoId: userInfoId,
-        attentionRecordId: attentionRecordId,
+        applicantId: applicantId,
+        id: id,
       },
     });
   }

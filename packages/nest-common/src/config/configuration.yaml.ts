@@ -1,10 +1,9 @@
 import { resolve } from "node:path";
 
-export const YAML_CONFIG_FILENAME = resolve(
-  __dirname,
-  "../../",
-  "config.local.yaml"
-);
+export const YAML_CONFIG_FILENAME =
+  process.env.NODE_ENV === "production"
+    ? "/etc/dongjiang-recruitment/config.yaml"
+    : resolve(__dirname, "../../", "config.local.yaml");
 
 export interface DatabaseConfig {
   type: string;

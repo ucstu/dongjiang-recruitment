@@ -1,8 +1,9 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { ApplicantInformation } from "../models/ApplicantInformation";
-import type { PersonnelInspectionRecord } from "../models/PersonnelInspectionRecord";
+import type { Applicant } from "../models/Applicant";
+import type { ApplicantInspectionRecord } from "../models/ApplicantInspectionRecord";
+import type { DeliveryRecord } from "../models/DeliveryRecord";
 
 import type { CancelablePromise } from "../core/CancelablePromise";
 import type { BaseHttpRequest } from "../core/BaseHttpRequest";
@@ -11,188 +12,11 @@ export class ApplicantService {
   constructor(public readonly httpRequest: BaseHttpRequest) {}
 
   /**
-   * 修改用户信息
-   * 修改用户信息的接口
+   * 添加求职者
    * @returns any 成功
    * @throws ApiError
    */
-  public updateUserInformation({
-    userInfoId,
-    requestBody,
-  }: {
-    /**
-     * 用户信息ID
-     */
-    userInfoId: string;
-    requestBody?: ApplicantInformation;
-  }): CancelablePromise<{
-    /**
-     * 处理时间
-     */
-    timestamp: string;
-    /**
-     * 响应状态
-     */
-    status: number;
-    /**
-     * 状态描述
-     */
-    message: string;
-    body: ApplicantInformation;
-  }> {
-    return this.httpRequest.request({
-      method: "PUT",
-      url: "/userInfos/{userInfoId}",
-      path: {
-        userInfoId: userInfoId,
-      },
-      body: requestBody,
-      mediaType: "application/json",
-    });
-  }
-
-  /**
-   * 查询用户信息
-   * 查询用户信息得接口
-   * @returns any 成功
-   * @throws ApiError
-   */
-  public getUserInformation({
-    userInfoId,
-  }: {
-    /**
-     * 用户信息ID
-     */
-    userInfoId: string;
-  }): CancelablePromise<{
-    /**
-     * 处理时间
-     */
-    timestamp: string;
-    /**
-     * 响应状态
-     */
-    status: number;
-    /**
-     * 状态描述
-     */
-    message: string;
-    body: ApplicantInformation;
-  }> {
-    return this.httpRequest.request({
-      method: "GET",
-      url: "/userInfos/{userInfoId}",
-      path: {
-        userInfoId: userInfoId,
-      },
-    });
-  }
-
-  /**
-   * 删除用户信息
-   * 删除用户信息的接口
-   * @returns any 成功
-   * @throws ApiError
-   */
-  public deleteUserInformation({
-    userInfoId,
-  }: {
-    /**
-     * 用户信息ID
-     */
-    userInfoId: string;
-  }): CancelablePromise<{
-    /**
-     * 处理时间
-     */
-    timestamp: string;
-    /**
-     * 响应状态
-     */
-    status: number;
-    /**
-     * 状态描述
-     */
-    message: string;
-    body: ApplicantInformation;
-  }> {
-    return this.httpRequest.request({
-      method: "DELETE",
-      url: "/userInfos/{userInfoId}",
-      path: {
-        userInfoId: userInfoId,
-      },
-    });
-  }
-
-  /**
-   * 查询所有用户信息
-   * 查询所有用户信息得接口
-   * @returns any 成功
-   * @throws ApiError
-   */
-  public getAllUserInformation({
-    page,
-    size,
-    sort,
-  }: {
-    /**
-     * 当前页，eg：0
-     */
-    page?: number;
-    /**
-     * 页大小，eg：5
-     */
-    size?: number;
-    /**
-     * 排序方式，eg：["createdAt,desc"]
-     */
-    sort?: Array<`${keyof ApplicantInformation},${"asc" | "desc"}`>;
-  }): CancelablePromise<{
-    /**
-     * 处理时间
-     */
-    timestamp: string;
-    /**
-     * 响应状态
-     */
-    status: number;
-    /**
-     * 状态描述
-     */
-    message: string;
-    /**
-     * 响应结果
-     */
-    body: {
-      /**
-       * 记录总数
-       */
-      totalCount: number;
-      /**
-       * 用户信息列表
-       */
-      userInformations: Array<ApplicantInformation>;
-    };
-  }> {
-    return this.httpRequest.request({
-      method: "GET",
-      url: "/userInfos",
-      query: {
-        page: page,
-        size: size,
-        sort: sort,
-      },
-    });
-  }
-
-  /**
-   * 增加用户信息
-   * 增加用户信息的接口
-   * @returns any 成功
-   * @throws ApiError
-   */
-  public addUserInformation({
+  public addApplicant({
     requestBody,
   }: {
     requestBody?: {
@@ -259,105 +83,333 @@ export class ApplicantService {
     };
   }): CancelablePromise<{
     /**
-     * 请求ID
-     */
-    requestId?: string;
-    /**
      * 响应时间
      */
     timestamp: string;
     /**
+     * 响应
+     */
+    message: string;
+    /**
      * 响应编码
      */
     status: number;
-    /**
-     * 响应信息
-     */
-    message: string;
-    body: ApplicantInformation;
+    body: Applicant;
   }> {
     return this.httpRequest.request({
       method: "POST",
-      url: "/userInfos",
+      url: "/applicant",
       body: requestBody,
       mediaType: "application/json",
     });
   }
 
   /**
-   * 查询谁看过我记录
-   * 查询谁看过我记录的接口
+   * 查询求职者
    * @returns any 成功
    * @throws ApiError
    */
-  public getUserSawMeRecord({
-    userInfoId,
-    startDate,
-    endDate,
+  public queryApplicant({
+    query,
     page,
     size,
     sort,
   }: {
     /**
-     * 用户信息ID
+     * 查询条件
      */
-    userInfoId: string;
+    query?: string;
     /**
-     * 开始时间，eg：2020-02-03
-     */
-    startDate: string;
-    /**
-     * 结束时间，eg：2020-02-07
-     */
-    endDate: string;
-    /**
-     * 当前页，eg：0
+     * 当前页数
      */
     page?: number;
     /**
-     * 页大小，eg：5
+     * 页面大小
      */
     size?: number;
     /**
-     * 排序方式，eg：["createdAt,desc"]
+     * 排序方式
      */
-    sort?: Array<`${keyof PersonnelInspectionRecord},${"asc" | "desc"}`>;
+    sort?: Array<`${keyof Applicant},${"asc" | "desc"}`>;
   }): CancelablePromise<{
     /**
-     * 处理时间
+     * 响应时间
      */
     timestamp: string;
     /**
-     * 响应状态
-     */
-    status: number;
-    /**
-     * 状态描述
+     * 响应
      */
     message: string;
     /**
-     * 响应结果
+     * 响应编码
+     */
+    status: number;
+    /**
+     * 分页结果
      */
     body: {
       /**
-       * 记录总数
+       * 求职者总数
        */
-      totalCount: number;
+      total: number;
       /**
-       * HR查看记录列表
+       * 当页求职者
        */
-      hrInspectionRecords: Array<PersonnelInspectionRecord>;
+      items: Array<Applicant>;
     };
   }> {
     return this.httpRequest.request({
       method: "GET",
-      url: "/userInfos/{userInfoId}/sawMeRecords",
-      path: {
-        userInfoId: userInfoId,
-      },
+      url: "/applicant",
       query: {
-        startDate: startDate,
-        endDate: endDate,
+        query: query,
+        page: page,
+        size: size,
+        sort: sort,
+      },
+    });
+  }
+
+  /**
+   * 修改求职者
+   * @returns any 成功
+   * @throws ApiError
+   */
+  public updateApplicant({
+    id,
+    requestBody,
+  }: {
+    /**
+     * 求职者ID
+     */
+    id: string;
+    requestBody?: Applicant;
+  }): CancelablePromise<{
+    /**
+     * 响应时间
+     */
+    timestamp: string;
+    /**
+     * 响应
+     */
+    message: string;
+    /**
+     * 响应编码
+     */
+    status: number;
+    body: Applicant;
+  }> {
+    return this.httpRequest.request({
+      method: "PUT",
+      url: "/applicant/{id}",
+      path: {
+        id: id,
+      },
+      body: requestBody,
+      mediaType: "application/json",
+    });
+  }
+
+  /**
+   * 移除求职者
+   * @returns any 成功
+   * @throws ApiError
+   */
+  public removeApplicant({
+    id,
+  }: {
+    /**
+     * 求职者ID
+     */
+    id: string;
+  }): CancelablePromise<{
+    /**
+     * 响应时间
+     */
+    timestamp: string;
+    /**
+     * 响应
+     */
+    message: string;
+    /**
+     * 响应编码
+     */
+    status: number;
+    /**
+     * 求职者ID
+     */
+    body: string;
+  }> {
+    return this.httpRequest.request({
+      method: "DELETE",
+      url: "/applicant/{id}",
+      path: {
+        id: id,
+      },
+    });
+  }
+
+  /**
+   * 获取求职者
+   * @returns any 成功
+   * @throws ApiError
+   */
+  public getApplicant({
+    id,
+  }: {
+    /**
+     * 求职者ID
+     */
+    id: string;
+  }): CancelablePromise<{
+    /**
+     * 响应时间
+     */
+    timestamp: string;
+    /**
+     * 响应
+     */
+    message: string;
+    /**
+     * 响应编码
+     */
+    status: number;
+    body: Applicant;
+  }> {
+    return this.httpRequest.request({
+      method: "GET",
+      url: "/applicant/{id}",
+      path: {
+        id: id,
+      },
+    });
+  }
+
+  /**
+   * 查询所有投递记录
+   * @returns any 成功
+   * @throws ApiError
+   */
+  public queryAllDeliveryRecord({
+    query,
+    page,
+    size,
+    sort,
+  }: {
+    /**
+     * 查询条件
+     */
+    query?: string;
+    /**
+     * 当前页数
+     */
+    page?: number;
+    /**
+     * 页面大小
+     */
+    size?: number;
+    /**
+     * 排序方式
+     */
+    sort?: Array<`${keyof DeliveryRecord},${"asc" | "desc"}`>;
+  }): CancelablePromise<{
+    /**
+     * 响应时间
+     */
+    timestamp: string;
+    /**
+     * 响应
+     */
+    message: string;
+    /**
+     * 响应编码
+     */
+    status: number;
+    /**
+     * 分页结果
+     */
+    body: {
+      /**
+       * 投递记录总数
+       */
+      total: number;
+      /**
+       * 当页投递记录
+       */
+      items: Array<DeliveryRecord>;
+    };
+  }> {
+    return this.httpRequest.request({
+      method: "GET",
+      url: "/applicant/deliveryRecords",
+      query: {
+        query: query,
+        page: page,
+        size: size,
+        sort: sort,
+      },
+    });
+  }
+
+  /**
+   * 查询所有求职者查看记录
+   * @returns any 成功
+   * @throws ApiError
+   */
+  public queryAllApplicantInspectionRecord({
+    query,
+    page,
+    size,
+    sort,
+  }: {
+    /**
+     * 查询条件
+     */
+    query?: string;
+    /**
+     * 当前页数
+     */
+    page?: number;
+    /**
+     * 页面大小
+     */
+    size?: number;
+    /**
+     * 排序方式
+     */
+    sort?: Array<`${keyof ApplicantInspectionRecord},${"asc" | "desc"}`>;
+  }): CancelablePromise<{
+    /**
+     * 响应时间
+     */
+    timestamp: string;
+    /**
+     * 响应
+     */
+    message: string;
+    /**
+     * 响应编码
+     */
+    status: number;
+    /**
+     * 分页结果
+     */
+    body: {
+      /**
+       * 查看记录总数
+       */
+      total: number;
+      /**
+       * 当页查看记录
+       */
+      items: Array<ApplicantInspectionRecord>;
+    };
+  }> {
+    return this.httpRequest.request({
+      method: "GET",
+      url: "/applicant/inspectionRecords",
+      query: {
+        query: query,
         page: page,
         size: size,
         sort: sort,

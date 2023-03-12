@@ -1,7 +1,6 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { ApplicantInspectionRecord } from "../models/ApplicantInspectionRecord";
 import type { PersonnelInspectionRecord } from "../models/PersonnelInspectionRecord";
 
 import type { CancelablePromise } from "../core/CancelablePromise";
@@ -11,163 +10,212 @@ export class PersonnelInspectionRecordService {
   constructor(public readonly httpRequest: BaseHttpRequest) {}
 
   /**
-   * 删除查看记录
-   * 删除HR查看记录的接口
+   * 移除查看记录
    * @returns any 成功
    * @throws ApiError
    */
-  public deleteHrInspectionRecord({
-    hrInfoId,
-    inspectionRecordId,
+  public removeHrInspectionRecord({
+    personnelId,
+    id,
   }: {
     /**
-     * 用户信息ID
+     * 人事ID
      */
-    hrInfoId: string;
+    personnelId: string;
     /**
      * 查看记录ID
      */
-    inspectionRecordId: string;
+    id: string;
   }): CancelablePromise<{
     /**
-     * 处理时间
+     * 响应时间
      */
     timestamp: string;
     /**
-     * 响应状态
-     */
-    status: number;
-    /**
-     * 状态描述
+     * 响应
      */
     message: string;
     /**
-     * 查看记录
+     * 响应编码
      */
-    body: PersonnelInspectionRecord;
+    status: number;
+    /**
+     * 查看记录ID
+     */
+    body: string;
   }> {
     return this.httpRequest.request({
       method: "DELETE",
-      url: "/hrInfos/{hrInfoId}/inspectionRecords/{inspectionRecordId}",
+      url: "/personnel/{personnelId}/inspectionRecords/{id}",
       path: {
-        hrInfoId: hrInfoId,
-        inspectionRecordId: inspectionRecordId,
+        personnelId: personnelId,
+        id: id,
+      },
+    });
+  }
+
+  /**
+   * 获取查看记录
+   * @returns any 成功
+   * @throws ApiError
+   */
+  public getHrInspectionRecord({
+    personnelId,
+    id,
+  }: {
+    /**
+     * 人事ID
+     */
+    personnelId: string;
+    /**
+     * 查看记录ID
+     */
+    id: string;
+  }): CancelablePromise<{
+    /**
+     * 响应时间
+     */
+    timestamp: string;
+    /**
+     * 响应
+     */
+    message: string;
+    /**
+     * 响应编码
+     */
+    status: number;
+    body: PersonnelInspectionRecord;
+  }> {
+    return this.httpRequest.request({
+      method: "GET",
+      url: "/personnel/{personnelId}/inspectionRecords/{id}",
+      path: {
+        personnelId: personnelId,
+        id: id,
       },
     });
   }
 
   /**
    * 查询查看记录
-   * 查询HR查看记录的接口
    * @returns any 成功
    * @throws ApiError
    */
-  public getHrInspectionRecord({
-    hrInfoId,
-    inspectionRecordId,
-  }: {
-    /**
-     * 用户信息ID
-     */
-    hrInfoId: string;
-    /**
-     * 查看记录ID
-     */
-    inspectionRecordId: string;
-  }): CancelablePromise<{
-    /**
-     * 处理时间
-     */
-    timestamp: string;
-    /**
-     * 响应状态
-     */
-    status: number;
-    /**
-     * 状态描述
-     */
-    message: string;
-    /**
-     * 查看记录
-     */
-    body: PersonnelInspectionRecord;
-  }> {
-    return this.httpRequest.request({
-      method: "GET",
-      url: "/hrInfos/{hrInfoId}/inspectionRecords/{inspectionRecordId}",
-      path: {
-        hrInfoId: hrInfoId,
-        inspectionRecordId: inspectionRecordId,
-      },
-    });
-  }
-
-  /**
-   * 查询所有查看记录
-   * 查询所有HR查看记录的接口
-   * @returns any 成功
-   * @throws ApiError
-   */
-  public getAllHrInspectionRecord({
-    hrInfoId,
+  public queryHrInspectionRecord({
+    personnelId,
+    query,
     page,
     size,
     sort,
   }: {
     /**
-     * 用户信息ID
+     * 人事ID
      */
-    hrInfoId: string;
+    personnelId: string;
     /**
-     * 当前页，eg：0
+     * 查询条件
+     */
+    query?: string;
+    /**
+     * 当前页数
      */
     page?: number;
     /**
-     * 页大小，eg：5
+     * 页面大小
      */
     size?: number;
     /**
-     * 排序方式，eg：["createdAt,desc"]
+     * 排序方式
      */
-    sort?: Array<`${keyof ApplicantInspectionRecord},${"asc" | "desc"}`>;
+    sort?: Array<`${keyof PersonnelInspectionRecord},${"asc" | "desc"}`>;
   }): CancelablePromise<{
     /**
-     * 处理时间
+     * 响应时间
      */
     timestamp: string;
     /**
-     * 响应状态
-     */
-    status: number;
-    /**
-     * 状态描述
+     * 响应
      */
     message: string;
     /**
-     * 响应结果
+     * 响应编码
+     */
+    status: number;
+    /**
+     * 分页结果
      */
     body: {
       /**
-       * 记录总数
+       * 查看记录总数
        */
-      totalCount: number;
+      total: number;
       /**
-       * 用户查看记录列表
+       * 当页查看记录
        */
-      userInspectionRecords: Array<ApplicantInspectionRecord>;
+      items: Array<PersonnelInspectionRecord>;
     };
   }> {
     return this.httpRequest.request({
       method: "GET",
-      url: "/hrInfos/{hrInfoId}/inspectionRecords",
+      url: "/personnel/{personnelId}/inspectionRecords",
       path: {
-        hrInfoId: hrInfoId,
+        personnelId: personnelId,
       },
       query: {
+        query: query,
         page: page,
         size: size,
         sort: sort,
       },
+    });
+  }
+
+  /**
+   * 添加查看记录
+   * @returns any 成功
+   * @throws ApiError
+   */
+  public addHrInspectionRecord({
+    personnelId,
+    requestBody,
+  }: {
+    /**
+     * 人事ID
+     */
+    personnelId: string;
+    requestBody?: {
+      /**
+       * 人事ID
+       */
+      personnelId: string;
+      /**
+       * 求职者ID
+       */
+      applicantId: string;
+    };
+  }): CancelablePromise<{
+    /**
+     * 响应时间
+     */
+    timestamp: string;
+    /**
+     * 响应
+     */
+    message: string;
+    /**
+     * 响应编码
+     */
+    status: number;
+    body: PersonnelInspectionRecord;
+  }> {
+    return this.httpRequest.request({
+      method: "POST",
+      url: "/personnel/{personnelId}/inspectionRecords",
+      path: {
+        personnelId: personnelId,
+      },
+      body: requestBody,
+      mediaType: "application/json",
     });
   }
 }

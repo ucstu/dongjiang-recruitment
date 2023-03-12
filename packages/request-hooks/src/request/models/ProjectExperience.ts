@@ -9,15 +9,19 @@ export type ProjectExperience = {
   /**
    * 项目经历ID
    */
-  projectExperienceId: string;
+  id: string;
   /**
    * 创建时间
    */
-  createdAt?: string;
+  createdAt: string;
   /**
    * 更新时间
    */
-  updatedAt?: string;
+  updatedAt: string;
+  /**
+   * 移除时间
+   */
+  deletedAt: string;
   /**
    * 项目名称
    */

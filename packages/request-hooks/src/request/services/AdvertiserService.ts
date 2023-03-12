@@ -1,7 +1,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { AdvertiserInformation } from "../models/AdvertiserInformation";
+import type { Advertiser } from "../models/Advertiser";
 
 import type { CancelablePromise } from "../core/CancelablePromise";
 import type { BaseHttpRequest } from "../core/BaseHttpRequest";
@@ -10,111 +10,179 @@ export class AdvertiserService {
   constructor(public readonly httpRequest: BaseHttpRequest) {}
 
   /**
-   * 增加广告商信息
+   * 修改广告商
    * @returns any 成功
    * @throws ApiError
    */
-  public addAdvertiserInformation({
+  public updateAdvertiser({
+    id,
     requestBody,
   }: {
-    requestBody?: {
-      /**
-       * 广告商名称
-       */
-      name: string;
-      /**
-       * 网页地址
-       */
-      pageUrl: string;
-      /**
-       * Logo地址
-       */
-      logoUrl: string;
-    };
-  }): CancelablePromise<{
     /**
-     * 请求ID
+     * 广告商ID，eg：BC810A11-0D52-81A0-bFEA-782148fb1e2F
      */
-    requestId?: string;
+    id: string;
+    requestBody?: Advertiser;
+  }): CancelablePromise<{
     /**
      * 响应时间
      */
     timestamp: string;
     /**
+     * 响应
+     */
+    message: string;
+    /**
      * 响应编码
      */
     status: number;
-    /**
-     * 响应信息
-     */
-    message: string;
-    body: AdvertiserInformation;
+    body: Advertiser;
   }> {
     return this.httpRequest.request({
-      method: "POST",
-      url: "/advertisers",
+      method: "PUT",
+      url: "/advertisers/{id}",
+      path: {
+        id: id,
+      },
       body: requestBody,
       mediaType: "application/json",
     });
   }
 
   /**
-   * 查询所有广告商信息
+   * 获取广告商
    * @returns any 成功
    * @throws ApiError
    */
-  public getAllAdvertiserInformation({
-    page,
-    size,
-    sort,
+  public getAdvertiser({
+    id,
   }: {
     /**
-     * 当前页，eg：0
+     * 广告商ID，eg：BC810A11-0D52-81A0-bFEA-782148fb1e2F
      */
-    page?: number;
-    /**
-     * 页大小，eg：5
-     */
-    size?: number;
-    /**
-     * 排序方式，eg：["createdAt,desc"]
-     */
-    sort?: Array<`${keyof AdvertiserInformation},${"asc" | "desc"}`>;
+    id: string;
   }): CancelablePromise<{
-    /**
-     * 请求ID
-     */
-    requestId?: string;
     /**
      * 响应时间
      */
     timestamp: string;
     /**
+     * 响应
+     */
+    message: string;
+    /**
+     * 响应编码
+     */
+    status: number;
+    body: Advertiser;
+  }> {
+    return this.httpRequest.request({
+      method: "GET",
+      url: "/advertisers/{id}",
+      path: {
+        id: id,
+      },
+    });
+  }
+
+  /**
+   * 移除广告商
+   * @returns any 成功
+   * @throws ApiError
+   */
+  public removeAdvertiser({
+    id,
+  }: {
+    /**
+     * 广告商ID，eg：BC810A11-0D52-81A0-bFEA-782148fb1e2F
+     */
+    id: string;
+  }): CancelablePromise<{
+    /**
+     * 响应时间
+     */
+    timestamp: string;
+    /**
+     * 响应
+     */
+    message: string;
+    /**
      * 响应编码
      */
     status: number;
     /**
-     * 响应信息
+     * 广告商ID
+     */
+    body: string;
+  }> {
+    return this.httpRequest.request({
+      method: "DELETE",
+      url: "/advertisers/{id}",
+      path: {
+        id: id,
+      },
+    });
+  }
+
+  /**
+   * 查询广告商
+   * @returns any 成功
+   * @throws ApiError
+   */
+  public queryAdvertiser({
+    query,
+    page,
+    size,
+    sort,
+  }: {
+    /**
+     * 查询条件
+     */
+    query?: string;
+    /**
+     * 当前页数
+     */
+    page?: number;
+    /**
+     * 页面大小
+     */
+    size?: number;
+    /**
+     * 排序方式
+     */
+    sort?: Array<`${keyof Advertiser},${"asc" | "desc"}`>;
+  }): CancelablePromise<{
+    /**
+     * 响应时间
+     */
+    timestamp: string;
+    /**
+     * 响应
      */
     message: string;
     /**
-     * 响应体
+     * 响应编码
+     */
+    status: number;
+    /**
+     * 分页结果
      */
     body: {
       /**
-       * 记录总数
+       * 广告商总数
        */
-      totalCount: number;
+      total: number;
       /**
-       * 当页内容
+       * 当页广告商
        */
-      advertisers: Array<AdvertiserInformation>;
+      items: Array<Advertiser>;
     };
   }> {
     return this.httpRequest.request({
       method: "GET",
       url: "/advertisers",
       query: {
+        query: query,
         page: page,
         size: size,
         sort: sort,
@@ -123,73 +191,16 @@ export class AdvertiserService {
   }
 
   /**
-   * 删除广告商信息
+   * 添加广告商
    * @returns any 成功
    * @throws ApiError
    */
-  public deleteAdvertiserInformation({
-    advertiserid,
-  }: {
-    /**
-     * 广告商ID
-     */
-    advertiserid: string;
-  }): CancelablePromise<{
-    /**
-     * 请求ID
-     */
-    requestId?: string;
-    /**
-     * 响应时间
-     */
-    timestamp: string;
-    /**
-     * 响应编码
-     */
-    status: number;
-    /**
-     * 响应信息
-     */
-    message: string;
-    body: AdvertiserInformation;
-  }> {
-    return this.httpRequest.request({
-      method: "DELETE",
-      url: "/advertisers/{advertiserid}",
-      path: {
-        advertiserid: advertiserid,
-      },
-    });
-  }
-
-  /**
-   * 修改广告商信息
-   * @returns any 成功
-   * @throws ApiError
-   */
-  public updateAdvertiserInformation({
-    advertiserid,
+  public addAdvertiser({
     requestBody,
   }: {
-    /**
-     * 广告商ID
-     */
-    advertiserid: string;
     requestBody?: {
       /**
-       * 广告商信息ID
-       */
-      advertiserInformationId: string;
-      /**
-       * 创建时间
-       */
-      createdAt: string;
-      /**
-       * 修改时间
-       */
-      updatedAt: string;
-      /**
-       * 广告商名称
+       * 名称
        */
       name: string;
       /**
@@ -203,71 +214,24 @@ export class AdvertiserService {
     };
   }): CancelablePromise<{
     /**
-     * 请求ID
-     */
-    requestId?: string;
-    /**
      * 响应时间
      */
     timestamp: string;
     /**
+     * 响应
+     */
+    message: string;
+    /**
      * 响应编码
      */
     status: number;
-    /**
-     * 响应信息
-     */
-    message: string;
-    body: AdvertiserInformation;
+    body: Advertiser;
   }> {
     return this.httpRequest.request({
-      method: "PUT",
-      url: "/advertisers/{advertiserid}",
-      path: {
-        advertiserid: advertiserid,
-      },
+      method: "POST",
+      url: "/advertisers",
       body: requestBody,
       mediaType: "application/json",
-    });
-  }
-
-  /**
-   * 查询广告商信息
-   * @returns any 成功
-   * @throws ApiError
-   */
-  public getAdvertiserInformation({
-    advertiserid,
-  }: {
-    /**
-     * 广告商ID
-     */
-    advertiserid: string;
-  }): CancelablePromise<{
-    /**
-     * 请求ID
-     */
-    requestId?: string;
-    /**
-     * 响应时间
-     */
-    timestamp: string;
-    /**
-     * 响应编码
-     */
-    status: number;
-    /**
-     * 响应信息
-     */
-    message: string;
-    body: AdvertiserInformation;
-  }> {
-    return this.httpRequest.request({
-      method: "GET",
-      url: "/advertisers/{advertiserid}",
-      path: {
-        advertiserid: advertiserid,
-      },
     });
   }
 }

@@ -4,7 +4,7 @@
 export const $AttentionRecord = {
   description: `关注记录`,
   properties: {
-    attentionRecordId: {
+    id: {
       type: "string",
       description: `关注记录ID`,
       isRequired: true,
@@ -19,14 +19,19 @@ export const $AttentionRecord = {
       description: `更新时间`,
       isRequired: true,
     },
-    userInformationId: {
+    deletedAt: {
       type: "string",
-      description: `用户信息ID`,
+      description: `移除时间`,
       isRequired: true,
     },
-    companyInformationId: {
+    applicantId: {
       type: "string",
-      description: `公司信息ID`,
+      description: `求职者ID`,
+      isRequired: true,
+    },
+    companyId: {
+      type: "string",
+      description: `公司ID`,
       isRequired: true,
     },
   },

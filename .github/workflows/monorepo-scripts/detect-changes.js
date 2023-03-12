@@ -1,6 +1,7 @@
 module.exports = async ({ github, context, core, fetch }) => {
   const { readFileSync } = require("node:fs");
   const { resolve } = require("node:path");
+  const { minimatch } = require("minimatch");
 
   const monoRepoConfig = JSON.parse(
     readFileSync(
@@ -12,6 +13,7 @@ module.exports = async ({ github, context, core, fetch }) => {
     )
   );
 
+  const globalFiles = monoRepoConfig.global.files;
   let changedPackages = monoRepoConfig.packages;
 
   let changedFiles = [];
@@ -47,7 +49,8 @@ module.exports = async ({ github, context, core, fetch }) => {
       break;
     case "pull_request":
       currentBranch = context.payload.pull_request.base.ref;
-      currentEnvironment = "staging";
+      currentEnvironment =
+        currentBranch === "master" ? "staging" : currentBranch;
       changedFiles = (
         await github.rest.repos.compareCommits({
           owner: context.repo.owner,
@@ -61,10 +64,14 @@ module.exports = async ({ github, context, core, fetch }) => {
   }
   changedPackages =
     Object.fromEntries(
-      Object.entries(changedPackages).filter(
-        ([key, { workspace }]) =>
-          changedFiles.some(({ filename }) => filename.startsWith(workspace)) ||
-          !hasSuccessRun
+      Object.entries(changedPackages).filter(([key, { workspace }]) =>
+        // 检测文件是否在工作区内或者匹配glob pattern
+        changedFiles.some(
+          ({ filename }) =>
+            !hasSuccessRun ||
+            globalFiles.some((pattern) => minimatch(filename, pattern)) ||
+            filename.startsWith(workspace)
+        )
       )
     ) || {};
 
@@ -87,7 +94,9 @@ module.exports = async ({ github, context, core, fetch }) => {
   const needRelease =
     currentEnvironment === "production" &&
     (!hasSuccessRun || currentVersion !== previousVersion);
-  const needPublish = Object.keys(changedPackages).length !== 0;
+  const needPublish =
+    Object.keys(changedPackages).length !== 0 &&
+    !(context.eventName === "pull_request" && currentBranch === "develop");
   const needDeploy = needPublish || needRelease;
   const publishVersion = needRelease ? currentVersion : currentEnvironment;
 

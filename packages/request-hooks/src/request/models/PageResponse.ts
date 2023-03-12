@@ -7,31 +7,27 @@
  */
 export type PageResponse = {
   /**
-   * 请求ID
-   */
-  requestId?: string;
-  /**
    * 响应时间
    */
   timestamp: string;
+  /**
+   * 响应
+   */
+  message: string;
   /**
    * 响应编码
    */
   status: number;
   /**
-   * 响应信息
-   */
-  message: string;
-  /**
-   * 响应体
+   * 分页结果
    */
   body: {
     /**
-     * 记录总数
+     * 数据总数
      */
-    totalCount: number;
+    total: number;
     /**
-     * 当页内容
+     * 当页数据
      */
     items: Array<string>;
   };
