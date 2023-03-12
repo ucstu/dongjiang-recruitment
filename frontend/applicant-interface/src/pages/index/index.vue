@@ -4,21 +4,30 @@
     <view class="text-area">
       <text class="title">{{ title }}</text>
       <input v-model="page" type="number" placeholder="页数" />
-      <button @click="refresh">请求</button>
+      <view>
+        <view v-for="item in data?.body.items" :key="item.id">
+          <text>{{ item.name }}</text>
+        </view>
+      </view>
     </view>
   </view>
 </template>
 
 <script setup lang="ts">
-const page = ref<number>(1);
+const page = ref<number>(0);
 
-const { refresh } = applicantService.useQueryApplicant(
+const { data } = advertiserService.useQueryAdvertiser(
   () => ({
     size: 10,
     page: page.value,
+    query: [
+      {
+        name: ["$like", "%总%"],
+      },
+    ],
   }),
   {
-    manual: true,
+    refreshDeps: [page],
   }
 );
 const title = ref("Hello");

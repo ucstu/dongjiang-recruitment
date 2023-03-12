@@ -1,6 +1,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { Query } from "../../interfaces";
 import type { ApplicantInspectionRecord } from "../models/ApplicantInspectionRecord";
 
 import type { CancelablePromise } from "../core/CancelablePromise";
@@ -116,7 +117,7 @@ export class ApplicantInspectionRecordService {
     /**
      * 查询条件
      */
-    query?: string;
+    query?: Query<ApplicantInspectionRecord>;
     /**
      * 当前页数
      */

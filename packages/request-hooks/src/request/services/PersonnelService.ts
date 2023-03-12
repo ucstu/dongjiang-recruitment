@@ -1,6 +1,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { Query } from "../../interfaces";
 import type { Personnel } from "../models/Personnel";
 import type { PersonnelInspectionRecord } from "../models/PersonnelInspectionRecord";
 
@@ -77,7 +78,7 @@ export class PersonnelService {
     /**
      * 查询条件
      */
-    query?: string;
+    query?: Query<Personnel>;
     /**
      * 当前页数
      */
@@ -258,7 +259,7 @@ export class PersonnelService {
     /**
      * 查询条件
      */
-    query?: string;
+    query?: Query<PersonnelInspectionRecord>;
     /**
      * 当前页数
      */

@@ -1,6 +1,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { Query } from "../../interfaces";
 import type { EducationExperience } from "../models/EducationExperience";
 
 import type { CancelablePromise } from "../core/CancelablePromise";
@@ -89,7 +90,7 @@ export class ApplicantEducationExperienceService {
     /**
      * 查询条件
      */
-    query?: string;
+    query?: Query<EducationExperience>;
     /**
      * 当前页数
      */

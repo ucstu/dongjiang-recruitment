@@ -1,6 +1,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { Query } from "../../interfaces";
 import type { Advertiser } from "../models/Advertiser";
 
 import type { CancelablePromise } from "../core/CancelablePromise";
@@ -138,7 +139,7 @@ export class AdvertiserService {
     /**
      * 查询条件
      */
-    query?: string;
+    query?: Query<Advertiser>;
     /**
      * 当前页数
      */

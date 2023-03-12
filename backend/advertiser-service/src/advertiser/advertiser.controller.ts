@@ -2,7 +2,9 @@ import { Public } from "@dongjiang-recruitment/nest-common/dist/auth";
 import {
   Page,
   Pagination,
+  QueryParam,
 } from "@dongjiang-recruitment/nest-common/dist/decorator";
+import { FindOptionsWhere } from "@dongjiang-recruitment/nest-common/dist/typeorm";
 import {
   Body,
   Controller,
@@ -15,7 +17,9 @@ import {
 import { AdvertiserService } from "./advertiser.service";
 import { CreateAdvertiserDto } from "./dto/create-advertiser.dto";
 import { UpdateAdvertiserDto } from "./dto/update-advertiser.dto";
+import { Advertiser } from "./entities/advertiser.entity";
 
+@Public()
 @Controller("advertisers")
 export class AdvertiserController {
   constructor(private readonly advertiserService: AdvertiserService) {}
@@ -27,25 +31,28 @@ export class AdvertiserController {
 
   @Get()
   @Public()
-  findAll(@Page() page: Pagination) {
-    return this.advertiserService.findAll(page);
+  findAll(
+    @QueryParam() query: Array<FindOptionsWhere<Advertiser>>,
+    @Page() page: Pagination<Advertiser>
+  ) {
+    return this.advertiserService.findAll(query, page);
   }
 
-  @Get(":advertiserid")
-  findOne(@Param("advertiserid") advertiserid: string) {
-    return this.advertiserService.findOne(advertiserid);
+  @Get(":id")
+  findOne(@Param("id") id: string) {
+    return this.advertiserService.findOne(id);
   }
 
-  @Put(":advertiserid")
+  @Put(":id")
   update(
-    @Param("advertiserid") advertiserid: string,
+    @Param("id") id: string,
     @Body() updateAdvertiserDto: UpdateAdvertiserDto
   ) {
-    return this.advertiserService.update(advertiserid, updateAdvertiserDto);
+    return this.advertiserService.update(id, updateAdvertiserDto);
   }
 
-  @Delete(":advertiserid")
-  remove(@Param("advertiserid") advertiserid: string) {
-    return this.advertiserService.remove(advertiserid);
+  @Delete(":id")
+  remove(@Param("id") id: string) {
+    return this.advertiserService.remove(id);
   }
 }

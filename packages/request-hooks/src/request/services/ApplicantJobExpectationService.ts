@@ -1,6 +1,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { Query } from "../../interfaces";
 import type { JobExpectation } from "../models/JobExpectation";
 
 import type { CancelablePromise } from "../core/CancelablePromise";
@@ -93,7 +94,7 @@ export class ApplicantJobExpectationService {
     /**
      * 查询条件
      */
-    query?: string;
+    query?: Query<JobExpectation>;
     /**
      * 当前页数
      */

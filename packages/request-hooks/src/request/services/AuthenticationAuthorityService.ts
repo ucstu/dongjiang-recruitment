@@ -1,6 +1,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { Query } from "../../interfaces";
 import type { Authority } from "../models/Authority";
 
 import type { CancelablePromise } from "../core/CancelablePromise";
@@ -55,7 +56,7 @@ export class AuthenticationAuthorityService {
     /**
      * 查询条件
      */
-    query?: string;
+    query?: Query<Authority>;
     /**
      * 当前页数
      */

@@ -1,6 +1,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { Query } from "../../interfaces";
 import type { DeliveryRecord } from "../models/DeliveryRecord";
 
 import type { CancelablePromise } from "../core/CancelablePromise";
@@ -89,7 +90,7 @@ export class ApplicantDeliveryRecordService {
     /**
      * 查询条件
      */
-    query?: string;
+    query?: Query<DeliveryRecord>;
     /**
      * 当前页数
      */

@@ -1,6 +1,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { Query } from "../../interfaces";
 import type { Account } from "../models/Account";
 
 import type { CancelablePromise } from "../core/CancelablePromise";

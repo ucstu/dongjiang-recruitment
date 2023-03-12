@@ -1,6 +1,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { Query } from "../../interfaces";
 import type { Areas } from "../models/Areas";
 import type { Cities } from "../models/Cities";
 import type { DirectionTags } from "../models/DirectionTags";

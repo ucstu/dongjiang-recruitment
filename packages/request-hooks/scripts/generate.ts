@@ -47,14 +47,14 @@ execSync(
 
 const replace = (content: string): string => {
   const matchResult =
-    /(sort\?: Array<)string(>,\n\s*\}\): CancelablePromise<\{[\s\S]*?body: \{[\s\S]*?: Array<)(\w.*?)(>;)/g.exec(
+    /(query\?: )string(,[\s\S]*?sort\?: Array<)string(>,\n\s*\}\): CancelablePromise<\{[\s\S]*?body: \{[\s\S]*?: Array<)(\w.*?)(>;)/g.exec(
       content
     );
   if (!matchResult) return content;
   return replace(
     content.replace(
       matchResult[0],
-      `${matchResult[1]}\`\${keyof ${matchResult[3]}},\${"asc" | "desc"}\`${matchResult[2]}${matchResult[3]}${matchResult[4]}`
+      `${matchResult[1]}Query<${matchResult[4]}>${matchResult[2]}\`\${keyof ${matchResult[4]}},\${"asc" | "desc"}\`${matchResult[3]}${matchResult[4]}${matchResult[5]}`
     )
   );
 };
@@ -64,7 +64,13 @@ const services = readdirSync(servicesPath);
 for (const service of services) {
   const servicePath = `${servicesPath}/${service}`;
   const serviceContent = readFileSync(servicePath).toString();
-  writeFileSync(servicePath, replace(serviceContent));
+  const splitResult = replace(serviceContent).split("\n");
+  splitResult.splice(
+    2,
+    1,
+    `${splitResult[2]}\nimport type { Query } from "../../interfaces";`
+  );
+  writeFileSync(servicePath, splitResult.join("\n"));
 }
 
 execSync("pnpm prettier --write src/request");

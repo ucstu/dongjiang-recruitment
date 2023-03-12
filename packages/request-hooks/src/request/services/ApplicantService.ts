@@ -1,6 +1,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { Query } from "../../interfaces";
 import type { Applicant } from "../models/Applicant";
 import type { ApplicantInspectionRecord } from "../models/ApplicantInspectionRecord";
 import type { DeliveryRecord } from "../models/DeliveryRecord";
@@ -118,7 +119,7 @@ export class ApplicantService {
     /**
      * 查询条件
      */
-    query?: string;
+    query?: Query<Applicant>;
     /**
      * 当前页数
      */
@@ -299,7 +300,7 @@ export class ApplicantService {
     /**
      * 查询条件
      */
-    query?: string;
+    query?: Query<DeliveryRecord>;
     /**
      * 当前页数
      */
@@ -365,7 +366,7 @@ export class ApplicantService {
     /**
      * 查询条件
      */
-    query?: string;
+    query?: Query<ApplicantInspectionRecord>;
     /**
      * 当前页数
      */

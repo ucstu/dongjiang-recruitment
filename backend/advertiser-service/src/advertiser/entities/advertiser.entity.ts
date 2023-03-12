@@ -9,30 +9,25 @@ import {
 import { IsNotEmpty } from "@dongjiang-recruitment/nest-common/dist/validation";
 
 /**
- * AdvertiserInformation
+ * Advertiser
  */
 @Entity()
-export class AdvertiserInformation {
-  /**
-   * 广告商信息ID
-   */
-  @PrimaryGeneratedColumn("uuid")
-  advertiserInformationId: string;
+export class Advertiser {
   /**
    * 创建时间
    */
   @CreateDateColumn()
   createdAt: Date;
   /**
-   * 更新时间
-   */
-  @UpdateDateColumn()
-  updatedAt: Date;
-  /**
-   * 删除时间
+   * 移除时间
    */
   @DeleteDateColumn()
-  deletedAt?: Date;
+  deletedAt: Date;
+  /**
+   * 广告商ID
+   */
+  @PrimaryGeneratedColumn("uuid")
+  id: string;
   /**
    * Logo地址
    */
@@ -40,7 +35,7 @@ export class AdvertiserInformation {
   @IsNotEmpty()
   logoUrl: string;
   /**
-   * 广告商名称
+   * 名称
    */
   @Column()
   @IsNotEmpty()
@@ -51,4 +46,9 @@ export class AdvertiserInformation {
   @Column()
   @IsNotEmpty()
   pageUrl: string;
+  /**
+   * 修改时间
+   */
+  @UpdateDateColumn()
+  updatedAt: Date;
 }

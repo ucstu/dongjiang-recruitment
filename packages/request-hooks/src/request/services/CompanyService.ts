@@ -1,6 +1,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { Query } from "../../interfaces";
 import type { Company } from "../models/Company";
 import type { Position } from "../models/Position";
 
@@ -130,7 +131,7 @@ export class CompanyService {
     /**
      * 查询条件
      */
-    query?: string;
+    query?: Query<Company>;
     /**
      * 当前页数
      */
@@ -272,7 +273,7 @@ export class CompanyService {
     /**
      * 查询条件
      */
-    query?: string;
+    query?: Query<Position>;
     /**
      * 当前页数
      */

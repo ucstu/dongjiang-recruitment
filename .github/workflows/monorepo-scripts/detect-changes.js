@@ -64,14 +64,15 @@ module.exports = async ({ github, context, core, fetch }) => {
   }
   changedPackages =
     Object.fromEntries(
-      Object.entries(changedPackages).filter(([key, { workspace }]) =>
-        // 检测文件是否在工作区内或者匹配glob pattern
-        changedFiles.some(
-          ({ filename }) =>
-            !hasSuccessRun ||
-            globalFiles.some((pattern) => minimatch(filename, pattern)) ||
-            filename.startsWith(workspace)
-        )
+      Object.entries(changedPackages).filter(
+        ([key, { workspace }]) =>
+          // 检测文件是否在工作区内或者匹配glob pattern
+          !hasSuccessRun ||
+          changedFiles.some(
+            ({ filename }) =>
+              globalFiles.some((pattern) => minimatch(filename, pattern)) ||
+              filename.startsWith(workspace)
+          )
       )
     ) || {};
 
@@ -111,7 +112,6 @@ module.exports = async ({ github, context, core, fetch }) => {
     "current-version": currentVersion,
     "publish-version": publishVersion,
   };
-  console.log("detectResults", detectResults);
 
   core.setOutput("changed-packages", changedPackages);
   core.setOutput("detect-results", JSON.stringify(detectResults, null, 2));
