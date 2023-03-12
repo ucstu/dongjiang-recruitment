@@ -1,6 +1,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { Query } from "../../interfaces";
 import type { WorkExperience } from "../models/WorkExperience";
 
 import type { CancelablePromise } from "../core/CancelablePromise";
@@ -101,7 +102,7 @@ export class ApplicantWorkExperienceService {
     /**
      * 查询条件
      */
-    query?: string;
+    query?: Query<WorkExperience>;
     /**
      * 当前页数
      */

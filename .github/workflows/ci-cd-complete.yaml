@@ -92,7 +92,10 @@ jobs:
           CURRENT_PACKAGE: ${{ matrix.package-name }}
           DETECT_RESULTS: ${{ needs.detect-changes.outputs.detect-results }}
         with:
-          script: await require(".github/workflows/monorepo-scripts/export-variables.js")({ core })
+          script: |
+            const exportResults = await require(".github/workflows/monorepo-scripts/export-variables.js")({ core })
+            const { command, type } = exportResults; const currentEnvironment = exportResults['current-environment'];
+            core.setOutput("command", type === "frontend" ? `${command} --mode ${currentEnvironment}` : command)
       - name: Setup Pnpm
         uses: pnpm/action-setup@v2
         with:
@@ -256,9 +259,10 @@ jobs:
         with:
           script: |
             const exportResults = await require(".github/workflows/monorepo-scripts/export-variables.js")({ core })
-            const domain = exportResults['current-environment'] === 'production' ? exportResults['domain'] : `${exportResults['current-environment']}.${exportResults['domain']}`
-            core.setOutput('secret-name', `${exportResults['type']}-${exportResults['type'] === 'backend' ? 'service-' : `${process.env.CURRENT_PACKAGE}-`}${exportResults['current-environment']}-tls`)
-            core.setOutput('deploy-url', `https://${domain}${exportResults['path']}`)
+            const { path, type } = exportResults; const currentEnvironment = exportResults['current-environment'];
+            const domain = currentEnvironment === 'production' ? exportResults['domain'] : `${currentEnvironment}.${exportResults['domain']}`
+            core.setOutput('secret-name', `${type}-${type === 'backend' ? 'service-' : `${process.env.CURRENT_PACKAGE}-`}${currentEnvironment}-tls`)
+            core.setOutput('deploy-url', `https://${domain}${path}`)
             core.setOutput('domain', domain)
       - uses: azure/k8s-set-context@v3
         with:

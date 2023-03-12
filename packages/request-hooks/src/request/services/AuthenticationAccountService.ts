@@ -1,6 +1,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { Query } from "../../interfaces";
 import type { Account } from "../models/Account";
 
 import type { CancelablePromise } from "../core/CancelablePromise";
@@ -71,7 +72,7 @@ export class AuthenticationAccountService {
     /**
      * 查询条件
      */
-    query?: string;
+    query?: Query<Account>;
     /**
      * 当前页数
      */

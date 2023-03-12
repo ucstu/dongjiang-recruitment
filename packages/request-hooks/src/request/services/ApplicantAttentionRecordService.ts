@@ -1,6 +1,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { Query } from "../../interfaces";
 import type { AttentionRecord } from "../models/AttentionRecord";
 
 import type { CancelablePromise } from "../core/CancelablePromise";
@@ -77,7 +78,7 @@ export class ApplicantAttentionRecordService {
     /**
      * 查询条件
      */
-    query?: string;
+    query?: Query<AttentionRecord>;
     /**
      * 当前页数
      */

@@ -1,5 +1,4 @@
 interface Base {
-  requestId: string;
   timestamp: string;
   status: number;
   message: string;

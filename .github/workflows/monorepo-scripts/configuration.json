@@ -39,7 +39,7 @@
           "name": "deploy",
           "sub-type": "kubernetes",
           "port": 3000,
-          "path": "/advertiser",
+          "path": "/advertisers",
           "domain": "api.djzhaopin.ucstu.com"
         }
       }

@@ -1,6 +1,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { Query } from "../../interfaces";
 import type { Position } from "../models/Position";
 
 import type { CancelablePromise } from "../core/CancelablePromise";
@@ -179,7 +180,7 @@ export class CompanyPositionService {
     /**
      * 查询条件
      */
-    query?: string;
+    query?: Query<Position>;
     /**
      * 当前页数
      */

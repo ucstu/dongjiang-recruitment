@@ -1,9 +1,6 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { MaybeComputedRef } from "@vueuse/core";
-import type {} from "@vueuse/shared";
-import { computed, ref } from "vue";
 import { useRequest, type Options, type Service } from "vue-request";
 import type { Entries, QueryResult } from "../interfaces";
 import type { ApiClient } from "../request";
@@ -14,7 +11,7 @@ type ClientWithHooks = {
       string & FKey
     >}`]: ApiClient[SKey][FKey] extends Service<infer R, infer P>
       ? (
-          params?: MaybeComputedRef<P[0]>,
+          params?: P[0] | (() => P[0]),
           options?: Options<R, P>
         ) => QueryResult<R, P>
       : never;
@@ -54,17 +51,20 @@ export const buildHooks = (client: ApiClient): ClientWithHooks => {
               // 保留已处理的请求方法
               ...fAcc,
               [`use${fKey.charAt(0).toUpperCase()}${fKey.slice(1)}`]: (
-                params?: MaybeComputedRef<Parameters<typeof request>[0]>,
+                params?:
+                  | Parameters<typeof request>[0]
+                  // @ts-ignore
+                  | (() => Parameters<typeof request>[0]),
                 options?: Options<
                   ReturnType<typeof request>,
                   Parameters<typeof request>
                 >
               ) => {
                 const _params =
-                  typeof params === "function" ? computed(params) : ref(params);
+                  typeof params === "function" ? params : () => params;
                 return useRequest(
                   // @ts-ignore
-                  () => request.call(service, _params.value),
+                  () => request.call(service, _params.call(service)),
                   // @ts-ignore
                   options
                 );

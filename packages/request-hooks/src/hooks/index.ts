@@ -1,4 +1,3 @@
-import type {} from "@vueuse/core";
 import { client } from "../client";
 import { buildHooks } from "../utils";
 

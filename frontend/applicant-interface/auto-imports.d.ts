@@ -3,7 +3,6 @@ export {};
 declare global {
   const EffectScope: typeof import("vue")["EffectScope"];
   const acceptHMRUpdate: typeof import("pinia")["acceptHMRUpdate"];
-  const accountService: typeof import("@dongjiang-recruitment/request-hooks")["accountService"];
   const advertiserAdvertiseService: typeof import("@dongjiang-recruitment/request-hooks")["advertiserAdvertiseService"];
   const advertiserService: typeof import("@dongjiang-recruitment/request-hooks")["advertiserService"];
   const applicantAttentionRecordService: typeof import("@dongjiang-recruitment/request-hooks")["applicantAttentionRecordService"];
@@ -15,8 +14,12 @@ declare global {
   const applicantProjectExperienceService: typeof import("@dongjiang-recruitment/request-hooks")["applicantProjectExperienceService"];
   const applicantService: typeof import("@dongjiang-recruitment/request-hooks")["applicantService"];
   const applicantWorkExperienceService: typeof import("@dongjiang-recruitment/request-hooks")["applicantWorkExperienceService"];
+  const authenticationAccountService: typeof import("@dongjiang-recruitment/request-hooks")["authenticationAccountService"];
+  const authenticationAuthorityGroupService: typeof import("@dongjiang-recruitment/request-hooks")["authenticationAuthorityGroupService"];
+  const authenticationAuthorityService: typeof import("@dongjiang-recruitment/request-hooks")["authenticationAuthorityService"];
+  const authenticationService: typeof import("@dongjiang-recruitment/request-hooks")["authenticationService"];
   const commonService: typeof import("@dongjiang-recruitment/request-hooks")["commonService"];
-  const companyPositionInformationService: typeof import("@dongjiang-recruitment/request-hooks")["companyPositionInformationService"];
+  const companyPositionService: typeof import("@dongjiang-recruitment/request-hooks")["companyPositionService"];
   const companyService: typeof import("@dongjiang-recruitment/request-hooks")["companyService"];
   const computed: typeof import("vue")["computed"];
   const createApp: typeof import("vue")["createApp"];
@@ -35,9 +38,6 @@ declare global {
   const isReactive: typeof import("vue")["isReactive"];
   const isReadonly: typeof import("vue")["isReadonly"];
   const isRef: typeof import("vue")["isRef"];
-  const managerAccountAuthoritiesService: typeof import("@dongjiang-recruitment/request-hooks")["managerAccountAuthoritiesService"];
-  const managerAccountGroupService: typeof import("@dongjiang-recruitment/request-hooks")["managerAccountGroupService"];
-  const managerAccountService: typeof import("@dongjiang-recruitment/request-hooks")["managerAccountService"];
   const mapActions: typeof import("pinia")["mapActions"];
   const mapGetters: typeof import("pinia")["mapGetters"];
   const mapState: typeof import("pinia")["mapState"];

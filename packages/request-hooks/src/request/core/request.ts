@@ -1,15 +1,15 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import axios from "axios";
 import type { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
+import axios from "axios";
 import FormData from "form-data";
 
 import { ApiError } from "./ApiError";
 import type { ApiRequestOptions } from "./ApiRequestOptions";
 import type { ApiResult } from "./ApiResult";
-import { CancelablePromise } from "./CancelablePromise";
 import type { OnCancel } from "./CancelablePromise";
+import { CancelablePromise } from "./CancelablePromise";
 import type { OpenAPIConfig } from "./OpenAPI";
 
 const isDefined = <T>(
@@ -70,9 +70,13 @@ const getQueryString = (params: Record<string, any>): string => {
           process(key, v);
         });
       } else if (typeof value === "object") {
-        Object.entries(value).forEach(([k, v]) => {
-          process(`${key}[${k}]`, v);
-        });
+        if (key === "query") {
+          process("query", JSON.stringify(value));
+        } else {
+          Object.entries(value).forEach(([k, v]) => {
+            process(`${key}[${k}]`, v);
+          });
+        }
       } else {
         append(key, value);
       }
