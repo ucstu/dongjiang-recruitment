@@ -96,9 +96,11 @@ importers:
   backend/applicant-service:
     specifiers:
       '@dongjiang-recruitment/eslint-config': workspace:^1.0.0
+      '@dongjiang-recruitment/nest-common': workspace:^1.0.0
       '@nestjs/cli': ^9.2.0
       '@nestjs/common': ^9.3.9
       '@nestjs/core': ^9.3.9
+      '@nestjs/mapped-types': '*'
       '@nestjs/platform-express': ^9.3.9
       '@nestjs/schematics': ^9.0.4
       '@nestjs/testing': ^9.3.9
@@ -123,8 +125,10 @@ importers:
       tsconfig-paths: 4.1.2
       typescript: ^4.9.5
     dependencies:
+      '@dongjiang-recruitment/nest-common': link:../../packages/nest-common
       '@nestjs/common': 9.3.9
       '@nestjs/core': 9.3.9
+      '@nestjs/mapped-types': 1.2.2_ilxajbd2e536h4oohar7aljlry
       '@nestjs/platform-express': 9.3.9_77foi4w27ghy47yutmnzv7krjy
       reflect-metadata: 0.1.13
       rxjs: 7.8.0
@@ -344,9 +348,11 @@ importers:
   backend/personnel-service:
     specifiers:
       '@dongjiang-recruitment/eslint-config': workspace:^1.0.0
+      '@dongjiang-recruitment/nest-common': workspace:^1.0.0
       '@nestjs/cli': ^9.2.0
       '@nestjs/common': ^9.3.9
       '@nestjs/core': ^9.3.9
+      '@nestjs/mapped-types': '*'
       '@nestjs/platform-express': ^9.3.9
       '@nestjs/schematics': ^9.0.4
       '@nestjs/testing': ^9.3.9
@@ -371,8 +377,10 @@ importers:
       tsconfig-paths: 4.1.2
       typescript: ^4.9.5
     dependencies:
+      '@dongjiang-recruitment/nest-common': link:../../packages/nest-common
       '@nestjs/common': 9.3.9
       '@nestjs/core': 9.3.9
+      '@nestjs/mapped-types': 1.2.2_ilxajbd2e536h4oohar7aljlry
       '@nestjs/platform-express': 9.3.9_77foi4w27ghy47yutmnzv7krjy
       reflect-metadata: 0.1.13
       rxjs: 7.8.0
@@ -416,7 +424,7 @@ importers:
       '@dcloudio/uni-mp-weixin': 3.0.0-alpha-3070120230210001
       '@dcloudio/uni-quickapp-webview': 3.0.0-alpha-3070120230210001
       '@dongjiang-recruitment/eslint-config': workspace:^1.0.0
-      '@dongjiang-recruitment/request-hooks': workspace:^1.0.0
+      '@dongjiang-recruitment/service-common': workspace:^1.0.0
       '@dongjiang-recruitment/stylelint-config': workspace:^1.0.0
       '@dongjiang-recruitment/typescript-config': workspace:^1.0.0
       '@dongjiang-recruitment/vite-config': workspace:^1.0.0
@@ -439,7 +447,7 @@ importers:
       '@dcloudio/uni-mp-toutiao': 3.0.0-alpha-3070120230210001_postcss@8.4.21+vue@3.2.47
       '@dcloudio/uni-mp-weixin': 3.0.0-alpha-3070120230210001_postcss@8.4.21+vue@3.2.47
       '@dcloudio/uni-quickapp-webview': 3.0.0-alpha-3070120230210001_postcss@8.4.21+vue@3.2.47
-      '@dongjiang-recruitment/request-hooks': link:../../packages/request-hooks
+      '@dongjiang-recruitment/service-common': link:../../packages/service-common
       normalize.css: 8.0.1
       pinia: 2.0.32_vue@3.2.47
       vue: 3.2.47
@@ -545,6 +553,7 @@ importers:
   packages/nest-common:
     specifiers:
       '@dongjiang-recruitment/eslint-config': workspace:^1.0.0
+      '@dongjiang-recruitment/service-common': workspace:^1.0.0
       '@dongjiang-recruitment/typescript-config': workspace:^1.0.0
       '@liaoliaots/nestjs-redis': ^9.0.5
       '@nestjs-modules/mailer': ^1.8.1
@@ -576,6 +585,7 @@ importers:
       typeorm: ^0.3.12
       typescript: ^4.9.5
     dependencies:
+      '@dongjiang-recruitment/service-common': link:../service-common
       '@liaoliaots/nestjs-redis': 9.0.5_7onl4z2ebziufxja564fg6zv54
       '@nestjs-modules/mailer': 1.8.1_qjyj2b37oh52zq44hrbo2j5jqy
       '@nestjs/axios': 2.0.0_qlpfhrwjmdkjrqftmn4wr5rjvq
@@ -609,7 +619,7 @@ importers:
       nodemailer: 6.9.1
       typescript: 4.9.5
 
-  packages/request-hooks:
+  packages/service-common:
     specifiers:
       '@dongjiang-recruitment/eslint-config': workspace:^1.0.0
       '@dongjiang-recruitment/typescript-config': workspace:^1.0.0
@@ -2040,7 +2050,7 @@ packages:
       '@babel/helper-function-name': 7.21.0
       '@babel/helper-hoist-variables': 7.18.6
       '@babel/helper-split-export-declaration': 7.18.6
-      '@babel/parser': 7.20.5
+      '@babel/parser': 7.21.2
       '@babel/types': 7.21.2
       debug: 4.3.4
       globals: 11.12.0

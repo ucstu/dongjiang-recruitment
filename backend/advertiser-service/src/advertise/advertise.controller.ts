@@ -1,4 +1,3 @@
-import { Public } from "@dongjiang-recruitment/nest-common/dist/auth";
 import {
   Page,
   Pagination,
@@ -19,7 +18,6 @@ import { CreateAdvertiseDto } from "./dto/create-advertise.dto";
 import { UpdateAdvertiseDto } from "./dto/update-advertise.dto";
 import { Advertise } from "./entities/advertise.entity";
 
-@Public()
 @Controller("advertisers/{advertiserid}/advertise")
 export class AdvertiseController {
   constructor(private readonly advertiseService: AdvertiseService) {}

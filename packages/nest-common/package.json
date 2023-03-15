@@ -59,10 +59,11 @@
     "nest"
   ],
   "scripts": {
-    "dev": "cpy \"src/**/*.hbs\" \"dist\" --cwd && tsc -w",
-    "build": "cpy \"src/**/*.hbs\" \"dist\" --cwd && tsc"
+    "dev": "s-prebuild && cpy \"src/**/*.hbs\" \"dist\" --cwd && tsc -w",
+    "build": "s-prebuild && cpy \"src/**/*.hbs\" \"dist\" --cwd && tsc"
   },
   "dependencies": {
+    "@dongjiang-recruitment/service-common": "workspace:^1.0.0",
     "@liaoliaots/nestjs-redis": "^9.0.5",
     "@nestjs-modules/mailer": "^1.8.1",
     "@nestjs/axios": "^2.0.0",

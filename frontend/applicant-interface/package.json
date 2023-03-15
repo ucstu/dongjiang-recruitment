@@ -50,7 +50,7 @@
     "@dcloudio/uni-mp-toutiao": "3.0.0-alpha-3070120230210001",
     "@dcloudio/uni-mp-weixin": "3.0.0-alpha-3070120230210001",
     "@dcloudio/uni-quickapp-webview": "3.0.0-alpha-3070120230210001",
-    "@dongjiang-recruitment/request-hooks": "workspace:^1.0.0",
+    "@dongjiang-recruitment/service-common": "workspace:^1.0.0",
     "normalize.css": "^8.0.1",
     "pinia": "^2.0.30",
     "vue": "^3.2.47",

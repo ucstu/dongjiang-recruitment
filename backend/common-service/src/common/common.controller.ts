@@ -2,12 +2,12 @@ import { Public } from "@dongjiang-recruitment/nest-common/dist/auth";
 import { Controller, Get, Query } from "@nestjs/common";
 import { CommonService } from "./common.service";
 
-@Controller()
+@Public()
+@Controller("common")
 export class CommonController {
   constructor(private readonly commonService: CommonService) {}
 
-  @Public()
-  @Get("/verificationCode")
+  @Get("verificationCode")
   getVerificationCode(@Query("email") email: string) {
     return this.commonService.getVerificationCode(email);
   }

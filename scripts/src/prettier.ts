@@ -1,10 +1,10 @@
 import { execSync } from "node:child_process";
 import {
-  appendFileSync,
-  existsSync,
-  readFileSync,
-  unlinkSync,
-  writeFileSync,
+appendFileSync,
+existsSync,
+readFileSync,
+unlinkSync,
+writeFileSync
 } from "node:fs";
 import { join } from "node:path";
 
@@ -42,6 +42,7 @@ try {
   execSync(
     `prettier --write --config ${tempConfigPath} --ignore-path ${tempIgnorePath} ${process.argv
       .slice(2)
+      .map((arg) => arg.replace(/\$/g, "\\$"))
       .join(" ")}`
   );
   unlinkSync(tempIgnorePath);

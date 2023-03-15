@@ -12,5 +12,6 @@ export const Permissions = (...permissions: User["permissions"]) =>
   SetMetadata(PERMISSIONS_KEY, permissions);
 
 export const OWNER_PERMISSION_KEY = "ownerPermission";
-export const OwnerPermission = <T>(callBack: (data: T) => string | number) =>
-  SetMetadata(OWNER_PERMISSION_KEY, callBack);
+export const OwnerPermission = (
+  callBack: (request: Request & { user: User }) => boolean
+) => SetMetadata(OWNER_PERMISSION_KEY, callBack);

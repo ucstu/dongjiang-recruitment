@@ -52,6 +52,7 @@ try {
   (0, node_child_process_1.execSync)(
     `prettier --write --config ${tempConfigPath} --ignore-path ${tempIgnorePath} ${process.argv
       .slice(2)
+      .map((arg) => arg.replace(/\$/g, "\\$"))
       .join(" ")}`
   );
   (0, node_fs_1.unlinkSync)(tempIgnorePath);
