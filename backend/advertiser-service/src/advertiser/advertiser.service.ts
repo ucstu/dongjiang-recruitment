@@ -56,7 +56,7 @@ export class AdvertiserService {
   }
 
   async remove(id: string) {
-    const { affected } = await this.advertiserRepository.delete(id);
+    const { affected } = await this.advertiserRepository.softDelete(id);
     if (!affected) throw new NotFoundException();
     return id;
   }

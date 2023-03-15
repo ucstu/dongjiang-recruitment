@@ -1,5 +1,5 @@
 import { Module } from "@nestjs/common";
-import { APP_GUARD, APP_INTERCEPTOR } from "@nestjs/core";
+import { APP_GUARD } from "@nestjs/core";
 import { JwtModule } from "@nestjs/jwt";
 import { PassportModule } from "@nestjs/passport";
 import {
@@ -8,7 +8,6 @@ import {
 } from "../config";
 import { AUTO_GUARD_KEY } from "./jwt.dec";
 import { JwtAuthGuard } from "./jwt.guard";
-import { JwtAuthInterceptor } from "./jwt.interceptor";
 import { JwtStrategy } from "./jwt.strategy";
 
 export interface AuthOption {
@@ -35,10 +34,6 @@ const commonProviders = [
   {
     provide: APP_GUARD,
     useClass: JwtAuthGuard,
-  },
-  {
-    provide: APP_INTERCEPTOR,
-    useClass: JwtAuthInterceptor,
   },
 ];
 
@@ -106,6 +101,5 @@ export {
 export * from "passport-jwt";
 export * from "./jwt.dec";
 export * from "./jwt.guard";
-export * from "./jwt.interceptor";
 export * from "./jwt.strategy";
 export * from "./user.dto";

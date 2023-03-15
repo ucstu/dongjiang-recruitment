@@ -276,7 +276,6 @@ jobs:
           APP_PORT: ${{ steps.github-script.outputs.port }}
           APP_PATH: ${{ steps.github-script.outputs.path }}
           APP_DOMAIN: ${{ steps.github-script.outputs.domain }}
-          SECRET_NAME: ${{ steps.github-script.outputs.secret-name }}
         run: |
           envsubst < deploy.yaml > ${{ format('{0}/{1}', github.workspace, format('deploy-{0}-{1}.yaml', steps.github-script.outputs.type, matrix.package-name)) }}
           kubectl apply -f ${{ format('{0}/{1}', github.workspace, format('deploy-{0}-{1}.yaml', steps.github-script.outputs.type, matrix.package-name)) }}

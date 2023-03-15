@@ -10,7 +10,7 @@ export default mergeConfig(
         "pinia",
         "uni-app",
         {
-          "@dongjiang-recruitment/request-hooks": [
+          "@dongjiang-recruitment/service-common": [
             "authenticationService",
             "authenticationAccountService",
             "authenticationAuthorityGroupService",

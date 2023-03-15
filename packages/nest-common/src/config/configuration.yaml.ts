@@ -37,9 +37,16 @@ export interface RedisConfig {
   password: string;
 }
 
+export interface ServiceConfig {
+  baseUrl: string;
+  username: string;
+  password: string;
+}
+
 export interface YamlConfiguration {
   database: DatabaseConfig;
   authorization: AuthorizationConfig;
   mailer: MailerConfig;
   redis: RedisConfig;
+  service: ServiceConfig;
 }

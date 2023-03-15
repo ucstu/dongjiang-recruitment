@@ -11,3 +11,6 @@ export class HttpModule extends AxiosHttpModule {
     super();
   }
 }
+
+export * from "@nestjs/axios";
+export * from "axios";

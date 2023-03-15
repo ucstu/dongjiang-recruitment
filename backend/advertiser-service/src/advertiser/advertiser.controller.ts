@@ -1,4 +1,3 @@
-import { Public } from "@dongjiang-recruitment/nest-common/dist/auth";
 import {
   Page,
   Pagination,
@@ -19,7 +18,6 @@ import { CreateAdvertiserDto } from "./dto/create-advertiser.dto";
 import { UpdateAdvertiserDto } from "./dto/update-advertiser.dto";
 import { Advertiser } from "./entities/advertiser.entity";
 
-@Public()
 @Controller("advertisers")
 export class AdvertiserController {
   constructor(private readonly advertiserService: AdvertiserService) {}
@@ -30,7 +28,6 @@ export class AdvertiserController {
   }
 
   @Get()
-  @Public()
   findAll(
     @QueryParam() query: Array<FindOptionsWhere<Advertiser>>,
     @Page() page: Pagination<Advertiser>

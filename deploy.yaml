@@ -1,16 +1,14 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: $APP_NAME-$APP_ENV
-  namespace: dongjiang-recruitment
+  name: $APP_NAME
+  namespace: dongjiang-recruitment-$APP_ENV
   labels:
     app: $APP_NAME
-    env: $APP_ENV
 spec:
   selector:
     matchLabels:
       app: $APP_NAME
-      env: $APP_ENV
   replicas: 1
   strategy:
     rollingUpdate:
@@ -21,7 +19,6 @@ spec:
     metadata:
       labels:
         app: $APP_NAME
-        env: $APP_ENV
     spec:
       # initContainers:
       # Init containers are exactly like regular containers, except:
@@ -44,10 +41,10 @@ spec:
             - containerPort: $APP_PORT
               name: http
           volumeMounts:
-            - name: dongjiang-recruitment
+            - name: dongjiang-recruitment-secret
               mountPath: /etc/dongjiang-recruitment
       volumes:
-        - name: dongjiang-recruitment
+        - name: dongjiang-recruitment-secret
           secret:
             secretName: dongjiang-recruitment-secret
       restartPolicy: Always
@@ -55,15 +52,13 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: $APP_NAME-$APP_ENV
-  namespace: dongjiang-recruitment
+  name: $APP_NAME
+  namespace: dongjiang-recruitment-$APP_ENV
   labels:
     app: $APP_NAME
-    env: $APP_ENV
 spec:
   selector:
     app: $APP_NAME
-    env: $APP_ENV
   type: ClusterIP
   sessionAffinity: None
   sessionAffinityConfig:
@@ -81,7 +76,7 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  namespace: dongjiang-recruitment
+  namespace: dongjiang-recruitment-$APP_ENV
   name: $APP_NAME
   annotations:
     external-dns.alpha.kubernetes.io/hostname: $APP_DOMAIN
@@ -99,6 +94,6 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: $APP_NAME-$APP_ENV
+                name: $APP_NAME
                 port:
                   name: http
