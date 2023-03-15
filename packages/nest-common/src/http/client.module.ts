@@ -46,7 +46,7 @@ export class ServiceClient extends ApiClient {
       },
     },
   ],
-  exports: [ApiClient],
+  exports: [ServiceClient],
 })
 export class ClientModule {}
 

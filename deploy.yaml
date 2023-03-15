@@ -46,7 +46,7 @@ spec:
       volumes:
         - name: dongjiang-recruitment
           secret:
-            secretName: dongjiang-recruitment-secret
+            secretName: dongjiang-recruitment
       restartPolicy: Always
 ---
 apiVersion: v1

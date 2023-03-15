@@ -1,11 +1,11 @@
 import { Module } from "@nestjs/common";
-import { ClientModule } from "./ClientModule";
-import { HttpModule as _HttpModule } from "./HttpModule";
+import { ClientModule } from "./client.module";
+import { HttpModule as _HttpModule } from "./http.module";
 
 @Module({
   imports: [_HttpModule, ClientModule],
 })
 export default class HttpModule {}
 
-export * from "./ClientModule";
-export * from "./HttpModule";
+export * from "./client.module";
+export * from "./http.module";
