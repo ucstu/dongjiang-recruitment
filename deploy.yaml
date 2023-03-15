@@ -41,10 +41,10 @@ spec:
             - containerPort: $APP_PORT
               name: http
           volumeMounts:
-            - name: dongjiang-recruitment-secret
+            - name: dongjiang-recruitment
               mountPath: /etc/dongjiang-recruitment
       volumes:
-        - name: dongjiang-recruitment-secret
+        - name: dongjiang-recruitment
           secret:
             secretName: dongjiang-recruitment-secret
       restartPolicy: Always
