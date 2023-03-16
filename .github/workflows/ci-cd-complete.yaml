@@ -261,7 +261,7 @@ jobs:
             const exportResults = await require(".github/workflows/monorepo-scripts/export-variables.js")({ core })
             const { path, type } = exportResults; const currentEnvironment = exportResults['current-environment'];
             const domain = currentEnvironment === 'production' ? exportResults['domain'] : `${currentEnvironment}.${exportResults['domain']}`
-            core.setOutput('secret-name', `${type}-${type === 'backend' ? 'service-' : `${process.env.CURRENT_PACKAGE}-`}${currentEnvironment}-tls`)
+            core.setOutput('secret-name', `${type}-${type === 'backend' ? 'service' : `${process.env.CURRENT_PACKAGE}`}-tls`)
             core.setOutput('deploy-url', `https://${domain}${path}`)
             core.setOutput('domain', domain)
       - uses: azure/k8s-set-context@v3
@@ -276,6 +276,7 @@ jobs:
           APP_PORT: ${{ steps.github-script.outputs.port }}
           APP_PATH: ${{ steps.github-script.outputs.path }}
           APP_DOMAIN: ${{ steps.github-script.outputs.domain }}
+          SECRET_NAME: ${{ steps.github-script.outputs.secret-name }}
         run: |
           envsubst < deploy.yaml > ${{ format('{0}/{1}', github.workspace, format('deploy-{0}-{1}.yaml', steps.github-script.outputs.type, matrix.package-name)) }}
           kubectl apply -f ${{ format('{0}/{1}', github.workspace, format('deploy-{0}-{1}.yaml', steps.github-script.outputs.type, matrix.package-name)) }}
