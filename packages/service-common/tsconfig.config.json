@@ -4,6 +4,7 @@
     "vite.config.*",
     "scripts/**/*.*",
     "vitest.config.*",
+    "rollup.config.*",
     "cypress.config.*",
     "tailwind.config.*",
     "playwright.config.*"

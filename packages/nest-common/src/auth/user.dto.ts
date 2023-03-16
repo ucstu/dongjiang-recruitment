@@ -1,6 +1,6 @@
 import { RequestMethod } from "@nestjs/common";
 
 export interface User {
-  userId: string;
+  id: string;
   permissions?: Array<[string, RequestMethod]>;
 }

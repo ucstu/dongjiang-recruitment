@@ -58,7 +58,9 @@ export class Account {
   /**
    * 权限组列表
    */
-  @Column("simple-array")
+  @Column("simple-array", {
+    default: [],
+  })
   groups: string[];
   /**
    * 账号ID

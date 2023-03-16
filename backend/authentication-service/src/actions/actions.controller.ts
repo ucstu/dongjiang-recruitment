@@ -14,11 +14,11 @@ import { ForgetPasswordActionDto } from "./dto/forget-password-action.dto";
 import { LoginActionDto } from "./dto/login-action.dto";
 import { RegisterActionDto } from "./dto/register-action.dto";
 
+@Public()
 @Controller("authentication/actions")
 export class ActionsController {
   constructor(private readonly actionsService: ActionsService) {}
 
-  @Public()
   @Post("register")
   register(@Body() registerActionDto: RegisterActionDto) {
     return this.actionsService.register(registerActionDto);
@@ -32,7 +32,6 @@ export class ActionsController {
     return this.actionsService.destroy(id, verificationCode);
   }
 
-  @Public()
   @Post("login")
   login(@Body() loginActionDto: LoginActionDto) {
     return this.actionsService.login(loginActionDto);

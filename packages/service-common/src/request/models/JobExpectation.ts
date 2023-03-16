@@ -13,15 +13,15 @@ export type JobExpectation = {
   /**
    * 创建时间
    */
-  createdAt: Date;
+  createdAt: string;
   /**
    * 更新时间
    */
-  updatedAt: Date;
+  updatedAt: string;
   /**
    * 移除时间
    */
-  deletedAt: Date;
+  deletedAt: string;
   /**
    * {1:全职,2:兼职,3:实习}
    */

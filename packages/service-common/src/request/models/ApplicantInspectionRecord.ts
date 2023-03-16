@@ -13,15 +13,15 @@ export type ApplicantInspectionRecord = {
   /**
    * 创建时间
    */
-  createdAt: Date;
+  createdAt: string;
   /**
    * 更新时间
    */
-  updatedAt: Date;
+  updatedAt: string;
   /**
    * 移除时间
    */
-  deletedAt: Date;
+  deletedAt: string;
   /**
    * 求职者ID
    */
