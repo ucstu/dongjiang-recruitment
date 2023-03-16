@@ -13,15 +13,15 @@ export type Advertise = {
   /**
    * 创建时间
    */
-  createdAt: Date;
+  createdAt: string;
   /**
    * 修改时间
    */
-  updatedAt: Date;
+  updatedAt: string;
   /**
    * 移除时间
    */
-  deletedAt: Date;
+  deletedAt: string;
   /**
    * 名称
    */

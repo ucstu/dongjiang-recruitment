@@ -1,3 +1,9 @@
+import {
+  Advertiser,
+  Applicant,
+  Personnel,
+} from "@dongjiang-recruitment/nest-common/dist/http";
+
 export enum AccountType {
   /**
    * 管理员
@@ -23,10 +29,6 @@ export class CreateAccountDto {
    */
   accountType: number;
   /**
-   * 详情ID
-   */
-  detailId: string;
-  /**
    * 用户名
    */
   userName: string;
@@ -34,4 +36,8 @@ export class CreateAccountDto {
    * 密码
    */
   password: string;
+  /**
+   * 详细信息
+   */
+  detail?: Applicant | Advertiser | Personnel;
 }

@@ -180,7 +180,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-66759543-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-66759543-run"
       },
       "get": {
         "summary": "获取广告商",
@@ -274,7 +274,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-66759544-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-66759544-run"
       },
       "delete": {
         "summary": "移除广告商",
@@ -361,7 +361,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-66759545-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-66759545-run"
       }
     },
     "/advertisers": {
@@ -553,7 +553,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-66759546-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-66759546-run"
       },
       "post": {
         "summary": "添加广告商",
@@ -677,7 +677,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-66759547-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-66759547-run"
       }
     },
     "/applicant": {
@@ -1002,7 +1002,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-66759548-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-66759548-run"
       },
       "get": {
         "summary": "查询求职者",
@@ -1293,7 +1293,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-66759551-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-66759551-run"
       }
     },
     "/applicant/{id}": {
@@ -1447,7 +1447,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-66759549-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-66759549-run"
       },
       "delete": {
         "summary": "移除求职者",
@@ -1535,7 +1535,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-66759550-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-66759550-run"
       },
       "get": {
         "summary": "获取求职者",
@@ -1647,7 +1647,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-66759552-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-66759552-run"
       }
     },
     "/companies": {
@@ -1974,7 +1974,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-66759569-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-66759569-run"
       },
       "get": {
         "summary": "查询公司",
@@ -2228,7 +2228,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-66759570-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-66759570-run"
       }
     },
     "/companies/{id}": {
@@ -2385,7 +2385,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-66759571-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-66759571-run"
       },
       "get": {
         "summary": "获取公司",
@@ -2506,7 +2506,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-66759572-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-66759572-run"
       }
     },
     "/companies/positions": {
@@ -2788,7 +2788,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-66759574-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-66759574-run"
       }
     },
     "/companies/{companyId}/bigData": {
@@ -2972,7 +2972,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-66759576-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-66759576-run"
       }
     },
     "/personnel": {
@@ -3133,7 +3133,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-66759577-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-66759577-run"
       },
       "get": {
         "summary": "查询人事",
@@ -3311,7 +3311,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-66759580-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-66759580-run"
       }
     },
     "/personnel/{id}": {
@@ -3400,7 +3400,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-66759578-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-66759578-run"
       },
       "put": {
         "summary": "修改人事",
@@ -3510,7 +3510,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-66759579-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-66759579-run"
       },
       "get": {
         "summary": "获取人事",
@@ -3611,7 +3611,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-66759581-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-66759581-run"
       }
     },
     "/advertisers/{advertiserid}/advertise": {
@@ -3810,7 +3810,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-66759582-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-66759582-run"
       },
       "get": {
         "summary": "查询广告",
@@ -4030,7 +4030,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-66759585-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-66759585-run"
       }
     },
     "/advertisers/{advertiserid}/advertise/{id}": {
@@ -4129,7 +4129,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-66759583-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-66759583-run"
       },
       "put": {
         "summary": "修改广告",
@@ -4248,7 +4248,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-66759584-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-66759584-run"
       },
       "get": {
         "summary": "获取广告",
@@ -4338,7 +4338,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-66759586-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-66759586-run"
       }
     },
     "/applicant/{applicantId}/jobExpectations": {
@@ -4511,7 +4511,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-66759587-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-66759587-run"
       },
       "get": {
         "summary": "查询求职期望",
@@ -4706,7 +4706,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-66759589-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-66759589-run"
       }
     },
     "/applicant/{applicantId}/jobExpectations/{id}": {
@@ -4806,7 +4806,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-66759588-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-66759588-run"
       },
       "get": {
         "summary": "获取求职期望",
@@ -4919,7 +4919,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-66759590-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-66759590-run"
       },
       "put": {
         "summary": "修改求职期望",
@@ -5059,7 +5059,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-66759592-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-66759592-run"
       }
     },
     "/applicant/{applicantId}/eduExperiences": {
@@ -5231,7 +5231,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-66759591-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-66759591-run"
       },
       "get": {
         "summary": "查询教育经历",
@@ -5463,7 +5463,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-66759595-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-66759595-run"
       }
     },
     "/applicant/{applicantId}/eduExperiences/{id}": {
@@ -5562,7 +5562,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-66759593-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-66759593-run"
       },
       "put": {
         "summary": "修改教育经历",
@@ -5699,7 +5699,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-66759594-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-66759594-run"
       },
       "get": {
         "summary": "获取教育经历",
@@ -5810,7 +5810,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-66759596-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-66759596-run"
       }
     },
     "/applicant/{applicantId}/workExperiences": {
@@ -6020,7 +6020,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-66759597-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-66759597-run"
       },
       "get": {
         "summary": "查询工作经历 ",
@@ -6239,7 +6239,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-66759600-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-66759600-run"
       }
     },
     "/applicant/{applicantId}/workExperiences/{id}": {
@@ -6338,7 +6338,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-66759598-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-66759598-run"
       },
       "put": {
         "summary": "修改工作经历",
@@ -6480,7 +6480,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-66759599-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-66759599-run"
       },
       "get": {
         "summary": "获取工作经历 ",
@@ -6594,7 +6594,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-66759601-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-66759601-run"
       }
     },
     "/applicant/{applicantId}/projectExperiences": {
@@ -6776,7 +6776,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-66759602-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-66759602-run"
       },
       "get": {
         "summary": "查询项目经历 ",
@@ -6965,7 +6965,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-66759604-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-66759604-run"
       }
     },
     "/applicant/{applicantId}/projectExperiences/{id}": {
@@ -7106,7 +7106,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-66759603-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-66759603-run"
       },
       "delete": {
         "summary": "移除项目经历 ",
@@ -7203,7 +7203,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-66759605-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-66759605-run"
       }
     },
     "/applicant/{applicantId}/projectExperiences/{projectExperienceId}": {
@@ -7298,7 +7298,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-66759606-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-66759606-run"
       }
     },
     "/applicant/{applicantId}/deliveryRecords": {
@@ -7488,7 +7488,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-66759607-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-66759607-run"
       },
       "get": {
         "summary": "查询投递记录",
@@ -7698,7 +7698,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-66759611-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-66759611-run"
       }
     },
     "/applicant/{applicantId}/deliveryRecords/{id}": {
@@ -7797,7 +7797,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-66759608-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-66759608-run"
       },
       "get": {
         "summary": "获取投递记录",
@@ -7908,7 +7908,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-66759610-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-66759610-run"
       }
     },
     "/applicant/{applicantId}/attentionRecords": {
@@ -8047,7 +8047,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-66759612-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-66759612-run"
       },
       "get": {
         "summary": "查询关注记录",
@@ -8256,7 +8256,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-66759615-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-66759615-run"
       }
     },
     "/applicant/{applicantId}/attentionRecords/{id}": {
@@ -8355,7 +8355,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-66759613-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-66759613-run"
       },
       "get": {
         "summary": "获取关注记录",
@@ -8463,7 +8463,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-66759616-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-66759616-run"
       }
     },
     "/applicant/{applicantId}/inspectionRecords/{id}": {
@@ -8562,7 +8562,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-66759617-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-66759617-run"
       },
       "get": {
         "summary": "获取查看记录",
@@ -8665,7 +8665,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-66759619-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-66759619-run"
       }
     },
     "/applicant/{applicantId}/inspectionRecords": {
@@ -8865,7 +8865,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-66759618-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-66759618-run"
       },
       "post": {
         "summary": "添加查看记录",
@@ -9001,7 +9001,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-67451948-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-67451948-run"
       }
     },
     "/applicant/{applicantId}/garnerRecords": {
@@ -9151,7 +9151,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-66759620-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-66759620-run"
       },
       "get": {
         "summary": "查询收藏记录",
@@ -9346,7 +9346,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-66759623-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-66759623-run"
       }
     },
     "/applicant/{applicantId}/garnerRecords/{id}": {
@@ -9445,7 +9445,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-66759621-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-66759621-run"
       },
       "get": {
         "summary": "获取收藏记录",
@@ -9554,7 +9554,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-66759624-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-66759624-run"
       }
     },
     "/companies/{companyId}/positions": {
@@ -10032,7 +10032,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-66759625-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-66759625-run"
       },
       "get": {
         "summary": "查询职位",
@@ -10355,7 +10355,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-66759628-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-66759628-run"
       }
     },
     "/companies/{companyId}/positions/{id}": {
@@ -10454,7 +10454,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-66759626-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-66759626-run"
       },
       "put": {
         "summary": "修改职位",
@@ -10639,7 +10639,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-66759627-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-66759627-run"
       },
       "get": {
         "summary": "获取职位",
@@ -10768,7 +10768,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-66759630-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-66759630-run"
       }
     },
     "/personnel/{personnelId}/inspectionRecords/{id}": {
@@ -10867,7 +10867,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-66759645-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-66759645-run"
       },
       "get": {
         "summary": "获取查看记录",
@@ -10969,7 +10969,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-66759647-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-66759647-run"
       }
     },
     "/personnel/{personnelId}/inspectionRecords": {
@@ -11182,7 +11182,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-66759646-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-66759646-run"
       },
       "post": {
         "summary": "添加查看记录",
@@ -11307,7 +11307,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-67467674-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-67467674-run"
       }
     },
     "/common/areas": {
@@ -11418,7 +11418,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-67461158-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-67461158-run"
       }
     },
     "/common/directionTags": {
@@ -11533,7 +11533,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-67461159-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-67461159-run"
       }
     },
     "/common/filterCriteria": {
@@ -11626,7 +11626,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-67461160-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-67461160-run"
       }
     },
     "/common/positionTypes": {
@@ -11827,7 +11827,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-67461161-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-67461161-run"
       }
     },
     "/common/cities": {
@@ -11920,7 +11920,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-67461162-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-67461162-run"
       }
     },
     "/common/newVersion": {
@@ -11998,7 +11998,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-67461164-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-67461164-run"
       }
     },
     "/common/verificationCode": {
@@ -12087,7 +12087,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-67461165-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-67461165-run"
       }
     },
     "/common/files": {
@@ -12183,7 +12183,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-67461166-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-67461166-run"
       }
     },
     "/common/avatars": {
@@ -12279,7 +12279,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-67461167-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-67461167-run"
       }
     },
     "/applicant/deliveryRecords": {
@@ -12503,7 +12503,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-67481288-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-67481288-run"
       }
     },
     "/applicant/inspectionRecords": {
@@ -12702,7 +12702,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-67487661-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-67487661-run"
       }
     },
     "/personnel/inspectionRecords": {
@@ -12905,7 +12905,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-67488216-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-67488216-run"
       }
     },
     "/authentication/actions/destroy/{id}": {
@@ -13004,7 +13004,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-67501907-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-67501907-run"
       }
     },
     "/authentication/actions/changePassword/{id}": {
@@ -13121,7 +13121,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-67501908-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-67501908-run"
       }
     },
     "/authentication/actions/login": {
@@ -13265,7 +13265,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-67501909-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-67501909-run"
       }
     },
     "/authentication/actions/forget": {
@@ -13377,7 +13377,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-67501910-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-67501910-run"
       }
     },
     "/authentication/actions/register": {
@@ -13430,6 +13430,290 @@
                     "type": "string",
                     "title": "密码",
                     "description": "密码"
+                  },
+                  "detail": {
+                    "anyOf": [
+                      {
+                        "type": "object",
+                        "x-apifox-refs": {
+                          "01GVMN63K45NC7ZHTBGQKEKSVF": {
+                            "$ref": "#/components/schemas/Advertiser",
+                            "x-apifox-overrides": {}
+                          }
+                        },
+                        "x-apifox-orders": ["01GVMN63K45NC7ZHTBGQKEKSVF"],
+                        "properties": {
+                          "name": {
+                            "type": "string",
+                            "title": "名称",
+                            "description": "名称"
+                          },
+                          "pageUrl": {
+                            "type": "string",
+                            "title": "网页地址",
+                            "description": "网页地址"
+                          },
+                          "logoUrl": {
+                            "type": "string",
+                            "title": "Logo地址",
+                            "description": "Logo地址"
+                          }
+                        },
+                        "required": ["name", "pageUrl", "logoUrl"],
+                        "x-apifox-ignore-properties": [
+                          "name",
+                          "pageUrl",
+                          "logoUrl"
+                        ]
+                      },
+                      {
+                        "type": "object",
+                        "x-apifox-refs": {
+                          "01GVMN68FKGQ6KAQ9R6W8FH93Q": {
+                            "$ref": "#/components/schemas/Applicant",
+                            "x-apifox-overrides": {
+                              "id": null,
+                              "createdAt": null,
+                              "updatedAt": null,
+                              "deletedAt": null
+                            }
+                          }
+                        },
+                        "x-apifox-orders": ["01GVMN68FKGQ6KAQ9R6W8FH93Q"],
+                        "properties": {
+                          "avatarUrl": {
+                            "type": "string",
+                            "title": "头像地址",
+                            "description": "头像地址"
+                          },
+                          "firstName": {
+                            "type": "string",
+                            "title": "姓",
+                            "description": "姓"
+                          },
+                          "lastName": {
+                            "type": "string",
+                            "title": "名",
+                            "description": "名"
+                          },
+                          "dateOfBirth": {
+                            "type": "string",
+                            "title": "生日",
+                            "pattern": "^((((19|20)\\d{2})-(0?[13-9]|1[012])-(0?[1-9]|[12]\\d|30))|(((19|20)\\d{2})-(0?[13578]|1[02])-31)|(((19|20)\\d{2})-0?2-(0?[1-9]|1\\d|2[0-8]))|((((19|20)([13579][26]|[2468][048]|0[48]))|(2000))-0?2-29))$",
+                            "description": "生日"
+                          },
+                          "sex": {
+                            "type": "string",
+                            "title": "性别",
+                            "description": "性别"
+                          },
+                          "age": {
+                            "type": "integer",
+                            "title": "年龄",
+                            "description": "年龄"
+                          },
+                          "cityName": {
+                            "type": "string",
+                            "title": "所在城市",
+                            "description": "所在城市"
+                          },
+                          "email": {
+                            "type": "string",
+                            "title": "电子邮箱",
+                            "description": "电子邮箱"
+                          },
+                          "workingYears": {
+                            "type": "integer",
+                            "title": "工作年限",
+                            "description": "{1:没有工作经验,2:在校/应届,3:3年一下,4:3-5年,5:5-10年,6:10年以上}",
+                            "enum": [1, 2, 3, 4, 5, 6],
+                            "x-apifox": {
+                              "enumDescriptions": {
+                                "1": "NoExperience",
+                                "2": "InSchoolOrFreshGraduate",
+                                "3": "Under3Year",
+                                "4": "With3To5Year",
+                                "5": "With5To10Year",
+                                "6": "MoreThen10Year"
+                              }
+                            },
+                            "x-enum-varnames": [
+                              "NoExperience",
+                              "InSchoolOrFreshGraduate",
+                              "Under3Year",
+                              "With3To5Year",
+                              "With5To10Year",
+                              "MoreThen10Year"
+                            ]
+                          },
+                          "education": {
+                            "type": "integer",
+                            "title": "学历状态",
+                            "description": "{0:未知,1:大专,2:本科,3:硕士,4:博士}",
+                            "enum": [0, 1, 2, 3, 4],
+                            "x-apifox": {
+                              "enumDescriptions": {
+                                "0": "Unknown",
+                                "1": "JuniorCollege",
+                                "2": "Undergraduate",
+                                "3": "Postgraduate",
+                                "4": "Doctor"
+                              }
+                            },
+                            "x-enum-varnames": [
+                              "Unknown",
+                              "JuniorCollege",
+                              "Undergraduate",
+                              "Postgraduate",
+                              "Doctor"
+                            ]
+                          },
+                          "personalAdvantage": {
+                            "type": "string",
+                            "title": "个人优势",
+                            "description": "个人优势"
+                          },
+                          "socialHomepage": {
+                            "type": "string",
+                            "title": "社交主页",
+                            "description": "社交主页"
+                          },
+                          "jobStatus": {
+                            "type": "integer",
+                            "title": "求职状态",
+                            "description": "{1:随时入职,2:2周内入职,3:1月内入职}",
+                            "enum": [0, 1, 2, 3],
+                            "x-apifox": {
+                              "enumDescriptions": {
+                                "0": "Unknown",
+                                "1": "AnyTime",
+                                "2": "TwoWeeks",
+                                "3": "OneMoth"
+                              }
+                            },
+                            "x-enum-varnames": [
+                              "Unknown",
+                              "AnyTime",
+                              "TwoWeeks",
+                              "OneMoth"
+                            ]
+                          },
+                          "pictureWorks": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            },
+                            "title": "图片作品",
+                            "description": "图片作品"
+                          },
+                          "privacySettings": {
+                            "type": "integer",
+                            "title": "隐私设置",
+                            "description": "{1:实名,2:匿名}",
+                            "enum": [1, 2],
+                            "x-apifox": {
+                              "enumDescriptions": {
+                                "1": "RealName",
+                                "2": "Anonymous"
+                              }
+                            },
+                            "x-enum-varnames": ["RealName", "Anonymous"]
+                          }
+                        },
+                        "required": [
+                          "avatarUrl",
+                          "firstName",
+                          "lastName",
+                          "dateOfBirth",
+                          "sex",
+                          "age",
+                          "cityName",
+                          "email",
+                          "workingYears",
+                          "education",
+                          "personalAdvantage",
+                          "socialHomepage",
+                          "jobStatus",
+                          "pictureWorks",
+                          "privacySettings"
+                        ],
+                        "x-apifox-ignore-properties": [
+                          "avatarUrl",
+                          "firstName",
+                          "lastName",
+                          "dateOfBirth",
+                          "sex",
+                          "age",
+                          "cityName",
+                          "email",
+                          "workingYears",
+                          "education",
+                          "personalAdvantage",
+                          "socialHomepage",
+                          "jobStatus",
+                          "pictureWorks",
+                          "privacySettings"
+                        ]
+                      },
+                      {
+                        "type": "object",
+                        "x-apifox-refs": {
+                          "01GVMN6G73YZFMC7CPPP4MMKJY": {
+                            "$ref": "#/components/schemas/Personnel",
+                            "x-apifox-overrides": {
+                              "id": null,
+                              "createdAt": null,
+                              "updatedAt": null,
+                              "deletedAt": null
+                            }
+                          }
+                        },
+                        "x-apifox-orders": ["01GVMN6G73YZFMC7CPPP4MMKJY"],
+                        "properties": {
+                          "companyId": {
+                            "type": "string",
+                            "title": "公司ID",
+                            "description": "公司ID"
+                          },
+                          "avatarUrl": {
+                            "type": "string",
+                            "title": "头像地址",
+                            "description": "头像地址"
+                          },
+                          "hrName": {
+                            "type": "string",
+                            "title": "人事姓名",
+                            "description": "人事姓名"
+                          },
+                          "postName": {
+                            "type": "string",
+                            "title": "职位名称",
+                            "description": "职位名称"
+                          },
+                          "acceptEmail": {
+                            "type": "string",
+                            "title": "电子邮箱",
+                            "description": "电子邮箱"
+                          }
+                        },
+                        "required": [
+                          "companyId",
+                          "avatarUrl",
+                          "hrName",
+                          "postName",
+                          "acceptEmail"
+                        ],
+                        "x-apifox-ignore-properties": [
+                          "companyId",
+                          "avatarUrl",
+                          "hrName",
+                          "postName",
+                          "acceptEmail"
+                        ]
+                      }
+                    ],
+                    "title": "详细信息",
+                    "description": "详细信息"
                   }
                 },
                 "required": [
@@ -13442,15 +13726,33 @@
                   "userName",
                   "verificationCode",
                   "accountType",
-                  "password"
+                  "password",
+                  "detail"
                 ],
                 "x-apifox-ignore-properties": []
               },
               "example": {
-                "userName": "g.snb@brnvoul.be",
-                "verificationCode": "6060",
-                "accountType": 2,
-                "password": "nZ9!gR0@nrHLY"
+                "userName": "c.hwyzd@ptduuzt.com.cn",
+                "verificationCode": "8910",
+                "accountType": 1,
+                "password": "VJwQtm&Sll%pDE9Zzqv",
+                "detail": {
+                  "avatarUrl": "http://dummyimage.com/120x90",
+                  "firstName": "吕",
+                  "lastName": "刚",
+                  "dateOfBirth": "1990-07-14",
+                  "sex": "反",
+                  "age": 49,
+                  "cityName": "香港岛",
+                  "email": "v.gaeorjct@kovxtswxu.asia",
+                  "workingYears": 5,
+                  "education": 2,
+                  "personalAdvantage": "变子关增打特准能真没进王完元米问。",
+                  "socialHomepage": "http://mtbfif.gd/hpsehgtgx",
+                  "jobStatus": 2,
+                  "pictureWorks": ["http://dummyimage.com/120x240"],
+                  "privacySettings": 1
+                }
               }
             }
           }
@@ -13520,7 +13822,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-67501911-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-67501911-run"
       }
     },
     "/authentication/accounts": {
@@ -13565,32 +13867,316 @@
                     "title": "用户名",
                     "description": "用户名"
                   },
-                  "detailId": {
-                    "type": "string",
-                    "title": "详情ID",
-                    "description": "详情ID"
-                  },
                   "password": {
                     "type": "string",
                     "title": "密码",
                     "description": "密码"
+                  },
+                  "detail": {
+                    "anyOf": [
+                      {
+                        "type": "object",
+                        "x-apifox-refs": {
+                          "01GVMN7MR8B7Q06D92GRYSX0MT": {
+                            "$ref": "#/components/schemas/Advertiser",
+                            "x-apifox-overrides": {}
+                          }
+                        },
+                        "x-apifox-orders": ["01GVMN7MR8B7Q06D92GRYSX0MT"],
+                        "properties": {
+                          "name": {
+                            "type": "string",
+                            "title": "名称",
+                            "description": "名称"
+                          },
+                          "pageUrl": {
+                            "type": "string",
+                            "title": "网页地址",
+                            "description": "网页地址"
+                          },
+                          "logoUrl": {
+                            "type": "string",
+                            "title": "Logo地址",
+                            "description": "Logo地址"
+                          }
+                        },
+                        "required": ["name", "pageUrl", "logoUrl"],
+                        "x-apifox-ignore-properties": [
+                          "name",
+                          "pageUrl",
+                          "logoUrl"
+                        ]
+                      },
+                      {
+                        "type": "object",
+                        "x-apifox-refs": {
+                          "01GVMN7ST28G131V3SSYY43X7T": {
+                            "$ref": "#/components/schemas/Applicant",
+                            "x-apifox-overrides": {
+                              "id": null,
+                              "createdAt": null,
+                              "updatedAt": null,
+                              "deletedAt": null
+                            }
+                          }
+                        },
+                        "x-apifox-orders": ["01GVMN7ST28G131V3SSYY43X7T"],
+                        "properties": {
+                          "avatarUrl": {
+                            "type": "string",
+                            "title": "头像地址",
+                            "description": "头像地址"
+                          },
+                          "firstName": {
+                            "type": "string",
+                            "title": "姓",
+                            "description": "姓"
+                          },
+                          "lastName": {
+                            "type": "string",
+                            "title": "名",
+                            "description": "名"
+                          },
+                          "dateOfBirth": {
+                            "type": "string",
+                            "title": "生日",
+                            "pattern": "^((((19|20)\\d{2})-(0?[13-9]|1[012])-(0?[1-9]|[12]\\d|30))|(((19|20)\\d{2})-(0?[13578]|1[02])-31)|(((19|20)\\d{2})-0?2-(0?[1-9]|1\\d|2[0-8]))|((((19|20)([13579][26]|[2468][048]|0[48]))|(2000))-0?2-29))$",
+                            "description": "生日"
+                          },
+                          "sex": {
+                            "type": "string",
+                            "title": "性别",
+                            "description": "性别"
+                          },
+                          "age": {
+                            "type": "integer",
+                            "title": "年龄",
+                            "description": "年龄"
+                          },
+                          "cityName": {
+                            "type": "string",
+                            "title": "所在城市",
+                            "description": "所在城市"
+                          },
+                          "email": {
+                            "type": "string",
+                            "title": "电子邮箱",
+                            "description": "电子邮箱"
+                          },
+                          "workingYears": {
+                            "type": "integer",
+                            "title": "工作年限",
+                            "description": "{1:没有工作经验,2:在校/应届,3:3年一下,4:3-5年,5:5-10年,6:10年以上}",
+                            "enum": [1, 2, 3, 4, 5, 6],
+                            "x-apifox": {
+                              "enumDescriptions": {
+                                "1": "NoExperience",
+                                "2": "InSchoolOrFreshGraduate",
+                                "3": "Under3Year",
+                                "4": "With3To5Year",
+                                "5": "With5To10Year",
+                                "6": "MoreThen10Year"
+                              }
+                            },
+                            "x-enum-varnames": [
+                              "NoExperience",
+                              "InSchoolOrFreshGraduate",
+                              "Under3Year",
+                              "With3To5Year",
+                              "With5To10Year",
+                              "MoreThen10Year"
+                            ]
+                          },
+                          "education": {
+                            "type": "integer",
+                            "title": "学历状态",
+                            "description": "{0:未知,1:大专,2:本科,3:硕士,4:博士}",
+                            "enum": [0, 1, 2, 3, 4],
+                            "x-apifox": {
+                              "enumDescriptions": {
+                                "0": "Unknown",
+                                "1": "JuniorCollege",
+                                "2": "Undergraduate",
+                                "3": "Postgraduate",
+                                "4": "Doctor"
+                              }
+                            },
+                            "x-enum-varnames": [
+                              "Unknown",
+                              "JuniorCollege",
+                              "Undergraduate",
+                              "Postgraduate",
+                              "Doctor"
+                            ]
+                          },
+                          "personalAdvantage": {
+                            "type": "string",
+                            "title": "个人优势",
+                            "description": "个人优势"
+                          },
+                          "socialHomepage": {
+                            "type": "string",
+                            "title": "社交主页",
+                            "description": "社交主页"
+                          },
+                          "jobStatus": {
+                            "type": "integer",
+                            "title": "求职状态",
+                            "description": "{1:随时入职,2:2周内入职,3:1月内入职}",
+                            "enum": [0, 1, 2, 3],
+                            "x-apifox": {
+                              "enumDescriptions": {
+                                "0": "Unknown",
+                                "1": "AnyTime",
+                                "2": "TwoWeeks",
+                                "3": "OneMoth"
+                              }
+                            },
+                            "x-enum-varnames": [
+                              "Unknown",
+                              "AnyTime",
+                              "TwoWeeks",
+                              "OneMoth"
+                            ]
+                          },
+                          "pictureWorks": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            },
+                            "title": "图片作品",
+                            "description": "图片作品"
+                          },
+                          "privacySettings": {
+                            "type": "integer",
+                            "title": "隐私设置",
+                            "description": "{1:实名,2:匿名}",
+                            "enum": [1, 2],
+                            "x-apifox": {
+                              "enumDescriptions": {
+                                "1": "RealName",
+                                "2": "Anonymous"
+                              }
+                            },
+                            "x-enum-varnames": ["RealName", "Anonymous"]
+                          }
+                        },
+                        "required": [
+                          "avatarUrl",
+                          "firstName",
+                          "lastName",
+                          "dateOfBirth",
+                          "sex",
+                          "age",
+                          "cityName",
+                          "email",
+                          "workingYears",
+                          "education",
+                          "personalAdvantage",
+                          "socialHomepage",
+                          "jobStatus",
+                          "pictureWorks",
+                          "privacySettings"
+                        ],
+                        "x-apifox-ignore-properties": [
+                          "avatarUrl",
+                          "firstName",
+                          "lastName",
+                          "dateOfBirth",
+                          "sex",
+                          "age",
+                          "cityName",
+                          "email",
+                          "workingYears",
+                          "education",
+                          "personalAdvantage",
+                          "socialHomepage",
+                          "jobStatus",
+                          "pictureWorks",
+                          "privacySettings"
+                        ]
+                      },
+                      {
+                        "type": "object",
+                        "x-apifox-refs": {
+                          "01GVMN7ZYB76AGCR8GV66N8M28": {
+                            "$ref": "#/components/schemas/Personnel",
+                            "x-apifox-overrides": {
+                              "id": null,
+                              "createdAt": null,
+                              "updatedAt": null,
+                              "deletedAt": null
+                            }
+                          }
+                        },
+                        "x-apifox-orders": ["01GVMN7ZYB76AGCR8GV66N8M28"],
+                        "properties": {
+                          "companyId": {
+                            "type": "string",
+                            "title": "公司ID",
+                            "description": "公司ID"
+                          },
+                          "avatarUrl": {
+                            "type": "string",
+                            "title": "头像地址",
+                            "description": "头像地址"
+                          },
+                          "hrName": {
+                            "type": "string",
+                            "title": "人事姓名",
+                            "description": "人事姓名"
+                          },
+                          "postName": {
+                            "type": "string",
+                            "title": "职位名称",
+                            "description": "职位名称"
+                          },
+                          "acceptEmail": {
+                            "type": "string",
+                            "title": "电子邮箱",
+                            "description": "电子邮箱"
+                          }
+                        },
+                        "required": [
+                          "companyId",
+                          "avatarUrl",
+                          "hrName",
+                          "postName",
+                          "acceptEmail"
+                        ],
+                        "x-apifox-ignore-properties": [
+                          "companyId",
+                          "avatarUrl",
+                          "hrName",
+                          "postName",
+                          "acceptEmail"
+                        ]
+                      }
+                    ],
+                    "title": "详细信息",
+                    "description": "详细信息"
                   }
                 },
                 "x-apifox-refs": {},
                 "x-apifox-orders": [
                   "accountType",
                   "userName",
-                  "detailId",
-                  "password"
+                  "password",
+                  "detail"
                 ],
-                "required": ["userName", "accountType", "detailId", "password"],
+                "required": ["userName", "accountType", "password"],
                 "x-apifox-ignore-properties": []
               },
               "example": {
-                "userName": "s.onytxq@zjzpoy.hk",
+                "userName": "t.lrfdsqgost@nbm.re",
                 "accountType": 2,
-                "detailId": "5DCbC1e1-31Db-4eBF-c990-DE2c8ff6485c",
-                "password": "quST"
+                "detailId": "A24bd84D-F873-E731-94bb-E957455fEEb4",
+                "password": "u4bJOWX",
+                "detail": {
+                  "name": "音术行拉习",
+                  "pageUrl": "http://ghlf.cz/wsrsvb",
+                  "logoUrl": "http://dummyimage.com/180x150"
+                }
               }
             }
           }
@@ -13679,7 +14265,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-67501967-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-67501967-run"
       },
       "get": {
         "summary": "查询账号",
@@ -13929,7 +14515,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-67501970-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-67501970-run"
       }
     },
     "/authentication/accounts/{id}": {
@@ -14018,7 +14604,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-67501968-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-67501968-run"
       },
       "put": {
         "summary": "修改账号",
@@ -14272,7 +14858,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-67501971-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-67501971-run"
       },
       "get": {
         "summary": "获取账号",
@@ -14378,7 +14964,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-67501974-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-67501974-run"
       }
     },
     "/authentication/authorityGroups": {
@@ -14486,7 +15072,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-67501988-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-67501988-run"
       },
       "get": {
         "summary": "查询权限组",
@@ -14672,7 +15258,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-67501991-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-67501991-run"
       }
     },
     "/authentication/authorityGroups/{id}": {
@@ -14761,7 +15347,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-67501989-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-67501989-run"
       },
       "put": {
         "summary": "修改权限组",
@@ -14874,7 +15460,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-67501990-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-67501990-run"
       },
       "get": {
         "summary": "获取权限组",
@@ -14970,7 +15556,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-67501992-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-67501992-run"
       }
     },
     "/authentication/authorities": {
@@ -15068,7 +15654,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-67501993-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-67501993-run"
       },
       "get": {
         "summary": "查询权限",
@@ -15264,7 +15850,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-67501996-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-67501996-run"
       }
     },
     "/authentication/authorities/{id}": {
@@ -15353,7 +15939,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-67501994-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-67501994-run"
       },
       "put": {
         "summary": "修改账号权限",
@@ -15499,7 +16085,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-67501995-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-67501995-run"
       },
       "get": {
         "summary": "获取权限",
@@ -15590,7 +16176,7 @@
             }
           }
         },
-        "x-run-in-apifox": "https://www.apifox.cn/web/project/2404362/apis/api-67501997-run"
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-67501997-run"
       }
     }
   },

@@ -1,4 +1,4 @@
-import { Module } from "@nestjs/common";
+import { Global, Module } from "@nestjs/common";
 import { APP_GUARD } from "@nestjs/core";
 import { JwtModule } from "@nestjs/jwt";
 import { PassportModule } from "@nestjs/passport";
@@ -37,6 +37,7 @@ const commonProviders = [
   },
 ];
 
+@Global()
 @Module({
   imports: [...commonImports],
   providers: [
@@ -46,6 +47,7 @@ const commonProviders = [
       useValue: true,
     },
   ],
+  exports: [...commonImports],
 })
 export default class AuthModule {
   static forRoot(option?: AuthOption) {

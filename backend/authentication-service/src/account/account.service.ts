@@ -1,5 +1,11 @@
 import { Pagination } from "@dongjiang-recruitment/nest-common/dist/decorator";
 import {
+  Advertiser,
+  Applicant,
+  Personnel,
+  ServiceClient,
+} from "@dongjiang-recruitment/nest-common/dist/http";
+import {
   FindOptionsWhere,
   InjectRepository,
   Repository,
@@ -9,15 +15,10 @@ import {
   Injectable,
   NotFoundException,
 } from "@nestjs/common";
-import * as bcrypt from "bcrypt";
+import { BcryptService } from "src/bcrypt.module";
 import { AccountType, CreateAccountDto } from "./dto/create-account.dto";
 import { UpdateAccountDto } from "./dto/update-account.dto";
 import { Account } from "./entities/account.entity";
-
-const hashPassword = (password: string) => {
-  const salt = bcrypt.genSaltSync();
-  return bcrypt.hashSync(password, salt);
-};
 
 const STATIC_FULL_ID = {
   manager: null,
@@ -30,11 +31,13 @@ const STATIC_FULL_ID = {
 export class AccountService {
   constructor(
     @InjectRepository(Account)
-    private readonly accountRepository: Repository<Account>
+    private readonly accountRepository: Repository<Account>,
+    private readonly serviceClient: ServiceClient,
+    private readonly bcryptService: BcryptService
   ) {}
 
   async create(createAccountDto: CreateAccountDto) {
-    const { accountType, userName, password, detailId } = createAccountDto;
+    const { accountType, userName, password, detail } = createAccountDto;
 
     // 获取账号类型对应的字段名
     const accountTypeStr = AccountType[
@@ -42,24 +45,61 @@ export class AccountService {
     ].toLowerCase() as keyof typeof STATIC_FULL_ID;
 
     // 检查账号是否已存在
-    const account = await this.accountRepository.findOne({
-      where: {
-        userName,
-      },
-    });
-    if (account?.detailId[accountTypeStr]) {
+    const { items: accounts } = await this.findAll(
+      [
+        {
+          userName,
+        },
+      ],
+      { page: 0, size: 1, sort: {} }
+    );
+    if (accounts[0]?.detailId[accountTypeStr]) {
       throw new BadRequestException("账号已存在");
+    }
+
+    if (accountType !== AccountType.Manager) {
+      await this.serviceClient.loginAsAdmin();
+    }
+
+    let detailId: string;
+    // 创建账号详细信息
+    switch (accountType) {
+      case AccountType.Manager:
+        detailId = "manager";
+        break;
+      case AccountType.Applicant:
+        detailId = (
+          await this.serviceClient.applicant.addApplicant({
+            requestBody: detail as Applicant,
+          })
+        ).body.id;
+        break;
+      case AccountType.Personnel:
+        detailId = (
+          await this.serviceClient.personnel.addPersonnel({
+            requestBody: detail as Personnel,
+          })
+        ).body.id;
+        break;
+      case AccountType.Advertiser:
+        detailId = (
+          await this.serviceClient.advertiser.addAdvertiser({
+            requestBody: detail as Advertiser,
+          })
+        ).body.id;
+        break;
     }
 
     // 创建账号
     return await this.accountRepository.save({
-      ...account,
+      ...accounts[0],
       userName,
-      password: hashPassword(password),
-      groups: [...(account?.groups || []), accountTypeStr],
+      password: await this.bcryptService.hash(password),
+      authorities: [...(accounts[0]?.authorities || [])],
+      groups: [...(accounts[0]?.groups || []), accountTypeStr],
       detailId: {
         ...STATIC_FULL_ID,
-        ...account?.detailId,
+        ...accounts[0]?.detailId,
         [accountTypeStr]: detailId,
       },
     });
@@ -93,7 +133,7 @@ export class AccountService {
   async update(id: string, updateAccountDto: UpdateAccountDto) {
     const account: UpdateAccountDto = {
       ...updateAccountDto,
-      password: hashPassword(updateAccountDto.password),
+      password: await this.bcryptService.hash(updateAccountDto.password),
       id,
     };
     const { affected } = await this.accountRepository.update(id, account);

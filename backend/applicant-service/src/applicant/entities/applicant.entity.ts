@@ -2,9 +2,9 @@ import {
   Column,
   CreateDateColumn,
   DeleteDateColumn,
-  UpdateDateColumn,
   Entity,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from "@dongjiang-recruitment/nest-common/dist/typeorm";
 
 export enum ApplicantEducation {

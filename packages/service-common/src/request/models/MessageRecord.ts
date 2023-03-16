@@ -13,11 +13,11 @@ export type MessageRecord = {
   /**
    * 创建时间
    */
-  createdAt: Date;
+  createdAt: string;
   /**
    * 更新时间
    */
-  updatedAt: Date;
+  updatedAt: string;
   /**
    * 发起用户ID
    */

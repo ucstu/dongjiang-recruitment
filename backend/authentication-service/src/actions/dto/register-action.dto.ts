@@ -1,3 +1,9 @@
+import {
+  Advertiser,
+  Applicant,
+  Personnel,
+} from "@dongjiang-recruitment/nest-common/dist/http";
+
 export class RegisterActionDto {
   /**
    * 账号类型
@@ -15,6 +21,10 @@ export class RegisterActionDto {
    * 短信验证码
    */
   verificationCode: string;
+  /**
+   * 详细信息
+   */
+  detail?: Applicant | Advertiser | Personnel;
 }
 
 export enum AccountType {
