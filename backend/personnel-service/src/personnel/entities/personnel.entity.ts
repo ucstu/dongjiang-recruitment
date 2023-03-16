@@ -3,6 +3,7 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "@dongjiang-recruitment/nest-common/dist/typeorm";
 /**
@@ -43,7 +44,7 @@ export class Personnel {
   /**
    * 人事ID
    */
-  @Column()
+  @PrimaryGeneratedColumn("uuid")
   id: string;
   /**
    * 职位名称
