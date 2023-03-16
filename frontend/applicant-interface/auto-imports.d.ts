@@ -38,6 +38,9 @@ declare global {
   const isReactive: typeof import("vue")["isReactive"];
   const isReadonly: typeof import("vue")["isReadonly"];
   const isRef: typeof import("vue")["isRef"];
+  const managerAccountAuthoritiesService: typeof import("@dongjiang-recruitment/request-hooks")["managerAccountAuthoritiesService"];
+  const managerAccountGroupService: typeof import("@dongjiang-recruitment/request-hooks")["managerAccountGroupService"];
+  const managerAccountService: typeof import("@dongjiang-recruitment/request-hooks")["managerAccountService"];
   const mapActions: typeof import("pinia")["mapActions"];
   const mapGetters: typeof import("pinia")["mapGetters"];
   const mapState: typeof import("pinia")["mapState"];
