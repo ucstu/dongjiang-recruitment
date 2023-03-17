@@ -21,7 +21,7 @@ export type Applicant = {
   /**
    * 移除时间
    */
-  deletedAt: string;
+  deletedAt: string | null;
   /**
    * 头像地址
    */

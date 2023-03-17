@@ -21,7 +21,7 @@ export type Account = {
   /**
    * 移除时间
    */
-  deletedAt: string;
+  deletedAt: string | null;
   /**
    * 用户名
    */
@@ -33,19 +33,19 @@ export type Account = {
     /**
      * 管理员
      */
-    manager: string;
+    manager: string | null;
     /**
      * 求职者
      */
-    applicant: string;
+    applicant: string | null;
     /**
      * 人事
      */
-    personnel: string;
+    personnel: string | null;
     /**
      * 广告商
      */
-    advertiser: string;
+    advertiser: string | null;
   };
   /**
    * 权限列表

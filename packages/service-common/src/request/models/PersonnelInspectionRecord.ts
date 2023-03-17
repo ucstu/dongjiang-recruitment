@@ -21,7 +21,7 @@ export type PersonnelInspectionRecord = {
   /**
    * 移除时间
    */
-  deletedAt: string;
+  deletedAt: string | null;
   /**
    * 人事ID
    */

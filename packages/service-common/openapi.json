@@ -14655,7 +14655,7 @@
                     "description": "更新时间"
                   },
                   "deletedAt": {
-                    "type": "string",
+                    "type": ["string", "null"],
                     "title": "移除时间",
                     "description": "移除时间"
                   },
@@ -14668,22 +14668,22 @@
                     "type": "object",
                     "properties": {
                       "manager": {
-                        "type": "string",
+                        "type": ["string", "null"],
                         "title": "管理员",
                         "description": "管理员"
                       },
                       "applicant": {
-                        "type": "string",
+                        "type": ["string", "null"],
                         "title": "求职者",
                         "description": "求职者"
                       },
                       "personnel": {
-                        "type": "string",
+                        "type": ["string", "null"],
                         "title": "人事",
                         "description": "人事"
                       },
                       "advertiser": {
-                        "type": "string",
+                        "type": ["string", "null"],
                         "title": "广告商",
                         "description": "广告商"
                       }
@@ -16201,7 +16201,7 @@
             "description": "更新时间"
           },
           "deletedAt": {
-            "type": "string",
+            "type": ["string", "null"],
             "title": "移除时间",
             "description": "移除时间"
           },
@@ -16256,7 +16256,7 @@
             "description": "更新时间"
           },
           "deletedAt": {
-            "type": "string",
+            "type": ["string", "null"],
             "title": "移除时间",
             "description": "移除时间"
           },
@@ -16332,7 +16332,7 @@
             "description": "更新时间"
           },
           "deletedAt": {
-            "type": "string",
+            "type": ["string", "null"],
             "title": "移除时间",
             "description": "移除时间"
           },
@@ -16546,7 +16546,7 @@
             "description": "更新时间"
           },
           "deletedAt": {
-            "type": "string",
+            "type": ["string", "null"],
             "title": "移除时间",
             "description": "移除时间"
           },
@@ -17186,7 +17186,7 @@
             "description": "修改时间"
           },
           "deletedAt": {
-            "type": "string",
+            "type": ["string", "null"],
             "title": "移除时间",
             "description": "移除时间"
           },
@@ -17244,7 +17244,7 @@
             "description": "修改时间"
           },
           "deletedAt": {
-            "type": "string",
+            "type": ["string", "null"],
             "title": "移除时间",
             "description": "移除时间"
           },
@@ -17286,7 +17286,7 @@
             "description": "更新时间"
           },
           "deletedAt": {
-            "type": "string",
+            "type": ["string", "null"],
             "title": "移除时间",
             "description": "移除时间"
           },
@@ -17299,22 +17299,22 @@
             "type": "object",
             "properties": {
               "manager": {
-                "type": "string",
+                "type": ["string", "null"],
                 "title": "管理员",
                 "description": "管理员"
               },
               "applicant": {
-                "type": "string",
+                "type": ["string", "null"],
                 "title": "求职者",
                 "description": "求职者"
               },
               "personnel": {
-                "type": "string",
+                "type": ["string", "null"],
                 "title": "人事",
                 "description": "人事"
               },
               "advertiser": {
-                "type": "string",
+                "type": ["string", "null"],
                 "title": "广告商",
                 "description": "广告商"
               }
@@ -17391,7 +17391,7 @@
             "description": "更新时间"
           },
           "deletedAt": {
-            "type": "string",
+            "type": ["string", "null"],
             "title": "移除时间",
             "description": "移除时间"
           },
@@ -17453,7 +17453,7 @@
             "description": "更新时间"
           },
           "deletedAt": {
-            "type": "string",
+            "type": ["string", "null"],
             "title": "移除时间",
             "description": "移除时间"
           },
@@ -17515,7 +17515,7 @@
             "description": "更新时间"
           },
           "deletedAt": {
-            "type": "string",
+            "type": ["string", "null"],
             "title": "移除时间",
             "description": "移除时间"
           },
@@ -17609,7 +17609,7 @@
             "description": "更新时间"
           },
           "deletedAt": {
-            "type": "string",
+            "type": ["string", "null"],
             "title": "移除时间",
             "description": "移除时间"
           },
@@ -17664,7 +17664,7 @@
             "description": "更新时间"
           },
           "deletedAt": {
-            "type": "string",
+            "type": ["string", "null"],
             "title": "移除时间",
             "description": "移除时间"
           },
@@ -17749,7 +17749,7 @@
             "description": "更新时间"
           },
           "deletedAt": {
-            "type": "string",
+            "type": ["string", "null"],
             "title": "移除时间",
             "description": "移除时间"
           },
@@ -17842,7 +17842,7 @@
             "description": "更新时间"
           },
           "deletedAt": {
-            "type": "string",
+            "type": ["string", "null"],
             "title": "移除时间",
             "description": "移除时间"
           },
@@ -17950,7 +17950,7 @@
             "description": "更新时间"
           },
           "deletedAt": {
-            "type": "string",
+            "type": ["string", "null"],
             "title": "移除时间",
             "description": "移除时间"
           },
@@ -18045,7 +18045,7 @@
             "description": "更新时间"
           },
           "deletedAt": {
-            "type": "string",
+            "type": ["string", "null"],
             "title": "移除时间",
             "description": "移除时间"
           },
@@ -18249,7 +18249,7 @@
             "description": "修改时间"
           },
           "deletedAt": {
-            "type": "string",
+            "type": ["string", "null"],
             "title": "移除时间",
             "description": "移除时间"
           },
@@ -18311,7 +18311,7 @@
             "description": "修改时间"
           },
           "deletedAt": {
-            "type": "string",
+            "type": ["string", "null"],
             "title": "移除时间",
             "description": "移除时间"
           },

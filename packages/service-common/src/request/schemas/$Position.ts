@@ -23,6 +23,7 @@ export const $Position = {
       type: "string",
       description: `移除时间`,
       isRequired: true,
+      isNullable: true,
     },
     positionName: {
       type: "string",

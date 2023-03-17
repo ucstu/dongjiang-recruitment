@@ -21,7 +21,7 @@ export type Position = {
   /**
    * 移除时间
    */
-  deletedAt: string;
+  deletedAt: string | null;
   /**
    * 职位名称
    */

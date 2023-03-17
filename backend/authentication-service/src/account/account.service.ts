@@ -21,10 +21,10 @@ import { UpdateAccountDto } from "./dto/update-account.dto";
 import { Account } from "./entities/account.entity";
 
 const STATIC_FULL_ID = {
-  manager: null,
+  advertiser: null,
   applicant: null,
+  manager: null,
   personnel: null,
-  account: null,
 };
 
 @Injectable()

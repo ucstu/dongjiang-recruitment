@@ -21,7 +21,7 @@ export type EducationExperience = {
   /**
    * 移除时间
    */
-  deletedAt: string;
+  deletedAt: string | null;
   /**
    * 学校名称
    */

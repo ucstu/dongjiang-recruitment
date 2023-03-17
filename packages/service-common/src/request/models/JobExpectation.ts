@@ -21,7 +21,7 @@ export type JobExpectation = {
   /**
    * 移除时间
    */
-  deletedAt: string;
+  deletedAt: string | null;
   /**
    * {1:全职,2:兼职,3:实习}
    */

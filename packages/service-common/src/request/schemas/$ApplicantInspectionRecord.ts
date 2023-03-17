@@ -23,6 +23,7 @@ export const $ApplicantInspectionRecord = {
       type: "string",
       description: `移除时间`,
       isRequired: true,
+      isNullable: true,
     },
     applicantId: {
       type: "string",

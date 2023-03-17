@@ -21,7 +21,7 @@ export type Company = {
   /**
    * 移除时间
    */
-  deletedAt: string;
+  deletedAt: string | null;
   /**
    * LOGO地址
    */

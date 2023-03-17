@@ -23,6 +23,7 @@ export const $Personnel = {
       type: "string",
       description: `移除时间`,
       isRequired: true,
+      isNullable: true,
     },
     companyId: {
       type: "string",

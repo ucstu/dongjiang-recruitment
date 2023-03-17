@@ -21,7 +21,7 @@ export type WorkExperience = {
   /**
    * 移除时间
    */
-  deletedAt: string;
+  deletedAt: string | null;
   /**
    * 公司名称
    */

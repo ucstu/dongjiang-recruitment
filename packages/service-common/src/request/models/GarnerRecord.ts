@@ -21,7 +21,7 @@ export type GarnerRecord = {
   /**
    * 移除时间
    */
-  deletedAt: string;
+  deletedAt: string | null;
   /**
    * 求职者ID
    */

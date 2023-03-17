@@ -21,7 +21,7 @@ export type Personnel = {
   /**
    * 移除时间
    */
-  deletedAt: string;
+  deletedAt: string | null;
   /**
    * 公司ID
    */
