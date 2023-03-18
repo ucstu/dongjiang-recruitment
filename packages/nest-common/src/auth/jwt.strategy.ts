@@ -1,5 +1,6 @@
 import { Inject, Injectable } from "@nestjs/common";
 import { PassportStrategy } from "@nestjs/passport";
+import { Request } from "express";
 import { ExtractJwt, Strategy } from "passport-jwt";
 import { ConfigType } from "../config";
 import _authorizationConfig from "../config/authorization.config";
@@ -26,12 +27,17 @@ interface JwtPayload {
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
+  private readonly jwtFrom = ExtractJwt.fromAuthHeaderAsBearerToken();
+
   constructor(
     @Inject(_authorizationConfig.KEY)
     readonly authorizationConfig: ConfigType<typeof _authorizationConfig>
   ) {
     super({
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      jwtFromRequest(request: Request) {
+        // return zlib.gunzipSync(this.jwtFrom(request));
+        return this.jwtFrom(request);
+      },
       secretOrKey: authorizationConfig.secret,
       ignoreExpiration: false,
       jsonWebTokenOptions: {

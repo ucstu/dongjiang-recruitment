@@ -12,13 +12,6 @@ import { ForgetPasswordActionDto } from "./dto/forget-password-action.dto";
 import { LoginActionDto } from "./dto/login-action.dto";
 import { RegisterActionDto } from "./dto/register-action.dto";
 
-const STATIC_FULL_ID = {
-  manager: null,
-  applicant: null,
-  personnel: null,
-  advertiser: null,
-};
-
 @Injectable()
 export class ActionsService {
   private readonly redis: Redis;
@@ -82,6 +75,9 @@ export class ActionsService {
     }
 
     return {
+      // token: this.jwtService.sign(
+      //   zlib.gzipSync(JSON.stringify(instanceToPlain(accounts[0])))
+      // ),
       token: this.jwtService.sign(instanceToPlain(accounts[0])),
       account: accounts[0],
     };
