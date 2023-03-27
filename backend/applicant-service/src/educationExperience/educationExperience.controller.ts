@@ -15,19 +15,24 @@ import {
 } from "@nestjs/common";
 import { CreateEducationExperienceDto } from "./dto/create-educationExperience.dto";
 import { UpdateEducationExperienceDto } from "./dto/update-educationExperience.dto";
-import { EducationExperience } from "./entities/educationExperience.entity";
 import { EducationExperienceService } from "./educationExperience.service";
+import { EducationExperience } from "./entities/educationExperience.entity";
 
-@Controller("applicants/{applicantid}/educationExperience")
+@Controller("applicant/{applicantid}/educationExperience")
 export class EducationExperienceController {
-  constructor(private readonly educationExperienceService: EducationExperienceService) {}
+  constructor(
+    private readonly educationExperienceService: EducationExperienceService
+  ) {}
 
   @Post()
   create(
     @Param("applicantid") applicantid: string,
     @Body() createEducationExperienceDto: CreateEducationExperienceDto
   ) {
-    return this.educationExperienceService.create(applicantid, createEducationExperienceDto);
+    return this.educationExperienceService.create(
+      applicantid,
+      createEducationExperienceDto
+    );
   }
 
   @Get()
@@ -50,7 +55,11 @@ export class EducationExperienceController {
     @Param("id") id: string,
     @Body() updateEducationExperienceDto: UpdateEducationExperienceDto
   ) {
-    return this.educationExperienceService.update(applicantid, id, updateEducationExperienceDto);
+    return this.educationExperienceService.update(
+      applicantid,
+      id,
+      updateEducationExperienceDto
+    );
   }
 
   @Delete(":id")

@@ -18,16 +18,21 @@ import { UpdateProjectExperienceDto } from "./dto/update-projectExperience.dto";
 import { ProjectExperience } from "./entities/projectExperience.entity";
 import { ProjectExperienceService } from "./projectExperience.service";
 
-@Controller("applicants/{applicantid}/projectExperience")
+@Controller("applicant/{applicantid}/projectExperience")
 export class ProjectExperienceController {
-  constructor(private readonly projectExperienceService: ProjectExperienceService) {}
+  constructor(
+    private readonly projectExperienceService: ProjectExperienceService
+  ) {}
 
   @Post()
   create(
     @Param("applicantid") applicantid: string,
     @Body() createProjectExperienceDto: CreateProjectExperienceDto
   ) {
-    return this.projectExperienceService.create(applicantid, createProjectExperienceDto);
+    return this.projectExperienceService.create(
+      applicantid,
+      createProjectExperienceDto
+    );
   }
 
   @Get()
@@ -50,7 +55,11 @@ export class ProjectExperienceController {
     @Param("id") id: string,
     @Body() updateProjectExperienceDto: UpdateProjectExperienceDto
   ) {
-    return this.projectExperienceService.update(applicantid, id, updateProjectExperienceDto);
+    return this.projectExperienceService.update(
+      applicantid,
+      id,
+      updateProjectExperienceDto
+    );
   }
 
   @Delete(":id")

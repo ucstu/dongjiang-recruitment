@@ -18,7 +18,7 @@ import { UpdateWorkExperienceDto } from "./dto/update-workExperience.dto";
 import { WorkExperience } from "./entities/workExperience.entity";
 import { WorkExperienceService } from "./workExperience.service";
 
-@Controller("applicants/{applicantid}/workExperience")
+@Controller("applicant/{applicantid}/workExperience")
 export class WorkExperienceController {
   constructor(private readonly workExperienceService: WorkExperienceService) {}
 
@@ -27,7 +27,10 @@ export class WorkExperienceController {
     @Param("applicantid") applicantid: string,
     @Body() createWorkExperienceDto: CreateWorkExperienceDto
   ) {
-    return this.workExperienceService.create(applicantid, createWorkExperienceDto);
+    return this.workExperienceService.create(
+      applicantid,
+      createWorkExperienceDto
+    );
   }
 
   @Get()
@@ -50,7 +53,11 @@ export class WorkExperienceController {
     @Param("id") id: string,
     @Body() updateWorkExperienceDto: UpdateWorkExperienceDto
   ) {
-    return this.workExperienceService.update(applicantid, id, updateWorkExperienceDto);
+    return this.workExperienceService.update(
+      applicantid,
+      id,
+      updateWorkExperienceDto
+    );
   }
 
   @Delete(":id")

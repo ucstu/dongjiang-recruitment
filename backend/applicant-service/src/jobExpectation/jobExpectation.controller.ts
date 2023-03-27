@@ -18,7 +18,7 @@ import { UpdateJobExpectationDto } from "./dto/update-jobExpectation.dto";
 import { JobExpectation } from "./entities/jobExpectation.entity";
 import { JobExpectationService } from "./jobExpectation.service";
 
-@Controller("applicants/{applicantid}/jobExpectation")
+@Controller("applicant/{applicantid}/jobExpectation")
 export class JobExpectationController {
   constructor(private readonly jobExpectationService: JobExpectationService) {}
 
@@ -27,7 +27,10 @@ export class JobExpectationController {
     @Param("applicantid") applicantid: string,
     @Body() createJobExpectationDto: CreateJobExpectationDto
   ) {
-    return this.jobExpectationService.create(applicantid, createJobExpectationDto);
+    return this.jobExpectationService.create(
+      applicantid,
+      createJobExpectationDto
+    );
   }
 
   @Get()
@@ -50,7 +53,11 @@ export class JobExpectationController {
     @Param("id") id: string,
     @Body() updateJobExpectationDto: UpdateJobExpectationDto
   ) {
-    return this.jobExpectationService.update(applicantid, id, updateJobExpectationDto);
+    return this.jobExpectationService.update(
+      applicantid,
+      id,
+      updateJobExpectationDto
+    );
   }
 
   @Delete(":id")

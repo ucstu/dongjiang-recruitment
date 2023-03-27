@@ -13,12 +13,12 @@ import {
   Post,
   Put,
 } from "@nestjs/common";
+import { DeliveryRecordService } from "./deliveryRecord.service";
 import { CreateDeliveryRecordDto } from "./dto/create-deliveryRecord.dto";
 import { UpdateDeliveryRecordDto } from "./dto/update-deliveryRecord.dto";
 import { DeliveryRecord } from "./entities/deliveryRecord.entity";
-import { DeliveryRecordService } from "./deliveryRecord.service";
 
-@Controller("applicants/{applicantid}/deliveryRecord")
+@Controller("applicant/{applicantid}/deliveryRecord")
 export class DeliveryRecordController {
   constructor(private readonly deliveryRecordService: DeliveryRecordService) {}
 
@@ -27,7 +27,10 @@ export class DeliveryRecordController {
     @Param("applicantid") applicantid: string,
     @Body() createDeliveryRecordDto: CreateDeliveryRecordDto
   ) {
-    return this.deliveryRecordService.create(applicantid, createDeliveryRecordDto);
+    return this.deliveryRecordService.create(
+      applicantid,
+      createDeliveryRecordDto
+    );
   }
 
   @Get()
@@ -50,7 +53,11 @@ export class DeliveryRecordController {
     @Param("id") id: string,
     @Body() updateDeliveryRecordDto: UpdateDeliveryRecordDto
   ) {
-    return this.deliveryRecordService.update(applicantid, id, updateDeliveryRecordDto);
+    return this.deliveryRecordService.update(
+      applicantid,
+      id,
+      updateDeliveryRecordDto
+    );
   }
 
   @Delete(":id")

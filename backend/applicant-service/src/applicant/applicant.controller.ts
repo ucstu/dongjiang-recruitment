@@ -13,12 +13,12 @@ import {
   Post,
   Put,
 } from "@nestjs/common";
+import { ApplicantService } from "./applicant.service";
 import { CreateApplicantDto } from "./dto/create-applicant.dto";
 import { UpdateApplicantDto } from "./dto/update-applicant.dto";
 import { Applicant } from "./entities/applicant.entity";
-import { ApplicantService } from "./applicant.service";
 
-@Controller("applicants")
+@Controller("applicant")
 export class ApplicantController {
   constructor(private readonly applicantService: ApplicantService) {}
 
@@ -41,7 +41,10 @@ export class ApplicantController {
   }
 
   @Put(":id")
-  update(@Param("id") id: string, @Body() updateApplicantDto: UpdateApplicantDto) {
+  update(
+    @Param("id") id: string,
+    @Body() updateApplicantDto: UpdateApplicantDto
+  ) {
     return this.applicantService.update(id, updateApplicantDto);
   }
 

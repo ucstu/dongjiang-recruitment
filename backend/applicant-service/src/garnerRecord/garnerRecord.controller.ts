@@ -18,7 +18,7 @@ import { UpdateGarnerRecordDto } from "./dto/update-garnerRecord.dto";
 import { GarnerRecord } from "./entities/garnerRecord.entity";
 import { GarnerRecordService } from "./garnerRecord.service";
 
-@Controller("applicants/{applicantid}/garnerRecord")
+@Controller("applicant/{applicantid}/garnerRecord")
 export class GarnerRecordController {
   constructor(private readonly garnerRecordService: GarnerRecordService) {}
 
@@ -50,7 +50,11 @@ export class GarnerRecordController {
     @Param("id") id: string,
     @Body() updateGarnerRecordDto: UpdateGarnerRecordDto
   ) {
-    return this.garnerRecordService.update(applicantid, id, updateGarnerRecordDto);
+    return this.garnerRecordService.update(
+      applicantid,
+      id,
+      updateGarnerRecordDto
+    );
   }
 
   @Delete(":id")
