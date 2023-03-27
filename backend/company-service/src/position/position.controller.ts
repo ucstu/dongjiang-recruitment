@@ -18,43 +18,43 @@ import { UpdatePositionDto } from "./dto/update-position.dto";
 import { Position } from "./entities/position.entity";
 import { PositionService } from "./position.service";
 
-@Controller("companies/{companyId}/positions")
+@Controller("companys/{companyid}/position")
 export class PositionController {
   constructor(private readonly positionService: PositionService) {}
 
   @Post()
   create(
-    @Param("companyId") companyId: string,
+    @Param("companyid") companyid: string,
     @Body() createPositionDto: CreatePositionDto
   ) {
-    return this.positionService.create(companyId, createPositionDto);
+    return this.positionService.create(companyid, createPositionDto);
   }
 
   @Get()
   findAll(
-    @Param("companyId") companyId: string,
+    @Param("companyid") companyid: string,
     @QueryParam() query: Array<FindOptionsWhere<Position>>,
     @Page() page: Pagination<Position>
   ) {
-    return this.positionService.findAll(companyId, query, page);
+    return this.positionService.findAll(companyid, query, page);
   }
 
   @Get(":id")
-  findOne(@Param("companyId") companyId: string, @Param("id") id: string) {
-    return this.positionService.findOne(companyId, id);
+  findOne(@Param("companyid") companyid: string, @Param("id") id: string) {
+    return this.positionService.findOne(companyid, id);
   }
 
   @Put(":id")
   update(
-    @Param("companyId") companyId: string,
+    @Param("companyid") companyid: string,
     @Param("id") id: string,
     @Body() updatePositionDto: UpdatePositionDto
   ) {
-    return this.positionService.update(companyId, id, updatePositionDto);
+    return this.positionService.update(companyid, id, updatePositionDto);
   }
 
   @Delete(":id")
-  remove(@Param("companyId") companyId: string, @Param("id") id: string) {
-    return this.positionService.remove(companyId, id);
+  remove(@Param("companyid") companyid: string, @Param("id") id: string) {
+    return this.positionService.remove(companyid, id);
   }
 }

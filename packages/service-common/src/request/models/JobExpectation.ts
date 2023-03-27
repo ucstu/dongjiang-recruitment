@@ -23,7 +23,7 @@ export type JobExpectation = {
    */
   deletedAt: string | null;
   /**
-   * {1:全职,2:兼职,3:实习}
+   * 职位类型，eg；{1:FullTime,2:PartTime,3:Practice}
    */
   positionType: JobExpectation.positionType;
   /**
@@ -50,7 +50,7 @@ export type JobExpectation = {
 
 export namespace JobExpectation {
   /**
-   * {1:全职,2:兼职,3:实习}
+   * 职位类型，eg；{1:FullTime,2:PartTime,3:Practice}
    */
   export enum positionType {
     FullTime = 1,

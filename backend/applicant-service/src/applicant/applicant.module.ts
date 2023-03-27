@@ -1,8 +1,11 @@
+import { TypeOrmModule } from "@dongjiang-recruitment/nest-common/dist/typeorm";
 import { Module } from "@nestjs/common";
-import { ApplicantService } from "./applicant.service";
+import { Applicant } from "./entities/applicant.entity";
 import { ApplicantController } from "./applicant.controller";
+import { ApplicantService } from "./applicant.service";
 
 @Module({
+  imports: [TypeOrmModule.forFeature([Applicant])],
   controllers: [ApplicantController],
   providers: [ApplicantService],
 })

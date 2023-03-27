@@ -81,7 +81,7 @@
           {
             "name": "id",
             "in": "path",
-            "description": "广告商ID，eg：BC810A11-0D52-81A0-bFEA-782148fb1e2F",
+            "description": "广告商ID",
             "required": true,
             "example": "BC810A11-0D52-81A0-bFEA-782148fb1e2F",
             "schema": {
@@ -194,7 +194,7 @@
           {
             "name": "id",
             "in": "path",
-            "description": "广告商ID，eg：BC810A11-0D52-81A0-bFEA-782148fb1e2F",
+            "description": "广告商ID",
             "required": true,
             "example": "BC810A11-0D52-81A0-bFEA-782148fb1e2F",
             "schema": {
@@ -288,7 +288,7 @@
           {
             "name": "id",
             "in": "path",
-            "description": "广告商ID，eg：BC810A11-0D52-81A0-bFEA-782148fb1e2F",
+            "description": "广告商ID",
             "required": true,
             "example": "BC810A11-0D52-81A0-bFEA-782148fb1e2F",
             "schema": {
@@ -753,7 +753,7 @@
                   "workingYears": {
                     "type": "integer",
                     "title": "工作年限",
-                    "description": "{1:没有工作经验,2:在校/应届,3:3年一下,4:3-5年,5:5-10年,6:10年以上}",
+                    "description": "工作年限，eg；{1:NoExperience,2:InSchoolOrFreshGraduate,3:Under3Year,4:With3To5Year,5:With5To10Year,6:MoreThen10Year}",
                     "enum": [1, 2, 3, 4, 5, 6],
                     "x-apifox": {
                       "enumDescriptions": {
@@ -777,7 +777,7 @@
                   "education": {
                     "type": "integer",
                     "title": "学历状态",
-                    "description": "{0:未知,1:大专,2:本科,3:硕士,4:博士}",
+                    "description": "学历状态，eg；{0:Unknown,1:JuniorCollege,2:Undergraduate,3:Postgraduate,4:Doctor}",
                     "enum": [0, 1, 2, 3, 4],
                     "x-apifox": {
                       "enumDescriptions": {
@@ -809,7 +809,7 @@
                   "jobStatus": {
                     "type": "integer",
                     "title": "求职状态",
-                    "description": "{1:随时入职,2:2周内入职,3:1月内入职}",
+                    "description": "求职状态，eg；{0:Unknown,1:AnyTime,2:TwoWeeks,3:OneMoth}",
                     "enum": [0, 1, 2, 3],
                     "x-apifox": {
                       "enumDescriptions": {
@@ -837,7 +837,7 @@
                   "privacySettings": {
                     "type": "integer",
                     "title": "隐私设置",
-                    "description": "{1:实名,2:匿名}",
+                    "description": "隐私设置，eg；{1:RealName,2:Anonymous}",
                     "enum": [1, 2],
                     "x-apifox": {
                       "enumDescriptions": {
@@ -1701,7 +1701,7 @@
                   "financingStage": {
                     "type": "integer",
                     "title": "融资阶段",
-                    "description": "{1:未融资,2:天使轮,3:A轮,4:B轮,5:C轮,6:D轮及以上,7:上市公司,8:不需要融资}",
+                    "description": "融资阶段，eg；{1:NoFinanced,2:AngelWheel,3:ARound,4:BRound,5:CRound,6:DAndMoreRound,7:ListedCompany,8:NoRequired}",
                     "enum": [1, 2, 3, 4, 5, 6, 7, 8],
                     "x-apifox": {
                       "enumDescriptions": {
@@ -1729,7 +1729,7 @@
                   "scale": {
                     "type": "integer",
                     "title": "公司规模",
-                    "description": "{1:少于15人,2:15-50人,3:50-150人,4:150-500人,5:500-2000人,6:2000以上}",
+                    "description": "公司规模，eg；{1:LessThan15People,2:With15To50People,3:With50To150People,4:With150To500People,5:With500To2000People,6:MoreThen2000People}",
                     "enum": [1, 2, 3, 4, 5, 6],
                     "x-apifox": {
                       "enumDescriptions": {
@@ -3678,7 +3678,7 @@
                       }
                     },
                     "title": "投放位置",
-                    "description": "{1:Master}",
+                    "description": "投放位置，eg；{1:Master}",
                     "x-enum-varnames": ["Master"]
                   },
                   "status": {
@@ -3691,7 +3691,7 @@
                       }
                     },
                     "title": "投放状态",
-                    "description": "{1:Active,2:Expired}",
+                    "description": "投放状态，eg；{1:Active,2:Inactive}",
                     "x-enum-varnames": ["Active", "Inactive"]
                   },
                   "payed": {
@@ -3705,7 +3705,7 @@
                       }
                     },
                     "x-enum-varnames": ["Active", "Expired"],
-                    "description": "已缴费用"
+                    "description": "已缴费用，eg；{1:Active,2:Expired}"
                   },
                   "startTime": {
                     "type": "string",
@@ -4384,7 +4384,7 @@
                   "positionType": {
                     "type": "integer",
                     "title": "职位类型",
-                    "description": "{1:全职,2:兼职,3:实习}",
+                    "description": "职位类型，eg；{1:FullTime,2:PartTime,3:Practice}",
                     "enum": [1, 2, 3],
                     "x-apifox": {
                       "enumDescriptions": {
@@ -5109,7 +5109,7 @@
                   "education": {
                     "type": "integer",
                     "title": "学历层次",
-                    "description": "{1:大专,2:本科,3:硕士,4:博士}",
+                    "description": "学历层次，eg；{1:JuniorCollege,2:Undergraduate,3:Postgraduate,4:Doctor}",
                     "enum": [1, 2, 3, 4],
                     "x-apifox": {
                       "enumDescriptions": {
@@ -5877,7 +5877,7 @@
                   "positionType": {
                     "type": "integer",
                     "title": "职位类型",
-                    "description": "{1:全职,2:兼职,3:实习}",
+                    "description": "职位类型，eg；{1:FullTime,2:PartTime,3:Practice}",
                     "enum": [1, 2, 3],
                     "x-apifox": {
                       "enumDescriptions": {
@@ -7348,7 +7348,7 @@
                   "status": {
                     "type": "integer",
                     "title": "投递状态",
-                    "description": "{1:待查看,2:已查看,3:通过筛选,4:约面试,5:不合适}",
+                    "description": "投递状态，eg；{1:UnViewed,2:Viewed,3:PassFilter,4:Interview,5:Inappropriate}",
                     "enum": [1, 2, 3, 4, 5],
                     "x-apifox": {
                       "enumDescriptions": {
@@ -9603,7 +9603,7 @@
                   "workingYears": {
                     "type": "integer",
                     "title": "工作年限",
-                    "description": "{1:经验不限,2:在校/应届,3:3年及以下,4:3-5年,5:5-10年,6:10年以上}",
+                    "description": "工作年限，eg；{1:NoExperience,2:InSchoolOrFreshGraduate,3:Under3Year,4:With3To5Year,5:With5To10Year,6:MoreThen10Year}",
                     "enum": [1, 2, 3, 4, 5, 6],
                     "x-apifox": {
                       "enumDescriptions": {
@@ -9627,7 +9627,7 @@
                   "education": {
                     "type": "integer",
                     "title": "学历要求",
-                    "description": "{1:不要求,2:大专,3:本科,4:硕士,5:博士}",
+                    "description": "学历要求，eg；{0:Unlimited,1:JuniorCollege,2:Undergraduate,3:Postgraduate,4:Doctor}",
                     "enum": [0, 1, 2, 3, 4],
                     "x-apifox": {
                       "enumDescriptions": {
@@ -9692,7 +9692,7 @@
                   "workType": {
                     "type": "integer",
                     "title": "职位类型",
-                    "description": "{1:全职,2:兼职,3:实习}",
+                    "description": "职位类型，eg；{1:FullTime,2:PartTime,3:Practice}",
                     "enum": [1, 2, 3],
                     "x-apifox": {
                       "enumDescriptions": {
@@ -9724,7 +9724,7 @@
                   "weekendReleaseTime": {
                     "type": "integer",
                     "title": "周末休息时间",
-                    "description": "{1:周末双休:,2:周末单休,3:大小周}",
+                    "description": "周末休息时间，eg；{1:Weekends,2:SingleOff,3:SizeWeek}",
                     "enum": [1, 2, 3],
                     "x-apifox": {
                       "enumDescriptions": {
@@ -9751,7 +9751,7 @@
                       "situation": {
                         "type": "integer",
                         "title": "面试形式",
-                        "description": "{1:现场面试,2:视频面试,3:电话面试}",
+                        "description": "面试形式，eg；{1:OffLine,2:OnLine,3:OnCall}",
                         "enum": [1, 2, 3],
                         "x-apifox": {
                           "enumDescriptions": {
@@ -9765,7 +9765,7 @@
                       "wheel": {
                         "type": "integer",
                         "title": "面试轮数",
-                        "description": "{1:1-2轮次,2:3-4轮次,3:5-6轮次,4:暂不确定}",
+                        "description": "面试轮数，eg；{1:With1To2Round,2:With3To4Round,3:With5To6Round,4:Uncertain}",
                         "enum": [1, 2, 3, 4],
                         "x-apifox": {
                           "enumDescriptions": {
@@ -9785,7 +9785,7 @@
                       "time": {
                         "type": "integer",
                         "title": "面试时长",
-                        "description": "{1:一天内完成,2:分多次完成}",
+                        "description": "面试时长，eg；{1:OneTime,2:ManyTime}",
                         "enum": [1, 2],
                         "x-apifox": {
                           "enumDescriptions": {
@@ -9798,7 +9798,7 @@
                       "illustrate": {
                         "type": "integer",
                         "title": "面试说明",
-                        "description": "{1:可周末面试,2:包含笔试,3:可下班面试,4:包含面试作业}",
+                        "description": "面试说明，eg；{1:Weekend,2:Examination,3:GetOffWork,4:Assignment}",
                         "enum": [1, 2, 3, 4],
                         "x-apifox": {
                           "enumDescriptions": {
@@ -13424,7 +13424,7 @@
                       "Personnel",
                       "Advertiser"
                     ],
-                    "description": "账号类型"
+                    "description": "账号类型，eg；{0:Manager,1:Applicant,2:Personnel,3:Advertiser}"
                   },
                   "password": {
                     "type": "string",
@@ -13525,7 +13525,7 @@
                           "workingYears": {
                             "type": "integer",
                             "title": "工作年限",
-                            "description": "{1:没有工作经验,2:在校/应届,3:3年一下,4:3-5年,5:5-10年,6:10年以上}",
+                            "description": "工作年限，eg；{1:NoExperience,2:InSchoolOrFreshGraduate,3:Under3Year,4:With3To5Year,5:With5To10Year,6:MoreThen10Year}",
                             "enum": [1, 2, 3, 4, 5, 6],
                             "x-apifox": {
                               "enumDescriptions": {
@@ -13549,7 +13549,7 @@
                           "education": {
                             "type": "integer",
                             "title": "学历状态",
-                            "description": "{0:未知,1:大专,2:本科,3:硕士,4:博士}",
+                            "description": "学历状态，eg；{0:Unknown,1:JuniorCollege,2:Undergraduate,3:Postgraduate,4:Doctor}",
                             "enum": [0, 1, 2, 3, 4],
                             "x-apifox": {
                               "enumDescriptions": {
@@ -13581,7 +13581,7 @@
                           "jobStatus": {
                             "type": "integer",
                             "title": "求职状态",
-                            "description": "{1:随时入职,2:2周内入职,3:1月内入职}",
+                            "description": "求职状态，eg；{0:Unknown,1:AnyTime,2:TwoWeeks,3:OneMoth}",
                             "enum": [0, 1, 2, 3],
                             "x-apifox": {
                               "enumDescriptions": {
@@ -13609,7 +13609,7 @@
                           "privacySettings": {
                             "type": "integer",
                             "title": "隐私设置",
-                            "description": "{1:实名,2:匿名}",
+                            "description": "隐私设置，eg；{1:RealName,2:Anonymous}",
                             "enum": [1, 2],
                             "x-apifox": {
                               "enumDescriptions": {
@@ -13860,7 +13860,7 @@
                       "Personnel",
                       "Advertiser"
                     ],
-                    "description": "账号类型"
+                    "description": "账号类型，eg；{0:Manager,1:Applicant,2:Personnel,3:Advertiser}"
                   },
                   "userName": {
                     "type": "string",
@@ -13966,7 +13966,7 @@
                           "workingYears": {
                             "type": "integer",
                             "title": "工作年限",
-                            "description": "{1:没有工作经验,2:在校/应届,3:3年一下,4:3-5年,5:5-10年,6:10年以上}",
+                            "description": "工作年限，eg；{1:NoExperience,2:InSchoolOrFreshGraduate,3:Under3Year,4:With3To5Year,5:With5To10Year,6:MoreThen10Year}",
                             "enum": [1, 2, 3, 4, 5, 6],
                             "x-apifox": {
                               "enumDescriptions": {
@@ -13990,7 +13990,7 @@
                           "education": {
                             "type": "integer",
                             "title": "学历状态",
-                            "description": "{0:未知,1:大专,2:本科,3:硕士,4:博士}",
+                            "description": "学历状态，eg；{0:Unknown,1:JuniorCollege,2:Undergraduate,3:Postgraduate,4:Doctor}",
                             "enum": [0, 1, 2, 3, 4],
                             "x-apifox": {
                               "enumDescriptions": {
@@ -14022,7 +14022,7 @@
                           "jobStatus": {
                             "type": "integer",
                             "title": "求职状态",
-                            "description": "{1:随时入职,2:2周内入职,3:1月内入职}",
+                            "description": "求职状态，eg；{0:Unknown,1:AnyTime,2:TwoWeeks,3:OneMoth}",
                             "enum": [0, 1, 2, 3],
                             "x-apifox": {
                               "enumDescriptions": {
@@ -14050,7 +14050,7 @@
                           "privacySettings": {
                             "type": "integer",
                             "title": "隐私设置",
-                            "description": "{1:实名,2:匿名}",
+                            "description": "隐私设置，eg；{1:RealName,2:Anonymous}",
                             "enum": [1, 2],
                             "x-apifox": {
                               "enumDescriptions": {
@@ -16359,7 +16359,7 @@
           "financingStage": {
             "type": "integer",
             "title": "融资阶段",
-            "description": "{1:未融资,2:天使轮,3:A轮,4:B轮,5:C轮,6:D轮及以上,7:上市公司,8:不需要融资}",
+            "description": "融资阶段，eg；{1:NoFinanced,2:AngelWheel,3:ARound,4:BRound,5:CRound,6:DAndMoreRound,7:ListedCompany,8:NoRequired}",
             "enum": [1, 2, 3, 4, 5, 6, 7, 8],
             "x-apifox": {
               "enumDescriptions": {
@@ -16387,7 +16387,7 @@
           "scale": {
             "type": "integer",
             "title": "公司规模",
-            "description": "{1:少于15人,2:15-50人,3:50-150人,4:150-500人,5:500-2000人,6:2000以上}",
+            "description": "公司规模，eg；{1:LessThan15People,2:With15To50People,3:With50To150People,4:With150To500People,5:With500To2000People,6:MoreThen2000People}",
             "enum": [1, 2, 3, 4, 5, 6],
             "x-apifox": {
               "enumDescriptions": {
@@ -16563,7 +16563,7 @@
           "workingYears": {
             "type": "integer",
             "title": "工作年限",
-            "description": "{1:经验不限,2:在校/应届,3:3年及以下,4:3-5年,5:5-10年,6:10年以上}",
+            "description": "工作年限，eg；{1:NoExperience,2:InSchoolOrFreshGraduate,3:Under3Year,4:With3To5Year,5:With5To10Year,6:MoreThen10Year}",
             "enum": [1, 2, 3, 4, 5, 6],
             "x-apifox": {
               "enumDescriptions": {
@@ -16587,7 +16587,7 @@
           "education": {
             "type": "integer",
             "title": "学历要求",
-            "description": "{1:不要求,2:大专,3:本科,4:硕士,5:博士}",
+            "description": "学历要求，eg；{0:Unlimited,1:JuniorCollege,2:Undergraduate,3:Postgraduate,4:Doctor}",
             "enum": [0, 1, 2, 3, 4],
             "x-apifox": {
               "enumDescriptions": {
@@ -16652,7 +16652,7 @@
           "workType": {
             "type": "integer",
             "title": "职位类型",
-            "description": "{1:全职,2:兼职,3:实习}",
+            "description": "职位类型，eg；{1:FullTime,2:PartTime,3:Practice}",
             "enum": [1, 2, 3],
             "x-apifox": {
               "enumDescriptions": {
@@ -16684,7 +16684,7 @@
           "weekendReleaseTime": {
             "type": "integer",
             "title": "周末休息时间",
-            "description": "{1:周末双休:,2:周末单休,3:大小周}",
+            "description": "周末休息时间，eg；{1:Weekends,2:SingleOff,3:SizeWeek}",
             "enum": [1, 2, 3],
             "x-apifox": {
               "enumDescriptions": {
@@ -16711,7 +16711,7 @@
               "situation": {
                 "type": "integer",
                 "title": "面试形式",
-                "description": "{1:现场面试,2:视频面试,3:电话面试}",
+                "description": "面试形式，eg；{1:OffLine,2:OnLine,3:OnCall}",
                 "enum": [1, 2, 3],
                 "x-apifox": {
                   "enumDescriptions": {
@@ -16725,7 +16725,7 @@
               "wheel": {
                 "type": "integer",
                 "title": "面试轮数",
-                "description": "{1:1-2轮次,2:3-4轮次,3:5-6轮次,4:暂不确定}",
+                "description": "面试轮数，eg；{1:With1To2Round,2:With3To4Round,3:With5To6Round,4:Uncertain}",
                 "enum": [1, 2, 3, 4],
                 "x-apifox": {
                   "enumDescriptions": {
@@ -16745,7 +16745,7 @@
               "time": {
                 "type": "integer",
                 "title": "面试时长",
-                "description": "{1:一天内完成,2:分多次完成}",
+                "description": "面试时长，eg；{1:OneTime,2:ManyTime}",
                 "enum": [1, 2],
                 "x-apifox": {
                   "enumDescriptions": {
@@ -16758,7 +16758,7 @@
               "illustrate": {
                 "type": "integer",
                 "title": "面试说明",
-                "description": "{1:可周末面试,2:包含笔试,3:可下班面试,4:包含面试作业}",
+                "description": "面试说明，eg；{1:Weekend,2:Examination,3:GetOffWork,4:Assignment}",
                 "enum": [1, 2, 3, 4],
                 "x-apifox": {
                   "enumDescriptions": {
@@ -16903,7 +16903,7 @@
           "messageType": {
             "type": "integer",
             "title": "消息类型",
-            "description": "{1:文字,2:图片,3:语音,4:文件}",
+            "description": "消息类型，eg；{1:Text,2:Picture,3:Voice,4:File}",
             "enum": [1, 2, 3, 4],
             "x-apifox": {
               "enumDescriptions": {
@@ -17527,7 +17527,7 @@
           "status": {
             "type": "integer",
             "title": "投递状态",
-            "description": "{1:待查看,2:已查看,3:通过筛选,4:约面试,5:不合适}",
+            "description": "投递状态，eg；{1:UnViewed,2:Viewed,3:PassFilter,4:Interview,5:Inappropriate}",
             "enum": [1, 2, 3, 4, 5],
             "x-apifox": {
               "enumDescriptions": {
@@ -17761,7 +17761,7 @@
           "education": {
             "type": "integer",
             "title": "学历层次",
-            "description": "{1:大专,2:本科,3:硕士,4:博士}",
+            "description": "学历层次，eg；{1:JuniorCollege,2:Undergraduate,3:Postgraduate,4:Doctor}",
             "enum": [1, 2, 3, 4],
             "x-apifox": {
               "enumDescriptions": {
@@ -17871,7 +17871,7 @@
           "positionType": {
             "type": "integer",
             "title": "职位类型",
-            "description": "{1:全职,2:兼职,3:实习}",
+            "description": "职位类型，eg；{1:FullTime,2:PartTime,3:Practice}",
             "enum": [1, 2, 3],
             "x-apifox": {
               "enumDescriptions": {
@@ -17957,7 +17957,7 @@
           "positionType": {
             "type": "integer",
             "title": "职位类型",
-            "description": "{1:全职,2:兼职,3:实习}",
+            "description": "职位类型，eg；{1:FullTime,2:PartTime,3:Practice}",
             "enum": [1, 2, 3],
             "x-apifox": {
               "enumDescriptions": {
@@ -18093,7 +18093,7 @@
           "workingYears": {
             "type": "integer",
             "title": "工作年限",
-            "description": "{1:没有工作经验,2:在校/应届,3:3年一下,4:3-5年,5:5-10年,6:10年以上}",
+            "description": "工作年限，eg；{1:NoExperience,2:InSchoolOrFreshGraduate,3:Under3Year,4:With3To5Year,5:With5To10Year,6:MoreThen10Year}",
             "enum": [1, 2, 3, 4, 5, 6],
             "x-apifox": {
               "enumDescriptions": {
@@ -18117,7 +18117,7 @@
           "education": {
             "type": "integer",
             "title": "学历状态",
-            "description": "{0:未知,1:大专,2:本科,3:硕士,4:博士}",
+            "description": "学历状态，eg；{0:Unknown,1:JuniorCollege,2:Undergraduate,3:Postgraduate,4:Doctor}",
             "enum": [0, 1, 2, 3, 4],
             "x-apifox": {
               "enumDescriptions": {
@@ -18149,7 +18149,7 @@
           "jobStatus": {
             "type": "integer",
             "title": "求职状态",
-            "description": "{1:随时入职,2:2周内入职,3:1月内入职}",
+            "description": "求职状态，eg；{0:Unknown,1:AnyTime,2:TwoWeeks,3:OneMoth}",
             "enum": [0, 1, 2, 3],
             "x-apifox": {
               "enumDescriptions": {
@@ -18172,7 +18172,7 @@
           "privacySettings": {
             "type": "integer",
             "title": "隐私设置",
-            "description": "{1:实名,2:匿名}",
+            "description": "隐私设置，eg；{1:RealName,2:Anonymous}",
             "enum": [1, 2],
             "x-apifox": {
               "enumDescriptions": {
@@ -18339,7 +18339,7 @@
               }
             },
             "title": "投放位置",
-            "description": "{1:Master}",
+            "description": "投放位置，eg；{1:Master}",
             "x-enum-varnames": ["Master"]
           },
           "status": {
@@ -18352,7 +18352,7 @@
               }
             },
             "title": "投放状态",
-            "description": "{1:Active,2:Expired}",
+            "description": "投放状态，eg；{1:Active,2:Inactive}",
             "x-enum-varnames": ["Active", "Inactive"]
           },
           "payed": {
@@ -18366,7 +18366,7 @@
               }
             },
             "x-enum-varnames": ["Active", "Expired"],
-            "description": "已缴费用"
+            "description": "已缴费用，eg；{1:Active,2:Expired}"
           },
           "startTime": {
             "type": "string",

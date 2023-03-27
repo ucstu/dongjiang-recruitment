@@ -1,7 +1,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { Query } from "../../interfaces";
+import type { Query, Sort } from "../../interfaces";
 import type { Account } from "../models/Account";
 
 import type { CancelablePromise } from "../core/CancelablePromise";
@@ -20,7 +20,7 @@ export class AuthenticationAccountService {
   }: {
     requestBody?: {
       /**
-       * 账号类型
+       * 账号类型，eg；{0:Manager,1:Applicant,2:Personnel,3:Advertiser}
        */
       accountType: 0 | 1 | 2 | 3;
       /**
@@ -83,11 +83,11 @@ export class AuthenticationAccountService {
              */
             email: string;
             /**
-             * {1:没有工作经验,2:在校/应届,3:3年一下,4:3-5年,5:5-10年,6:10年以上}
+             * 工作年限，eg；{1:NoExperience,2:InSchoolOrFreshGraduate,3:Under3Year,4:With3To5Year,5:With5To10Year,6:MoreThen10Year}
              */
             workingYears: 1 | 2 | 3 | 4 | 5 | 6;
             /**
-             * {0:未知,1:大专,2:本科,3:硕士,4:博士}
+             * 学历状态，eg；{0:Unknown,1:JuniorCollege,2:Undergraduate,3:Postgraduate,4:Doctor}
              */
             education: 0 | 1 | 2 | 3 | 4;
             /**
@@ -99,7 +99,7 @@ export class AuthenticationAccountService {
              */
             socialHomepage: string;
             /**
-             * {1:随时入职,2:2周内入职,3:1月内入职}
+             * 求职状态，eg；{0:Unknown,1:AnyTime,2:TwoWeeks,3:OneMoth}
              */
             jobStatus: 0 | 1 | 2 | 3;
             /**
@@ -107,7 +107,7 @@ export class AuthenticationAccountService {
              */
             pictureWorks: Array<string>;
             /**
-             * {1:实名,2:匿名}
+             * 隐私设置，eg；{1:RealName,2:Anonymous}
              */
             privacySettings: 1 | 2;
           }
@@ -134,24 +134,7 @@ export class AuthenticationAccountService {
             acceptEmail: string;
           };
     };
-  }): CancelablePromise<{
-    /**
-     * 响应时间
-     */
-    timestamp: string;
-    /**
-     * 响应
-     */
-    message: string;
-    /**
-     * 响应编码
-     */
-    status: number;
-    /**
-     * 账号
-     */
-    body: Account;
-  }> {
+  }): CancelablePromise<Account> {
     return this.httpRequest.request({
       method: "POST",
       url: "/authentication/accounts",
@@ -186,33 +169,16 @@ export class AuthenticationAccountService {
     /**
      * 排序方式
      */
-    sort?: Array<`${keyof Account},${"asc" | "desc"}`>;
+    sort?: Sort<Account>;
   }): CancelablePromise<{
     /**
-     * 响应时间
+     * 账号总数
      */
-    timestamp: string;
+    total: number;
     /**
-     * 响应
+     * 当页账号
      */
-    message: string;
-    /**
-     * 响应编码
-     */
-    status: number;
-    /**
-     * 分页结果
-     */
-    body: {
-      /**
-       * 账号总数
-       */
-      total: number;
-      /**
-       * 当页账号
-       */
-      items: Array<Account>;
-    };
+    items: Array<Account>;
   }> {
     return this.httpRequest.request({
       method: "GET",
@@ -238,24 +204,7 @@ export class AuthenticationAccountService {
      * 账号ID
      */
     id: string;
-  }): CancelablePromise<{
-    /**
-     * 响应时间
-     */
-    timestamp: string;
-    /**
-     * 响应
-     */
-    message: string;
-    /**
-     * 响应编码
-     */
-    status: number;
-    /**
-     * 账户ID
-     */
-    body: string;
-  }> {
+  }): CancelablePromise<string> {
     return this.httpRequest.request({
       method: "DELETE",
       url: "/authentication/accounts/{id}",
@@ -333,24 +282,7 @@ export class AuthenticationAccountService {
        */
       password: string;
     };
-  }): CancelablePromise<{
-    /**
-     * 响应时间
-     */
-    timestamp: string;
-    /**
-     * 响应
-     */
-    message: string;
-    /**
-     * 响应编码
-     */
-    status: number;
-    /**
-     * 账号
-     */
-    body: Account;
-  }> {
+  }): CancelablePromise<Account> {
     return this.httpRequest.request({
       method: "PUT",
       url: "/authentication/accounts/{id}",
@@ -374,24 +306,7 @@ export class AuthenticationAccountService {
      * 账号ID
      */
     id: string;
-  }): CancelablePromise<{
-    /**
-     * 响应时间
-     */
-    timestamp: string;
-    /**
-     * 响应
-     */
-    message: string;
-    /**
-     * 响应编码
-     */
-    status: number;
-    /**
-     * 账号
-     */
-    body: Account;
-  }> {
+  }): CancelablePromise<Account> {
     return this.httpRequest.request({
       method: "GET",
       url: "/authentication/accounts/{id}",

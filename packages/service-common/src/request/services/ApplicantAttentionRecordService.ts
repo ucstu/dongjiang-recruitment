@@ -1,7 +1,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { Query } from "../../interfaces";
+import type { Query, Sort } from "../../interfaces";
 import type { AttentionRecord } from "../models/AttentionRecord";
 
 import type { CancelablePromise } from "../core/CancelablePromise";
@@ -33,21 +33,7 @@ export class ApplicantAttentionRecordService {
        */
       companyId: string;
     };
-  }): CancelablePromise<{
-    /**
-     * 响应时间
-     */
-    timestamp: string;
-    /**
-     * 响应
-     */
-    message: string;
-    /**
-     * 响应编码
-     */
-    status: number;
-    body: AttentionRecord;
-  }> {
+  }): CancelablePromise<AttentionRecord> {
     return this.httpRequest.request({
       method: "POST",
       url: "/applicant/{applicantId}/attentionRecords",
@@ -90,33 +76,16 @@ export class ApplicantAttentionRecordService {
     /**
      * 排序方式
      */
-    sort?: Array<`${keyof AttentionRecord},${"asc" | "desc"}`>;
+    sort?: Sort<AttentionRecord>;
   }): CancelablePromise<{
     /**
-     * 响应时间
+     * 关注记录总数
      */
-    timestamp: string;
+    total: number;
     /**
-     * 响应
+     * 当页关注记录
      */
-    message: string;
-    /**
-     * 响应编码
-     */
-    status: number;
-    /**
-     * 分页结果
-     */
-    body: {
-      /**
-       * 关注记录总数
-       */
-      total: number;
-      /**
-       * 当页关注记录
-       */
-      items: Array<AttentionRecord>;
-    };
+    items: Array<AttentionRecord>;
   }> {
     return this.httpRequest.request({
       method: "GET",
@@ -150,24 +119,7 @@ export class ApplicantAttentionRecordService {
      * 关注记录ID
      */
     id: string;
-  }): CancelablePromise<{
-    /**
-     * 响应时间
-     */
-    timestamp: string;
-    /**
-     * 响应
-     */
-    message: string;
-    /**
-     * 响应编码
-     */
-    status: number;
-    /**
-     * 关注记录ID
-     */
-    body: string;
-  }> {
+  }): CancelablePromise<string> {
     return this.httpRequest.request({
       method: "DELETE",
       url: "/applicant/{applicantId}/attentionRecords/{id}",
@@ -195,21 +147,7 @@ export class ApplicantAttentionRecordService {
      * 关注记录ID
      */
     id: string;
-  }): CancelablePromise<{
-    /**
-     * 响应时间
-     */
-    timestamp: string;
-    /**
-     * 响应
-     */
-    message: string;
-    /**
-     * 响应编码
-     */
-    status: number;
-    body: AttentionRecord;
-  }> {
+  }): CancelablePromise<AttentionRecord> {
     return this.httpRequest.request({
       method: "GET",
       url: "/applicant/{applicantId}/attentionRecords/{id}",

@@ -1,7 +1,6 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { Query } from "../../interfaces";
 import type { Areas } from "../models/Areas";
 import type { Cities } from "../models/Cities";
 import type { DirectionTags } from "../models/DirectionTags";
@@ -26,24 +25,7 @@ export class CommonService {
      * 城市名称
      */
     cityName: string;
-  }): CancelablePromise<{
-    /**
-     * 响应时间
-     */
-    timestamp: string;
-    /**
-     * 响应
-     */
-    message: string;
-    /**
-     * 响应编码
-     */
-    status: number;
-    /**
-     * 地区
-     */
-    body: Areas;
-  }> {
+  }): CancelablePromise<Areas> {
     return this.httpRequest.request({
       method: "GET",
       url: "/common/areas",
@@ -65,24 +47,7 @@ export class CommonService {
      * 职位名称
      */
     positionName: string;
-  }): CancelablePromise<{
-    /**
-     * 响应时间
-     */
-    timestamp: string;
-    /**
-     * 响应
-     */
-    message: string;
-    /**
-     * 响应编码
-     */
-    status: number;
-    /**
-     * 细分标签
-     */
-    body: DirectionTags;
-  }> {
+  }): CancelablePromise<DirectionTags> {
     return this.httpRequest.request({
       method: "GET",
       url: "/common/directionTags",
@@ -97,24 +62,7 @@ export class CommonService {
    * @returns any 成功
    * @throws ApiError
    */
-  public getFilterCriteria(): CancelablePromise<{
-    /**
-     * 响应时间
-     */
-    timestamp: string;
-    /**
-     * 响应
-     */
-    message: string;
-    /**
-     * 响应编码
-     */
-    status: number;
-    /**
-     * 筛选条件
-     */
-    body: FilterCriteria;
-  }> {
+  public getFilterCriteria(): CancelablePromise<FilterCriteria> {
     return this.httpRequest.request({
       method: "GET",
       url: "/common/filterCriteria",
@@ -126,24 +74,7 @@ export class CommonService {
    * @returns any 成功
    * @throws ApiError
    */
-  public getPositionTypes(): CancelablePromise<{
-    /**
-     * 响应时间
-     */
-    timestamp: string;
-    /**
-     * 响应
-     */
-    message: string;
-    /**
-     * 响应编码
-     */
-    status: number;
-    /**
-     * 职位类型
-     */
-    body: PositionTypes;
-  }> {
+  public getPositionTypes(): CancelablePromise<PositionTypes> {
     return this.httpRequest.request({
       method: "GET",
       url: "/common/positionTypes",
@@ -155,24 +86,7 @@ export class CommonService {
    * @returns any 成功
    * @throws ApiError
    */
-  public getCities(): CancelablePromise<{
-    /**
-     * 响应时间
-     */
-    timestamp: string;
-    /**
-     * 响应
-     */
-    message: string;
-    /**
-     * 响应编码
-     */
-    status: number;
-    /**
-     * 城市
-     */
-    body: Cities;
-  }> {
+  public getCities(): CancelablePromise<Cities> {
     return this.httpRequest.request({
       method: "GET",
       url: "/common/cities",
@@ -184,24 +98,7 @@ export class CommonService {
    * @returns any 成功
    * @throws ApiError
    */
-  public getNewVersion(): CancelablePromise<{
-    /**
-     * 响应时间
-     */
-    timestamp: string;
-    /**
-     * 响应
-     */
-    message: string;
-    /**
-     * 响应编码
-     */
-    status: number;
-    /**
-     * 新版本号
-     */
-    body: number;
-  }> {
+  public getNewVersion(): CancelablePromise<number> {
     return this.httpRequest.request({
       method: "GET",
       url: "/common/newVersion",
@@ -220,24 +117,7 @@ export class CommonService {
      * 电子邮箱
      */
     email: string;
-  }): CancelablePromise<{
-    /**
-     * 响应时间
-     */
-    timestamp: string;
-    /**
-     * 响应
-     */
-    message: string;
-    /**
-     * 响应编码
-     */
-    status: number;
-    /**
-     * 发送状态
-     */
-    body: string;
-  }> {
+  }): CancelablePromise<string> {
     return this.httpRequest.request({
       method: "GET",
       url: "/common/verificationCode",
@@ -261,24 +141,7 @@ export class CommonService {
        */
       file: Blob;
     };
-  }): CancelablePromise<{
-    /**
-     * 响应时间
-     */
-    timestamp: string;
-    /**
-     * 响应
-     */
-    message: string;
-    /**
-     * 响应编码
-     */
-    status: number;
-    /**
-     * 文件地址
-     */
-    body: string;
-  }> {
+  }): CancelablePromise<string> {
     return this.httpRequest.request({
       method: "POST",
       url: "/common/files",
@@ -301,24 +164,7 @@ export class CommonService {
        */
       avatar: Blob;
     };
-  }): CancelablePromise<{
-    /**
-     * 响应时间
-     */
-    timestamp: string;
-    /**
-     * 响应
-     */
-    message: string;
-    /**
-     * 响应编码
-     */
-    status: number;
-    /**
-     * 头像地址
-     */
-    body: string;
-  }> {
+  }): CancelablePromise<string> {
     return this.httpRequest.request({
       method: "POST",
       url: "/common/avatars",

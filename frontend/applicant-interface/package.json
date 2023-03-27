@@ -53,8 +53,10 @@
     "@dongjiang-recruitment/service-common": "workspace:^1.0.0",
     "normalize.css": "^8.0.1",
     "pinia": "^2.0.30",
+    "pinia-plugin-persist-uni": "^1.2.0",
     "vue": "^3.2.47",
-    "vue-i18n": "^9.2.2"
+    "vue-i18n": "^9.2.2",
+    "z-paging": "^2.5.7"
   },
   "devDependencies": {
     "@dcloudio/types": "^3.2.11",
@@ -63,6 +65,7 @@
     "@dongjiang-recruitment/typescript-config": "workspace:^1.0.0",
     "@dongjiang-recruitment/vite-config": "workspace:^1.0.0",
     "@types/node": "^18.13.0",
+    "@uni-helper/uni-app-types": "^0.5.1",
     "vite": "^4.0.3"
   },
   "author": "ucstu",

@@ -1,7 +1,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { Query } from "../../interfaces";
+import type { Query, Sort } from "../../interfaces";
 import type { DeliveryRecord } from "../models/DeliveryRecord";
 
 import type { CancelablePromise } from "../core/CancelablePromise";
@@ -29,7 +29,7 @@ export class ApplicantDeliveryRecordService {
        */
       applicantId: string;
       /**
-       * {1:待查看,2:已查看,3:通过筛选,4:约面试,5:不合适}
+       * 投递状态，eg；{1:UnViewed,2:Viewed,3:PassFilter,4:Interview,5:Inappropriate}
        */
       status: 1 | 2 | 3 | 4 | 5;
       /**
@@ -45,21 +45,7 @@ export class ApplicantDeliveryRecordService {
        */
       positionId: string;
     };
-  }): CancelablePromise<{
-    /**
-     * 响应时间
-     */
-    timestamp: string;
-    /**
-     * 响应
-     */
-    message: string;
-    /**
-     * 响应编码
-     */
-    status: number;
-    body: DeliveryRecord;
-  }> {
+  }): CancelablePromise<DeliveryRecord> {
     return this.httpRequest.request({
       method: "POST",
       url: "/applicant/{applicantId}/deliveryRecords",
@@ -102,33 +88,16 @@ export class ApplicantDeliveryRecordService {
     /**
      * 排序方式
      */
-    sort?: Array<`${keyof DeliveryRecord},${"asc" | "desc"}`>;
+    sort?: Sort<DeliveryRecord>;
   }): CancelablePromise<{
     /**
-     * 响应时间
+     * 投递记录总数
      */
-    timestamp: string;
+    total: number;
     /**
-     * 响应
+     * 当页投递记录
      */
-    message: string;
-    /**
-     * 响应编码
-     */
-    status: number;
-    /**
-     * 分页结果
-     */
-    body: {
-      /**
-       * 投递记录总数
-       */
-      total: number;
-      /**
-       * 当页投递记录
-       */
-      items: Array<DeliveryRecord>;
-    };
+    items: Array<DeliveryRecord>;
   }> {
     return this.httpRequest.request({
       method: "GET",
@@ -162,24 +131,7 @@ export class ApplicantDeliveryRecordService {
      * 投递记录ID
      */
     id: string;
-  }): CancelablePromise<{
-    /**
-     * 响应时间
-     */
-    timestamp: string;
-    /**
-     * 响应
-     */
-    message: string;
-    /**
-     * 响应编码
-     */
-    status: number;
-    /**
-     * 投递记录ID
-     */
-    body: string;
-  }> {
+  }): CancelablePromise<string> {
     return this.httpRequest.request({
       method: "DELETE",
       url: "/applicant/{applicantId}/deliveryRecords/{id}",
@@ -207,21 +159,7 @@ export class ApplicantDeliveryRecordService {
      * 投递记录ID
      */
     id: string;
-  }): CancelablePromise<{
-    /**
-     * 响应时间
-     */
-    timestamp: string;
-    /**
-     * 响应
-     */
-    message: string;
-    /**
-     * 响应编码
-     */
-    status: number;
-    body: DeliveryRecord;
-  }> {
+  }): CancelablePromise<DeliveryRecord> {
     return this.httpRequest.request({
       method: "GET",
       url: "/applicant/{applicantId}/deliveryRecords/{id}",

@@ -18,7 +18,7 @@ import { UpdatePersonnelDto } from "./dto/update-personnel.dto";
 import { Personnel } from "./entities/personnel.entity";
 import { PersonnelService } from "./personnel.service";
 
-@Controller("personnel")
+@Controller("personnels")
 export class PersonnelController {
   constructor(private readonly personnelService: PersonnelService) {}
 
@@ -41,10 +41,7 @@ export class PersonnelController {
   }
 
   @Put(":id")
-  update(
-    @Param("id") id: string,
-    @Body() updatePersonnelDto: UpdatePersonnelDto
-  ) {
+  update(@Param("id") id: string, @Body() updatePersonnelDto: UpdatePersonnelDto) {
     return this.personnelService.update(id, updatePersonnelDto);
   }
 

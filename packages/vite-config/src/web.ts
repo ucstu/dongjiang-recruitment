@@ -17,7 +17,7 @@ export function webConfig(options?: WebOptions): UserConfigExport {
   return mergeConfig(
     baseConfig({
       autoImport: options?.autoImport,
-      checker: options?.checker,
+      // checker: options?.checker,
       visualizer: options?.visualizer,
       components: options?.components,
       tailwindcss: options?.tailwindcss,

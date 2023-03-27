@@ -1,17 +1,24 @@
 import {
-  Controller,
-  Get,
-  Post,
+  Page,
+  Pagination,
+  QueryParam,
+} from "@dongjiang-recruitment/nest-common/dist/decorator";
+import { FindOptionsWhere } from "@dongjiang-recruitment/nest-common/dist/typeorm";
+import {
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
+  Get,
+  Param,
+  Post,
+  Put,
 } from "@nestjs/common";
-import { ApplicantService } from "./applicant.service";
 import { CreateApplicantDto } from "./dto/create-applicant.dto";
 import { UpdateApplicantDto } from "./dto/update-applicant.dto";
+import { Applicant } from "./entities/applicant.entity";
+import { ApplicantService } from "./applicant.service";
 
-@Controller("applicant")
+@Controller("applicants")
 export class ApplicantController {
   constructor(private readonly applicantService: ApplicantService) {}
 
@@ -21,25 +28,25 @@ export class ApplicantController {
   }
 
   @Get()
-  findAll() {
-    return this.applicantService.findAll();
+  findAll(
+    @QueryParam() query: Array<FindOptionsWhere<Applicant>>,
+    @Page() page: Pagination<Applicant>
+  ) {
+    return this.applicantService.findAll(query, page);
   }
 
   @Get(":id")
   findOne(@Param("id") id: string) {
-    return this.applicantService.findOne(+id);
+    return this.applicantService.findOne(id);
   }
 
-  @Patch(":id")
-  update(
-    @Param("id") id: string,
-    @Body() updateApplicantDto: UpdateApplicantDto
-  ) {
-    return this.applicantService.update(+id, updateApplicantDto);
+  @Put(":id")
+  update(@Param("id") id: string, @Body() updateApplicantDto: UpdateApplicantDto) {
+    return this.applicantService.update(id, updateApplicantDto);
   }
 
   @Delete(":id")
   remove(@Param("id") id: string) {
-    return this.applicantService.remove(+id);
+    return this.applicantService.remove(id);
   }
 }

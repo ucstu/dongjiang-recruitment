@@ -13,6 +13,10 @@
       "@/*": ["./src/*"]
     }
   },
+  "vueCompilerOptions": {
+    "experimentalRuntimeMode": "runtime-uni-app",
+    "nativeTags": ["block", "component", "template", "slot"]
+  },
   "references": [
     {
       "path": "./tsconfig.config.json"

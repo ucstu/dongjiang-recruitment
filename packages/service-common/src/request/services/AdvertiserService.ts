@@ -1,7 +1,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { Query } from "../../interfaces";
+import type { Query, Sort } from "../../interfaces";
 import type { Advertiser } from "../models/Advertiser";
 
 import type { CancelablePromise } from "../core/CancelablePromise";
@@ -20,25 +20,11 @@ export class AdvertiserService {
     requestBody,
   }: {
     /**
-     * 广告商ID，eg：BC810A11-0D52-81A0-bFEA-782148fb1e2F
+     * 广告商ID
      */
     id: string;
     requestBody?: Advertiser;
-  }): CancelablePromise<{
-    /**
-     * 响应时间
-     */
-    timestamp: string;
-    /**
-     * 响应
-     */
-    message: string;
-    /**
-     * 响应编码
-     */
-    status: number;
-    body: Advertiser;
-  }> {
+  }): CancelablePromise<Advertiser> {
     return this.httpRequest.request({
       method: "PUT",
       url: "/advertisers/{id}",
@@ -59,24 +45,10 @@ export class AdvertiserService {
     id,
   }: {
     /**
-     * 广告商ID，eg：BC810A11-0D52-81A0-bFEA-782148fb1e2F
+     * 广告商ID
      */
     id: string;
-  }): CancelablePromise<{
-    /**
-     * 响应时间
-     */
-    timestamp: string;
-    /**
-     * 响应
-     */
-    message: string;
-    /**
-     * 响应编码
-     */
-    status: number;
-    body: Advertiser;
-  }> {
+  }): CancelablePromise<Advertiser> {
     return this.httpRequest.request({
       method: "GET",
       url: "/advertisers/{id}",
@@ -95,27 +67,10 @@ export class AdvertiserService {
     id,
   }: {
     /**
-     * 广告商ID，eg：BC810A11-0D52-81A0-bFEA-782148fb1e2F
-     */
-    id: string;
-  }): CancelablePromise<{
-    /**
-     * 响应时间
-     */
-    timestamp: string;
-    /**
-     * 响应
-     */
-    message: string;
-    /**
-     * 响应编码
-     */
-    status: number;
-    /**
      * 广告商ID
      */
-    body: string;
-  }> {
+    id: string;
+  }): CancelablePromise<string> {
     return this.httpRequest.request({
       method: "DELETE",
       url: "/advertisers/{id}",
@@ -151,33 +106,16 @@ export class AdvertiserService {
     /**
      * 排序方式
      */
-    sort?: Array<`${keyof Advertiser},${"asc" | "desc"}`>;
+    sort?: Sort<Advertiser>;
   }): CancelablePromise<{
     /**
-     * 响应时间
+     * 广告商总数
      */
-    timestamp: string;
+    total: number;
     /**
-     * 响应
+     * 当页广告商
      */
-    message: string;
-    /**
-     * 响应编码
-     */
-    status: number;
-    /**
-     * 分页结果
-     */
-    body: {
-      /**
-       * 广告商总数
-       */
-      total: number;
-      /**
-       * 当页广告商
-       */
-      items: Array<Advertiser>;
-    };
+    items: Array<Advertiser>;
   }> {
     return this.httpRequest.request({
       method: "GET",
@@ -213,21 +151,7 @@ export class AdvertiserService {
        */
       logoUrl: string;
     };
-  }): CancelablePromise<{
-    /**
-     * 响应时间
-     */
-    timestamp: string;
-    /**
-     * 响应
-     */
-    message: string;
-    /**
-     * 响应编码
-     */
-    status: number;
-    body: Advertiser;
-  }> {
+  }): CancelablePromise<Advertiser> {
     return this.httpRequest.request({
       method: "POST",
       url: "/advertisers",

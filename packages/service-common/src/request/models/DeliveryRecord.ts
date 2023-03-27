@@ -27,7 +27,7 @@ export type DeliveryRecord = {
    */
   applicantId: string;
   /**
-   * {1:待查看,2:已查看,3:通过筛选,4:约面试,5:不合适}
+   * 投递状态，eg；{1:UnViewed,2:Viewed,3:PassFilter,4:Interview,5:Inappropriate}
    */
   status: DeliveryRecord.status;
   /**
@@ -46,7 +46,7 @@ export type DeliveryRecord = {
 
 export namespace DeliveryRecord {
   /**
-   * {1:待查看,2:已查看,3:通过筛选,4:约面试,5:不合适}
+   * 投递状态，eg；{1:UnViewed,2:Viewed,3:PassFilter,4:Interview,5:Inappropriate}
    */
   export enum status {
     UnViewed = 1,

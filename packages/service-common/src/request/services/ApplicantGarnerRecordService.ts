@@ -1,7 +1,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { Query } from "../../interfaces";
+import type { Query, Sort } from "../../interfaces";
 import type { GarnerRecord } from "../models/GarnerRecord";
 
 import type { CancelablePromise } from "../core/CancelablePromise";
@@ -37,21 +37,7 @@ export class ApplicantGarnerRecordService {
        */
       positionId: string;
     };
-  }): CancelablePromise<{
-    /**
-     * 响应时间
-     */
-    timestamp: string;
-    /**
-     * 响应
-     */
-    message: string;
-    /**
-     * 响应编码
-     */
-    status: number;
-    body: GarnerRecord;
-  }> {
+  }): CancelablePromise<GarnerRecord> {
     return this.httpRequest.request({
       method: "POST",
       url: "/applicant/{applicantId}/garnerRecords",
@@ -94,33 +80,16 @@ export class ApplicantGarnerRecordService {
     /**
      * 排序方式
      */
-    sort?: Array<`${keyof GarnerRecord},${"asc" | "desc"}`>;
+    sort?: Sort<GarnerRecord>;
   }): CancelablePromise<{
     /**
-     * 响应时间
+     * 收藏记录总数
      */
-    timestamp: string;
+    total: number;
     /**
-     * 响应
+     * 当页收藏记录
      */
-    message: string;
-    /**
-     * 响应编码
-     */
-    status: number;
-    /**
-     * 分页结果
-     */
-    body: {
-      /**
-       * 收藏记录总数
-       */
-      total: number;
-      /**
-       * 当页收藏记录
-       */
-      items: Array<GarnerRecord>;
-    };
+    items: Array<GarnerRecord>;
   }> {
     return this.httpRequest.request({
       method: "GET",
@@ -154,24 +123,7 @@ export class ApplicantGarnerRecordService {
      * 收藏记录ID
      */
     id: string;
-  }): CancelablePromise<{
-    /**
-     * 响应时间
-     */
-    timestamp: string;
-    /**
-     * 响应
-     */
-    message: string;
-    /**
-     * 响应编码
-     */
-    status: number;
-    /**
-     * 收藏记录ID
-     */
-    body: string;
-  }> {
+  }): CancelablePromise<string> {
     return this.httpRequest.request({
       method: "DELETE",
       url: "/applicant/{applicantId}/garnerRecords/{id}",
@@ -199,21 +151,7 @@ export class ApplicantGarnerRecordService {
      * 收藏记录ID
      */
     id: string;
-  }): CancelablePromise<{
-    /**
-     * 响应时间
-     */
-    timestamp: string;
-    /**
-     * 响应
-     */
-    message: string;
-    /**
-     * 响应编码
-     */
-    status: number;
-    body: GarnerRecord;
-  }> {
+  }): CancelablePromise<GarnerRecord> {
     return this.httpRequest.request({
       method: "GET",
       url: "/applicant/{applicantId}/garnerRecords/{id}",

@@ -1,4 +1,3 @@
-import { Public } from "@dongjiang-recruitment/nest-common/dist/auth";
 import {
   Page,
   Pagination,
@@ -19,8 +18,7 @@ import { CreateCompanyDto } from "./dto/create-company.dto";
 import { UpdateCompanyDto } from "./dto/update-company.dto";
 import { Company } from "./entities/company.entity";
 
-@Public()
-@Controller("companies")
+@Controller("companys")
 export class CompanyController {
   constructor(private readonly companyService: CompanyService) {}
 

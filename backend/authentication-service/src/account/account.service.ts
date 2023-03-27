@@ -1,19 +1,19 @@
 import { Pagination } from "@dongjiang-recruitment/nest-common/dist/decorator";
 import {
-  Advertiser,
-  Applicant,
-  Personnel,
-  ServiceClient,
+Advertiser,
+Applicant,
+Personnel,
+ServiceClient
 } from "@dongjiang-recruitment/nest-common/dist/http";
 import {
-  FindOptionsWhere,
-  InjectRepository,
-  Repository,
+FindOptionsWhere,
+InjectRepository,
+Repository
 } from "@dongjiang-recruitment/nest-common/dist/typeorm";
 import {
-  BadRequestException,
-  Injectable,
-  NotFoundException,
+BadRequestException,
+Injectable,
+NotFoundException
 } from "@nestjs/common";
 import { BcryptService } from "src/bcrypt.module";
 import { AccountType, CreateAccountDto } from "./dto/create-account.dto";
@@ -72,21 +72,21 @@ export class AccountService {
           await this.serviceClient.applicant.addApplicant({
             requestBody: detail as Applicant,
           })
-        ).body.id;
+        ).id;
         break;
       case AccountType.Personnel:
         detailId = (
           await this.serviceClient.personnel.addPersonnel({
             requestBody: detail as Personnel,
           })
-        ).body.id;
+        ).id;
         break;
       case AccountType.Advertiser:
         detailId = (
           await this.serviceClient.advertiser.addAdvertiser({
             requestBody: detail as Advertiser,
           })
-        ).body.id;
+        ).id;
         break;
     }
 

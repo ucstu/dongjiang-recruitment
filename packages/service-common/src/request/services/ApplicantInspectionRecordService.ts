@@ -1,7 +1,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { Query } from "../../interfaces";
+import type { Query, Sort } from "../../interfaces";
 import type { ApplicantInspectionRecord } from "../models/ApplicantInspectionRecord";
 
 import type { CancelablePromise } from "../core/CancelablePromise";
@@ -27,24 +27,7 @@ export class ApplicantInspectionRecordService {
      * 查看记录ID
      */
     id: string;
-  }): CancelablePromise<{
-    /**
-     * 响应时间
-     */
-    timestamp: string;
-    /**
-     * 响应
-     */
-    message: string;
-    /**
-     * 响应编码
-     */
-    status: number;
-    /**
-     * 查看记录ID
-     */
-    body: string;
-  }> {
+  }): CancelablePromise<string> {
     return this.httpRequest.request({
       method: "DELETE",
       url: "/applicant/{applicantId}/inspectionRecords/{id}",
@@ -73,21 +56,7 @@ export class ApplicantInspectionRecordService {
      * 查看记录ID
      */
     id: string;
-  }): CancelablePromise<{
-    /**
-     * 响应时间
-     */
-    timestamp: string;
-    /**
-     * 响应
-     */
-    message: string;
-    /**
-     * 响应编码
-     */
-    status: number;
-    body: ApplicantInspectionRecord;
-  }> {
+  }): CancelablePromise<ApplicantInspectionRecord> {
     return this.httpRequest.request({
       method: "GET",
       url: "/applicant/{applicantId}/inspectionRecords/{id}",
@@ -129,33 +98,16 @@ export class ApplicantInspectionRecordService {
     /**
      * 排序方式
      */
-    sort?: Array<`${keyof ApplicantInspectionRecord},${"asc" | "desc"}`>;
+    sort?: Sort<ApplicantInspectionRecord>;
   }): CancelablePromise<{
     /**
-     * 响应时间
+     * 查看记录总数
      */
-    timestamp: string;
+    total: number;
     /**
-     * 响应
+     * 当页查看记录
      */
-    message: string;
-    /**
-     * 响应编码
-     */
-    status: number;
-    /**
-     * 分页结果
-     */
-    body: {
-      /**
-       * 查看记录总数
-       */
-      total: number;
-      /**
-       * 当页查看记录
-       */
-      items: Array<ApplicantInspectionRecord>;
-    };
+    items: Array<ApplicantInspectionRecord>;
   }> {
     return this.httpRequest.request({
       method: "GET",
@@ -199,21 +151,7 @@ export class ApplicantInspectionRecordService {
        */
       positionId: string;
     };
-  }): CancelablePromise<{
-    /**
-     * 响应时间
-     */
-    timestamp: string;
-    /**
-     * 响应
-     */
-    message: string;
-    /**
-     * 响应编码
-     */
-    status: number;
-    body: ApplicantInspectionRecord;
-  }> {
+  }): CancelablePromise<ApplicantInspectionRecord> {
     return this.httpRequest.request({
       method: "POST",
       url: "/applicant/{applicantId}/inspectionRecords",

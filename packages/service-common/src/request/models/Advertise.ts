@@ -35,15 +35,15 @@ export type Advertise = {
    */
   banner: string;
   /**
-   * {1:Master}
+   * 投放位置，eg；{1:Master}
    */
   position: Advertise.position;
   /**
-   * {1:Active,2:Expired}
+   * 投放状态，eg；{1:Active,2:Inactive}
    */
   status: Advertise.status;
   /**
-   * 已缴费用
+   * 已缴费用，eg；{1:Active,2:Expired}
    */
   payed: Advertise.payed;
   /**
@@ -58,14 +58,14 @@ export type Advertise = {
 
 export namespace Advertise {
   /**
-   * {1:Master}
+   * 投放位置，eg；{1:Master}
    */
   export enum position {
     Master = 1,
   }
 
   /**
-   * {1:Active,2:Expired}
+   * 投放状态，eg；{1:Active,2:Inactive}
    */
   export enum status {
     Active = 1,
@@ -73,7 +73,7 @@ export namespace Advertise {
   }
 
   /**
-   * 已缴费用
+   * 已缴费用，eg；{1:Active,2:Expired}
    */
   export enum payed {
     Active = 1,

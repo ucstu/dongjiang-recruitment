@@ -1,26 +1,63 @@
-import { Injectable } from "@nestjs/common";
+import { Pagination } from "@dongjiang-recruitment/nest-common/dist/decorator";
+import {
+  FindOptionsWhere,
+  InjectRepository,
+  Repository,
+} from "@dongjiang-recruitment/nest-common/dist/typeorm";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { CreateApplicantDto } from "./dto/create-applicant.dto";
 import { UpdateApplicantDto } from "./dto/update-applicant.dto";
+import { Applicant } from "./entities/applicant.entity";
 
 @Injectable()
 export class ApplicantService {
-  create(createApplicantDto: CreateApplicantDto) {
-    return "This action adds a new applicant";
+  constructor(
+    @InjectRepository(Applicant)
+    private readonly applicantRepository: Repository<Applicant>
+  ) {}
+
+  async create(createApplicantDto: CreateApplicantDto) {
+    return await this.applicantRepository.save(createApplicantDto);
   }
 
-  findAll() {
-    return `This action returns all applicant`;
+  async findAll(
+    query: Array<FindOptionsWhere<Applicant>>,
+    { page, size, sort }: Pagination<Applicant>
+  ) {
+    return {
+      total: await this.applicantRepository.count({
+        where: query,
+      }),
+      items: await this.applicantRepository.find({
+        where: query,
+        skip: page * size,
+        take: size,
+        order: sort,
+      }),
+    };
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} applicant`;
+  async findOne(id: string) {
+    const applicant = await this.applicantRepository.findOne({
+      where: { id },
+    });
+    if (!applicant) throw new NotFoundException();
+    return applicant;
   }
 
-  update(id: number, updateApplicantDto: UpdateApplicantDto) {
-    return `This action updates a #${id} applicant`;
+  async update(id: string, updateApplicantDto: UpdateApplicantDto) {
+    const applicant = {
+      ...updateApplicantDto,
+      id,
+    };
+    const { affected } = await this.applicantRepository.update(id, applicant);
+    if (!affected) throw new NotFoundException();
+    return applicant;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} applicant`;
+  async remove(id: string) {
+    const { affected } = await this.applicantRepository.softDelete(id);
+    if (!affected) throw new NotFoundException();
+    return id;
   }
 }
