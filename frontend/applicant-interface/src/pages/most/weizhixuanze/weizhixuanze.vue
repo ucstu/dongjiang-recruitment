@@ -58,14 +58,12 @@
 
 <script lang="ts" setup>
 import NavigationBar from "@/components/NavigationBar/NavigationBar.vue";
-import { getAreaInformations } from "@/services/services";
-import { AreaInformations } from "@/services/types";
-import { useAuthStore } from "@/stores/auth";
-import { failResponseHandler } from "@/utils/handler";
+import { useInfoStore } from "@/stores";
+import type { Areas } from "@dongjiang-recruitment/service-common";
 
-const store = useAuthStore();
+const store = useInfoStore();
 
-const countries = ref<AreaInformations>([
+const countries = ref<Areas>([
   {
     countyName: "不限",
     areas: ["不限"],
@@ -79,15 +77,17 @@ const c = ref();
 
 onLoad((e) => {
   // 这是加载页面时执行的代码。
-  if (e.city) {
-    country.value = e.city;
-    c.value = e.city;
+  if (e!.city) {
+    country.value = e!.city;
+    c.value = e!.city;
     countries.value.splice(1, countries.value.length - 1);
-    for (const item of store.areas) {
-      countries.value.push(item);
-    }
-    if (e.areas) {
-      filterValue.value = JSON.parse(e.areas);
+    // for (const item of store.areas) {
+    //   countries.value.push(item);
+    // }
+    console.log("!!!!!!!!!!!!!!!!!");
+
+    if (e!.areas) {
+      filterValue.value = JSON.parse(e!.areas);
       if (filterValue.value.length) {
         const count = countries.value.map((item) => item.countyName);
         countriesIndex.value = count.indexOf(c.value);
@@ -102,15 +102,15 @@ onLoad((e) => {
   uni.$on("liveCity", (city) => {
     countriesIndex.value = 0;
     country.value = city;
-    getAreaInformations({
-      cityName: country.value,
-    })
+    commonService
+      .getAreas({
+        cityName: country.value,
+      })
       .then((res) => {
         countries.value.splice(1, countries.value.length - 1);
-        countries.value.push(...res.data.body);
-        store.areas = res.data.body;
-      })
-      .catch(failResponseHandler);
+        countries.value.push(...res);
+        // store.areas = res;
+      });
   });
 });
 // 卸载页面时调用的函数。

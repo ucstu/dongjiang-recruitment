@@ -29,46 +29,46 @@
 <script lang="ts" setup>
 import JobPanel from "@/components/JobPanel/JobPanel.vue";
 import NavigationBar from "@/components/NavigationBar/NavigationBar.vue";
-import {
-deleteUserInfosP0DeliveryRecordsP1,
-getCompanyInfosP0PositionInfosP1,
-getUserInfosP0DeliveryRecords
-} from "@/services/services";
-import { DeliveryRecord, PositionInformation } from "@/services/types";
-import { useAuthStore } from "@/stores/auth";
-import { failResponseHandler } from "@/utils/handler";
-const store = useAuthStore();
+import { useInfoStore } from "@/stores";
+import type {
+  DeliveryRecord,
+  Position,
+} from "@dongjiang-recruitment/service-common";
 
-const deliveryRecords = ref<PositionInformation[]>([]);
-const deliveryLength = ref();
+const store = useInfoStore();
+
+const deliveryRecords = ref<Position[]>([]);
+const deliveryLength = ref<DeliveryRecord[]>([]);
 const sendType = ["", "待查看", "已查看", "通过初筛", "约面试", "不合格"];
 const sendId = ref<DeliveryRecord["status"]>(1);
 const emptyShow = ref(true);
 
 /* 默认查看记录 */
-
-getUserInfosP0DeliveryRecords(store.account.fullInformationId, {
-  status: [1],
-  size: 10,
-})
+applicantDeliveryRecordService
+  .queryDeliveryRecord({
+    applicantId: store.applicant!.id,
+    query: {
+      status: ["$eq", 1],
+    },
+    size: 10,
+  })
   .then((res) => {
-    deliveryLength.value = res.data.body.deliveryRecords;
+    deliveryLength.value = res.items;
     for (const delivery of deliveryLength.value) {
-      getCompanyInfosP0PositionInfosP1(
-        delivery.companyInformationId,
-        delivery.positionInformationId
-      )
+      companyPositionService
+        .getPosition({
+          companyId: delivery.companyId,
+          id: delivery.positionId,
+        })
         .then((res) => {
-          res.data.body["companyInformationId"] = delivery.companyInformationId;
-          deliveryRecords.value.push(res.data.body);
+          res.companyId = delivery.companyId;
+          deliveryRecords.value.push(res);
           if (deliveryRecords.value.length) {
             emptyShow.value = false;
           }
-        })
-        .catch(failResponseHandler);
+        });
     }
-  })
-  .catch(failResponseHandler);
+  });
 
 onShow(() => {
   if (deliveryLength.value === null) {
@@ -79,43 +79,45 @@ onShow(() => {
 /* 查看不同状态记录 */
 const sendTypeId = (index: number) => {
   sendId.value = index as DeliveryRecord["status"];
-  getUserInfosP0DeliveryRecords(store.account.fullInformationId, {
-    status: index as unknown as (2 | 1 | 3 | 4 | 5)[],
-  })
+  applicantDeliveryRecordService
+    .queryDeliveryRecord({
+      applicantId: store.applicant!.id,
+      query: {
+        status: ["$eq", index],
+      },
+    })
     .then((res) => {
       deliveryRecords.value.length = 0;
-      if (!res.data.body.deliveryRecords.length) {
+      if (res.total === 0) {
         emptyShow.value = true;
       } else {
-        for (const delivery of res.data.body.deliveryRecords) {
-          getCompanyInfosP0PositionInfosP1(
-            delivery.companyInformationId,
-            delivery.positionInformationId
-          )
-            .then((res) => {
-              res.data.body["companyInformationId"] =
-                delivery.companyInformationId;
-              deliveryRecords.value.push(res.data.body);
+        for (const delivery of res.items) {
+          companyPositionService
+            .getPosition({
+              companyId: delivery.companyId,
+              id: delivery.positionId,
             })
-            .catch(failResponseHandler);
+            .then((res) => {
+              res.companyId = delivery.companyId;
+              deliveryRecords.value.push(res);
+            });
         }
         emptyShow.value = false;
       }
-    })
-    .catch(failResponseHandler);
+    });
 };
 /* 清空记录 */
 const clearRecord = () => {
   for (const delivery of deliveryLength.value) {
-    deleteUserInfosP0DeliveryRecordsP1(
-      store.account.fullInformationId,
-      delivery.deliveryRecordId
-    )
-      .then((res) => {
-        deliveryLength.value = null;
-        deliveryRecords.value.length = 0;
+    applicantDeliveryRecordService
+      .removeDeliveryRecord({
+        applicantId: store.applicant!.id,
+        id: delivery.id,
       })
-      .catch(failResponseHandler);
+      .then((res) => {
+        deliveryLength.value = [];
+        deliveryRecords.value.length = 0;
+      });
   }
 };
 </script>

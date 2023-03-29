@@ -85,24 +85,18 @@
 </template>
 
 <script lang="ts" setup>
-import {
-getUserInfosP0AttentionRecords,
-getUserInfosP0DeliveryRecords,
-getUserInfosP0GarnerRecords
-} from "@/services/services";
-import {
-AttentionRecord,
-DeliveryRecord,
-GarnerRecord,
-UserInformation
-} from "@/services/types";
-import { useAuthStore } from "@/stores/auth";
-import { failResponseHandler } from "@/utils/handler";
+import { useInfoStore } from "@/stores";
+import type {
+  Applicant,
+  AttentionRecord,
+  DeliveryRecord,
+  GarnerRecord,
+} from "@dongjiang-recruitment/service-common";
 
 const VITE_CDN_URL = import.meta.env.VITE_CDN_URL;
-const store = useAuthStore();
+const store = useInfoStore();
 
-const userInfos = ref<UserInformation>({} as UserInformation);
+const userInfos = ref<Applicant>({} as Applicant);
 const education = ref(["未知", "大专", "本科", "硕士", "博士"]);
 const fullName = ref();
 const deliveryNum = ref(0);
@@ -116,40 +110,50 @@ const interviewPosition = ref<DeliveryRecord[]>([]);
 
 const status = ref<(1 | 2 | 3 | 4 | 5)[]>([1, 2, 3, 4, 5]);
 onShow(() => {
-  userInfos.value = store.applicant;
+  userInfos.value = store.applicant!;
   fullName.value = userInfos.value.firstName + userInfos.value.lastName;
   /* 投递记录 */
-  getUserInfosP0DeliveryRecords(store.account.fullInformationId, {
-    status: status.value,
-    size: 10,
-  })
-    .then((res) => {
-      deliveryNum.value = res.data.body.totalCount;
+  applicantDeliveryRecordService
+    .queryDeliveryRecord({
+      applicantId: store.applicant!.id,
+      query: {
+        status: ["$in", ...status.value],
+      },
+      size: 10,
     })
-    .catch(failResponseHandler);
+    .then((res) => {
+      deliveryNum.value = res.total;
+    });
   /* 收藏职位 */
-  getUserInfosP0GarnerRecords(store.account.fullInformationId, {})
-    .then((res) => {
-      favoriteNum.value = res.data.body.totalCount;
-      favoritePosition.value = res.data.body.garnerRecords;
+  applicantGarnerRecordService
+    .queryGarnerRecord({
+      applicantId: store.applicant!.id,
     })
-    .catch(failResponseHandler);
+    .then((res) => {
+      favoriteNum.value = res.total;
+      favoritePosition.value = res.items;
+    });
   /* 关注公司 */
-  getUserInfosP0AttentionRecords(store.account.fullInformationId, {})
-    .then((res) => {
-      focusNum.value = res.data.body.totalCount;
-      focusCompany.value = res.data.body.attentionRecords;
+  applicantAttentionRecordService
+    .queryAttentionRecord({
+      applicantId: store.applicant!.id,
     })
-    .catch(failResponseHandler);
+    .then((res) => {
+      focusNum.value = res.total;
+      focusCompany.value = res.items;
+    });
   /* 待面试 */
-  getUserInfosP0DeliveryRecords(store.account.fullInformationId, {
-    status: [4],
-  })
-    .then((res) => {
-      interviewNum.value = res.data.body.totalCount;
-      interviewPosition.value = res.data.body.deliveryRecords;
+  applicantDeliveryRecordService
+    .queryDeliveryRecord({
+      applicantId: store.applicant!.id,
+      query: {
+        status: ["$eq", 4],
+      },
     })
-    .catch(failResponseHandler);
+    .then((res) => {
+      interviewNum.value = res.total;
+      interviewPosition.value = res.items;
+    });
 });
 
 /**跳转页面 */
@@ -160,19 +164,20 @@ const toSelfInfo = () => {
 };
 // 投递记录
 const onClick_1 = () => {
-  getUserInfosP0DeliveryRecords(store.account.fullInformationId, {
-    status: [1],
-    size: 10,
-  })
+  applicantDeliveryRecordService
+    .queryDeliveryRecord({
+      applicantId: store.applicant!.id,
+      query: {
+        status: ["$eq", 1],
+      },
+      size: 10,
+    })
     .then((res) => {
-      const item = encodeURIComponent(
-        JSON.stringify(res.data.body.deliveryRecords)
-      );
+      const item = encodeURIComponent(JSON.stringify(res.items));
       uni.navigateTo({
         url: "/record/toudijilu/toudijilu?deliveryRecords=" + item,
       });
-    })
-    .catch(failResponseHandler);
+    });
 };
 // 收藏职位
 const onClick_2 = () => {

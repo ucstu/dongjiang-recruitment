@@ -7,31 +7,31 @@
           <view class="flex-col" @click="changeInfo">
             <view class="flex-row items-center user">
               <text class="text-top" style="font-size: 40rpx; font-weight: 600"
-                >{{ store.applicantInformation.firstName
-                }}{{ store.applicantInformation.lastName }}</text
+                >{{ infoStore.applicant!.firstName
+                }}{{ infoStore.applicant!.lastName }}</text
               >
               <image class="image" src="@/static/icons/edit.png" />
             </view>
             <view>
               <text style="font-size: 30rpx"
-                >{{ workYear[store.applicantInformation.workingYears] }}/{{
-                  store.applicantInformation.age
-                }}岁/{{ education[store.applicantInformation.education] }}</text
+                >{{ workYear[infoStore.applicant!.workingYears] }}/{{
+                  infoStore.applicant!.age
+                }}岁/{{ education[infoStore.applicant!.education] }}</text
               >
             </view>
           </view>
           <view class="image-box">
             <image
-              :src="VITE_CDN_URL + store.applicantInformation.avatarUrl"
+              :src="VITE_CDN_URL + infoStore.applicant!.avatarUrl"
               class="photo"
             />
             <image
-              v-if="store.applicantInformation.sex === '男'"
+              v-if="infoStore.applicant!.sex === '男'"
               class="sex-image"
               src="@/static/icons/man.png"
             />
             <image
-              v-if="store.applicantInformation.sex === '女'"
+              v-if="infoStore.applicant!.sex === '女'"
               class="sex-image"
               src="@/static/icons/woman.png"
             />
@@ -42,7 +42,7 @@
             <text class="text-top">求职期望</text>
           </view>
           <view
-            v-for="(jobExcept, i) in store.jobExpectations"
+            v-for="(jobExcept, i) in infoStore.jobExpectations"
             :key="i"
             class="flex-col"
             style="margin-top: 20rpx"
@@ -81,7 +81,7 @@
         </view>
         <view class="advantage-box">
           <text style="white-space: nowrap">{{
-            store.applicantInformation.personalAdvantage
+            infoStore.applicant!.personalAdvantage
           }}</text>
         </view>
       </view>
@@ -101,7 +101,7 @@
           @click="alterWork(i)"
         >
           <text class="experience-company">{{
-            workExperience.corporateName
+            workExperience.companyName
           }}</text>
           <text>{{ workExperience.positionName }}</text>
           <text
@@ -164,21 +164,15 @@
 
 <script lang="ts" setup>
 import NavigationBar from "@/components/NavigationBar/NavigationBar.vue";
-import {
-getUserInfosP0EduExperiences,
-getUserInfosP0ProjectExperiences,
-getUserInfosP0WorkExperiences
-} from "@/services/services";
-import {
-EducationExperience,
-ProjectExperience,
-WorkExperience
-} from "@/services/types";
-import { useAuthStore } from "@/stores/auth";
-import { failResponseHandler } from "@/utils/handler";
+import { useInfoStore } from "@/stores";
+import type {
+  EducationExperience,
+  ProjectExperience,
+  WorkExperience,
+} from "@dongjiang-recruitment/service-common";
 
 const VITE_CDN_URL = import.meta.env.VITE_CDN_URL;
-const store = useAuthStore();
+const infoStore = useInfoStore();
 
 const education = ref(["未知", "大专", "本科", "硕士", "博士"]);
 const workYear = [
@@ -200,41 +194,44 @@ const projectExperiences = ref<ProjectExperience[]>([]);
 
 onShow(() => {
   // 查询所有工作经历
-  getUserInfosP0WorkExperiences(store.accountInformation.fullInformationId, {})
-    .then((res) => {
-      workExperiences.value = res.data.body.workExperiences;
+  applicantWorkExperienceService
+    .queryWorkExperience({
+      applicantId: infoStore.applicant!.id,
     })
-    .catch(failResponseHandler);
-  // 查询所有教育经历
-  getUserInfosP0EduExperiences(store.accountInformation.fullInformationId, {})
     .then((res) => {
-      if (res.data.body.educationExperiences.length > 0) {
-        educationExperiences.value = res.data.body.educationExperiences;
-        store.applicantInformation.education =
+      workExperiences.value = res.items;
+    });
+  // 查询所有教育经历
+  applicantEducationExperienceService
+    .queryEducationExperience({
+      applicantId: infoStore.applicant!.id,
+    })
+    .then((res) => {
+      if (res.total > 0) {
+        educationExperiences.value = res.items;
+        infoStore.applicant!.education =
           educationExperiences.value[0].education;
         for (let i = 0; i <= educationExperiences.value.length; i++) {
           if (
-            store.applicantInformation.education <
+            infoStore.applicant!.education <
             educationExperiences.value[i].education
           ) {
-            store.applicantInformation.education =
+            infoStore.applicant!.education =
               educationExperiences.value[i].education;
           }
         }
       } else {
-        store.applicantInformation.education = 0;
+        infoStore.applicant!.education = 0;
       }
-    })
-    .catch(failResponseHandler);
+    });
   // 查询所有项目经历
-  getUserInfosP0ProjectExperiences(
-    store.accountInformation.fullInformationId,
-    {}
-  )
-    .then((res) => {
-      projectExperiences.value = res.data.body.projectExperiences;
+  applicantProjectExperienceService
+    .queryProjectExperience({
+      applicantId: infoStore.applicant!.id,
     })
-    .catch(failResponseHandler);
+    .then((res) => {
+      projectExperiences.value = res.items;
+    });
 });
 
 // 修改个人信息
@@ -264,7 +261,7 @@ const addProject = () => {
 
 // 查看、修改、删除工作经历
 const alterWork = (index: number) => {
-  const workId = workExperiences.value[index].workExperienceId;
+  const workId = workExperiences.value[index].id;
   const deleteWork = ref("删除");
   uni.navigateTo({
     url:
@@ -277,7 +274,7 @@ const alterWork = (index: number) => {
 
 // 查看、修改、删除教育经历
 const alterEducate = (index: number) => {
-  const educateId = educationExperiences.value[index].educationExperienceId;
+  const educateId = educationExperiences.value[index].id;
   const deleteEducate = ref("删除");
   uni.navigateTo({
     url:
@@ -290,7 +287,7 @@ const alterEducate = (index: number) => {
 
 // 查看、修改、删除项目经历
 const alterProject = (index: number) => {
-  const projectId = projectExperiences.value[index].projectExperienceId;
+  const projectId = projectExperiences.value[index].id;
   const deleteProject = ref("删除");
   uni.navigateTo({
     url:

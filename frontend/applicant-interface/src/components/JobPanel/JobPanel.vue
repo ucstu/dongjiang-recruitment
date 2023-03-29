@@ -1,6 +1,6 @@
 <template>
   <view class="flex-col component">
-      <JobDetail :position="collectionPosition" @job-click="view_4OnClick" />
+    <JobDetail :position="collectionPosition!" @job-click="view_4OnClick" />
     <view class="flex-row group-8">
       <view
         class="flex-col items-center text-wrapper-2"
@@ -17,14 +17,16 @@
 
 <script lang="ts" setup>
 import JobDetail from "@/components/JobDetail/JobDetail.vue";
-import { useAuthStore } from "@/stores/auth";
+import { useInfoStore } from "@/stores";
+import type { Position } from "@dongjiang-recruitment/service-common";
+import type { PropType } from "vue";
 
-const store = useAuthStore();
+const store = useInfoStore();
 const messageKey = ref("");
 
 const props = defineProps({
   collectionPosition: {
-    type: Object,
+    type: Object as PropType<Position>,
   },
   sendType: {
     type: String,
@@ -35,18 +37,16 @@ const emit = defineEmits(["stateClick"]);
 
 // 获取消息密钥的方法。
 if (props.collectionPosition) {
-  for (const key in store.messages[
-    store.account!.detailId.personnel
-  ]) {
-    if (key === props.collectionPosition?.hrInformationId) {
+  for (const key in store.messages[store.applicant!.id]) {
+    if (key === props.collectionPosition?.personnelId) {
       messageKey.value = key;
     }
   }
 }
 
 const view_4OnClick = () => {
-  const companyId = props.collectionPosition?.companyInformationId;
-  const positionId = props.collectionPosition?.positionInformationId;
+  const companyId = props.collectionPosition?.companyId;
+  const positionId = props.collectionPosition?.id;
   uni.navigateTo({
     url:
       "/detail/zhiweixiangqing/zhiweixiangqing?companyId=" +
@@ -59,7 +59,7 @@ const view_11OnClick = () => {
   uni.navigateTo({
     url:
       "/mine/liaotianyemian/liaotianyemian?Id=" +
-      props.collectionPosition?.hrInformationId +
+      props.collectionPosition?.personnelId +
       "&key=" +
       messageKey.value,
   });

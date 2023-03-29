@@ -53,8 +53,8 @@
 </template>
 
 <script lang="ts" setup>
-import { useAuthStore } from "@/stores/auth";
-const store = useAuthStore();
+import { useInfoStore } from "@/stores";
+const store = useInfoStore();
 
 /* #ifdef MP-WEIXIN || MP-ALIPAY || MP-BAIDU || MP-TOUTIAO || MP-QQ */
 

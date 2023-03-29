@@ -104,14 +104,12 @@
 <script lang="ts" setup>
 import NavigationBar from "@/components/NavigationBar/NavigationBar.vue";
 import wybPopup from "@/components/wyb-popup/wyb-popup.vue";
-import { putUserInfosP0 } from "@/services/services";
-import { UserInformation } from "@/services/types";
-import { useAuthStore } from "@/stores/auth";
-import { failResponseHandler } from "@/utils/handler";
+import { useInfoStore } from "@/stores";
+import type { Applicant } from "@dongjiang-recruitment/service-common";
 
-const store = useAuthStore();
+const store = useInfoStore();
 
-const userInfo = ref<UserInformation>(store.applicant);
+const userInfo = ref<Applicant>(store.applicant!);
 
 const changeSex = ref(true); // 判断性别
 const city = ref("请选择"); // 城市
@@ -139,7 +137,7 @@ for (let i = 1; i <= 31; i++) {
 }
 const value = ref([9999, month - 1, day - 1]);
 // 更改选择器视图时调用的函数。
-const bindChange = (e: { detail: { value: never } }) => {
+const bindChange = (e: { detail: { value: any } }) => {
   const val = e.detail.value;
   year = years.value[val[0]];
   month = months.value[val[1]];
@@ -188,15 +186,18 @@ const nextClick = () => {
     });
   } else {
     userInfo.value.cityName = city.value;
-    store.applicant.workingYears = 1;
-    putUserInfosP0(store.account.fullInformationId, userInfo.value)
+    store.applicant!.workingYears = 1;
+    applicantService
+      .updateApplicant({
+        id: store.applicant!.id,
+        requestBody: userInfo.value,
+      })
       .then((res) => {
-        store.applicant = res.data.body;
+        store.applicant = res;
         uni.navigateTo({
           url: "/init/wanshanjiaoyujingli/wanshanjiaoyujingli",
         });
-      })
-      .catch(failResponseHandler);
+      });
   }
 };
 </script>

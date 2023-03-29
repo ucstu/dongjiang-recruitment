@@ -147,11 +147,9 @@
 <script lang="ts" setup>
 import NavigationBar from "@/components/NavigationBar/NavigationBar.vue";
 import wybPopup from "@/components/wyb-popup/wyb-popup.vue";
-import { postUserInfosP0EduExperiences } from "@/services/services";
-import { useAuthStore } from "@/stores/auth";
-import { failResponseHandler } from "@/utils/handler";
+import { useInfoStore } from "@/stores";
 
-const store = useAuthStore();
+const store = useInfoStore();
 
 const schoolName = ref("");
 const educationId = ref<0 | 1 | 2 | 3 | 4>(0);
@@ -203,7 +201,7 @@ for (let i = 1; i <= 31; i++) {
 const startValue = ref([year - 1970, month - 1, day - 1]);
 const endValue = ref([year, month - 1, day - 1]);
 // 选择在校时间
-const schoolChange = (e: { detail: { value: never } }) => {
+const schoolChange = (e: { detail: { value: any } }) => {
   const val = e.detail.value;
   year = years.value[val[0]];
   month = months.value[val[1]];
@@ -234,20 +232,23 @@ const nextClick = () => {
       duration: 1500,
     });
   } else {
-    postUserInfosP0EduExperiences(store.account.fullInformationId, {
-      schoolName: schoolName.value,
-      education: educationId.value,
-      majorName: subject.value,
-      admissionTime: startSchool.value,
-      graduationTime: endSchool.value,
-    })
+    applicantEducationExperienceService
+      .addEducationExperience({
+        applicantId: store.applicant!.id,
+        requestBody: {
+          schoolName: schoolName.value,
+          education: educationId.value,
+          majorName: subject.value,
+          admissionTime: startSchool.value,
+          graduationTime: endSchool.value,
+        },
+      })
       .then((res) => {
-        store.applicant.education = res.data.body.education;
+        store.applicant!.education = res.education;
         uni.navigateTo({
           url: "/init/wanshangongzuojingli/wanshangongzuojingli",
         });
-      })
-      .catch(failResponseHandler);
+      });
   }
 };
 

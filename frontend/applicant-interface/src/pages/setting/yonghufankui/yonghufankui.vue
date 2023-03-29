@@ -24,7 +24,7 @@
               v-model="opinion"
               class="input"
               placeholder="请写下您的宝贵意见（不得少与5个字符）"
-              maxlength="-1"
+              :maxlength="-1"
               :auto-height="true"
             />
           </scroll-view>

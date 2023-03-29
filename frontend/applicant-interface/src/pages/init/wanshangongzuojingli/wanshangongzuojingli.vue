@@ -136,15 +136,13 @@
 <script lang="ts" setup>
 import NavigationBar from "@/components/NavigationBar/NavigationBar.vue";
 import wybPopup from "@/components/wyb-popup/wyb-popup.vue";
-import { postUserInfosP0WorkExperiences } from "@/services/services";
-import { CompanyInformation } from "@/services/types";
-import { useAuthStore } from "@/stores/auth";
-import { failResponseHandler } from "@/utils/handler";
+import { useInfoStore } from "@/stores";
+import type { Company } from "@dongjiang-recruitment/service-common";
 
-const store = useAuthStore();
+const store = useInfoStore();
 
-const companyName = ref<CompanyInformation["companyName"]>("");
-const companyType = ref<CompanyInformation["comprehensionName"]>("");
+const companyName = ref<Company["companyName"]>("");
+const companyType = ref<Company["comprehensionName"]>("");
 const subject = ref<0 | 1 | 2 | 3>(0);
 const subjectType = ref(["请选择", "全职", "兼职", "实习"]);
 const startTime = ref("入职时间");
@@ -217,20 +215,23 @@ const nextClick = () => {
       duration: 1500,
     });
   } else {
-    postUserInfosP0WorkExperiences(store.account.fullInformationId, {
-      corporateName: companyName.value,
-      companyIndustry: companyType.value,
-      positionType: subject.value,
-      startTime: startTime.value,
-      endTime: endTime.value,
-      departmentName: "",
-      jobContent: "",
-      positionName: "",
-    })
+    applicantWorkExperienceService
+      .addWorkExperience({
+        applicantId: store.applicant!.id,
+        requestBody: {
+          companyName: companyName.value,
+          companyIndustry: companyType.value,
+          positionType: subject.value,
+          startTime: startTime.value,
+          endTime: endTime.value,
+          departmentName: "",
+          jobContent: "",
+          positionName: "",
+        },
+      })
       .then(() => {
         uni.navigateTo({ url: `/info/qiuzhiqiwang/qiuzhiqiwang?data=` + 0 });
-      })
-      .catch(failResponseHandler);
+      });
   }
 };
 

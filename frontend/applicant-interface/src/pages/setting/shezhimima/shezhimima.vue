@@ -7,7 +7,7 @@
         <input
           v-model="password"
           class="text-input"
-          :type="seen ? typeText : typePassword"
+          :type="seen ? 'text' : 'safe-password'"
           placeholder="请输入新密码"
         />
         <image
@@ -30,7 +30,7 @@
         <input
           v-model="password2"
           class="text-input"
-          :type="seen2 ? typeText : typePassword"
+          :type="seen2 ? 'text' : 'safe-password'"
           placeholder="请再次输入密码"
         />
         <image
@@ -57,7 +57,7 @@
               class="text-input"
               type="number"
               placeholder="请输入验证码"
-              maxlength="4"
+              :maxlength="4"
             />
           </view>
         </view>

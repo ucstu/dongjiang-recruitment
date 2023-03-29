@@ -24,7 +24,7 @@
       :key="i"
       class="list-item"
       :company-detail="attentionCompany"
-      @com-click="toCompanyInfo(attentionCompany.companyInformationId)"
+      @com-click="toCompanyInfo(attentionCompany.id)"
     />
   </view>
 
@@ -53,9 +53,7 @@
 <script lang="ts" setup>
 import CompanyDetail from "@/components/CompanyDetail/CompanyDetail.vue";
 import wybPopup from "@/components/wyb-popup/wyb-popup.vue";
-import { getCompanyInfos } from "@/services/services";
-import { CompanyInformation } from "@/services/types";
-import { failResponseHandler } from "@/utils/handler";
+import type { Company } from "@dongjiang-recruitment/service-common";
 
 const props = defineProps({
   searchContent: {
@@ -64,29 +62,33 @@ const props = defineProps({
   },
 });
 
-const companyInfos = ref<CompanyInformation[]>([]);
+const companyInfos = ref<Company[]>([]);
 const sortValue = ["综合排序", "距离优先", "公司规模", "融资阶段"];
 const sortval = ref(sortValue[0]);
 
-getCompanyInfos({
-  companyName: props.searchContent,
-})
-  .then((res) => {
-    companyInfos.value = res.data.body.companyInformations;
+companyService
+  .queryCompany({
+    query: {
+      companyName: ["$eq", props.searchContent],
+    },
   })
-  .catch(failResponseHandler);
+  .then((res) => {
+    companyInfos.value = res.items;
+  });
 
 // 监听事件`filter`然后从事件中获取数据，然后使用数据获取公司信息。
 uni.$on("filter", (data) => {
-  getCompanyInfos({
-    companyName: props.searchContent,
-    scales: data.size as (1 | 5 | 2 | 3 | 4 | 6)[],
-    financingStages: data.stage as (2 | 1 | 3 | 4 | 5 | 6 | 7 | 8)[],
-  })
-    .then((res) => {
-      companyInfos.value = res.data.body.companyInformations;
+  companyService
+    .queryCompany({
+      query: {
+        companyName: ["$eq", props.searchContent],
+        scale: ["$in", ...(data.size || [])],
+        financingStage: ["$in", ...(data.stage || [])],
+      },
     })
-    .catch(failResponseHandler);
+    .then((res) => {
+      companyInfos.value = res.items;
+    });
 });
 
 onMounted(() => {
@@ -109,36 +111,50 @@ const sortChoose = (index: number) => {
   sortval.value = sortValue[index];
   if (index === 1) {
     // 距离优先
-    getCompanyInfos({
-      companyName: props.searchContent,
-      sort: ["cityName,asc"],
-    }).then((res) => {
-      companyInfos.value = res.data.body.companyInformations;
-    });
+    companyService
+      .queryCompany({
+        query: {
+          companyName: ["$eq", props.searchContent],
+        },
+        sort: ["cityName,asc"],
+      })
+      .then((res) => {
+        companyInfos.value = res.items;
+      });
   } else if (index === 2) {
-    getCompanyInfos({
-      // 公司规模
-      companyName: props.searchContent,
-      sort: ["scale,desc"],
-    }).then((res) => {
-      companyInfos.value = res.data.body.companyInformations;
-    });
+    companyService
+      .queryCompany({
+        query: {
+          companyName: ["$eq", props.searchContent],
+        },
+        sort: ["scale,asc"],
+      })
+      .then((res) => {
+        companyInfos.value = res.items;
+      });
   } else if (index === 3) {
-    getCompanyInfos({
-      // 融资阶段
-      companyName: props.searchContent,
-      sort: ["financingStage,desc"],
-    }).then((res) => {
-      companyInfos.value = res.data.body.companyInformations;
-    });
+    companyService
+      .queryCompany({
+        query: {
+          companyName: ["$eq", props.searchContent],
+        },
+        sort: ["financingStage,asc"],
+      })
+      .then((res) => {
+        companyInfos.value = res.items;
+      });
   } else {
     // 综合排序
-    getCompanyInfos({
-      companyName: props.searchContent,
-      sort: ["companyName,asc"],
-    }).then((res) => {
-      companyInfos.value = res.data.body.companyInformations;
-    });
+    companyService
+      .queryCompany({
+        query: {
+          companyName: ["$eq", props.searchContent],
+        },
+        sort: ["companyName,asc"],
+      })
+      .then((res) => {
+        companyInfos.value = res.items;
+      });
   }
   popup.value.hide();
 };

@@ -80,8 +80,7 @@
 <script lang="ts" setup>
 import NavigationBar from "@/components/NavigationBar/NavigationBar.vue";
 import wybPopup from "@/components/wyb-popup/wyb-popup.vue";
-import { getPositionTypes } from "@/services/services";
-import { PositionTypes } from "@/services/types";
+import type { PositionTypes } from "@dongjiang-recruitment/service-common";
 
 const popup = ref();
 
@@ -95,8 +94,8 @@ const positions = computed(
   () => directions.value[activeDirectionIndex.value].positions
 );
 
-getPositionTypes().then((res) => {
-  fields.push(...res.data.body);
+commonService.getPositionTypes().then((res) => {
+  fields.push(...res);
 });
 
 // 显示弹出层
@@ -136,8 +135,8 @@ const filteredPositionNames = computed(() => {
 const value = ref();
 const cityName = ref();
 onLoad((e) => {
-  value.value = e.value;
-  cityName.value = e.city;
+  value.value = e!.value;
+  cityName.value = e!.city;
 });
 
 // 当用户单击搜索栏中的职位名称时调用的函数。它将 activePositionIndex 设置为被点击的位置名称的索引，发出一个名为 positiontypes
@@ -181,7 +180,8 @@ onMounted(() => {
     .select("#marTop")
     .boundingClientRect((data) => {
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      marTop.value = data.top! + data.height!;
+      marTop.value =
+        (data as UniApp.NodeInfo).top! + (data as UniApp.NodeInfo).height!;
     })
     .exec();
 });

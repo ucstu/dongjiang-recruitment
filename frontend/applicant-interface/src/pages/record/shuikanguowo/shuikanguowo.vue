@@ -7,7 +7,7 @@
         :key="i"
         class="list-item"
         :company-detail="lookForMe"
-        @com-click="view_2OnClick(lookForMe.companyInformationId)"
+        @com-click="view_2OnClick(lookForMe.id)"
       />
     </view>
   </view>
@@ -19,39 +19,37 @@
 <script lang="ts" setup>
 import CompanyDetail from "@/components/CompanyDetail/CompanyDetail.vue";
 import NavigationBar from "@/components/NavigationBar/NavigationBar.vue";
-import {
-getCompanyInfosP0,
-getUserInfosP0InspectionRecords
-} from "@/services/services";
-import { CompanyInformation } from "@/services/types";
-import { useAuthStore } from "@/stores/auth";
-import { failResponseHandler } from "@/utils/handler";
+import { useInfoStore } from "@/stores";
+import type { Company } from "@dongjiang-recruitment/service-common";
 
-const store = useAuthStore();
+const store = useInfoStore();
 
-const companyInfo = ref<CompanyInformation[]>([]);
+const companyInfo = ref<Company[]>([]);
 const emptyShow = ref(false);
 // 查询查看记录
-getUserInfosP0InspectionRecords(
-  store.account.fullInformationId,
-  {}
-).then((res) => {
-  if (!res.data.body.userInspectionRecords.length) {
-    emptyShow.value = true;
-  } else {
-    for (const item of res.data.body.userInspectionRecords) {
-      getCompanyInfosP0(item.companyInformationId)
-        .then((res) => {
-          const p = companyInfo.value.map((item) => item.companyInformationId);
-          if (!p.includes(res.data.body.companyInformationId)) {
-            companyInfo.value.push(res.data.body);
-          }
-        })
-        .catch(failResponseHandler);
+applicantInspectionRecordService
+  .queryUserInspectionRecord({
+    applicantId: store.applicant!.id,
+  })
+  .then((res) => {
+    if (res.total === 0) {
+      emptyShow.value = true;
+    } else {
+      for (const item of res.items) {
+        companyService
+          .getCompany({
+            id: item.companyId,
+          })
+          .then((res) => {
+            const p = companyInfo.value.map((item) => item.id);
+            if (!p.includes(res.id)) {
+              companyInfo.value.push(res);
+            }
+          });
+      }
+      emptyShow.value = false;
     }
-    emptyShow.value = false;
-  }
-});
+  });
 
 const view_2OnClick = (c: string) => {
   uni.navigateTo({ url: "/detail/gongsijieshao/gongsijieshao?companyId=" + c });

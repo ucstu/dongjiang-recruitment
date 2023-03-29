@@ -11,15 +11,15 @@
         class="img-photo"
       />
     </view>
-    <image :src="VITE_CDN_URL + store.applicantInformation.avatarUrl" class="img" />
+    <image :src="VITE_CDN_URL + store.applicant!.avatarUrl" class="img" />
   </view>
 </template>
 
 <script lang="ts" setup>
-import { useAuthStore } from "@/stores/auth";
+import { useInfoStore } from "@/stores";
 
 const VITE_CDN_URL = import.meta.env.VITE_CDN_URL;
-const store = useAuthStore();
+const store = useInfoStore();
 
 const props = defineProps({
   mes: {

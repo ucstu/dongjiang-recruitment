@@ -2,9 +2,7 @@
   <view class="flex-col page">
     <view class="group-top">
       <view class="justify-between items-center top-box">
-        <text class="info-title"
-          >消息 ({{ connected ? "已连接" : "等待连接" }})</text
-        >
+        <text class="info-title">消息</text>
         <text class="items-center info-del" @click="allRead">一键已读</text>
       </view>
     </view>
@@ -43,11 +41,11 @@
           <view v-for="(item, i) in hrInfo" :key="i">
             <MailBar
               :hr-info="item"
-              :mes="mes.get(item.hrInformationId)"
-              :is-read="isRead.get(item.hrInformationId)"
-              :time="time.get(item.hrInformationId)"
-              :message-key="messageKey.get(item.hrInformationId)"
-              :initiate-type="messageType.get(item.hrInformationId)"
+              :mes="mes.get(item.id)"
+              :is-read="isRead.get(item.id)"
+              :time="time.get(item.id)"
+              :message-key="messageKey.get(item.id)"
+              :initiate-type="messageType.get(item.id)"
             />
           </view>
         </view>
@@ -58,18 +56,15 @@
 
 <script lang="ts" setup>
 import MailBar from "@/components/MailBar/MailBar.vue";
-import {
-getHrInfosP0,
-getUserInfosP0DeliveryRecords
-} from "@/services/services";
-import { DeliveryRecord, HrInformation } from "@/services/types";
-import { useAuthStore } from "@/stores/auth";
-import { failResponseHandler } from "@/utils/handler";
-import { connected } from "@/utils/stomp";
+import { useInfoStore } from "@/stores";
 import usetimeChange from "@/utils/useTimeChange";
+import type {
+  DeliveryRecord,
+  Personnel,
+} from "@dongjiang-recruitment/service-common";
 
-const hrInfo = ref<HrInformation[]>([]);
-const store = useAuthStore();
+const hrInfo = ref<Personnel[]>([]);
+const store = useInfoStore();
 const mes = ref<Map<string, string>>(new Map());
 const time = ref<Map<string, string>>(new Map());
 const isRead = ref<Map<string, boolean>>(new Map());
@@ -78,63 +73,57 @@ const messageKey = ref<Map<string, string>>(new Map());
 
 onShow(() => {
   // 从store获取消息信息。
-  if (store.messages[store.account.detailId.personnel]) {
+  if (store.messages[store.applicant!.id]) {
     hrInfo.value = [];
-    for (const key in store.messages[
-      store.account.fullInformationId
-    ]) {
+    for (const key in store.messages[store.applicant!.id]) {
       messageKey.value.set(key, key);
-      getHrInfosP0(key).then((res) => {
-        // 用于获取最新消息信息。
-        mes.value.set(
-          key,
-          store.messages[store.account.detailId.personnel][key][
-            store.messages[store.account.detailId.personnel][key]
-              .length - 1
-          ].content
-        );
-        time.value.set(
-          key,
-          usetimeChange(
-            store.messages[store.account.detailId.personnel][key][
-              store.messages[store.account.detailId.personnel][key]
-                .length - 1
-            ].createdAt
-          )
-        );
-        isRead.value.set(
-          key,
-          store.messages[store.account.detailId.personnel][key][
-            store.messages[store.account.detailId.personnel][key]
-              .length - 1
-          ].haveRead
-        );
-        messageType.value.set(
-          key,
-          store.messages[store.account.detailId.personnel][key][
-            store.messages[store.account.detailId.personnel][key]
-              .length - 1
-          ].messageType
-        );
-        hrInfo.value.push(res.data.body);
-      });
+      personnelService
+        .getPersonnel({
+          id: key,
+        })
+        .then((res) => {
+          // 用于获取最新消息信息。
+          mes.value.set(
+            key,
+            store.messages[store.applicant!.id][key][
+              store.messages[store.applicant!.id][key].length - 1
+            ].content
+          );
+          time.value.set(
+            key,
+            usetimeChange(
+              store.messages[store.applicant!.id][key][
+                store.messages[store.applicant!.id][key].length - 1
+              ].createdAt
+            )
+          );
+          isRead.value.set(
+            key,
+            store.messages[store.applicant!.id][key][
+              store.messages[store.applicant!.id][key].length - 1
+            ].haveRead
+          );
+          messageType.value.set(
+            key,
+            store.messages[store.applicant!.id][key][
+              store.messages[store.applicant!.id][key].length - 1
+            ].messageType
+          );
+          hrInfo.value.push(res);
+        });
     }
   }
 });
 // 一键已读
 const allRead = () => {
-  for (const key in store.messages[
-    store.account.fullInformationId
-  ]) {
+  for (const key in store.messages[store.applicant!.id]) {
     if (
-      store.messages[store.account.detailId.personnel][key][
-        store.messages[store.account.detailId.personnel][key].length -
-          1
+      store.messages[store.applicant!.id][key][
+        store.messages[store.applicant!.id][key].length - 1
       ].initiateType === 2
     ) {
-      store.messages[store.account.detailId.personnel][key][
-        store.messages[store.account.detailId.personnel][key].length -
-          1
+      store.messages[store.applicant!.id][key][
+        store.messages[store.applicant!.id][key].length - 1
       ].haveRead = true;
       isRead.value.set(key, true);
     }
@@ -144,13 +133,16 @@ const allRead = () => {
 /* 投递记录 */
 const toMyDelivery = () => {
   let deliveryRecords = <DeliveryRecord[]>[];
-  getUserInfosP0DeliveryRecords(store.account.fullInformationId, {
-    status: 1 as unknown as (1 | 2 | 3 | 4 | 5)[],
-  })
-    .then((res) => {
-      deliveryRecords = res.data.body.deliveryRecords;
+  applicantDeliveryRecordService
+    .queryDeliveryRecord({
+      applicantId: store.applicant!.id,
+      query: {
+        status: ["$eq", 1],
+      },
     })
-    .catch(failResponseHandler);
+    .then((res) => {
+      deliveryRecords = res.items;
+    });
   let item = encodeURIComponent(JSON.stringify(deliveryRecords));
   uni.navigateTo({
     url: "/record/toudijilu/toudijilu?deliveryRecords=" + item,

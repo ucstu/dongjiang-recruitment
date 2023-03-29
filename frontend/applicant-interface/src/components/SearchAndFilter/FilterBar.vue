@@ -31,13 +31,8 @@
         v-for="(JobDetailer, i) in jobDetails"
         :key="i"
         class="list-item"
-          :position="JobDetailer"
-        @job-click="
-          toPositions(
-            JobDetailer.positionInformationId,
-            JobDetailer.companyInformationId
-          )
-        "
+        :position="JobDetailer"
+        @job-click="toPositions(JobDetailer.id, JobDetailer.companyId)"
       />
     </scroll-view>
   </view>
@@ -66,8 +61,7 @@
 <script lang="ts" setup>
 import JobDetail from "@/components/JobDetail/JobDetail.vue";
 import wybPopup from "@/components/wyb-popup/wyb-popup.vue";
-import { getCompanyInfosPositionInfos } from "@/services/services";
-import { PositionInformation } from "@/services/types";
+import type { Position } from "@dongjiang-recruitment/service-common";
 
 const props = defineProps({
   searchContent: {
@@ -76,28 +70,36 @@ const props = defineProps({
   },
 });
 
-const jobDetails = ref<PositionInformation[]>([]);
+const jobDetails = ref<Position[]>([]);
 const sortValue = ["综合排序", "距离优先", "薪资待遇", "学历要求", "工作经验"];
 const sortval = ref(sortValue[0]);
 
-getCompanyInfosPositionInfos({
-  positionType: props.searchContent,
-}).then((res) => {
-  jobDetails.value = res.data.body.positionInformations;
-});
+companyService
+  .queryAllPosition({
+    query: {
+      positionType: ["$like", `%${props.searchContent}}%`],
+    },
+  })
+  .then((res) => {
+    jobDetails.value = res.items;
+  });
 
 // 在“shaixuanyemian”页面中发出的事件“filter”的监听器。
 uni.$on("filter", (data) => {
-  getCompanyInfosPositionInfos({
-    positionType: props.searchContent,
-    educations: data.degree as (1 | 5 | 2 | 3 | 4)[],
-    workingYears: data.experience as (1 | 5 | 2 | 3 | 4 | 6)[],
-    workTypes: data.nature as (1 | 2 | 3)[],
-    scales: data.size as (1 | 5 | 2 | 3 | 4 | 6)[],
-    financingStages: data.stage as (2 | 1 | 3 | 4 | 5 | 6 | 7 | 8)[],
-  }).then((res) => {
-    jobDetails.value = res.data.body.positionInformations;
-  });
+  companyService
+    .queryAllPosition({
+      query: {
+        positionType: ["$like", `%${props.searchContent}`],
+        education: ["$in", ...(data.degree || [])],
+        workingYears: ["$in", ...(data.degree || [])],
+        workType: ["$in", ...(data.degree || [])],
+        // scale: ["$in", ...(data.degree || [])],
+        // financingStage: ["$in", ...(data.degree || [])],
+      },
+    })
+    .then((res) => {
+      jobDetails.value = res.items;
+    });
 });
 
 // 安装组件后调用的生命周期挂钩。
@@ -118,44 +120,64 @@ const sortChoose = (index: number) => {
   sortval.value = sortValue[index];
   if (index === 1) {
     // 距离优先
-    getCompanyInfosPositionInfos({
-      positionType: props.searchContent,
-      sort: ["workCityName,asc"],
-    }).then((res) => {
-      jobDetails.value = res.data.body.positionInformations;
-    });
+    companyService
+      .queryAllPosition({
+        query: {
+          positionType: ["$like", props.searchContent],
+        },
+        sort: ["workCityName,asc"],
+      })
+      .then((res) => {
+        jobDetails.value = res.items;
+      });
   } else if (index === 2) {
     // 薪资待遇
-    getCompanyInfosPositionInfos({
-      positionType: props.searchContent,
-      sort: ["startingSalary,desc"],
-    }).then((res) => {
-      jobDetails.value = res.data.body.positionInformations;
-    });
+    companyService
+      .queryAllPosition({
+        query: {
+          positionType: ["$like", props.searchContent],
+        },
+        sort: ["startingSalary,asc"],
+      })
+      .then((res) => {
+        jobDetails.value = res.items;
+      });
   } else if (index === 3) {
     // 学历要求
-    getCompanyInfosPositionInfos({
-      positionType: props.searchContent,
-      sort: ["education,asc"],
-    }).then((res) => {
-      jobDetails.value = res.data.body.positionInformations;
-    });
+    companyService
+      .queryAllPosition({
+        query: {
+          positionType: ["$like", props.searchContent],
+        },
+        sort: ["education,asc"],
+      })
+      .then((res) => {
+        jobDetails.value = res.items;
+      });
   } else if (index === 4) {
     // 工作经验
-    getCompanyInfosPositionInfos({
-      positionType: props.searchContent,
-      sort: ["workingYears,asc"],
-    }).then((res) => {
-      jobDetails.value = res.data.body.positionInformations;
-    });
+    companyService
+      .queryAllPosition({
+        query: {
+          positionType: ["$like", props.searchContent],
+        },
+        sort: ["workingYears,asc"],
+      })
+      .then((res) => {
+        jobDetails.value = res.items;
+      });
   } else {
     // 综合排序
-    getCompanyInfosPositionInfos({
-      positionType: props.searchContent,
-      sort: ["positionName,asc"],
-    }).then((res) => {
-      jobDetails.value = res.data.body.positionInformations;
-    });
+    companyService
+      .queryAllPosition({
+        query: {
+          positionType: ["$like", props.searchContent],
+        },
+        sort: ["positionName,asc"],
+      })
+      .then((res) => {
+        jobDetails.value = res.items;
+      });
   }
   popup.value.hide();
 };

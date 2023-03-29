@@ -36,11 +36,11 @@ const searchContent = ref("");
 
 // 加载页面时调用的函数。
 onLoad((e) => {
-  if (e.city) {
-    cityName.value = e.city;
+  if (e!.city) {
+    cityName.value = e!.city;
   }
-  if (e.searchContent) {
-    searchContent.value = e.searchContent;
+  if (e!.searchContent) {
+    searchContent.value = e!.searchContent;
   }
 });
 

@@ -66,15 +66,18 @@
 import NavigationBar from "@/components/NavigationBar/NavigationBar.vue";
 import wybModal from "@/components/wyb-modal/wyb-modal.vue";
 import wybPopup from "@/components/wyb-popup/wyb-popup.vue";
+import { useInfoStore } from "@/stores";
 import { useAuthStore } from "@/stores/auth";
 
-const store = useAuthStore();
+const authStore = useAuthStore();
+const infoStore = useInfoStore();
+
 const { runAsync: sendVerificationCode } =
   commonService.useSendVerificationCode(undefined, {
     manual: true,
   });
 // 隐藏账号
-const phoneNumber = store.account!.userName.replace(
+const phoneNumber = authStore.account!.userName.replace(
   /(\d{3})\d{4}(\d{4})/,
   "$1****$2"
 );
@@ -94,7 +97,7 @@ const showDelete = () => {
 const { refreshAsync: destroyAccount } =
   authenticationService.useDestroyAccount(
     {
-      id: store.account!.id,
+      id: authStore.account!.id,
       verificationCode: code.value,
     },
     {
@@ -128,10 +131,10 @@ const cancelDelete = () => {
 // 注销账号并退出登录
 const confirmDelete = async () => {
   await destroyAccount();
-  store.token = null;
-  store.account = null;
-  store.applicant = null;
-  store.jobExpectations = [];
+  authStore.token = null;
+  authStore.account = null;
+  infoStore.applicant = null;
+  infoStore.jobExpectations = [];
   uni.navigateTo({
     url: "/account/denglu_zhuce/denglu",
   });

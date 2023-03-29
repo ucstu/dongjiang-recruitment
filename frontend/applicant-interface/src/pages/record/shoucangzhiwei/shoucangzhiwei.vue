@@ -19,39 +19,40 @@
 <script lang="ts" setup>
 import JobPanel from "@/components/JobPanel/JobPanel.vue";
 import NavigationBar from "@/components/NavigationBar/NavigationBar.vue";
-import {
-deleteUserInfosP0GarnerRecordsP1,
-getCompanyInfosP0PositionInfosP1,
-getUserInfosP0GarnerRecords
-} from "@/services/services";
-import { PositionInformation } from "@/services/types";
-import { useAuthStore } from "@/stores/auth";
-import { failResponseHandler } from "@/utils/handler";
-const store = useAuthStore();
+import { useInfoStore } from "@/stores";
+import type {
+  GarnerRecord,
+  Position,
+} from "@dongjiang-recruitment/service-common";
 
-const favorites = ref();
-const favoritesPosition = ref<PositionInformation[]>([]);
+const store = useInfoStore();
+
+const favorites = ref<GarnerRecord[]>([]);
+const favoritesPosition = ref<Position[]>([]);
 const cancelCollection = ref("取消收藏");
 const emptyShow = ref(true);
+
 // 查询收藏记录
-getUserInfosP0GarnerRecords(store.account.fullInformationId, {})
+applicantGarnerRecordService
+  .queryGarnerRecord({
+    applicantId: store.applicant!.id,
+  })
   .then((res) => {
-    favorites.value = res.data.body.garnerRecords;
+    favorites.value = res.items;
     for (const favorite of favorites.value) {
-      getCompanyInfosP0PositionInfosP1(
-        favorite.companyInformationId,
-        favorite.positionInformationId
-      )
+      companyPositionService
+        .getPosition({
+          companyId: favorite.companyId,
+          id: favorite.positionId,
+        })
         .then((res) => {
-          favoritesPosition.value.push(res.data.body);
+          favoritesPosition.value.push(res);
           if (favoritesPosition.value.length) {
             emptyShow.value = false;
           }
-        })
-        .catch(failResponseHandler);
+        });
     }
-  })
-  .catch(failResponseHandler);
+  });
 
 onShow(() => {
   if (!favoritesPosition.value.length) {
@@ -63,15 +64,15 @@ onShow(() => {
 /* 清空收藏记录 */
 const emptyFavorites = () => {
   for (const favorite of favorites.value) {
-    deleteUserInfosP0GarnerRecordsP1(
-      favorite.userInformationId,
-      favorite.garnerRecordId
-    )
-      .then(() => {
-        favorites.value = null;
-        favoritesPosition.value.length = 0;
+    applicantGarnerRecordService
+      .removeGarnerRecord({
+        applicantId: favorite.applicantId,
+        id: favorite.id,
       })
-      .catch(failResponseHandler);
+      .then(() => {
+        favorites.value = [];
+        favoritesPosition.value.length = 0;
+      });
   }
 };
 </script>

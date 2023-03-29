@@ -51,14 +51,13 @@
       </view>
     </scroll-view>
     <view class="justify-center items-center btn-box">
-      <button class="btn-submit" type="submit" @click="saveTags">确定</button>
+      <button class="btn-submit" @click="saveTags">确定</button>
     </view>
   </view>
 </template>
 
 <script lang="ts" setup>
 import NavigationBar from "@/components/NavigationBar/NavigationBar.vue";
-import { getDirectionTags } from "@/services/services";
 
 interface subDivisionLabels {
   classificationName: string;
@@ -73,22 +72,26 @@ const checkedSubLabels = ref<subDivisionLabels["subLabels"]>([]);
 
 onMounted(() => {
   // 用于从服务器获取数据的函数。
-  getDirectionTags({ positionName: "撒辣椒粉" }).then((res) => {
-    checkedClassifyName.value = res.data.body.map((classify) => {
-      const checkedLabels = classify.subdivisionLabels.map((label) => {
-        const checkableLabel = reactive({
-          subLabelsName: label,
-          checked: false,
+  commonService
+    .getDirectionTags({
+      positionName: "撒辣椒粉",
+    })
+    .then((res) => {
+      checkedClassifyName.value = res.map((classify) => {
+        const checkedLabels = classify.subdivisionLabels.map((label) => {
+          const checkableLabel = reactive({
+            subLabelsName: label,
+            checked: false,
+          });
+          checkedSubLabels.value.push(checkableLabel);
+          return checkableLabel;
         });
-        checkedSubLabels.value.push(checkableLabel);
-        return checkableLabel;
+        return {
+          classificationName: classify.classificationName,
+          subLabels: checkedLabels,
+        };
       });
-      return {
-        classificationName: classify.classificationName,
-        subLabels: checkedLabels,
-      };
     });
-  });
 });
 
 const checkeds = ref<string[]>([]);

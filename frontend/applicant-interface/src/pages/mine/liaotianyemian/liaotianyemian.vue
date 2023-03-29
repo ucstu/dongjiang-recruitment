@@ -38,10 +38,10 @@
     <!-- #endif -->
     <scroll-view class="group-info" :scroll-y="true" :scroll-top="scrollTop">
       <view
-        v-for="recode in store.messages[
-          store.account.fullInformationId
+        v-for="recode in infoStore.messages[
+          infoStore.applicant!.id
         ][messageKey]"
-        :key="recode.messageRecordId"
+        :key="recode.id"
       >
         <Left
           v-if="recode.initiateType === 2"
@@ -86,67 +86,61 @@
 <script lang="ts" setup>
 import Left from "@/components/BubbleBox/BubbleBoxHr.vue";
 import Right from "@/components/BubbleBox/BubbleBoxUser.vue";
-import { getHrInfosP0 } from "@/services/services";
-import { HrInformation } from "@/services/types";
-import { useAuthStore } from "@/stores/auth";
-import { failResponseHandler } from "@/utils/handler";
-import { sendMessage } from "@/utils/stomp";
+import { useAuthStore, useInfoStore } from "@/stores";
+import type { Personnel } from "@dongjiang-recruitment/service-common";
 
 const VITE_BASE_URL = import.meta.env.VITE_BASE_URL;
-const store = useAuthStore();
+
+const infoStore = useInfoStore();
+const authStore = useAuthStore();
 
 /* #ifdef MP-WEIXIN || MP-ALIPAY || MP-BAIDU || MP-TOUTIAO || MP-QQ */
 
-const navigationBarTop = store.menu.top;
+const navigationBarTop = infoStore.menu.top;
 
-const navigationBarWidth = store.menu.left - uni.upx2px(30);
+const navigationBarWidth = infoStore.menu.left - uni.upx2px(30);
 
 /* #endif */
 
-const hrInfo = ref<HrInformation>({} as HrInformation);
+const hrInfo = ref<Personnel>({} as Personnel);
 const inputValue = ref("");
 const messageKey = ref("");
 const scrollTop = ref(0);
 
 watchEffect(() => {
   // 用于在页面高度发生变化时滚动到页面底部。
-  if (
-    store.messages[store.account.detailId.personnel][
-      hrInfo.value.hrInformationId
-    ]
-  ) {
+  if (infoStore.messages[infoStore.applicant!.id][hrInfo.value.id]) {
     const sTop =
-      store.messages[store.account.detailId.personnel][
-        hrInfo.value.hrInformationId
-      ].length * uni.upx2px(150);
+      infoStore.messages[infoStore.applicant!.id][hrInfo.value.id].length *
+      uni.upx2px(150);
     nextTick(() => {
       scrollTop.value = sTop;
     });
   }
 
   // 这是为了检查用户是否已经与 HR 进行过对话。如果没有，它将创建一个新的对话。
-  if (!store.messages[store.account.detailId.personnel]) {
-    store.messages[store.account.detailId.personnel] = {};
+  if (!infoStore.messages[infoStore.applicant!.id]) {
+    infoStore.messages[infoStore.applicant!.id] = {};
   }
-  for (const key in store.messages[
-    store.account.fullInformationId
-  ]) {
-    if (key === hrInfo.value.hrInformationId) {
+  for (const key in infoStore.messages[infoStore.applicant!.id]) {
+    if (key === hrInfo.value.id) {
       messageKey.value = key;
     }
   }
 });
 
 onLoad((e) => {
-  if (e.Id) {
-    getHrInfosP0(e.Id)
-      .then((res) => {
-        hrInfo.value = res.data.body;
+  if (e!.Id) {
+    personnelService
+      .getPersonnel({
+        id: e!.Id,
       })
-      .catch(failResponseHandler);
+      .then((res) => {
+        hrInfo.value = res;
+      });
   }
-  if (e.key) {
-    messageKey.value = e.key;
+  if (e!.key) {
+    messageKey.value = e!.key;
   }
 });
 
@@ -159,7 +153,9 @@ const goBack = () => {
 // 发送消息的函数。
 const sendMes = () => {
   if (inputValue.value.length) {
-    sendMessage(inputValue.value, 1, hrInfo.value.hrInformationId, 2);
+    // sendMessage(inputValue.value, 1, hrInfo.value.hrInformationId, 2);
+    console.log("fasongzaibukeyong");
+
     inputValue.value = "";
   } else {
     uni.showToast({
@@ -180,7 +176,7 @@ const sendImage = () => {
         filePath: tempFilePath[0],
         name: "file",
         header: {
-          Authorization: "Bearer " + store.token,
+          Authorization: "Bearer " + authStore.token,
         },
         success: (res) => {
           const response = JSON.parse(res.data) as {
@@ -189,7 +185,8 @@ const sendImage = () => {
             status: number;
             timestamp: string;
           };
-          sendMessage(response.body, 2, hrInfo.value.hrInformationId, 2);
+          // sendMessage(response.body, 2, hrInfo.value.hrInformationId, 2);
+          console.log("fasongzanbukeyong");
         },
         fail: (err) => {
           uni.showToast({

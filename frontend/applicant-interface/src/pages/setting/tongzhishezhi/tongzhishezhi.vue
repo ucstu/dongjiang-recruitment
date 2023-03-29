@@ -100,7 +100,7 @@ for (let i = 0; i <= 59; i++) {
   minutes.value.push(m);
 }
 
-const bindChange = (e: { detail: { value: never } }) => {
+const bindChange = (e: { detail: { value: any } }) => {
   const val = e.detail.value;
   hour1.value = hours.value[val[0]];
   hour2.value = hours.value[val[2]];

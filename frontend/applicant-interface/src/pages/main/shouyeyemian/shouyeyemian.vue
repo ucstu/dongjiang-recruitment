@@ -57,7 +57,7 @@
         </view>
         <view class="flex-row group-4">
           <view class="flex-row">
-            <text @click="text_22OnClick">{{ jobFilter.workCityName }}</text>
+            <text @click="text_22OnClick">{{ jobFilter }}</text>
             <image
               src="https://codefun-proj-user-res-1256085488.cos.ap-guangzhou.myqcloud.com/623287845a7e3f0310c3a3f7/623446dc62a7d90011023514/16475959311313713900.png"
               class="image-3 image-4"
@@ -121,7 +121,7 @@
           </view>
           <view class="flex-row group-4">
             <view class="flex-row">
-              <text @click="text_22OnClick">{{ jobFilter.workCityName }}</text>
+              <text @click="text_22OnClick">{{ jobFilter }}</text>
               <image
                 src="https://codefun-proj-user-res-1256085488.cos.ap-guangzhou.myqcloud.com/623287845a7e3f0310c3a3f7/623446dc62a7d90011023514/16475959311313713900.png"
                 class="image-3 image-4"
@@ -144,7 +144,13 @@
     </view>
     <!--  #endif -->
     <view class="flex-col">
-      <z-paging ref="paging" v-model="positions" use-page-scroll :default-page-size="5" @query="queryList">
+      <z-paging
+        ref="paging"
+        v-model="positions"
+        use-page-scroll
+        :default-page-size="5"
+        @query="queryList"
+      >
         <job-detail
           v-for="position in positions"
           :key="position.id"
@@ -159,8 +165,8 @@
 <script lang="ts" setup>
 import { useInfoStore } from "@/stores";
 import type {
-JobExpectation,
-Position
+  JobExpectation,
+  Position,
 } from "@dongjiang-recruitment/service-common";
 
 const infoStore = useInfoStore();
@@ -179,11 +185,15 @@ const activeMethod = ref<"热门" | "附近" | "最新">(methods.value[0]);
 const activeJobExpectation = ref<JobExpectation>(infoStore.jobExpectations[0]);
 const paging = ref<{ complete: (param: Array<any> | boolean) => void }>();
 const queryList = async (pageNo: number, pageSize: number) => {
-  paging.value?.complete((await companyService.queryAllPosition({
-    page: pageNo,
-    size: pageSize,
-    sort: activeMethod.value === "最新" ? ["createdAt,desc"] : undefined,
-  })).items);
+  paging.value?.complete(
+    (
+      await companyService.queryAllPosition({
+        page: pageNo,
+        size: pageSize,
+        sort: activeMethod.value === "最新" ? ["createdAt,desc"] : undefined,
+      })
+    ).items
+  );
 };
 
 /** 添加求职期望 */
@@ -195,7 +205,7 @@ const image_5OnClick = () => {
  */
 const image_6OnClick = () => {
   uni.navigateTo({
-    url: `/pages/most/sousuoyemian/sousuoyemian?city=${jobFilter.value.workCityName}`,
+    url: `/pages/most/sousuoyemian/sousuoyemian?city=${jobFilter.value}`,
   });
 };
 /* 位置选择 */
@@ -203,16 +213,15 @@ const text_22OnClick = () => {
   uni.navigateTo({
     url:
       `/pages/most/weizhixuanze/weizhixuanze?city=` +
-      jobFilter.value.workCityName +
-      "&areas=" +
-      JSON.stringify(city.value),
+      jobFilter.value +
+      "&areas=",
+    // JSON.stringify(city.value),
   });
 };
 const text_23OnClick = () => {
   uni.navigateTo({
-    url:
-      "/pages/most/shaixuanyemian/shaixuanyemian?filter=" +
-      JSON.stringify(filters.value),
+    url: "/pages/most/shaixuanyemian/shaixuanyemian?filter=",
+    // JSON.stringify(filters.value),
   });
 };
 /* 查看职位详情 */

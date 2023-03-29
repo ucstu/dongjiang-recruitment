@@ -142,15 +142,16 @@
 <script lang="ts" setup>
 import NavigationBar from "@/components/NavigationBar/NavigationBar.vue";
 import wybPopup from "@/components/wyb-popup/wyb-popup.vue";
-import { putUserInfosP0 } from "@/services/services";
-import { UserInformation } from "@/services/types";
+import { useInfoStore } from "@/stores";
 import { useAuthStore } from "@/stores/auth";
-import { failResponseHandler } from "@/utils/handler";
+import type { Applicant } from "@dongjiang-recruitment/service-common";
+
 const VITE_BASE_URL = import.meta.env.VITE_BASE_URL;
 const VITE_CDN_URL = import.meta.env.VITE_CDN_URL;
-const store = useAuthStore();
+const authStore = useAuthStore();
+const infoStore = useInfoStore();
 
-const userInformation = ref<UserInformation>({ ...store.applicantInformation });
+const userInformation = ref<Applicant>({ ...infoStore.applicant! });
 
 const fullName = ref(""); // 姓名
 const birOrTime = ref(true);
@@ -227,7 +228,7 @@ const chooseImage = () => {
         filePath: tempFilePath[0],
         name: "avatar",
         header: {
-          Authorization: "Bearer " + store.jsonWebToken,
+          Authorization: "Bearer " + authStore.token,
         },
         success: (res) => {
           const response = JSON.parse(res.data) as {
@@ -260,7 +261,7 @@ const chooseImage = () => {
 const birthday = ref();
 const age = ref();
 const worktime = ref([1]);
-const bindChange = (e: { detail: { value: never } }) => {
+const bindChange = (e: { detail: { value: any } }) => {
   const val = e.detail.value;
   if (!birOrTime.value) {
     userInformation.value.workingYears = val[0] as 1 | 2 | 3 | 4 | 5 | 6;
@@ -324,15 +325,15 @@ const saveInfos = () => {
       1,
       fullName.value.length
     );
-    putUserInfosP0(
-      store.accountInformation.fullInformationId,
-      userInformation.value
-    )
-      .then((res) => {
-        store.applicantInformation = res.data.body;
-        uni.navigateBack({ delta: 1 });
+    applicantService
+      .updateApplicant({
+        id: infoStore.applicant!.id,
+        requestBody: userInformation.value,
       })
-      .catch(failResponseHandler);
+      .then((res) => {
+        infoStore.applicant = res;
+        uni.navigateBack({ delta: 1 });
+      });
   }
 };
 </script>

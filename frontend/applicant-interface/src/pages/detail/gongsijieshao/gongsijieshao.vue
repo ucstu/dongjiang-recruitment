@@ -90,7 +90,7 @@
       style="width: 100%; height: 300px; margin-top: 20rpx"
       :latitude="companyInfo.location.latitude"
       :longitude="companyInfo.location.longitude"
-      :markers="markers"
+      :markers="markers as any"
     >
     </map>
   </view>
@@ -106,9 +106,7 @@
       v-for="(position, i) in positionInfo"
       :key="i"
       :position="position"
-      @job-click="
-        jobClick(position.positionInformationId, position.companyInformationId)
-      "
+      @job-click="jobClick(position.id, position.companyId)"
     />
     <view v-if="emptyShow" class="justify-center image">
       <image src="@/static/icons/nodata.svg" />
@@ -120,22 +118,14 @@
 import JobDetail from "@/components/JobDetail/JobDetail.vue";
 import NavigationBar from "@/components/NavigationBar/NavigationBar.vue";
 import wybPopup from "@/components/wyb-popup/wyb-popup.vue";
-import {
-  deleteUserInfosP0AttentionRecordsP1,
-  getCompanyInfosP0,
-  getCompanyInfosP0PositionInfos,
-  getUserInfosP0AttentionRecords,
-  postUserInfosP0AttentionRecords,
-} from "@/services/services";
-import { CompanyInformation, PositionInformation } from "@/services/types";
-import { useAuthStore } from "@/stores/auth";
-import { failResponseHandler } from "@/utils/handler";
+import { useInfoStore } from "@/stores";
+import type { Company, Position } from "@dongjiang-recruitment/service-common";
 
 const VITE_CDN_URL = import.meta.env.VITE_CDN_URL;
-const store = useAuthStore();
+const store = useInfoStore();
 
-const companyInfo = ref<CompanyInformation>({} as CompanyInformation);
-const positionInfo = ref<PositionInformation[]>([]);
+const companyInfo = ref<Company>({} as Company);
+const positionInfo = ref<Position[]>([]);
 const companyId = ref();
 const emptyShow = ref(false);
 const markers = ref([
@@ -174,30 +164,34 @@ const focus = ref(false);
 const focusId = ref();
 /* 判断是否关注 */
 onMounted(() => {
-  getUserInfosP0AttentionRecords(store.account.fullInformationId, {})
-    .then((res) => {
-      const focusCompany = res.data.body.attentionRecords.find((item) => {
-        return item.companyInformationId === companyId.value;
-      });
-      if (focusCompany) {
-        focus.value = true;
-        focusId.value = focusCompany.attentionRecordId;
-      }
+  applicantAttentionRecordService
+    .queryAttentionRecord({
+      applicantId: store.applicant!.id,
+      query: {
+        companyId: ["$eq", companyId.value],
+      },
     })
-    .catch(failResponseHandler);
+    .then((res) => {
+      if (res.total > 0) {
+        focus.value = true;
+        focusId.value = res.items[0].id;
+      }
+    });
 });
 
 // 一个生命周期钩子。它在页面加载时调用。
 onLoad((options) => {
-  if (options.companyId) {
-    companyId.value = options.companyId;
-    getCompanyInfosP0(companyId.value)
-      .then((res) => {
-        companyInfo.value = res.data.body;
-        markers.value[0].latitude = res.data.body.location.latitude;
-        markers.value[0].longitude = res.data.body.location.longitude;
+  if (options!.companyId) {
+    companyId.value = options!.companyId;
+    companyService
+      .getCompany({
+        id: companyId.value,
       })
-      .catch(failResponseHandler);
+      .then((res) => {
+        companyInfo.value = res;
+        markers.value[0].latitude = res.location.latitude;
+        markers.value[0].longitude = res.location.longitude;
+      });
   } else {
     uni.showToast({
       title: "参数错误",
@@ -212,53 +206,50 @@ const focusOn = () => {
   // 这是用于关注于公司的功能
   if (focus.value) {
     // 增加关注记录接口
-    postUserInfosP0AttentionRecords(store.account.fullInformationId, {
-      companyInformationId: companyId.value,
-      userInformationId: store.account.fullInformationId,
-    })
+    applicantAttentionRecordService
+      .addAttentionRecord({
+        applicantId: store.applicant!.id,
+        requestBody: {
+          companyId: companyId.value,
+          applicantId: store.applicant!.id,
+        },
+      })
       .then((res) => {
         uni.showToast({
           title: "关注成功",
           icon: "none",
           duration: 1500,
         });
-      })
-      .catch(failResponseHandler);
+      });
   } else {
-    getUserInfosP0AttentionRecords(store.account.fullInformationId, {})
-      .then((res) => {
-        const focusCompany = res.data.body.attentionRecords.find((item) => {
-          return item.companyInformationId === companyId.value;
-        });
-        if (focusCompany) {
-          focusId.value = focusCompany.attentionRecordId;
-          deleteUserInfosP0AttentionRecordsP1(
-            store.account.fullInformationId,
-            focusId.value
-          )
-            .then((res) => {
-              uni.showToast({
-                title: "取消关注",
-                icon: "none",
-                duration: 1500,
-              });
-              focusId.value = null;
-            })
-            .catch(failResponseHandler);
-        }
+    applicantAttentionRecordService
+      .removeAttentionRecord({
+        applicantId: store.applicant!.id,
+        id: focusId.value,
       })
-      .catch(failResponseHandler);
+      .then((res) => {
+        uni.showToast({
+          title: "取消关注",
+          icon: "none",
+          duration: 1500,
+        });
+        focusId.value = null;
+      });
   }
 };
 /* 查看在招职位 */
 const popup = ref();
 const jobOpening = () => {
-  getCompanyInfosP0PositionInfos(companyId.value, {}).then((res) => {
-    positionInfo.value = res.data.body.positionInformations;
-    if (positionInfo.value.length === 0) {
-      emptyShow.value = true;
-    }
-  });
+  companyPositionService
+    .queryPosition({
+      companyId: companyId.value,
+    })
+    .then((res) => {
+      positionInfo.value = res.items;
+      if (positionInfo.value.length === 0) {
+        emptyShow.value = true;
+      }
+    });
   popup.value.show();
 };
 

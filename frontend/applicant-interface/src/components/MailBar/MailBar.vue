@@ -28,15 +28,17 @@
 </template>
 
 <script lang="ts" setup>
-import { useAuthStore } from "@/stores/auth";
+import { useInfoStore } from "@/stores";
+import type { Personnel } from "@dongjiang-recruitment/service-common";
+import type { PropType } from "vue";
 
 const VITE_CDN_URL = import.meta.env.VITE_CDN_URL;
 
-const store = useAuthStore();
+const store = useInfoStore();
 
 const props = defineProps({
   hrInfo: {
-    type: Object,
+    type: Object as PropType<Personnel>,
     default: () => ({}),
   },
   mes: {
@@ -67,14 +69,10 @@ onShow(() => {
 
 // 当用户单击消息时调用的函数。它会将消息更改为已阅读，然后导航到聊天页面。
 const toChatPage = () => {
-  store.messages[store.account.detailId.personnel][
-    props.hrInfo.hrInformationId
-  ][
-    store.messages[store.account.detailId.personnel][
-      props.hrInfo.hrInformationId
-    ].length - 1
+  store.messages[store.applicant!.id][props.hrInfo.id][
+    store.messages[store.applicant!.id][props.hrInfo.id].length - 1
   ].haveRead = true;
-  const i = props.hrInfo.hrInformationId;
+  const i = props.hrInfo.id;
   uni.navigateTo({
     url:
       "/mine/liaotianyemian/liaotianyemian?Id=" +

@@ -72,39 +72,37 @@
 <script lang="ts" setup>
 import NavigationBar from "@/components/NavigationBar/NavigationBar.vue";
 import wybPopup from "@/components/wyb-popup/wyb-popup.vue";
-import {
-getUserInfosP0JobExpectations,
-putUserInfosP0
-} from "@/services/services";
-import { JobExpectation } from "@/services/types";
-import { useAuthStore } from "@/stores/auth";
-import { failResponseHandler } from "@/utils/handler";
-const store = useAuthStore();
+import { useInfoStore } from "@/stores";
+import type { JobExpectation } from "@dongjiang-recruitment/service-common";
+
+const store = useInfoStore();
 
 const jobExpectations = ref<JobExpectation[]>([]);
 const entryTime = ref("请选择");
 const entryTimes = ["请选择", "随时入职", "2周内入职", "一个月内入职"];
-const definedValue = ref([store.applicant.jobStatus]);
+const definedValue = ref([store.applicant!.jobStatus]);
 
 onLoad(() => {
-  if (store.applicant.jobStatus !== null) {
-    entryTime.value = entryTimes[store.applicant.jobStatus];
+  if (store.applicant!.jobStatus !== null) {
+    entryTime.value = entryTimes[store.applicant!.jobStatus];
   }
 });
 
 // 一个生命周期钩子。页面显示时调用。
 onShow(() => {
-  getUserInfosP0JobExpectations(store.account.fullInformationId, {})
-    .then((res) => {
-      jobExpectations.value = res.data.body.jobExpectations;
-      store.jobExpectations = res.data.body.jobExpectations;
+  applicantJobExpectationService
+    .queryJobExpectation({
+      applicantId: store.applicant!.id,
     })
-    .catch(failResponseHandler);
+    .then((res) => {
+      jobExpectations.value = res.items;
+      store.jobExpectations = res.items;
+    });
 });
 
 /* 查看、修改、删除求职期望 */
 const jobExpectationClick = (index: number) => {
-  const jobId = jobExpectations.value[index].jobExpectationId;
+  const jobId = jobExpectations.value[index].id;
   if (jobExpectations.value.length === 1) {
     uni.navigateTo({
       url: "/info/qiuzhiqiwang/qiuzhiqiwang?id=" + jobId + "&type=" + 1,
@@ -136,16 +134,16 @@ const jobStatus = () => {
 // 当用户更改选取器的值时调用的函数。
 const entryChange = (e: { detail: { value: number[] } }) => {
   entryTime.value = entryTimes[e.detail.value[0]];
-  store.applicant.jobStatus = e.detail.value[0] as 1 | 2 | 3;
+  store.applicant!.jobStatus = e.detail.value[0] as 1 | 2 | 3;
   definedValue.value = [e.detail.value[0] as 1 | 2 | 3];
-  putUserInfosP0(
-    store.account.fullInformationId,
-    store.applicant
-  )
-    .then((res) => {
-      store.applicant = res.data.body;
+  applicantService
+    .updateApplicant({
+      id: store.applicant!.id,
+      requestBody: store.applicant!,
     })
-    .catch(failResponseHandler);
+    .then((res) => {
+      store.applicant = res;
+    });
   popup.value.hide();
 };
 </script>
@@ -159,7 +157,7 @@ const entryChange = (e: { detail: { value: number[] } }) => {
   background-color: rgb(255 255 255);
 
   .header {
-    position: reactive;
+    position: relative;
   }
 
   .job-expect {

@@ -44,10 +44,12 @@
 
 <script lang="ts" setup>
 import NavigationBar from "@/components/NavigationBar/NavigationBar.vue";
-import { AccountInformation, UserInformation } from "@/services/types";
+import { useInfoStore } from "@/stores";
 import { useAuthStore } from "@/stores/auth";
+import type { Account, Applicant } from "@dongjiang-recruitment/service-common";
 
-const store = useAuthStore();
+const authStore = useAuthStore();
+const infoStore = useInfoStore();
 
 // 我的账户
 const toMyAccount = () => {
@@ -75,10 +77,10 @@ const toVersion = () => {
 // 退出当前账号
 const exitAccount = () => {
   // 清除存储中的数据。
-  store.jobExpectations = [];
-  store.token = null as unknown as string;
-  store.applicant = null as unknown as UserInformation;
-  store.account = null as unknown as AccountInformation;
+  infoStore.jobExpectations = [];
+  authStore.token = null as unknown as string;
+  infoStore.applicant = null as unknown as Applicant;
+  authStore.account = null as unknown as Account;
   uni.navigateTo({ url: "/account/denglu_zhuce/denglu" });
 };
 </script>

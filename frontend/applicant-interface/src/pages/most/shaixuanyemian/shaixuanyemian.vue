@@ -112,16 +112,15 @@
 
 <script lang="ts" setup>
 import NavigationBar from "@/components/NavigationBar/NavigationBar.vue";
-import { getFilterInformation } from "@/services/services";
-import { FilterInformation } from "@/services/types";
+import type { FilterCriteria } from "@dongjiang-recruitment/service-common";
 
-const expectedSalaries = ref<FilterInformation["expectedSalary"]>([]); // 期望薪资
-const workExperiences = ref<FilterInformation["workExperience"]>([]); // 工作经验
-const degreeRequires = ref<FilterInformation["education"]>([]); // 学历
-const jobNatures = ref<FilterInformation["natureWork"]>([]); // 工作性质
-const companySizes = ref<FilterInformation["companySize"]>([]); // 公司规模
-const financeStages = ref<FilterInformation["financingStage"]>([]); // 融资阶段
-const industrySectors = ref<FilterInformation["industryField"]>([]); // 行业领域
+const expectedSalaries = ref<FilterCriteria["expectedSalary"]>([]); // 期望薪资
+const workExperiences = ref<FilterCriteria["workExperience"]>([]); // 工作经验
+const degreeRequires = ref<FilterCriteria["education"]>([]); // 学历
+const jobNatures = ref<FilterCriteria["natureWork"]>([]); // 工作性质
+const companySizes = ref<FilterCriteria["companySize"]>([]); // 公司规模
+const financeStages = ref<FilterCriteria["financingStage"]>([]); // 融资阶段
+const industrySectors = ref<FilterCriteria["industryField"]>([]); // 行业领域
 
 const filterValue = ref({
   salary: "", // 期望薪资
@@ -134,41 +133,33 @@ const filterValue = ref({
 }); // 筛选值
 
 onMounted(() => {
-  getFilterInformation().then((res) => {
+  commonService.getFilterCriteria().then((res) => {
     expectedSalaries.value.splice(
       0,
       expectedSalaries.value.length,
-      ...res.data.body.expectedSalary
+      ...res.expectedSalary
     );
     workExperiences.value.splice(
       0,
       workExperiences.value.length,
-      ...res.data.body.workExperience
+      ...res.workExperience
     );
     degreeRequires.value.splice(
       0,
       degreeRequires.value.length,
-      ...res.data.body.education
+      ...res.education
     );
-    jobNatures.value.splice(
-      0,
-      jobNatures.value.length,
-      ...res.data.body.natureWork
-    );
-    companySizes.value.splice(
-      0,
-      companySizes.value.length,
-      ...res.data.body.companySize
-    );
+    jobNatures.value.splice(0, jobNatures.value.length, ...res.natureWork);
+    companySizes.value.splice(0, companySizes.value.length, ...res.companySize);
     financeStages.value.splice(
       0,
       financeStages.value.length,
-      ...res.data.body.financingStage
+      ...res.financingStage
     );
     industrySectors.value.splice(
       0,
       industrySectors.value.length,
-      ...res.data.body.industryField
+      ...res.industryField
     );
   });
 });
@@ -253,8 +244,8 @@ const activeSectorOf = (index: number) => {
 };
 
 onLoad((e) => {
-  if (e.filter) {
-    let p = JSON.parse(e.filter);
+  if (e!.filter) {
+    let p = JSON.parse(e!.filter);
     // 检查过滤器值是否为空。如果不为空，则会将值映射到
     // filterValue.value.workingYears、filterValue.value.educations、filterValue.value.workTypes、filterValue.value.scales、filterValue.value.financingStages。
     if (Object.keys(p).length) {

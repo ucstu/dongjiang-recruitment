@@ -48,7 +48,7 @@
               v-if="showCancel"
               class="wyb-modal-cancel"
               hover-class="wyb-modal-cancel-hover"
-              hover-stay-time="100"
+              :hover-stay-time="100"
               :style="{
                 color: cancelColor || ftColor,
                 borderBottomLeftRadius: radius + 'px',
@@ -60,7 +60,7 @@
             <view
               class="wyb-modal-confirm"
               hover-class="wyb-modal-confirm-hover"
-              hover-stay-time="100"
+              :hover-stay-time="100"
               :style="{
                 color: confirmColor,
                 borderBottomRightRadius: radius + 'px',

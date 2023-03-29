@@ -105,7 +105,7 @@ jobs:
         with:
           script: |
             const exportResults = await require(".github/workflows/monorepo-scripts/export-variables.js")({ core })
-            core.setOutput("build-args", exportResults['build-args'].join('\n'))
+            exportResults['build-args'] && core.setOutput("build-args", exportResults['build-args'].join('\n'))
       - name: Download Build Artifacts
         uses: actions/download-artifact@v3
         with:

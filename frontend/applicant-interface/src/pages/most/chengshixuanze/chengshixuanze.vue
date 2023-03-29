@@ -31,9 +31,9 @@
 
 <script lang="ts" setup>
 import NavigationBar from "@/components/NavigationBar/NavigationBar.vue";
-import { useAuthStore } from "@/stores/auth";
+import { useInfoStore } from "@/stores";
 
-const store = useAuthStore();
+const store = useInfoStore();
 
 const provinces = store.cities;
 const provinceIndexOf = ref(0);

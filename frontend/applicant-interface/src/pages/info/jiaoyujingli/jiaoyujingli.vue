@@ -153,15 +153,9 @@
 <script lang="ts" setup>
 import NavigationBar from "@/components/NavigationBar/NavigationBar.vue";
 import WybPopup from "@/components/wyb-popup/wyb-popup.vue";
-import {
-  deleteUserInfosP0EduExperiencesP1,
-  getUserInfosP0EduExperiencesP1,
-  postUserInfosP0EduExperiences,
-  putUserInfosP0EduExperiencesP1,
-} from "@/services/services";
-import { useAuthStore } from "@/stores/auth";
-import { failResponseHandler } from "@/utils/handler";
-const store = useAuthStore();
+import { useInfoStore } from "@/stores";
+import type { EducationExperience } from "@dongjiang-recruitment/service-common";
+const store = useInfoStore();
 
 const schoolName = ref(""); // 学校名称
 const education = ref<1 | 2 | 3 | 4>(0 as 1); // 学历
@@ -208,7 +202,7 @@ for (let i = 1; i <= 31; i++) {
 }
 const value1 = ref([year - 1960, month - 1, day - 1]); /* 默认入学时间 */
 const value2 = ref([year, month - 1, day - 1]); /* 默认毕业时间 */
-const defaultEducation = ref([education]); /* 默认学历 */
+const defaultEducation = ref([education.value]); /* 默认学历 */
 const bindChange = (e: any) => {
   const val = e.detail.value;
   year = years.value[val[0]];
@@ -229,22 +223,22 @@ const bindChange = (e: any) => {
 const educateId = ref(); // 教育经历id
 const deleteEd = ref(); // 删除
 onLoad((e) => {
-  educateId.value = e.educateId;
-  deleteEd.value = e.deleteEducate;
+  educateId.value = e!.educateId;
+  deleteEd.value = e!.deleteEducate;
   // 查询教育经历
   if (educateId.value !== undefined) {
-    getUserInfosP0EduExperiencesP1(
-      store.account.fullInformationId,
-      educateId.value
-    )
-      .then((res) => {
-        schoolName.value = res.data.body.schoolName;
-        education.value = res.data.body.education as 1 | 2 | 3 | 4;
-        subject.value = res.data.body.majorName;
-        startTime.value = res.data.body.admissionTime;
-        overTime.value = res.data.body.graduationTime;
+    applicantEducationExperienceService
+      .getEducationExperience({
+        applicantId: store.applicant!.id,
+        id: educateId.value,
       })
-      .catch(failResponseHandler);
+      .then((res) => {
+        schoolName.value = res.schoolName;
+        education.value = res.education as 1 | 2 | 3 | 4;
+        subject.value = res.majorName;
+        startTime.value = res.admissionTime;
+        overTime.value = res.graduationTime;
+      });
   }
 });
 // 增加、修改教育经历
@@ -264,40 +258,37 @@ const saveEducation = () => {
   } else {
     if (educateId.value !== undefined) {
       //修改教育经历
-      putUserInfosP0EduExperiencesP1(
-        store.account.fullInformationId,
-        educateId.value,
-        {
-          schoolName: schoolName.value,
-          education: education.value,
-          majorName: subject.value,
-          admissionTime: startTime.value,
-          graduationTime: overTime.value,
-          createdAt: "",
-          educationExperienceId: educateId.value,
-          updatedAt: "",
-        }
-      )
+      applicantEducationExperienceService
+        .updateEducationExperience({
+          applicantId: store.applicant!.id,
+          id: educateId.value,
+          requestBody: {
+            schoolName: schoolName.value,
+            education: education.value,
+            majorName: subject.value,
+            admissionTime: startTime.value,
+            graduationTime: overTime.value,
+            id: educateId.value,
+          } as EducationExperience,
+        })
         .then((res) => {
           uni.navigateBack({ delta: 1 });
-        })
-        .catch(failResponseHandler);
+        });
     } else {
-      postUserInfosP0EduExperiences(
-        //新增教育经历
-        store.account.fullInformationId,
-        {
-          schoolName: schoolName.value,
-          education: education.value,
-          majorName: subject.value,
-          admissionTime: startTime.value,
-          graduationTime: overTime.value,
-        }
-      )
+      applicantEducationExperienceService
+        .addEducationExperience({
+          applicantId: store.applicant!.id,
+          requestBody: {
+            schoolName: schoolName.value,
+            education: education.value,
+            majorName: subject.value,
+            admissionTime: startTime.value,
+            graduationTime: overTime.value,
+          },
+        })
         .then((res) => {
           uni.navigateBack({ delta: 1 });
-        })
-        .catch(failResponseHandler);
+        });
     }
   }
 };
@@ -309,14 +300,14 @@ const deleteEducation = () => {
     showCancel: true,
     success: (res) => {
       if (res.confirm) {
-        deleteUserInfosP0EduExperiencesP1(
-          store.account.fullInformationId,
-          educateId.value
-        )
+        applicantEducationExperienceService
+          .removeEducationExperience({
+            applicantId: store.applicant!.id,
+            id: educateId.value,
+          })
           .then(() => {
             uni.navigateBack({ delta: 1 });
-          })
-          .catch(failResponseHandler);
+          });
       } else if (res.cancel) {
         return;
       }

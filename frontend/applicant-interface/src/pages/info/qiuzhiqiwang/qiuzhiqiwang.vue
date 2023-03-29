@@ -100,18 +100,13 @@
 <script lang="ts" setup>
 import NavigationBar from "@/components/NavigationBar/NavigationBar.vue";
 import wybPopup from "@/components/wyb-popup/wyb-popup.vue";
-import {
-deleteUserInfosP0JobExpectationsP1,
-getUserInfosP0JobExpectationsP1,
-postUserInfosP0JobExpectations,
-putUserInfosP0JobExpectationsP1
-} from "@/services/services";
-import { useAuthStore } from "@/stores/auth";
-import { failResponseHandler } from "@/utils/handler";
-const store = useAuthStore();
+import { useInfoStore } from "@/stores";
+import type { JobExpectation } from "@dongjiang-recruitment/service-common";
 
-const jobExpectation = ref({
-  jobExpectationId: "",
+const store = useInfoStore();
+
+const jobExpectation = ref<JobExpectation>({
+  id: "",
   createdAt: "",
   updatedAt: "",
   positionType: 1 as 1 | 2 | 3,
@@ -120,7 +115,7 @@ const jobExpectation = ref({
   startingSalary: 0,
   ceilingSalary: 0,
   cityName: "",
-});
+} as JobExpectation);
 const salary = ref("");
 
 const directionTag = ref("");
@@ -168,32 +163,33 @@ const salaryExpectation = () => {
 };
 const d = ref(1);
 onLoad((e) => {
-  if (e.id !== undefined) {
-    jobId.value = e.id;
+  if (e!.id !== undefined) {
+    jobId.value = e!.id;
   }
-  if (e.data) {
-    d.value = parseInt(e.data);
-    if (parseInt(e.data)) {
+  if (e!.data) {
+    d.value = parseInt(e!.data);
+    if (parseInt(e!.data)) {
       saveBtn.value = "保存";
     } else {
       saveBtn.value = "完成";
     }
   }
   if (jobId.value) {
-    if (e.type) {
-      if (parseInt(e.type) === 1) {
+    if (e!.type) {
+      if (parseInt(e!.type) === 1) {
         deleteEx.value = "";
       }
     } else {
       deleteEx.value = "删除";
     }
     // 获取工作期望信息的函数。
-    getUserInfosP0JobExpectationsP1(
-      store.account.fullInformationId,
-      jobId.value
-    )
+    applicantJobExpectationService
+      .getJobExpectation({
+        applicantId: store.applicant!.id,
+        id: jobId.value,
+      })
       .then((res) => {
-        jobExpectation.value = res.data.body;
+        jobExpectation.value = res;
         salary.value = `${
           jobExpectation.value.startingSalary
         }k-${`${jobExpectation.value.ceilingSalary}k`}`;
@@ -209,8 +205,7 @@ onLoad((e) => {
             );
           }
         }
-      })
-      .catch(failResponseHandler);
+      });
   }
   // 监听组件 `chengshixuanze` 发出的事件 `liveCity`。
   uni.$on("liveCity", (date) => {
@@ -276,63 +271,65 @@ const saveJobExcept = () => {
     } else {
       if (jobId.value) {
         /* 修改求职期望 */
-        putUserInfosP0JobExpectationsP1(
-          store.account.fullInformationId,
-          jobId.value,
-          jobExpectation.value
-        )
+        applicantJobExpectationService
+          .updateJobExpectation({
+            applicantId: store.applicant!.id,
+            id: jobId.value,
+            requestBody: jobExpectation.value,
+          })
           .then((res) => {
             uni.showToast({
               title: "修改成功",
               icon: "none",
               duration: 1500,
             });
-            uni.$emit("changeJob", res.data.body);
-          })
-          .catch(failResponseHandler);
+            uni.$emit("changeJob", res);
+          });
       } else {
         /* 新增求职期望 */
-        postUserInfosP0JobExpectations(
-          store.account.fullInformationId,
-          {
-            positionType: jobExpectation.value.positionType,
-            directionTags: jobExpectation.value.directionTags,
-            positionName: jobExpectation.value.positionName,
-            startingSalary: jobExpectation.value.startingSalary,
-            ceilingSalary: jobExpectation.value.ceilingSalary,
-            cityName: jobExpectation.value.cityName,
-          }
-        )
+        applicantJobExpectationService
+          .addJobExpectation({
+            applicantId: store.applicant!.id,
+            requestBody: {
+              positionType: jobExpectation.value.positionType,
+              directionTags: jobExpectation.value.directionTags,
+              positionName: jobExpectation.value.positionName,
+              startingSalary: jobExpectation.value.startingSalary,
+              ceilingSalary: jobExpectation.value.ceilingSalary,
+              cityName: jobExpectation.value.cityName,
+            },
+          })
           .then((res) => {
             if (saveBtn.value === saveOver.value) {
               uni.switchTab({ url: "/pages/shouyeyemian/shouyeyemian" });
-              store.jobExpectations.push(res.data.body);
+              store.jobExpectations.push(res);
             } else {
               uni.navigateBack({
                 delta: 1,
               });
             }
-          })
-          .catch(failResponseHandler);
+          });
       }
     }
   }
 };
 // 删除求职期望
 const deleteExpectation = () => {
-  deleteUserInfosP0JobExpectationsP1(
-    store.account.fullInformationId,
-    jobId.value
-  ).then(() => {
-    uni.showToast({
-      title: "删除成功",
-      icon: "none",
-      duration: 1500,
+  applicantJobExpectationService
+    .removeJobExpectation({
+      applicantId: store.applicant!.id,
+      id: jobId.value,
+    })
+    .then(() => {
+      uni.showToast({
+        title: "删除成功",
+        icon: "none",
+        duration: 1500,
+      });
+      uni.navigateBack({
+        delta: 1,
+      });
     });
-    uni.navigateBack({
-      delta: 1,
-    });
-  });
 };
 
 const expectJob = () => {

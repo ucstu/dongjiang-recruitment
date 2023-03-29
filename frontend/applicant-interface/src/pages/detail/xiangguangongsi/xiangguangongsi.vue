@@ -16,25 +16,22 @@
 <script lang="ts" setup>
 import CompanyDetail from "@/components/CompanyDetail/CompanyDetail.vue";
 import SearchAndFilter from "@/components/SearchAndFilter/SearchAndFilter.vue";
-import { getCompanyInfos, getFilterInformation } from "@/services/services";
-import { CompanyInformation } from "@/services/types";
-import { failResponseHandler } from "@/utils/handler";
+import type { Company } from "@dongjiang-recruitment/service-common";
 
 const popup = ref();
 
-const attentionCompanies = reactive<CompanyInformation[]>([]);
-getCompanyInfos({})
-  .then((res) => {
-    attentionCompanies.push(...res.data.body.companyInformations);
-  })
-  .catch(failResponseHandler);
+const attentionCompanies = reactive<Company[]>([]);
+companyService.queryCompany({}).then((res) => {
+  attentionCompanies.push(...res.items);
+});
 const companySizes = reactive<string[]>([]); //公司规模
 const financeStages = reactive<string[]>([]); //融资阶段
 const industrySectors = reactive<string[]>([]); //行业领域
-getFilterInformation().then((res) => {
-  companySizes.push(...res.data.body.companySize);
-  financeStages.push(...res.data.body.financingStage);
-  industrySectors.push(...res.data.body.industryField);
+
+commonService.getFilterCriteria().then((res) => {
+  companySizes.push(...res.companySize);
+  financeStages.push(...res.financingStage);
+  industrySectors.push(...res.industryField);
 });
 
 const toCompanyInfo = () => {

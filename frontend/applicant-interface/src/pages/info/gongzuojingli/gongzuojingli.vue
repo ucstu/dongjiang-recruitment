@@ -194,7 +194,7 @@
         <view class="job-content-box">
           <textarea
             v-model="companyContent"
-            maxlength="150"
+            :maxlength="150"
             class="textarea"
             placeholder="请填写相关的工作内容"
           />
@@ -208,15 +208,9 @@
 <script lang="ts" setup>
 import NavigationBar from "@/components/NavigationBar/NavigationBar.vue";
 import wybPopup from "@/components/wyb-popup/wyb-popup.vue";
-import {
-  deleteUserInfosP0WorkExperiencesP1,
-  getUserInfosP0WorkExperiencesP1,
-  postUserInfosP0WorkExperiences,
-} from "@/services/services";
-import { WorkExperience } from "@/services/types";
-import { useAuthStore } from "@/stores/auth";
-import { failResponseHandler } from "@/utils/handler";
-const store = useAuthStore();
+import { useInfoStore } from "@/stores";
+import type { WorkExperience } from "@dongjiang-recruitment/service-common";
+const store = useInfoStore();
 
 const companyName = ref(""); // 公司名称
 const companyIndustry = ref(""); // 公司行业
@@ -239,25 +233,25 @@ const getPosition = () => {
   uni.navigateTo({ url: "/most/zhiweileixing/zhiweileixing" });
 };
 onLoad((e) => {
-  workId.value = e.workId; // 工作经历id
-  deleteWork.value = e.deleteWork; // 删除工作经历
+  workId.value = e!.workId; // 工作经历id
+  deleteWork.value = e!.deleteWork; // 删除工作经历
   /* 查询工作经历 */
   if (workId.value !== undefined) {
-    getUserInfosP0WorkExperiencesP1(
-      store.account.fullInformationId,
-      workId.value
-    )
-      .then((res) => {
-        companyName.value = res.data.body.corporateName;
-        companyIndustry.value = res.data.body.companyIndustry;
-        companyStartTime.value = res.data.body.startTime;
-        companyEndTime.value = res.data.body.endTime;
-        companyPosition.value = res.data.body.positionType;
-        positionName.value = res.data.body.positionName;
-        companyDepartment.value = res.data.body.departmentName;
-        companyContent.value = res.data.body.jobContent;
+    applicantWorkExperienceService
+      .getWorkExperience({
+        applicantId: store.applicant!.id,
+        id: workId.value,
       })
-      .catch(failResponseHandler);
+      .then((res) => {
+        companyName.value = res.companyName;
+        companyIndustry.value = res.companyIndustry;
+        companyStartTime.value = res.startTime;
+        companyEndTime.value = res.endTime;
+        companyPosition.value = res.positionType;
+        positionName.value = res.positionName;
+        companyDepartment.value = res.departmentName;
+        companyContent.value = res.jobContent;
+      });
   }
   /* 接收职位名*/
   uni.$on("positiontypes", (data) => {
@@ -363,24 +357,27 @@ const saveWorkExperience = () => {
       duration: 1500,
     });
   } else {
-    postUserInfosP0WorkExperiences(store.account.fullInformationId, {
-      corporateName: companyName.value,
-      companyIndustry: companyIndustry.value,
-      startTime: companyStartTime.value,
-      endTime: companyEndTime.value,
-      positionName: positionName.value,
-      positionType: companyPosition.value,
-      departmentName: companyDepartment.value,
-      jobContent: companyContent.value,
-    })
+    applicantWorkExperienceService
+      .addWorkExperience({
+        applicantId: store.applicant!.id,
+        requestBody: {
+          companyName: companyName.value,
+          companyIndustry: companyIndustry.value,
+          startTime: companyStartTime.value,
+          endTime: companyEndTime.value,
+          positionName: positionName.value,
+          positionType: companyPosition.value,
+          departmentName: companyDepartment.value,
+          jobContent: companyContent.value,
+        },
+      })
       .then((res) => {
         uni.showToast({
           title: "保存成功",
           icon: "none",
           duration: 1500,
         });
-      })
-      .catch(failResponseHandler);
+      });
   }
 };
 
@@ -391,10 +388,11 @@ const deleteWorkExperience = () => {
     content: "确定删除该工作经历吗？",
     success: (res) => {
       if (res.confirm) {
-        deleteUserInfosP0WorkExperiencesP1(
-          store.account.fullInformationId,
-          workId.value
-        )
+        applicantWorkExperienceService
+          .removeWorkExperience({
+            applicantId: store.applicant!.id,
+            id: workId.value,
+          })
           .then(() => {
             uni.showToast({
               title: "删除成功",
@@ -404,8 +402,7 @@ const deleteWorkExperience = () => {
             uni.navigateBack({
               delta: 1,
             });
-          })
-          .catch(failResponseHandler);
+          });
       } else if (res.cancel) {
         return;
       }

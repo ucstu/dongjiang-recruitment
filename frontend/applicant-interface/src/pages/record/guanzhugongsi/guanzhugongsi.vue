@@ -8,7 +8,7 @@
         class="list-item"
         :attention-company="attentionCompany"
         :send-type="unfocus"
-        @unfocus="unsubscribe(attentionCompany.companyInformationId)"
+        @unfocus="unsubscribe(attentionCompany.id)"
       />
     </view>
   </view>
@@ -20,36 +20,38 @@
 <script lang="ts" setup>
 import CompanyPanel from "@/components/CompanyPanel/CompanyPanel.vue";
 import NavigationBar from "@/components/NavigationBar/NavigationBar.vue";
-import {
-  deleteUserInfosP0AttentionRecordsP1,
-  getCompanyInfosP0,
-  getUserInfosP0AttentionRecords,
-} from "@/services/services";
-import { CompanyInformation } from "@/services/types";
-import { useAuthStore } from "@/stores/auth";
-import { failResponseHandler } from "@/utils/handler";
-const store = useAuthStore();
+import { useInfoStore } from "@/stores";
+import type {
+  AttentionRecord,
+  Company,
+} from "@dongjiang-recruitment/service-common";
 
-const attentionCompanies = ref<CompanyInformation[]>([]);
-const focusCompany = ref();
+const store = useInfoStore();
+
+const attentionCompanies = ref<Company[]>([]);
+const focusCompany = ref<AttentionRecord[]>([]);
 const unfocus = ref("取消关注");
 const emptyShow = ref(true);
 // 查询关注公司记录
-getUserInfosP0AttentionRecords(store.account.fullInformationId, {})
+applicantAttentionRecordService
+  .queryAttentionRecord({
+    applicantId: store.applicant!.id,
+  })
   .then((res) => {
-    focusCompany.value = res.data.body.attentionRecords;
+    focusCompany.value = res.items;
     for (const focus of focusCompany.value) {
-      getCompanyInfosP0(focus.companyInformationId)
+      companyService
+        .getCompany({
+          id: focus.companyId,
+        })
         .then((res) => {
-          attentionCompanies.value.push(res.data.body);
+          attentionCompanies.value.push(res);
           if (attentionCompanies.value.length) {
             emptyShow.value = false;
           }
-        })
-        .catch(failResponseHandler);
+        });
     }
-  })
-  .catch(failResponseHandler);
+  });
 
 onShow(() => {
   if (!attentionCompanies.value.length) {
@@ -58,24 +60,20 @@ onShow(() => {
   }
 });
 // 删除关注记录
-const unsubscribe = (index: string) => {
-  const attentionRecordId = focusCompany.value.find(
-    (item: { companyInformationId: string }) => {
-      return item.companyInformationId === index;
-    }
-  );
-  deleteUserInfosP0AttentionRecordsP1(
-    attentionRecordId.userInformationId,
-    attentionRecordId.attentionRecordId
-  )
-    .then((res) => {
-      attentionCompanies.value = attentionCompanies.value.filter(
-        (item: CompanyInformation) => {
-          return item.companyInformationId !== index;
-        }
-      );
+const unsubscribe = (id: string) => {
+  const attentionRecordId = focusCompany.value.find((item) => {
+    return item.companyId === id;
+  });
+  applicantAttentionRecordService
+    .removeAttentionRecord({
+      applicantId: attentionRecordId!.applicantId,
+      id: attentionRecordId!.id,
     })
-    .catch(failResponseHandler);
+    .then((res) => {
+      attentionCompanies.value = attentionCompanies.value.filter((item) => {
+        return item.id !== id;
+      });
+    });
 };
 </script>
 

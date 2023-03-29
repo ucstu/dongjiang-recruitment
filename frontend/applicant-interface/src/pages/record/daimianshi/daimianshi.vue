@@ -8,7 +8,7 @@
         class="list-item"
         :collection-position="interviewedJob"
         :send-type="sendType"
-        @state-click="stateClick(interviewedJob.positionInformationId)"
+        @state-click="stateClick(interviewedJob.id)"
       />
     </view>
   </view>
@@ -20,36 +20,43 @@
 <script lang="ts" setup>
 import JobPanel from "@/components/JobPanel/JobPanel.vue";
 import NavigationBar from "@/components/NavigationBar/NavigationBar.vue";
-import { useAuthStore } from "@/stores/auth";
+import { useInfoStore } from "@/stores";
+import type {
+  DeliveryRecord,
+  Position,
+} from "@dongjiang-recruitment/service-common";
 
-const store = useAuthStore();
+const store = useInfoStore();
 
-const interviewedJobs = ref<PositionInformation[]>([]);
-const interviewed = ref();
+const interviewedJobs = ref<Position[]>([]);
+const interviewed = ref<DeliveryRecord[]>([]);
 const sendType = ref("放弃面试");
 const emptyShow = ref(true);
 
 // 查询待面试信息
-getUserInfosP0DeliveryRecords(store.accountInformation.fullInformationId, {
-  status: [4],
-})
+applicantDeliveryRecordService
+  .queryDeliveryRecord({
+    applicantId: store.applicant!.id,
+    query: {
+      status: ["$eq", 4],
+    },
+  })
   .then((res) => {
-    interviewed.value = res.data.body.deliveryRecords;
+    interviewed.value = res.items;
     for (const interview of interviewed.value) {
-      getCompanyInfosP0PositionInfosP1(
-        interview.companyInformationId,
-        interview.positionInformationId
-      )
+      companyPositionService
+        .getPosition({
+          companyId: interview.companyId,
+          id: interview.positionId,
+        })
         .then((res) => {
-          interviewedJobs.value.push(res.data.body);
+          interviewedJobs.value.push(res);
           if (interviewedJobs.value.length) {
             emptyShow.value = false;
           }
-        })
-        .catch(failResponseHandler);
+        });
     }
-  })
-  .catch(failResponseHandler);
+  });
 
 onShow(() => {
   if (!interviewed.value.length) {
@@ -62,22 +69,20 @@ onShow(() => {
 /* 放弃面试 */
 const stateClick = (index: string) => {
   for (const delivery of interviewed.value) {
-    if (delivery.positionInformationId === index) {
-      deleteUserInfosP0DeliveryRecordsP1(
-        store.accountInformation.fullInformationId,
-        delivery.deliveryRecordId
-      )
+    if (delivery.positionId === index) {
+      applicantDeliveryRecordService
+        .removeDeliveryRecord({
+          applicantId: store.applicant!.id,
+          id: delivery.id,
+        })
         .then(() => {
           interviewed.value = interviewed.value.filter(
-            (item: { deliveryRecordId: any }) =>
-              item.deliveryRecordId !== delivery.deliveryRecordId
+            (item) => item.id !== delivery.id
           );
           interviewedJobs.value = interviewedJobs.value.filter(
-            (item: { positionInformationId: any }) =>
-              item.positionInformationId !== delivery.positionInformationId
+            (item) => item.id !== delivery.companyId
           );
-        })
-        .catch(failResponseHandler);
+        });
     }
   }
 };

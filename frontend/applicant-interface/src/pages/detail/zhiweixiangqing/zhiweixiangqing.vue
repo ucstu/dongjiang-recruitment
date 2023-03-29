@@ -82,7 +82,7 @@
         style="width: 100%; height: 300px; margin-top: 20rpx"
         :latitude="jobInformation.workingPlace.latitude"
         :longitude="jobInformation.workingPlace.longitude"
-        :markers="markers"
+        :markers="markers as any"
       >
       </map>
     </view>
@@ -106,7 +106,7 @@
     </view>
     <button
       class="justify-center items-center btn-common"
-      @click="communication(jobInformation.hrInformationId)"
+      @click="communication(jobInformation.personnelId)"
     >
       立即沟通
     </button>
@@ -147,22 +147,13 @@
 <script lang="ts" setup>
 import NavigationBar from "@/components/NavigationBar/NavigationBar.vue";
 import wybPopup from "@/components/wyb-popup/wyb-popup.vue";
-import {
-  deleteUserInfosP0GarnerRecordsP1,
-  getCompanyInfosP0,
-  getCompanyInfosP0PositionInfosP1,
-  getUserInfosP0GarnerRecords,
-  postUserInfosP0DeliveryRecords,
-  postUserInfosP0GarnerRecords,
-} from "@/services/services";
-import { CompanyInformation, PositionInformation } from "@/services/types";
-import { useAuthStore } from "@/stores/auth";
-import { failResponseHandler } from "@/utils/handler";
+import { useInfoStore } from "@/stores";
+import type { Company, Position } from "@dongjiang-recruitment/service-common";
 
 const VITE_CDN_URL = import.meta.env.VITE_CDN_URL;
-const store = useAuthStore();
+const store = useInfoStore();
 
-const jobInformation = ref<PositionInformation>({} as PositionInformation); // 职位信息
+const jobInformation = ref<Position>({} as Position); // 职位信息
 
 const educates = ref(["不要求", "大专", "本科", "硕士", "博士"]); //学历要求
 const workYears = ref(["经验不限", "在校/应届", "3年以下", "3-5年", "5-10年"]); //工作经验
@@ -203,31 +194,36 @@ const markers = ref([
     height: 30,
   },
 ]);
-const companyInformation = ref<CompanyInformation>({} as CompanyInformation); // 公司信息
+const companyInformation = ref<Company>({} as Company); // 公司信息
 const companyId = ref(""); // 公司id
 const positionId = ref(""); // 职位id
 onLoad((e) => {
-  if (e.companyId && e.positionId) {
-    companyId.value = e.companyId;
-    positionId.value = e.positionId;
+  if (e!.companyId && e!.positionId) {
+    companyId.value = e!.companyId;
+    positionId.value = e!.positionId;
     /* 获取职位信息 */
-    getCompanyInfosP0PositionInfosP1(companyId.value, positionId.value)
-      .then((res) => {
-        jobInformation.value = res.data.body;
-        markers.value[0].latitude = res.data.body.workingPlace.latitude;
-        markers.value[0].longitude = res.data.body.workingPlace.longitude;
+    companyPositionService
+      .getPosition({
+        companyId: companyId.value,
+        id: positionId.value,
       })
-      .catch(failResponseHandler);
-    getCompanyInfosP0(companyId.value)
       .then((res) => {
-        companyInformation.value = res.data.body;
+        jobInformation.value = res;
+        markers.value[0].latitude = res.workingPlace.latitude;
+        markers.value[0].longitude = res.workingPlace.longitude;
+      });
+    companyService
+      .getCompany({
+        id: companyId.value,
       })
-      .catch(failResponseHandler);
+      .then((res) => {
+        companyInformation.value = res;
+      });
   }
 });
 // 相关公司
 const toCompanyIn = () => {
-  companyId.value = companyInformation.value.companyInformationId;
+  companyId.value = companyInformation.value.id;
   uni.navigateTo({
     url: "/detail/gongsijieshao/gongsijieshao?companyId=" + companyId.value,
   });
@@ -238,17 +234,19 @@ const isCollection = ref(false);
 const garnerRecordId = ref("");
 //判断是否收藏
 onMounted(() => {
-  getUserInfosP0GarnerRecords(store.account.fullInformationId, {})
-    .then((res) => {
-      const collectionPosition = res.data.body.garnerRecords.find((item) => {
-        return item.positionInformationId === positionId.value;
-      });
-      if (collectionPosition) {
-        isCollection.value = true;
-        garnerRecordId.value = collectionPosition.garnerRecordId;
-      }
+  applicantGarnerRecordService
+    .queryGarnerRecord({
+      applicantId: store.applicant!.id,
+      query: {
+        positionId: ["$eq", positionId.value],
+      },
     })
-    .catch(failResponseHandler);
+    .then((res) => {
+      if (res.total > 0) {
+        isCollection.value = true;
+        garnerRecordId.value = res.items[0].id;
+      }
+    });
 });
 
 // 上面的代码是用户点击收藏按钮时调用的函数。
@@ -256,49 +254,42 @@ const collection = () => {
   isCollection.value = !isCollection.value;
   // 判断是否收藏
   if (isCollection.value) {
-    postUserInfosP0GarnerRecords(store.account.fullInformationId, {
-      positionInformationId: positionId.value,
-      companyInformationId: companyId.value,
-      userInformationId: store.account.fullInformationId,
-    })
+    applicantGarnerRecordService
+      .addGarnerRecord({
+        applicantId: store.applicant!.id,
+        requestBody: {
+          positionId: positionId.value,
+          companyId: companyId.value,
+          applicantId: store.applicant!.id,
+        },
+      })
       .then((res) => {
         uni.showToast({
           title: "收藏成功",
           icon: "none",
           duration: 1500,
         });
-      })
-      .catch(failResponseHandler);
+      });
   } else {
-    getUserInfosP0GarnerRecords(store.account.fullInformationId, {})
-      .then((res) => {
-        const collectionPosition = res.data.body.garnerRecords.find((item) => {
-          return item.positionInformationId === positionId.value;
-        });
-        if (collectionPosition) {
-          garnerRecordId.value = collectionPosition.garnerRecordId;
-          deleteUserInfosP0GarnerRecordsP1(
-            store.account.fullInformationId,
-            garnerRecordId.value
-          )
-            .then(() => {
-              uni.showToast({
-                title: "取消收藏",
-                icon: "none",
-                duration: 1500,
-              });
-            })
-            .catch(failResponseHandler);
-        }
+    applicantGarnerRecordService
+      .removeGarnerRecord({
+        applicantId: store.applicant!.id,
+        id: garnerRecordId.value,
       })
-      .catch(failResponseHandler);
+      .then(() => {
+        uni.showToast({
+          title: "取消收藏",
+          icon: "none",
+          duration: 1500,
+        });
+      });
   }
 };
 // 沟通HR
 const communication = (i: string) => {
   let messageKey = "";
-  for (const key in store.messages[store.account.fullInformationId]) {
-    if (key === jobInformation.value.hrInformationId) {
+  for (const key in store.messages[store.applicant!.id]) {
+    if (key === jobInformation.value.personnelId) {
       messageKey = key;
     } else {
       messageKey = i;
@@ -313,19 +304,24 @@ const sendResume = () => {
   popup.value.show();
 };
 const send = () => {
-  postUserInfosP0DeliveryRecords(store.account.fullInformationId, {
-    positionInformationId: positionId.value,
-    userInformationId: store.account.fullInformationId,
-    companyInformationId: companyId.value,
-  })
+  applicantDeliveryRecordService
+    .addDeliveryRecord({
+      applicantId: store.applicant!.id,
+      requestBody: {
+        status: 1,
+        interviewTime: "",
+        positionId: positionId.value,
+        applicantId: store.applicant!.id,
+        companyId: companyId.value,
+      },
+    })
     .then(() => {
       uni.showToast({
         title: "投递成功",
         icon: "none",
         duration: 1500,
       });
-    })
-    .catch(failResponseHandler);
+    });
   popup.value.hide();
 };
 

@@ -5,13 +5,8 @@
       <JobDetail
         v-for="(myView, i) in myViews"
         :key="i"
-          :position="myView"
-        @job-click="
-          view_2OnClick(
-            myView.companyInformationId,
-            myView.positionInformationId
-          )
-        "
+        :position="myView"
+        @job-click="view_2OnClick(myView.companyId, myView.id)"
       />
     </view>
   </view>
@@ -20,33 +15,32 @@
 <script lang="ts" setup>
 import JobDetail from "@/components/JobDetail/JobDetail.vue";
 import NavigationBar from "@/components/NavigationBar/NavigationBar.vue";
-import {
-getCompanyInfosP0PositionInfosP1,
-getUserInfosP0InspectionRecords
-} from "@/services/services";
-import { PositionInformation } from "@/services/types";
-import { useAuthStore } from "@/stores/auth";
+import { useInfoStore } from "@/stores";
+import type { Position } from "@dongjiang-recruitment/service-common";
 
-const store = useAuthStore();
+const store = useInfoStore();
 
-const myViews = ref<PositionInformation[]>([]);
+const myViews = ref<Position[]>([]);
 /* 查询所有查看记录 */
-getUserInfosP0InspectionRecords(
-  store.account.fullInformationId,
-  {}
-).then((res) => {
-  for (const item of res.data.body.userInspectionRecords) {
-    getCompanyInfosP0PositionInfosP1(
-      item.companyInformationId,
-      item.positionInformationId
-    ).then((res) => {
-      const p = myViews.value.map((item) => item.positionInformationId);
-      if (!p.includes(res.data.body.positionInformationId)) {
-        myViews.value.push(res.data.body);
-      }
-    });
-  }
-});
+applicantInspectionRecordService
+  .queryUserInspectionRecord({
+    applicantId: store.applicant!.id,
+  })
+  .then((res) => {
+    for (const item of res.items) {
+      companyPositionService
+        .getPosition({
+          companyId: item.companyId,
+          id: item.positionId,
+        })
+        .then((res) => {
+          const p = myViews.value.map((item) => item.id);
+          if (!p.includes(res.id)) {
+            myViews.value.push(res);
+          }
+        });
+    }
+  });
 
 const view_2OnClick = (c: string, p: string) => {
   uni.navigateTo({

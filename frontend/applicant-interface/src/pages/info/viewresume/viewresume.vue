@@ -2,15 +2,15 @@
   <NavigationBar title="预览简历"></NavigationBar>
   <view class="flex-col info-box">
     <text style="font-size: 45rpx; font-weight: bold"
-      >{{ store.applicantInformation.firstName
-      }}{{ store.applicantInformation.lastName }}</text
+      >{{ infoStore.applicant!.firstName
+      }}{{ infoStore.applicant!.lastName }}</text
     >
     <text v-if="schoolName" style="font-size: 28rpx"
-      >{{ schoolName }}/{{ education[store.applicantInformation.education] }}</text
+      >{{ schoolName }}/{{ education[infoStore.applicant!.education] }}</text
     >
     <text style="margin-top: 20rpx"
-      >{{ workYear[store.applicantInformation.workingYears] }}/{{
-        store.applicantInformation.age
+      >{{ workYear[infoStore.applicant!.workingYears] }}/{{
+        infoStore.applicant!.age
       }}岁</text
     >
   </view>
@@ -32,12 +32,12 @@
   </view>
   <view v-if="change">
     <view
-      v-if="store.applicantInformation.personalAdvantage"
+      v-if="infoStore.applicant!.personalAdvantage"
       class="flex-col expectation"
     >
       <text style="font-size: 40rpx; font-weight: bold">我的优势</text>
       <text class="ascendent">{{
-        store.applicantInformation.personalAdvantage
+        infoStore.applicant!.personalAdvantage
       }}</text>
     </view>
     <view v-if="educationInfo.length" class="flex-col expectation">
@@ -60,7 +60,7 @@
       <text style="font-size: 40rpx; font-weight: bold">工作经历</text>
       <view v-for="(item, i) in workInfo" :key="i" class="flex-col ex-info">
         <text style="font-size: 32rpx; font-weight: bold">{{
-          item.corporateName
+          item.companyName
         }}</text>
         <text>{{ item.positionName }}</text>
         <text>{{ item.startTime }}-{{ item.endTime }}</text>
@@ -86,7 +86,7 @@
       <image src="@/static/icons/heard.png" class="img" />
       <view class="flex-col" style="margin-left: 15rpx; line-height: 50rpx">
         <text>联系邮箱</text>
-        <text>{{ store.accountInformation.userName }}</text>
+        <text>{{ authStore.account!.userName }}</text>
       </view>
     </view>
   </view>
@@ -94,19 +94,15 @@
 
 <script lang="ts" setup>
 import NavigationBar from "@/components/NavigationBar/NavigationBar.vue";
-import {
-getUserInfosP0EduExperiences,
-getUserInfosP0ProjectExperiences,
-getUserInfosP0WorkExperiences
-} from "@/services/services";
-import {
-EducationExperience,
-ProjectExperience,
-WorkExperience
-} from "@/services/types";
-import { useAuthStore } from "@/stores/auth";
+import { useAuthStore, useInfoStore } from "@/stores";
+import type {
+  EducationExperience,
+  ProjectExperience,
+  WorkExperience,
+} from "@dongjiang-recruitment/service-common";
 
-const store = useAuthStore();
+const authStore = useAuthStore();
+const infoStore = useInfoStore();
 const educationInfo = ref<EducationExperience[]>([]);
 const workInfo = ref<WorkExperience[]>([]);
 const positionInfo = ref<ProjectExperience[]>([]);
@@ -123,27 +119,30 @@ const workYear = [
 const schoolName = ref("");
 const change = ref(true);
 // 教育经历
-getUserInfosP0EduExperiences(
-  store.accountInformation.fullInformationId,
-  {}
-).then((res) => {
-  educationInfo.value = res.data.body.educationExperiences;
-  schoolName.value = educationInfo.value[0].schoolName;
-});
+applicantEducationExperienceService
+  .queryEducationExperience({
+    applicantId: infoStore.applicant!.id,
+  })
+  .then((res) => {
+    educationInfo.value = res.items;
+    schoolName.value = educationInfo.value[0].schoolName;
+  });
 // 工作经历
-getUserInfosP0WorkExperiences(
-  store.accountInformation.fullInformationId,
-  {}
-).then((res) => {
-  workInfo.value = res.data.body.workExperiences;
-});
+applicantWorkExperienceService
+  .queryWorkExperience({
+    applicantId: infoStore.applicant!.id,
+  })
+  .then((res) => {
+    workInfo.value = res.items;
+  });
 // 项目经验
-getUserInfosP0ProjectExperiences(
-  store.accountInformation.fullInformationId,
-  {}
-).then((res) => {
-  positionInfo.value = res.data.body.projectExperiences;
-});
+applicantProjectExperienceService
+  .queryProjectExperience({
+    applicantId: infoStore.applicant!.id,
+  })
+  .then((res) => {
+    positionInfo.value = res.items;
+  });
 
 // 改变变化值的函数。
 const changeValue = () => {

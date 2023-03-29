@@ -37,6 +37,22 @@ export default mergeConfig(
     },
   }),
   {
+    css: {
+      preprocessorOptions: {
+        scss: {
+          additionalData: (content: any, path: string) => {
+            if (path.endsWith("src/style.scss")) {
+              return content;
+            }
+
+            return `
+              @import "~@/style.scss";
+              ${content}
+            `;
+          },
+        },
+      },
+    },
     resolve: {
       alias: {
         "@": path.resolve(__dirname, "src"),

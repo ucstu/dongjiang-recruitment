@@ -155,27 +155,20 @@
 <script lang="ts" setup>
 import NavigationBar from "@/components/NavigationBar/NavigationBar.vue";
 import WybPopup from "@/components/wyb-popup/wyb-popup.vue";
-import {
-  deleteUserInfosP0ProjectExperiencesP1,
-  getUserInfosP0ProjectExperiencesP1,
-  postUserInfosP0ProjectExperiences,
-  putUserInfosP0ProjectExperiencesP1,
-} from "@/services/services";
-import { ProjectExperience } from "@/services/types";
-import { useAuthStore } from "@/stores/auth";
-import { failResponseHandler } from "@/utils/handler";
+import { useInfoStore } from "@/stores";
+import type { ProjectExperience } from "@dongjiang-recruitment/service-common";
 
-const store = useAuthStore();
+const store = useInfoStore();
 
 const projectExperience = ref<ProjectExperience>({
-  projectExperienceId: "",
+  id: "",
   projectName: "", //项目名称
   projectDescription: "", //项目描述
   achievement: "", //你的成就
   startTime: "开始时间", //项目开始时间
   endTime: "结束时间", //项目结束时间
   projectLink: "", //项目链接
-});
+} as ProjectExperience);
 
 const start = ref(true);
 const end = ref(false);
@@ -203,7 +196,7 @@ for (let i = 1; i <= 31; i++) {
 const value1 = ref([years.value[0], months.value[0], days.value[0]]);
 const value2 = ref([year, month - 1, day]);
 // 更改选择器视图时调用的函数。
-const bindChange = (e: { detail: { value: never } }) => {
+const bindChange = (e: { detail: { value: any } }) => {
   const val = e.detail.value;
   year = years.value[val[0]];
   month = months.value[val[1]];
@@ -220,18 +213,18 @@ const bindChange = (e: { detail: { value: never } }) => {
 const projectId = ref(); // 项目id
 const deleteProject = ref(); // 删除项目
 onLoad((e) => {
-  projectId.value = e.projectId;
-  deleteProject.value = e.deleteProject;
+  projectId.value = e!.projectId;
+  deleteProject.value = e!.deleteProject;
   /*查询项目经历*/
   if (projectId.value !== undefined) {
-    getUserInfosP0ProjectExperiencesP1(
-      store.account.fullInformationId,
-      projectId.value
-    )
-      .then((res) => {
-        projectExperience.value = res.data.body as ProjectExperience;
+    applicantProjectExperienceService
+      .getProjectExperience({
+        applicantId: store.applicant!.id,
+        projectExperienceId: projectId.value,
       })
-      .catch(failResponseHandler);
+      .then((res) => {
+        projectExperience.value = res as ProjectExperience;
+      });
   }
 });
 
@@ -259,11 +252,12 @@ const saveProjectExperience = () => {
   } else {
     if (projectId.value !== undefined) {
       // 修改项目经历
-      putUserInfosP0ProjectExperiencesP1(
-        store.account.fullInformationId,
-        projectId.value,
-        projectExperience.value
-      )
+      applicantProjectExperienceService
+        .updateProjectExperience({
+          applicantId: store.applicant!.id,
+          id: projectId.value,
+          requestBody: projectExperience.value,
+        })
         .then(() => {
           uni.showToast({
             title: "修改成功",
@@ -271,14 +265,14 @@ const saveProjectExperience = () => {
             duration: 1500,
           });
           uni.navigateBack({ delta: 1 });
-        })
-        .catch(failResponseHandler);
+        });
     } else {
       // 添加项目经历
-      postUserInfosP0ProjectExperiences(
-        store.account.fullInformationId,
-        projectExperience.value
-      )
+      applicantProjectExperienceService
+        .addProjectExperience({
+          applicantId: store.applicant!.id,
+          requestBody: projectExperience.value,
+        })
         .then(() => {
           uni.showToast({
             title: "添加成功",
@@ -286,8 +280,7 @@ const saveProjectExperience = () => {
             duration: 1500,
           });
           uni.navigateBack({ delta: 1 });
-        })
-        .catch(failResponseHandler);
+        });
     }
   }
 };
@@ -298,10 +291,11 @@ const deleteProjectExperience = () => {
     content: "确定删除该项目经历吗？",
     success: (res) => {
       if (res.confirm) {
-        deleteUserInfosP0ProjectExperiencesP1(
-          store.account.fullInformationId,
-          projectId.value
-        )
+        applicantProjectExperienceService
+          .removeProjectExperience({
+            applicantId: store.applicant!.id,
+            id: projectId.value,
+          })
           .then(() => {
             uni.showToast({
               title: "删除成功",
@@ -309,8 +303,7 @@ const deleteProjectExperience = () => {
               duration: 1500,
             });
             uni.navigateBack({ delta: 1 });
-          })
-          .catch(failResponseHandler);
+          });
       } else if (res.cancel) {
         return;
       }

@@ -54,7 +54,7 @@ import NavigationBar from "@/components/NavigationBar/NavigationBar.vue";
 
 const newVersion = ref("无最新版本");
 const { data, refreshAsync } = commonService.useGetNewVersion();
-const versionNum = computed(() => data.value?.body || "");
+const versionNum = computed(() => data.value || "");
 
 // 查询版本更新
 const checkVersion = async () => {

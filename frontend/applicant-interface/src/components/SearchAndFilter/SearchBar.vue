@@ -10,38 +10,63 @@
         navigationBarHeight +
         'px'
       "
-    >
-  <!-- #endif -->
-  <!--  #ifndef MP-WEIXIN || MP-ALIPAY || MP-BAIDU || MP-TOUTIAO || MP-QQ -->
-  <view class="bar">
-    <view
-      class="items-center group"
-    >
-  <!-- #endif -->
-      <view class="flex-row" style="width: 100%">
+      ><view class="flex-row" style="width: 100%">
         <text class="city" @click="textOnClick">{{ city }}</text>
         <image
           src="https://codefun-proj-user-res-1256085488.cos.ap-guangzhou.myqcloud.com/623287845a7e3f0310c3a3f7/623446dc62a7d90011023514/16478528773197745663.png"
           class="image"
         />
-        <view class="flex-row  input">
+        <view class="flex-row input">
           <image
             src="https://codefun-proj-user-res-1256085488.cos.ap-guangzhou.myqcloud.com/623287845a7e3f0310c3a3f7/623446dc62a7d90011023514/16478528771387958614.png"
             class="search"
             @click="searchOnClick"
           />
-          <input v-model="_searchContent" type="text" class="search-text" placeholder="请输入关键字">
+          <input
+            v-model="_searchContent"
+            type="text"
+            class="search-text"
+            placeholder="请输入关键字"
+          />
         </view>
         <text class="cancel" @click="text_1OnClick">取消</text>
       </view>
     </view>
   </view>
+  <!-- #endif -->
+  <!--  #ifndef MP-WEIXIN || MP-ALIPAY || MP-BAIDU || MP-TOUTIAO || MP-QQ -->
+  <view class="bar">
+    <view class="items-center group"
+      ><view class="flex-row" style="width: 100%">
+        <text class="city" @click="textOnClick">{{ city }}</text>
+        <image
+          src="https://codefun-proj-user-res-1256085488.cos.ap-guangzhou.myqcloud.com/623287845a7e3f0310c3a3f7/623446dc62a7d90011023514/16478528773197745663.png"
+          class="image"
+        />
+        <view class="flex-row input">
+          <image
+            src="https://codefun-proj-user-res-1256085488.cos.ap-guangzhou.myqcloud.com/623287845a7e3f0310c3a3f7/623446dc62a7d90011023514/16478528771387958614.png"
+            class="search"
+            @click="searchOnClick"
+          />
+          <input
+            v-model="_searchContent"
+            type="text"
+            class="search-text"
+            placeholder="请输入关键字"
+          />
+        </view>
+        <text class="cancel" @click="text_1OnClick">取消</text>
+      </view>
+    </view>
+  </view>
+  <!-- #endif -->
 </template>
 
 <script lang="ts" setup>
-import { useAuthStore } from "@/stores/auth";
+import { useInfoStore } from "@/stores";
 
-const store = useAuthStore();
+const store = useInfoStore();
 
 /* #ifdef MP-WEIXIN || MP-ALIPAY || MP-BAIDU || MP-TOUTIAO || MP-QQ */
 // 获取小程序胶囊高度等
@@ -61,7 +86,7 @@ const props = defineProps({
     type: String,
     default: "",
   },
-})
+});
 
 const _searchContent = ref(props.searchContent);
 
@@ -70,18 +95,24 @@ const textOnClick = () => {
 };
 const searchOnClick = () => {
   if (_searchContent.value !== "") {
-    uni.navigateTo({ url: "/detail/xiangguanzhiwei/xiangguanzhiwei?searchContent=" + _searchContent.value + "&city=" + props.city });
-  }else{
+    uni.navigateTo({
+      url:
+        "/detail/xiangguanzhiwei/xiangguanzhiwei?searchContent=" +
+        _searchContent.value +
+        "&city=" +
+        props.city,
+    });
+  } else {
     uni.showToast({
       title: "搜索内容不能为空",
       icon: "none",
-      duration: 500
+      duration: 500,
     });
   }
-}
+};
 // 当用户单击“取消”按钮时将调用的函数。
 const text_1OnClick = () => {
- uni.switchTab({ url: "/pages/shouyeyemian/shouyeyemian" });
+  uni.switchTab({ url: "/pages/shouyeyemian/shouyeyemian" });
 };
 </script>
 

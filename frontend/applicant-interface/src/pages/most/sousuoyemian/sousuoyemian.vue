@@ -73,8 +73,8 @@ const popularCompanies = reactive([
 const cityName = ref("");
 
 onLoad((e) => {
-  if (e.city) {
-    cityName.value = e.city;
+  if (e!.city) {
+    cityName.value = e!.city;
   }
   uni.$on("liveCity", (city: string) => {
     cityName.value = city;

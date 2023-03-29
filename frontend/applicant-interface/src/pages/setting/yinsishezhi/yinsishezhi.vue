@@ -2,7 +2,10 @@
   <NavigationBar title="隐私设置" />
   <view class="flex-col page">
     <view class="group-1">匿名展示</view>
-    <view class="justify-between items-center group-2" @click="privacySet(Applicant.privacySettings.Anonymous)">
+    <view
+      class="justify-between items-center group-2"
+      @click="privacySet(Applicant.privacySettings.Anonymous)"
+    >
       <view class="flex-row justify-center items-center group-box">
         <image :src="VITE_CDN_URL + applicant.avatarUrl" class="image" />
         <text style="padding-left: 15rpx; font-size: 30rpx"
@@ -13,9 +16,18 @@
           >(实名展示)</text
         >
       </view>
-      <radio style="transform: scale(0.7)" value="1" :checked="applicant.privacySettings === Applicant.privacySettings.Anonymous" />
+      <radio
+        style="transform: scale(0.7)"
+        value="1"
+        :checked="
+          applicant.privacySettings === Applicant.privacySettings.Anonymous
+        "
+      />
     </view>
-    <view class="justify-between items-center group-2" @click="privacySet(Applicant.privacySettings.RealName)">
+    <view
+      class="justify-between items-center group-2"
+      @click="privacySet(Applicant.privacySettings.RealName)"
+    >
       <view class="flex-row justify-center items-center group-box">
         <image :src="VITE_CDN_URL + applicant.avatarUrl" class="image" />
         <text style="padding-left: 15rpx; font-size: 30rpx"
@@ -26,18 +38,24 @@
           >(匿名展示)</text
         >
       </view>
-      <radio style="transform: scale(0.7)" value="2" :checked="applicant.privacySettings === Applicant.privacySettings.RealName" />
+      <radio
+        style="transform: scale(0.7)"
+        value="2"
+        :checked="
+          applicant.privacySettings === Applicant.privacySettings.RealName
+        "
+      />
     </view>
   </view>
 </template>
 
 <script lang="ts" setup>
 import NavigationBar from "@/components/NavigationBar/NavigationBar.vue";
-import { useAuthStore } from "@/stores/auth";
+import { useInfoStore } from "@/stores";
 import { Applicant } from "@dongjiang-recruitment/service-common";
 const VITE_CDN_URL = import.meta.env.VITE_CDN_URL;
 
-const store = useAuthStore();
+const store = useInfoStore();
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 const applicant = store.applicant!;
 

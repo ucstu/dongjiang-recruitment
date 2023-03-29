@@ -11,7 +11,7 @@
           v-model="inputValue"
           class="input"
           placeholder="请填写你的特点与优势，或你的求职目标"
-          maxlength="250"
+          :maxlength="250"
         />
         <text class="items-end">({{ inputValue.length }}/250)</text>
       </view>
@@ -21,23 +21,24 @@
 
 <script lang="ts" setup>
 import NavigationBar from "@/components/NavigationBar/NavigationBar.vue";
-import { putUserInfosP0 } from "@/services/services";
-import { useAuthStore } from "@/stores/auth";
+import { useInfoStore } from "@/stores";
 
-const store = useAuthStore();
+const store = useInfoStore();
 
 const inputValue = ref("");
 // 添加个人优势
 const saveAdvantage = () => {
-  store.applicant.personalAdvantage = inputValue.value;
-  putUserInfosP0(
-    store.account.fullInformationId,
-    store.applicant
-  ).then(() => {
-    uni.navigateBack({
-      delta: 1,
+  store.applicant!.personalAdvantage = inputValue.value;
+  applicantService
+    .updateApplicant({
+      id: store.applicant!.id,
+      requestBody: store.applicant!,
+    })
+    .then(() => {
+      uni.navigateBack({
+        delta: 1,
+      });
     });
-  });
 };
 </script>
 
