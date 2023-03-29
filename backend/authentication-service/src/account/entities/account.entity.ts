@@ -4,9 +4,13 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  JoinTable,
+  ManyToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "@dongjiang-recruitment/nest-common/dist/typeorm";
+import { AuthorityGroup } from "src/authority-group/entities/authority-group.entity";
+import { Authority } from "src/authority/entities/authority.entity";
 
 /**
  * 详情ID
@@ -38,8 +42,11 @@ export class Account {
   /**
    * 权限列表
    */
-  @Column("simple-array")
-  authorities: string[];
+  @ManyToMany(() => Authority, {
+    eager: true,
+  })
+  @JoinTable()
+  authorities: Authority[];
   /**
    * 创建时间
    */
@@ -58,10 +65,11 @@ export class Account {
   /**
    * 权限组列表
    */
-  @Column("simple-array", {
-    default: [],
+  @ManyToMany(() => AuthorityGroup, {
+    eager: true,
   })
-  groups: string[];
+  @JoinTable()
+  groups: AuthorityGroup[];
   /**
    * 账号ID
    */

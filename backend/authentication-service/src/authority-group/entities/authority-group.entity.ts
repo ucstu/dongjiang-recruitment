@@ -3,9 +3,12 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  JoinTable,
+  ManyToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "@dongjiang-recruitment/nest-common/dist/typeorm";
+import { Authority } from "src/authority/entities/authority.entity";
 
 /**
  * AuthorityGroup
@@ -15,8 +18,11 @@ export class AuthorityGroup {
   /**
    * 权限列表
    */
-  @Column("simple-json")
-  authorities: string[];
+  @ManyToMany(() => Authority, {
+    eager: true,
+  })
+  @JoinTable()
+  authorities: Authority[];
   /**
    * 创建时间
    */

@@ -151,7 +151,7 @@ export class Position {
   /**
    * 上班地点
    */
-  @Column()
+  @Column("simple-json")
   workingPlace: WorkingPlace;
   /**
    * 工作年限，{1:经验不限,2:在校/应届,3:3年及以下,4:3-5年,5:5-10年,6:10年以上}

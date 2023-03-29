@@ -1,10 +1,10 @@
 import {
-Column,
-CreateDateColumn,
-DeleteDateColumn,
-Entity,
-PrimaryGeneratedColumn,
-UpdateDateColumn
+  Column,
+  CreateDateColumn,
+  DeleteDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from "@dongjiang-recruitment/nest-common/dist/typeorm";
 
 /**
@@ -35,26 +35,36 @@ export class Personnel {
   /**
    * 电子邮箱
    */
-  @Column()
+  @Column({
+    nullable: true,
+  })
   acceptEmail: string;
   /**
    * 头像地址
    */
-  @Column()
+  @Column({
+    nullable: true,
+  })
   avatarUrl: string;
   /**
    * 公司ID
    */
-  @Column()
+  @Column({
+    nullable: true,
+  })
   companyId: string;
   /**
    * 人事姓名
    */
-  @Column()
+  @Column({
+    nullable: true,
+  })
   hrName: string;
   /**
    * 职位名称
    */
-  @Column()
+  @Column({
+    nullable: true,
+  })
   postName: string;
 }

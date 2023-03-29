@@ -1,19 +1,19 @@
 import { Pagination } from "@dongjiang-recruitment/nest-common/dist/decorator";
 import {
-Advertiser,
-Applicant,
-Personnel,
-ServiceClient
+  Advertiser,
+  Applicant,
+  Personnel,
+  ServiceClient,
 } from "@dongjiang-recruitment/nest-common/dist/http";
 import {
-FindOptionsWhere,
-InjectRepository,
-Repository
+  FindOptionsWhere,
+  InjectRepository,
+  Repository,
 } from "@dongjiang-recruitment/nest-common/dist/typeorm";
 import {
-BadRequestException,
-Injectable,
-NotFoundException
+  BadRequestException,
+  Injectable,
+  NotFoundException,
 } from "@nestjs/common";
 import { BcryptService } from "src/bcrypt.module";
 import { AccountType, CreateAccountDto } from "./dto/create-account.dto";
@@ -96,7 +96,7 @@ export class AccountService {
       userName,
       password: await this.bcryptService.hash(password),
       authorities: [...(accounts[0]?.authorities || [])],
-      groups: [...(accounts[0]?.groups || []), accountTypeStr],
+      groups: [...(accounts[0]?.groups || [])],
       detailId: {
         ...STATIC_FULL_ID,
         ...accounts[0]?.detailId,

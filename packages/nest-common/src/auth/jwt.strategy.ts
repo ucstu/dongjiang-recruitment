@@ -1,20 +1,16 @@
 import { Inject, Injectable } from "@nestjs/common";
 import { PassportStrategy } from "@nestjs/passport";
-import { Request } from "express";
 import { ExtractJwt, Strategy } from "passport-jwt";
+import * as zlib from "zlib";
 import { ConfigType } from "../config";
 import _authorizationConfig from "../config/authorization.config";
 import { User } from "./user.dto";
 
 interface JwtPayload {
   /**
-   * 用户ID
+   * 实际值
    */
-  uid: string;
-  /**
-   * 权限列表
-   */
-  pms: User["permissions"];
+  value: string;
   /**
    * 签发时间
    */
@@ -27,17 +23,12 @@ interface JwtPayload {
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-  private readonly jwtFrom = ExtractJwt.fromAuthHeaderAsBearerToken();
-
   constructor(
     @Inject(_authorizationConfig.KEY)
     readonly authorizationConfig: ConfigType<typeof _authorizationConfig>
   ) {
     super({
-      jwtFromRequest(request: Request) {
-        // return zlib.gunzipSync(this.jwtFrom(request));
-        return this.jwtFrom(request);
-      },
+      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       secretOrKey: authorizationConfig.secret,
       ignoreExpiration: false,
       jsonWebTokenOptions: {
@@ -47,9 +38,19 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   validate(payload: JwtPayload): User {
+    const { value } = payload;
+    const { id, auth, did } = JSON.parse(
+      zlib.unzipSync(Buffer.from(value, "base64")).toString()
+    ) as {
+      id: string;
+      auth: User["authorities"];
+      did: User["detailId"];
+    };
+
     return {
-      id: payload.uid,
-      permissions: payload.pms,
+      id: id,
+      detailId: did,
+      authorities: auth,
     };
   }
 }
