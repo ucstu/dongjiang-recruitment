@@ -2,7 +2,14 @@
   <router-view> </router-view>
 </template>
 <script setup lang="ts">
-import { axios, Company, request, type Account, type Personnel } from "@dongjiang-recruitment/service-common";
+import {
+  axios,
+  AxiosError,
+  Company,
+  request,
+  type Account,
+  type Personnel,
+} from "@dongjiang-recruitment/service-common";
 import { ElMessage } from "element-plus";
 import router from "./router";
 import { useMainStore, useMessageStore } from "./stores/main";
@@ -16,27 +23,20 @@ axios.interceptors.response.use(
     return response;
   },
   (error) => {
-    switch (error.response.status) {
-      case 401:
-        mainStore.jsonWebToken = null as unknown as string;
-        mainStore.hrInformation = null as unknown as Personnel;
-        mainStore.accountInformation = null as unknown as Account;
-        mainStore.companyInformation = null as unknown as Company;
-        router.replace("/Login");
-        break;
-      case 403:
-        router.replace("/Login");
-        break;
-      case 404:
-        router.replace("/Login");
-        break;
-      case 500:
-        break;
-      default:
-        ElMessage.error("未知错误");
-        break;
+    if (error instanceof AxiosError && error.response) {
+      switch ((error.response as { status: number }).status) {
+        case 401:
+          mainStore.jsonWebToken = null as unknown as string;
+          mainStore.hrInformation = null as unknown as Personnel;
+          mainStore.accountInformation = null as unknown as Account;
+          mainStore.companyInformation = null as unknown as Company;
+          void router.replace("/Login");
+          break;
+        default:
+          break;
+      }
+      ElMessage.error((error.response.data as { error: string }).error);
     }
-    ElMessage.error(error.response.data.error);
     return Promise.reject(error);
   }
 );
@@ -44,23 +44,16 @@ axios.interceptors.response.use(
 // 检查用户是否登录，如果用户已经登录，它会为axios设置授权头，并获取用户的信息。如果用户没有登录，它会将用户重定向到登录页面。
 if (mainStore.jsonWebToken != null) {
   request.config.TOKEN = `Bearer ${mainStore.jsonWebToken}`;
-  personnelService
+  void personnelService
     .getPersonnel({ id: mainStore.accountInformation.detailId.personnel! })
     .then(() => {
       if (
         !messageStore.messages[mainStore.accountInformation.detailId.personnel!]
       ) {
-        messageStore.messages[mainStore.accountInformation.detailId.personnel!] =
-          {};
+        messageStore.messages[
+          mainStore.accountInformation.detailId.personnel!
+        ] = {};
       }
-    })
-    .catch(() => {
-      ElMessage.error("登录失效，请重新登录");
-      mainStore.jsonWebToken = null as unknown as string;
-      mainStore.hrInformation = null as unknown as Personnel;
-      mainStore.accountInformation = null as unknown as Account;
-      mainStore.companyInformation = null as unknown as Company;
-      router.replace("/Login");
     });
 }
 onMounted(() => {

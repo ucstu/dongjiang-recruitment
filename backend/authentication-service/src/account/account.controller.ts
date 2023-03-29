@@ -1,4 +1,3 @@
-import { OwnerPermission } from "@dongjiang-recruitment/nest-common/dist/auth";
 import {
   Page,
   Pagination,

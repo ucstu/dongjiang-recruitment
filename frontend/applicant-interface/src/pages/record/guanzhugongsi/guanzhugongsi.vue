@@ -21,9 +21,9 @@
 import CompanyPanel from "@/components/CompanyPanel/CompanyPanel.vue";
 import NavigationBar from "@/components/NavigationBar/NavigationBar.vue";
 import {
-deleteUserInfosP0AttentionRecordsP1,
-getCompanyInfosP0,
-getUserInfosP0AttentionRecords
+  deleteUserInfosP0AttentionRecordsP1,
+  getCompanyInfosP0,
+  getUserInfosP0AttentionRecords,
 } from "@/services/services";
 import { CompanyInformation } from "@/services/types";
 import { useAuthStore } from "@/stores/auth";
@@ -59,7 +59,7 @@ onShow(() => {
 });
 // 删除关注记录
 const unsubscribe = (index: string) => {
-  let attentionRecordId = focusCompany.value.find(
+  const attentionRecordId = focusCompany.value.find(
     (item: { companyInformationId: string }) => {
       return item.companyInformationId === index;
     }

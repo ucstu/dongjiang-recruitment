@@ -232,6 +232,7 @@ import type { Ref } from "vue";
 import { useRoute } from "vue-router";
 import State from "./State.vue";
 import tag from "./Tag.vue";
+
 const VITE_CDN_URL = import.meta.env.VITE_CDN_URL;
 const formRef = ref<FormInstance>();
 const map = shallowRef<AMap.Map>();
@@ -479,18 +480,19 @@ const confirmCompany = (formEl: FormInstance | undefined) => {
         .then((res) => {
           let hrInformation = store.hrInformation;
           hrInformation.companyId = res.id;
-          personnelService.updatePersonnel({
-            id: hrInformation.id,
-            requestBody: hrInformation,
-          })
+          personnelService
+            .updatePersonnel({
+              id: hrInformation.id,
+              requestBody: hrInformation,
+            })
             .then((response) => {
               store.hrInformation = response;
               store.companyInformation = res;
               ElMessage.success("恭喜您，公司创建成功,将前往信息认证");
               dialogFormVisible.value = false;
               router.replace({ name: "Execution" });
-            })
-        })
+            });
+        });
     }
   });
 };

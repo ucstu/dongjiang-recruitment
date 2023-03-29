@@ -148,12 +148,12 @@
 import NavigationBar from "@/components/NavigationBar/NavigationBar.vue";
 import wybPopup from "@/components/wyb-popup/wyb-popup.vue";
 import {
-deleteUserInfosP0GarnerRecordsP1,
-getCompanyInfosP0,
-getCompanyInfosP0PositionInfosP1,
-getUserInfosP0GarnerRecords,
-postUserInfosP0DeliveryRecords,
-postUserInfosP0GarnerRecords
+  deleteUserInfosP0GarnerRecordsP1,
+  getCompanyInfosP0,
+  getCompanyInfosP0PositionInfosP1,
+  getUserInfosP0GarnerRecords,
+  postUserInfosP0DeliveryRecords,
+  postUserInfosP0GarnerRecords,
 } from "@/services/services";
 import { CompanyInformation, PositionInformation } from "@/services/types";
 import { useAuthStore } from "@/stores/auth";
@@ -240,7 +240,7 @@ const garnerRecordId = ref("");
 onMounted(() => {
   getUserInfosP0GarnerRecords(store.account.fullInformationId, {})
     .then((res) => {
-      let collectionPosition = res.data.body.garnerRecords.find((item) => {
+      const collectionPosition = res.data.body.garnerRecords.find((item) => {
         return item.positionInformationId === positionId.value;
       });
       if (collectionPosition) {
@@ -272,7 +272,7 @@ const collection = () => {
   } else {
     getUserInfosP0GarnerRecords(store.account.fullInformationId, {})
       .then((res) => {
-        let collectionPosition = res.data.body.garnerRecords.find((item) => {
+        const collectionPosition = res.data.body.garnerRecords.find((item) => {
           return item.positionInformationId === positionId.value;
         });
         if (collectionPosition) {
@@ -297,9 +297,7 @@ const collection = () => {
 // 沟通HR
 const communication = (i: string) => {
   let messageKey = "";
-  for (const key in store.messages[
-    store.account.fullInformationId
-  ]) {
+  for (const key in store.messages[store.account.fullInformationId]) {
     if (key === jobInformation.value.hrInformationId) {
       messageKey = key;
     } else {

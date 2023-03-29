@@ -111,7 +111,7 @@ const inputValue = ref("");
 
 // 一个计算属性，返回所有位置名称的数组。
 const positionNames = computed(() => {
-  let result = [];
+  const result = [];
   for (const searchType of fields) {
     for (const direction of searchType.directions) {
       for (const position of direction.positions) {
@@ -124,7 +124,7 @@ const positionNames = computed(() => {
 
 // 计算属性。
 const filteredPositionNames = computed(() => {
-  let result = [];
+  const result = [];
   for (const positionName of positionNames.value) {
     if (positionName.includes(inputValue.value)) {
       result.push(positionName);

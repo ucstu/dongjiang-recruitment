@@ -89,7 +89,7 @@ onLoad((e) => {
     if (e.areas) {
       filterValue.value = JSON.parse(e.areas);
       if (filterValue.value.length) {
-        let count = countries.value.map((item) => item.countyName);
+        const count = countries.value.map((item) => item.countyName);
         countriesIndex.value = count.indexOf(c.value);
         areas.value = countries.value[countriesIndex.value].areas;
       } else {

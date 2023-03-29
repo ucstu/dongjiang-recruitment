@@ -105,7 +105,7 @@
     <JobDetail
       v-for="(position, i) in positionInfo"
       :key="i"
-        :position="position"
+      :position="position"
       @job-click="
         jobClick(position.positionInformationId, position.companyInformationId)
       "
@@ -121,11 +121,11 @@ import JobDetail from "@/components/JobDetail/JobDetail.vue";
 import NavigationBar from "@/components/NavigationBar/NavigationBar.vue";
 import wybPopup from "@/components/wyb-popup/wyb-popup.vue";
 import {
-deleteUserInfosP0AttentionRecordsP1,
-getCompanyInfosP0,
-getCompanyInfosP0PositionInfos,
-getUserInfosP0AttentionRecords,
-postUserInfosP0AttentionRecords
+  deleteUserInfosP0AttentionRecordsP1,
+  getCompanyInfosP0,
+  getCompanyInfosP0PositionInfos,
+  getUserInfosP0AttentionRecords,
+  postUserInfosP0AttentionRecords,
 } from "@/services/services";
 import { CompanyInformation, PositionInformation } from "@/services/types";
 import { useAuthStore } from "@/stores/auth";
@@ -176,7 +176,7 @@ const focusId = ref();
 onMounted(() => {
   getUserInfosP0AttentionRecords(store.account.fullInformationId, {})
     .then((res) => {
-      let focusCompany = res.data.body.attentionRecords.find((item) => {
+      const focusCompany = res.data.body.attentionRecords.find((item) => {
         return item.companyInformationId === companyId.value;
       });
       if (focusCompany) {
@@ -212,13 +212,10 @@ const focusOn = () => {
   // 这是用于关注于公司的功能
   if (focus.value) {
     // 增加关注记录接口
-    postUserInfosP0AttentionRecords(
-      store.account.fullInformationId,
-      {
-        companyInformationId: companyId.value,
-        userInformationId: store.account.fullInformationId,
-      }
-    )
+    postUserInfosP0AttentionRecords(store.account.fullInformationId, {
+      companyInformationId: companyId.value,
+      userInformationId: store.account.fullInformationId,
+    })
       .then((res) => {
         uni.showToast({
           title: "关注成功",
@@ -228,12 +225,9 @@ const focusOn = () => {
       })
       .catch(failResponseHandler);
   } else {
-    getUserInfosP0AttentionRecords(
-      store.account.fullInformationId,
-      {}
-    )
+    getUserInfosP0AttentionRecords(store.account.fullInformationId, {})
       .then((res) => {
-        let focusCompany = res.data.body.attentionRecords.find((item) => {
+        const focusCompany = res.data.body.attentionRecords.find((item) => {
           return item.companyInformationId === companyId.value;
         });
         if (focusCompany) {

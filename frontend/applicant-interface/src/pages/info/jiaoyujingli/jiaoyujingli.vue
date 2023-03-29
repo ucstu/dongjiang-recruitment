@@ -154,10 +154,10 @@
 import NavigationBar from "@/components/NavigationBar/NavigationBar.vue";
 import WybPopup from "@/components/wyb-popup/wyb-popup.vue";
 import {
-deleteUserInfosP0EduExperiencesP1,
-getUserInfosP0EduExperiencesP1,
-postUserInfosP0EduExperiences,
-putUserInfosP0EduExperiencesP1
+  deleteUserInfosP0EduExperiencesP1,
+  getUserInfosP0EduExperiencesP1,
+  postUserInfosP0EduExperiences,
+  putUserInfosP0EduExperiencesP1,
 } from "@/services/services";
 import { useAuthStore } from "@/stores/auth";
 import { failResponseHandler } from "@/utils/handler";
@@ -210,7 +210,7 @@ const value1 = ref([year - 1960, month - 1, day - 1]); /* 默认入学时间 */
 const value2 = ref([year, month - 1, day - 1]); /* 默认毕业时间 */
 const defaultEducation = ref([education]); /* 默认学历 */
 const bindChange = (e: any) => {
-  let val = e.detail.value;
+  const val = e.detail.value;
   year = years.value[val[0]];
   month = months.value[val[1]];
   day = days.value[val[2]];

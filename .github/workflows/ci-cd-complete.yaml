@@ -45,7 +45,8 @@ jobs:
     outputs:
       detect-results: ${{ needs.detect-changes.outputs.detect-results }}
       changed-packages: ${{ needs.detect-changes.outputs.changed-packages }}
-    if: ${{ fromJson(needs.detect-changes.outputs.detect-results).has-changed-packages }}
+    # if: ${{ fromJson(needs.detect-changes.outputs.detect-results).has-changed-packages }}
+    if: never()
     steps:
       - uses: actions/checkout@v3
       - uses: actions/github-script@v6

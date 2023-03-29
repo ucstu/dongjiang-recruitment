@@ -209,9 +209,9 @@
 import NavigationBar from "@/components/NavigationBar/NavigationBar.vue";
 import wybPopup from "@/components/wyb-popup/wyb-popup.vue";
 import {
-deleteUserInfosP0WorkExperiencesP1,
-getUserInfosP0WorkExperiencesP1,
-postUserInfosP0WorkExperiences
+  deleteUserInfosP0WorkExperiencesP1,
+  getUserInfosP0WorkExperiencesP1,
+  postUserInfosP0WorkExperiences,
 } from "@/services/services";
 import { WorkExperience } from "@/services/types";
 import { useAuthStore } from "@/stores/auth";
@@ -231,7 +231,7 @@ const start = ref(true); // 开始时间
 const positionName = ref(""); // 职位名称
 const companyDepartment = ref(""); // 所属部门
 const companyContent = ref(""); // 工作内容
-let deleteWork = ref(); // 删除工作经历
+const deleteWork = ref(); // 删除工作经历
 const workId = ref(); // 工作经历id
 
 // 获取职位名
@@ -285,7 +285,7 @@ const defaultStart = ref([year, month, day]); /* 默认入职时间 */
 const defaultEnd = ref([year, month, day]); /* 默认离职时间 */
 // 选择器
 const bindChange = (e: any) => {
-  let val = e.detail.value;
+  const val = e.detail.value;
   year = years.value[val[0]];
   month = months.value[val[1]];
   day = days.value[val[2]];

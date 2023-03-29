@@ -230,7 +230,7 @@ const chooseImage = () => {
           Authorization: "Bearer " + store.jsonWebToken,
         },
         success: (res) => {
-          let response = JSON.parse(res.data) as {
+          const response = JSON.parse(res.data) as {
             body: string;
             message: string;
             status: number;
@@ -261,7 +261,7 @@ const birthday = ref();
 const age = ref();
 const worktime = ref([1]);
 const bindChange = (e: { detail: { value: never } }) => {
-  let val = e.detail.value;
+  const val = e.detail.value;
   if (!birOrTime.value) {
     userInformation.value.workingYears = val[0] as 1 | 2 | 3 | 4 | 5 | 6;
     worktime.value = [val[0]];

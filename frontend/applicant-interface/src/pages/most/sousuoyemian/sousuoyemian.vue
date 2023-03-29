@@ -83,7 +83,7 @@ onLoad((e) => {
 
 // 根据职位类型搜索
 const searchType = () => {
-  let value = true;
+  const value = true;
   uni.navigateTo({
     url:
       `/most/zhiweileixing/zhiweileixing?value=` +

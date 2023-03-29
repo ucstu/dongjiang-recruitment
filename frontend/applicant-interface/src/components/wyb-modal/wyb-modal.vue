@@ -143,7 +143,7 @@ const props = withDefaults(
     custom: false,
     negativeTop: 0,
     asyncClose: false,
-    padding: [20, 0, 20, 0] as any
+    padding: [20, 0, 20, 0] as any,
   }
 );
 
@@ -374,7 +374,6 @@ defineExpose({
   width: 35rpx;
   height: 35rpx;
   animation: loading 0.75s infinite linear;
-  animation: loading 0.75s infinite linear;
 }
 
 .wyb-modal-loader,
@@ -385,11 +384,9 @@ defineExpose({
 @keyframes loading {
   0% {
     transform: rotate(0deg);
-    transform: rotate(0deg);
   }
 
   100% {
-    transform: rotate(360deg);
     transform: rotate(360deg);
   }
 }
@@ -397,11 +394,9 @@ defineExpose({
 @keyframes loading {
   0% {
     transform: rotate(0deg);
-    transform: rotate(0deg);
   }
 
   100% {
-    transform: rotate(360deg);
     transform: rotate(360deg);
   }
 }

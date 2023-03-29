@@ -1,8 +1,6 @@
-import { resolvers, webConfig } from "@dongjiang-recruitment/vite-config";
+import { webConfig } from "@dongjiang-recruitment/vite-config";
 import path from "node:path";
 import { mergeConfig } from "vite";
-
-const { NaiveUiResolver } = resolvers;
 
 export default mergeConfig(
   webConfig({
@@ -37,9 +35,6 @@ export default mergeConfig(
           ],
         },
       ],
-    },
-    components: {
-      resolvers: [NaiveUiResolver()],
     },
     tailwindcss: path.resolve(__dirname, "./tailwind.config.js"),
   }),

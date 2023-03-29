@@ -156,10 +156,10 @@
 import NavigationBar from "@/components/NavigationBar/NavigationBar.vue";
 import WybPopup from "@/components/wyb-popup/wyb-popup.vue";
 import {
-deleteUserInfosP0ProjectExperiencesP1,
-getUserInfosP0ProjectExperiencesP1,
-postUserInfosP0ProjectExperiences,
-putUserInfosP0ProjectExperiencesP1
+  deleteUserInfosP0ProjectExperiencesP1,
+  getUserInfosP0ProjectExperiencesP1,
+  postUserInfosP0ProjectExperiences,
+  putUserInfosP0ProjectExperiencesP1,
 } from "@/services/services";
 import { ProjectExperience } from "@/services/types";
 import { useAuthStore } from "@/stores/auth";
@@ -204,7 +204,7 @@ const value1 = ref([years.value[0], months.value[0], days.value[0]]);
 const value2 = ref([year, month - 1, day]);
 // 更改选择器视图时调用的函数。
 const bindChange = (e: { detail: { value: never } }) => {
-  let val = e.detail.value;
+  const val = e.detail.value;
   year = years.value[val[0]];
   month = months.value[val[1]];
   day = days.value[val[2]];
