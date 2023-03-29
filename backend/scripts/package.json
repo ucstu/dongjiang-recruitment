@@ -1,0 +1,27 @@
+{
+  "name": "@dongjiang-recruitment/scripts",
+  "version": "1.0.0",
+  "description": "scripts",
+  "private": true,
+  "keywords": [
+    "vite"
+  ],
+  "scripts": {
+    "start": "ts-node src/services.ts"
+  },
+  "dependencies": {
+    "http-proxy": "^1.18.1",
+    "inquirer": "^8.0.0"
+  },
+  "devDependencies": {
+    "@dongjiang-recruitment/eslint-config": "workspace:^1.0.0",
+    "@dongjiang-recruitment/typescript-config": "workspace:^1.0.0",
+    "@types/http-proxy": "^1.17.10",
+    "@types/inquirer": "^9.0.3",
+    "@types/node": "^18.13.0",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.9.5"
+  },
+  "author": "ucstu",
+  "license": "MIT"
+}

@@ -33,12 +33,13 @@
           "sub-type": "docker",
           "artifact": "bundle",
           "context": "bundle",
+          "build-args": ["SERVICE_PORT=3001"],
           "docker-file": "../Dockerfile.node"
         },
         "deploy": {
           "name": "deploy",
           "sub-type": "kubernetes",
-          "port": 3000,
+          "port": 3001,
           "path": "/advertisers",
           "domain": "api.djzhaopin.ucstu.com"
         }
@@ -63,12 +64,13 @@
           "sub-type": "docker",
           "artifact": "bundle",
           "context": "bundle",
+          "build-args": ["SERVICE_PORT=3002"],
           "docker-file": "../Dockerfile.node"
         },
         "deploy": {
           "name": "deploy",
           "sub-type": "kubernetes",
-          "port": 3000,
+          "port": 3002,
           "path": "/applicant",
           "domain": "api.djzhaopin.ucstu.com"
         }
@@ -93,12 +95,13 @@
           "sub-type": "docker",
           "artifact": "bundle",
           "context": "bundle",
+          "build-args": ["SERVICE_PORT=3003"],
           "docker-file": "../Dockerfile.node"
         },
         "deploy": {
           "name": "deploy",
           "sub-type": "kubernetes",
-          "port": 3000,
+          "port": 3003,
           "path": "/authentication",
           "domain": "api.djzhaopin.ucstu.com"
         }
@@ -123,12 +126,13 @@
           "sub-type": "docker",
           "artifact": "bundle",
           "context": "bundle",
+          "build-args": ["SERVICE_PORT=3004"],
           "docker-file": "../Dockerfile.node"
         },
         "deploy": {
           "name": "deploy",
           "sub-type": "kubernetes",
-          "port": 3000,
+          "port": 3004,
           "path": "/common",
           "domain": "api.djzhaopin.ucstu.com"
         }
@@ -153,12 +157,13 @@
           "sub-type": "docker",
           "artifact": "bundle",
           "context": "bundle",
+          "build-args": ["SERVICE_PORT=3005"],
           "docker-file": "../Dockerfile.node"
         },
         "deploy": {
           "name": "deploy",
           "sub-type": "kubernetes",
-          "port": 3000,
+          "port": 3005,
           "path": "/companies",
           "domain": "api.djzhaopin.ucstu.com"
         }
@@ -183,12 +188,13 @@
           "sub-type": "docker",
           "artifact": "bundle",
           "context": "bundle",
+          "build-args": ["SERVICE_PORT=3006"],
           "docker-file": "../Dockerfile.node"
         },
         "deploy": {
           "name": "deploy",
           "sub-type": "kubernetes",
-          "port": 3000,
+          "port": 3006,
           "path": "/personnel",
           "domain": "api.djzhaopin.ucstu.com"
         }

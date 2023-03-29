@@ -103,7 +103,9 @@ jobs:
           CURRENT_PACKAGE: ${{ matrix.package-name }}
           DETECT_RESULTS: ${{ needs.build-packages.outputs.detect-results }}
         with:
-          script: await require(".github/workflows/monorepo-scripts/export-variables.js")({ core })
+          script: |
+            const exportResults = await require(".github/workflows/monorepo-scripts/export-variables.js")({ core })
+            core.setOutput("build-args", exportResults['build-args'].join('\n'))
       - name: Download Build Artifacts
         uses: actions/download-artifact@v3
         with:
@@ -130,6 +132,7 @@ jobs:
           build-args: |
             NODE_ENV=production
             NODE_VERSION=${{ env.NODE_VERSION }}
+            {{ steps.github-script.outputs.build-args }
           tags: |
             ${{ format('ghcr.io/{0}/{1}-{2}:{3}', github.repository, steps.github-script.outputs.type, matrix.package-name, github.sha) }}
             ${{ format('ghcr.io/{0}/{1}-{2}:{3}', github.repository, steps.github-script.outputs.type, matrix.package-name, steps.github-script.outputs.publish-version) }}

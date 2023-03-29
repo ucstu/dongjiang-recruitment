@@ -1,0 +1,92 @@
+[
+  {
+    "name": "advertiser-service",
+    "prefix": "/advertisers",
+    "current": "local",
+    "local": {
+      "host": "localhost",
+      "protocol": "http",
+      "port": 3001
+    },
+    "remote": {
+      "host": "develop.api.djzhaopin.ucstu.com",
+      "protocol": "https",
+      "port": 443
+    }
+  },
+  {
+    "name": "applicant-service",
+    "prefix": "/applicant",
+    "current": "remote",
+    "local": {
+      "host": "localhost",
+      "protocol": "http",
+      "port": 3002
+    },
+    "remote": {
+      "host": "develop.api.djzhaopin.ucstu.com",
+      "protocol": "https",
+      "port": 443
+    }
+  },
+  {
+    "name": "authentication-service",
+    "prefix": "/authentication",
+    "current": "remote",
+    "local": {
+      "host": "localhost",
+      "protocol": "http",
+      "port": 3003
+    },
+    "remote": {
+      "host": "develop.api.djzhaopin.ucstu.com",
+      "protocol": "https",
+      "port": 443
+    }
+  },
+  {
+    "name": "common-service",
+    "prefix": "/common",
+    "current": "remote",
+    "local": {
+      "host": "localhost",
+      "protocol": "http",
+      "port": 3004
+    },
+    "remote": {
+      "host": "develop.api.djzhaopin.ucstu.com",
+      "protocol": "https",
+      "port": 443
+    }
+  },
+  {
+    "name": "company-service",
+    "prefix": "/companies",
+    "current": "remote",
+    "local": {
+      "host": "localhost",
+      "protocol": "http",
+      "port": 3005
+    },
+    "remote": {
+      "host": "develop.api.djzhaopin.ucstu.com",
+      "protocol": "https",
+      "port": 443
+    }
+  },
+  {
+    "name": "personnel-service",
+    "prefix": "/personnel",
+    "current": "remote",
+    "local": {
+      "host": "localhost",
+      "protocol": "http",
+      "port": 3006
+    },
+    "remote": {
+      "host": "develop.api.djzhaopin.ucstu.com",
+      "protocol": "https",
+      "port": 443
+    }
+  }
+]
