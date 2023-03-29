@@ -85,17 +85,15 @@
 
 <script setup lang="ts">
 import router from "@/router";
-import { putCompanyInfosP0 } from "@/services/services";
-import { CompanyInformation } from "@/services/types";
 import { useMainStore } from "@/stores/main";
-import { failResponseHandler } from "@/utils/handler";
-import { ElMessage, FormInstance } from "element-plus";
+import type { Company } from "@dongjiang-recruitment/service-common";
+import { ElMessage, type FormInstance } from "element-plus";
 
 const store = useMainStore();
 
 const comFormRef = ref<FormInstance>();
 
-const companyForm = reactive<CompanyInformation>({
+const companyForm = reactive<Company>({
   ...store.companyInformation,
 });
 
@@ -103,16 +101,15 @@ const confirmCompany = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   formEl.validate((valid) => {
     if (valid) {
-      putCompanyInfosP0(
-        store.companyInformation.companyInformationId,
-        companyForm
-      )
+      companyService.updateCompany({
+        id: store.companyInformation.id,
+        requestBody: companyForm,
+      })
         .then((res) => {
           ElMessage.success("恭喜您，企业认证成功");
-          store.companyInformation = res.data.body;
+          store.companyInformation = res;
           router.replace({ name: "PublishJob" });
         })
-        .catch(failResponseHandler);
     }
   });
 };

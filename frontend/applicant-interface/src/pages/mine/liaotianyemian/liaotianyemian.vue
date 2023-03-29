@@ -111,12 +111,12 @@ const scrollTop = ref(0);
 watchEffect(() => {
   // 用于在页面高度发生变化时滚动到页面底部。
   if (
-    store.messages[store.account.fullInformationId][
+    store.messages[store.account.detailId.personnel][
       hrInfo.value.hrInformationId
     ]
   ) {
     const sTop =
-      store.messages[store.account.fullInformationId][
+      store.messages[store.account.detailId.personnel][
         hrInfo.value.hrInformationId
       ].length * uni.upx2px(150);
     nextTick(() => {
@@ -125,8 +125,8 @@ watchEffect(() => {
   }
 
   // 这是为了检查用户是否已经与 HR 进行过对话。如果没有，它将创建一个新的对话。
-  if (!store.messages[store.account.fullInformationId]) {
-    store.messages[store.account.fullInformationId] = {};
+  if (!store.messages[store.account.detailId.personnel]) {
+    store.messages[store.account.detailId.personnel] = {};
   }
   for (const key in store.messages[
     store.account.fullInformationId

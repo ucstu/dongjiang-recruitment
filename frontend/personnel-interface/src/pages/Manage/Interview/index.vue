@@ -86,7 +86,7 @@ const handleWorkTimeChange = (val: Array<string>) => {
   applicantService.queryAllDeliveryRecord(
     {
       query: {
-        companyId: ["$eq", store.companyInformation.companyInformationId],
+        companyId: ["$eq", store.companyInformation.id],
         status: ["$eq", 4],
         interviewTime: ["$in", ...deliveryDates.value],
       }
@@ -100,28 +100,21 @@ const handleWorkTimeChange = (val: Array<string>) => {
         deliveryRecordsCheckeds.value.push(
           Object.assign(item, { checked: false })
         );
-        getUserInfosP0(item.userInformationId)
+        applicantService.getApplicant({
+          id: item.applicantId,
+        })
           .then((response) => {
-            userInformations.value.set(
-              item.userInformationId,
-              response
-            );
+            userInformations.value.set(item.applicantId, response);
           })
-          .catch(failResponseHandler);
-        getCompanyInfosP0PositionInfosP1(
-          store.companyInformation.companyInformationId,
-          item.positionInformationId
-        )
-          .then((responseable) => {
-            jobInformations.value.set(
-              item.positionInformationId,
-              responseable
-            );
+        companyPositionService.getPosition({
+          companyId: store.companyInformation.id,
+          id: item.positionId,
+        })
+          .then((response) => {
+            jobInformations.value.set(item.positionId, response);
           })
-          .catch(failResponseHandler);
       });
     })
-    .catch(failResponseHandler);
 };
 // 更改所选简历信息状态的功能。
 const changeState = (val: 1 | 2 | 3 | 4 | 5) => {
@@ -135,11 +128,11 @@ const changeState = (val: 1 | 2 | 3 | 4 | 5) => {
     // 更改所选简历信息的状态。
     newDeliver.map((delivery: DeliveryRecordChecked) => {
       delivery.status = val;
-      putUserInfosP0DeliveryRecordsP1(
-        delivery.userInformationId,
-        delivery.deliveryRecordId,
-        delivery
-      ).then(() => {
+      applicantDeliveryRecordService.updateDeliveryRecord({
+        applicantId: delivery.applicantId,
+        id: delivery.id,
+        requestBody: delivery,
+      }).then(() => {
         ElMessage.success("操作成功");
       });
     });
@@ -178,39 +171,35 @@ const total = computed(() => {
   let num: number = (totalCount.value / 7) * 10;
   return Math.ceil(num);
 });
-getCompanyInfosP0DeliveryRecords(
-  store.companyInformation.companyInformationId,
-  { status: [4] }
-)
+
+applicantService.queryAllDeliveryRecord({
+  query: {
+    companyId: ["$eq", store.companyInformation.id],
+    status: ["$eq", 4],
+  }
+})
   .then((res) => {
-    totalCount.value = res.totalCount;
-    deliveryRecords.value = res.deliveryRecords;
+    totalCount.value = res.total;
+    deliveryRecords.value = res.items;
     deliveryRecords.value.forEach((item) => {
       deliveryRecordsCheckeds.value.push(
         Object.assign(item, { checked: false })
       );
-      getUserInfosP0(item.userInformationId)
+      applicantService.getApplicant({
+        id: item.applicantId,
+      })
         .then((response) => {
-          userInformations.value.set(
-            item.userInformationId,
-            response
-          );
+          userInformations.value.set(item.applicantId, response);
         })
-        .catch(failResponseHandler);
-      getCompanyInfosP0PositionInfosP1(
-        store.companyInformation.companyInformationId,
-        item.positionInformationId
-      )
-        .then((responseable) => {
-          jobInformations.value.set(
-            item.positionInformationId,
-            responseable
-          );
+      companyPositionService.getPosition({
+        companyId: store.companyInformation.id,
+        id: item.positionId,
+      })
+        .then((response) => {
+          jobInformations.value.set(item.positionId, response);
         })
-        .catch(failResponseHandler);
     });
   })
-  .catch(failResponseHandler);
 </script>
 
 <style scoped lang="scss">

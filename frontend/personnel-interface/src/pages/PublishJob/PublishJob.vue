@@ -352,18 +352,11 @@
 import SystemHeader from "@/components/System/SystemHeader.vue";
 import useTime from "@/hooks/useTime";
 import router from "@/router";
-import {
-  getCityInformations,
-  getCompanyInfosP0PositionInfosP1,
-  getDirectionTags,
-  postCompanyInfosP0PositionInfos,
-  putCompanyInfosP0PositionInfosP1,
-} from "@/services/services";
-import { PositionInformation } from "@/services/types";
 import { useMainStore } from "@/stores/main";
-import { failResponseHandler } from "@/utils/handler";
-import { ElMessage, FormInstance } from "element-plus";
+import type { Position } from "@dongjiang-recruitment/service-common";
+import { ElMessage, type FormInstance } from "element-plus";
 import { storeToRefs } from "pinia";
+import type { Ref } from "vue";
 import { useRoute } from "vue-router";
 import DirectionTagSelector from "./DirectionTagSelector.vue";
 import InterviewTagSelector from "./InterviewTagSelector.vue";
@@ -374,7 +367,7 @@ const map = shallowRef<AMap.Map>();
 const placeSearch = shallowRef();
 const formRef = ref<FormInstance>();
 const marker = shallowRef();
-const jobTypeList = ref<PositionInformation>({} as PositionInformation);
+const jobTypeList = ref<Position>({} as Position);
 const weekendReleaseTimeMap = reactive(["周末双休", "周末单休", "大小周"]);
 const jobTypeMap = reactive(["全职", "兼职", "实习"]);
 const educationMap = reactive(["不要求", "大专", "本科", "硕士", "博士"]);
@@ -584,19 +577,19 @@ const loadMap = () => {
 
 onMounted(() => {
   if (route.params.PublishJobId) {
-    getCompanyInfosP0PositionInfosP1(
-      store.companyInformation.companyInformationId,
-      route.params.PublishJobId.toString()
-    )
+    companyPositionService
+      .getPosition({
+        companyId: store.companyInformation.id,
+        id: route.params.PublishJobId.toString(),
+      })
       .then((res) => {
-        jobTypeList.value = res.data.body;
+        jobTypeList.value = res;
         cityInfo.value = [
           jobTypeList.value.workProvinceName,
           jobTypeList.value.workCityName,
         ];
         loadMap();
-      })
-      .catch(failResponseHandler);
+      });
   } else {
     loadMap();
   }
@@ -604,11 +597,9 @@ onMounted(() => {
 
 const { directionTags } = storeToRefs(store);
 if (directionTags.value === null) {
-  getDirectionTags({ positionName: "软件工程师" })
-    .then((res) => {
-      store.directionTags = res.data.body;
-    })
-    .catch(failResponseHandler);
+  commonService.getDirectionTags({ positionName: "软件工程师" }).then((res) => {
+    store.directionTags = res;
+  });
 }
 
 interface CityInfo {
@@ -619,22 +610,20 @@ interface CityInfo {
 const cityMap = ref<CityInfo[]>([]);
 const cityInfo = ref<string[]>([]);
 
-getCityInformations()
-  .then((res) => {
-    cityMap.value = res.data.body.map((item) => {
-      return {
-        value: item.provinceName,
-        label: item.provinceName,
-        children: item.cities.map((city) => {
-          return {
-            value: city,
-            label: city,
-          };
-        }),
-      };
-    });
-  })
-  .catch(failResponseHandler);
+commonService.getCities().then((res) => {
+  cityMap.value = res.map((item) => {
+    return {
+      value: item.provinceName,
+      label: item.provinceName,
+      children: item.cities.map((city) => {
+        return {
+          value: city,
+          label: city,
+        };
+      }),
+    };
+  });
+});
 
 const workTimeing = ref([]);
 // 当用户更改工作时间时调用的函数。
@@ -666,20 +655,19 @@ const publishPost = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   formEl.validate((valid) => {
     if (valid) {
-      jobTypeList.value.hrInformationId =
-        store.accountInformation.fullInformationId;
-      jobTypeList.value.companyInformationId =
-        store.companyInformation.companyInformationId;
+      jobTypeList.value.personnelId =
+        store.accountInformation.detailId.personnel!;
+      jobTypeList.value.companyId = store.companyInformation.id;
       handleWorkTimeChange(workTimeing.value);
-      postCompanyInfosP0PositionInfos(
-        store.companyInformation.companyInformationId,
-        jobTypeList.value
-      )
+      companyPositionService
+        .addPosition({
+          companyId: store.companyInformation.id,
+          requestBody: jobTypeList.value,
+        })
         .then(() => {
           ElMessage.success("恭喜您，职位发布成功");
           router.push({ name: "Manage" });
-        })
-        .catch(failResponseHandler);
+        });
     }
   });
 };
@@ -687,20 +675,19 @@ const updatePost = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   formEl.validate((valid) => {
     if (valid) {
-      jobTypeList.value.hrInformationId =
-        store.accountInformation.fullInformationId;
-      jobTypeList.value.companyInformationId =
-        store.hrInformation.companyInformationId;
-      putCompanyInfosP0PositionInfosP1(
-        store.hrInformation.companyInformationId,
-        route.params.PublishJobId.toString(),
-        jobTypeList.value
-      )
+      jobTypeList.value.personnelId =
+        store.accountInformation.detailId.personnel!;
+      jobTypeList.value.companyId = store.hrInformation.id;
+      companyPositionService
+        .updatePosition({
+          companyId: store.companyInformation.id,
+          id: route.params.PublishJobId.toString(),
+          requestBody: jobTypeList.value,
+        })
         .then(() => {
           ElMessage.success("恭喜您，职位修改成功");
           router.go(-1);
-        })
-        .catch(failResponseHandler);
+        });
     }
   });
 };

@@ -73,7 +73,7 @@ const deleteForm = (formEl: FormInstance | undefined) => {
   formEl.validate((valid) => {
     if (valid) {
       authenticationService.destroyAccount({
-        id: store.accountInformation.accountInformationId,
+        id: store.accountInformation.id,
         verificationCode: ruleForm.verificationCode,
       })
         .then(() => {

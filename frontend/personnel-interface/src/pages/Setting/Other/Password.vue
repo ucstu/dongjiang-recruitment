@@ -122,7 +122,7 @@ const updateForm = (formEl: FormInstance | undefined) => {
     if (valid) {
       authenticationService
         .changePassword({
-          id: store.accountInformation.accountInformationId,
+          id: store.accountInformation.id,
           requestBody: ruleForm,
         })
         .then((res) => {

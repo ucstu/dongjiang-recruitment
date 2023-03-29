@@ -81,17 +81,15 @@
 <script setup lang="ts">
 import useAvatarUpload from "@/hooks/useAvatarUpload";
 import router from "@/router/index";
-import { postAvatars, putHrInfosP0 } from "@/services/services";
-import { HrInformation } from "@/services/types";
 import { useMainStore } from "@/stores/main";
-import { failResponseHandler } from "@/utils/handler";
+import type { Personnel } from "@dongjiang-recruitment/service-common";
 import { Plus } from "@element-plus/icons-vue";
-import { ElMessage, FormInstance } from "element-plus";
+import { ElMessage, type FormInstance } from "element-plus";
 const VITE_CDN_URL = import.meta.env.VITE_CDN_URL;
 const store = useMainStore();
 
 const ruleFormRef = ref<FormInstance>();
-const formHr = reactive<HrInformation>({ ...store.hrInformation });
+const formHr = reactive<Personnel>({ ...store.hrInformation });
 //上传头像
 const uploadInput = ref<HTMLElement | null>(null);
 const dealfilechange = (e: Event) => {
@@ -99,11 +97,12 @@ const dealfilechange = (e: Event) => {
   let files = input.files;
   if (files) {
     if (useAvatarUpload(files[files.length - 1])) {
-      postAvatars({ avatar: files[files.length - 1] })
-        .then((res) => {
-          formHr.avatarUrl = res.data.body;
-        })
-        .catch(failResponseHandler);
+      // postAvatars({ avatar: files[files.length - 1] })
+      //   .then((res) => {
+      //     formHr.avatarUrl = res.data.body;
+      //   })
+      //   .catch(failResponseHandler);
+      console.log("上传暂时不可用");
     }
   }
 };
@@ -151,12 +150,15 @@ const updateHrinfo = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   formEl.validate((valid) => {
     if (valid) {
-      putHrInfosP0(store.accountInformation.fullInformationId, formHr)
-        .then((res) => {
-          store.hrInformation = res.data.body;
-          ElMessage.success("修改成功");
+      personnelService
+        .updatePersonnel({
+          id: store.accountInformation.detailId.personnel!,
+          requestBody: formHr,
         })
-        .catch(failResponseHandler);
+        .then((res) => {
+          store.hrInformation = res;
+          ElMessage.success("修改成功");
+        });
     }
   });
 };

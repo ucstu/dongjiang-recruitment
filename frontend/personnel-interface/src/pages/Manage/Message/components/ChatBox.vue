@@ -83,9 +83,10 @@
 
 <script setup lang="ts">
 import useTimeChange from "@/hooks/useTimeChange";
-import { UserInformation } from "@/services/types";
-import { useMainStore, withReadStateMessageRecord } from "@/stores/main";
+import { useMainStore, type withReadStateMessageRecord } from "@/stores/main";
+import type { Applicant } from "@dongjiang-recruitment/service-common";
 import { ElScrollbar } from "element-plus";
+import type { PropType } from "vue";
 const VITE_CDN_URL = import.meta.env.VITE_CDN_URL as string;
 const mainStore = useMainStore();
 const srcList = ref<string[]>([]);
@@ -97,7 +98,7 @@ let props = defineProps({
     default: "",
   },
   userInfo: {
-    type: Object as PropType<UserInformation>,
+    type: Object as PropType<Applicant>,
     default: () => ({}),
   },
   chatList: {
@@ -115,7 +116,8 @@ watchEffect(() => {
     nextTick(() => {
       scrollbarRef.value!.scrollTo(
         0,
-        scrollbarRef.value!.resize$!.offsetHeight
+        // scrollbarRef.value!.resize$!.offsetHeight
+        scrollbarRef.value!.resizeRef!.offsetHeight
       );
     });
   }

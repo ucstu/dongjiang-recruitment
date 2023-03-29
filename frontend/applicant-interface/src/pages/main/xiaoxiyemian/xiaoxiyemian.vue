@@ -78,7 +78,7 @@ const messageKey = ref<Map<string, string>>(new Map());
 
 onShow(() => {
   // 从store获取消息信息。
-  if (store.messages[store.account.fullInformationId]) {
+  if (store.messages[store.account.detailId.personnel]) {
     hrInfo.value = [];
     for (const key in store.messages[
       store.account.fullInformationId
@@ -88,31 +88,31 @@ onShow(() => {
         // 用于获取最新消息信息。
         mes.value.set(
           key,
-          store.messages[store.account.fullInformationId][key][
-            store.messages[store.account.fullInformationId][key]
+          store.messages[store.account.detailId.personnel][key][
+            store.messages[store.account.detailId.personnel][key]
               .length - 1
           ].content
         );
         time.value.set(
           key,
           usetimeChange(
-            store.messages[store.account.fullInformationId][key][
-              store.messages[store.account.fullInformationId][key]
+            store.messages[store.account.detailId.personnel][key][
+              store.messages[store.account.detailId.personnel][key]
                 .length - 1
             ].createdAt
           )
         );
         isRead.value.set(
           key,
-          store.messages[store.account.fullInformationId][key][
-            store.messages[store.account.fullInformationId][key]
+          store.messages[store.account.detailId.personnel][key][
+            store.messages[store.account.detailId.personnel][key]
               .length - 1
           ].haveRead
         );
         messageType.value.set(
           key,
-          store.messages[store.account.fullInformationId][key][
-            store.messages[store.account.fullInformationId][key]
+          store.messages[store.account.detailId.personnel][key][
+            store.messages[store.account.detailId.personnel][key]
               .length - 1
           ].messageType
         );
@@ -127,13 +127,13 @@ const allRead = () => {
     store.account.fullInformationId
   ]) {
     if (
-      store.messages[store.account.fullInformationId][key][
-        store.messages[store.account.fullInformationId][key].length -
+      store.messages[store.account.detailId.personnel][key][
+        store.messages[store.account.detailId.personnel][key].length -
           1
       ].initiateType === 2
     ) {
-      store.messages[store.account.fullInformationId][key][
-        store.messages[store.account.fullInformationId][key].length -
+      store.messages[store.account.detailId.personnel][key][
+        store.messages[store.account.detailId.personnel][key].length -
           1
       ].haveRead = true;
       isRead.value.set(key, true);

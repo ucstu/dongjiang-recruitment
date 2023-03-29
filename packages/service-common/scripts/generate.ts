@@ -3,11 +3,11 @@
 /* eslint-disable */
 import { execSync } from "node:child_process";
 import {
-existsSync,
-readdirSync,
-readFileSync,
-rmSync,
-writeFileSync
+  existsSync,
+  readdirSync,
+  readFileSync,
+  rmSync,
+  writeFileSync
 } from "node:fs";
 
 const json = JSON.parse(readFileSync("openapi.json").toString());
@@ -23,7 +23,7 @@ const fix = (json: { [x: string]: any }) => {
         ([key, value]) => `${key}:${value}`
       ).join(",")
     }}`
-    if (!json["description"].includes(patchedDescription)) {
+    if (!json["description"]?.includes(patchedDescription)) {
       json["description"] = `${json["title"]}${patchedDescription}`
     }
   } else {

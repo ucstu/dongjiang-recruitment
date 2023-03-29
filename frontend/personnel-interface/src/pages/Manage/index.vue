@@ -65,10 +65,10 @@
                         <div class="hint">
                           <p>
                             候选人:{{
-                              userInformations.get(interview.userInformationId)
+                              userInformations.get(interview.applicantId)
                                 ?.firstName +
                               "" +
-                              userInformations.get(interview.userInformationId)
+                              userInformations.get(interview.applicantId)
                                 ?.lastName
                             }}
                           </p>
@@ -76,7 +76,7 @@
                           <p>
                             应聘职位：{{
                               jobInformations.get(
-                                interview.positionInformationId
+                                interview.positionId
                               )?.positionName
                             }}
                           </p>
@@ -108,20 +108,8 @@
 import SystemHeader from "@/components/System/SystemHeader.vue";
 import useDate from "@/hooks/useDate";
 import router from "@/router";
-import {
-  getCompanyInfosP0DeliveryRecords,
-  getCompanyInfosP0PositionInfos,
-  getCompanyInfosP0PositionInfosP1,
-  getUserInfosP0,
-  putUserInfosP0DeliveryRecordsP1,
-} from "@/services/services";
-import {
-  DeliveryRecord,
-  PositionInformation,
-  UserInformation,
-} from "@/services/types";
 import { useMainStore } from "@/stores/main";
-import { failResponseHandler } from "@/utils/handler";
+import type { Applicant, DeliveryRecord, Position } from "@dongjiang-recruitment/service-common";
 
 const store = useMainStore();
 const ho = new Date().getHours();
@@ -132,8 +120,8 @@ const num = ref({
   countCommunication: 0,
   countInterviewed: 0,
 });
-const userInformations = ref<Map<string, UserInformation>>(new Map());
-const jobInformations = ref<Map<string, PositionInformation>>(new Map());
+const userInformations = ref<Map<string, Applicant>>(new Map());
+const jobInformations = ref<Map<string, Position>>(new Map());
 interface Record {
   status: Array<1 | 2 | 3 | 4 | 5>;
   ages?: Array<1 | 2 | 3 | 4 | 5>;
@@ -151,38 +139,41 @@ const valueMap = ref<Record>({
 });
 const recruitmentPosition = ref(0);
 // 获取位置信息的总数。
-getCompanyInfosP0PositionInfos(store.companyInformation.companyInformationId, {
-  size: 1,
+companyPositionService.queryPosition({
+  companyId: store.companyInformation.id,
+  size: 0,
 }).then((res) => {
-  recruitmentPosition.value = res.data.body.totalCount;
+  recruitmentPosition.value = res.total;
 });
 
-getCompanyInfosP0DeliveryRecords(
-  store.companyInformation.companyInformationId,
-  valueMap.value
-)
+// 获取面试信息
+applicantService.queryAllDeliveryRecord({
+  query: {
+    companyId: ["$eq", store.companyInformation.id],
+    status: ["$in", ...valueMap.value.status],
+  }
+})
   .then((res) => {
-    interviewNum.value = res.data.body.deliveryRecords;
+    interviewNum.value = res.items;
     interviewNum.value.forEach((item) => {
-      getCompanyInfosP0PositionInfosP1(
-        store.companyInformation.companyInformationId,
-        item.positionInformationId
-      )
+      companyPositionService.getPosition({
+        companyId: item.companyId,
+        id: item.positionId,
+      })
         .then((response) => {
           jobInformations.value.set(
-            item.positionInformationId,
-            response.data.body
+            item.positionId,
+            response
           );
         })
-        .catch(failResponseHandler);
-      getUserInfosP0(item.userInformationId)
-        .then((responseable) => {
+      applicantService.getApplicant({
+        id: item.applicantId,
+      }).then((responseable) => {
           userInformations.value.set(
-            item.userInformationId,
-            responseable.data.body
+            item.applicantId,
+            responseable
           );
         })
-        .catch(failResponseHandler);
 
       if (item.status === 1) {
         num.value.countCommunication = num.value.countCommunication + 1;
@@ -194,7 +185,6 @@ getCompanyInfosP0DeliveryRecords(
       }
     });
   })
-  .catch(failResponseHandler);
 
 const goPosition = () => {
   router.push("/System/Position");
@@ -204,16 +194,16 @@ const inspectionResume = (delivery: DeliveryRecord) => {
   // 变更状态函数，将选中的简历信息的状态进行变更
   if (delivery.status === 1) {
     delivery.status = 2;
-    putUserInfosP0DeliveryRecordsP1(
-      delivery.userInformationId,
-      delivery.deliveryRecordId,
-      delivery
-    ).then(() => {
+    applicantDeliveryRecordService.updateDeliveryRecord({
+      applicantId: delivery.applicantId,
+      id: delivery.id,
+      requestBody: delivery,
+    }).then(() => {
       router.push({
         name: "Resume",
         params: {
-          userId: delivery.userInformationId,
-          postId: delivery.positionInformationId,
+          userId: delivery.applicantId,
+          postId: delivery.positionId,
         },
       });
     });
@@ -221,8 +211,8 @@ const inspectionResume = (delivery: DeliveryRecord) => {
     router.push({
       name: "Resume",
       params: {
-        userId: delivery.userInformationId,
-        postId: delivery.positionInformationId,
+        userId: delivery.applicantId,
+        postId: delivery.positionId,
       },
     });
   }

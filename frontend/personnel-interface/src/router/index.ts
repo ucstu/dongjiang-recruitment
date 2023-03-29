@@ -1,7 +1,11 @@
 import { useMainStore } from "@/stores/main";
 import NProgress from "nprogress";
 import "nprogress/nprogress.css";
-import { createRouter, createWebHashHistory, RouteRecordRaw } from "vue-router";
+import {
+  createRouter,
+  createWebHashHistory,
+  type RouteRecordRaw,
+} from "vue-router";
 
 const leftBarRouteList: RouteRecordRaw[] = [
   {

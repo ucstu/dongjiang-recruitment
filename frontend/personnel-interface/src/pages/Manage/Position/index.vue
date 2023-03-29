@@ -216,7 +216,7 @@ interface GetCompanyInfosP0PositionInfosQueryParams {
 
 companyPositionService
   .queryPosition({
-    companyId: store.companyInformation.companyInformationId,
+    companyId: store.companyInformation.id,
   })
   .then((res) => {
     jobTypeList.value = res.items;
@@ -236,7 +236,7 @@ const updatePosition = (id: string) => {
 const search = () => {
   companyPositionService
     .queryPosition({
-      companyId: store.companyInformation.companyInformationId,
+      companyId: store.companyInformation.id,
       query: {
         positionName: ["$like", `%${input2.value}%`],
       },
@@ -248,7 +248,7 @@ const search = () => {
 const deletePosition = (id: string) => {
   companyPositionService
     .removePosition({
-      companyId: store.companyInformation.companyInformationId,
+      companyId: store.companyInformation.id,
       id: id,
     })
     .then((res) => {

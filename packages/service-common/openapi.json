@@ -7909,6 +7909,143 @@
           }
         },
         "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-66759610-run"
+      },
+      "put": {
+        "summary": "修改投递记录",
+        "x-apifox-folder": "Applicant/DeliveryRecord",
+        "x-apifox-status": "developing",
+        "deprecated": false,
+        "description": "",
+        "operationId": "UpdateDeliveryRecord",
+        "tags": ["Applicant/DeliveryRecord"],
+        "parameters": [
+          {
+            "name": "applicantId",
+            "in": "path",
+            "description": "求职者ID",
+            "required": true,
+            "example": "cAADFA4A-de3b-ECBC-fc4d-FFA6dF8e2f2C",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "投递记录ID",
+            "required": true,
+            "example": "c9B331EB-4EBF-FC3F-CCf7-C1Cc54Ed662F",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeliveryRecord",
+                "x-apifox-overrides": {
+                  "id": null,
+                  "createdAt": null,
+                  "updatedAt": null,
+                  "deletedAt": null
+                }
+              },
+              "example": {
+                "status": 4,
+                "interviewTime": "2010-02-18",
+                "positionId": "c9B331EB-4EBF-FC3F-CCf7-C1Cc54Ed662F",
+                "applicantId": "AE62acB8-Eb93-35DB-Cadf-2569dCc3E449",
+                "id": "97A5Cc9b-55dA-EEAC-Bd47-02B3DEda48A5",
+                "createdAt": "2014-12-18 19:47:43",
+                "updatedAt": "1989-12-14 16:57:26",
+                "companyId": "11601ef2-B9a8-D1cc-1693-5D6F6DfDF1EE",
+                "deletedAt": "1989-10-05 08:30:25"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "x-apifox-refs": {
+                    "01GV4RR4B8Q845T5Y6Y0MNRBWT": {
+                      "$ref": "#/components/schemas/BaseResponse",
+                      "x-apifox-overrides": {
+                        "body": {
+                          "$ref": "#/components/schemas/Advertiser",
+                          "x-apifox-overrides": {}
+                        }
+                      },
+                      "required": ["body"]
+                    }
+                  },
+                  "x-apifox-orders": ["01GV4RR4B8Q845T5Y6Y0MNRBWT"],
+                  "properties": {
+                    "timestamp": {
+                      "type": "string",
+                      "title": "响应时间",
+                      "description": "响应时间"
+                    },
+                    "message": {
+                      "type": "string",
+                      "title": "响应",
+                      "description": "响应"
+                    },
+                    "status": {
+                      "type": "integer",
+                      "title": "响应编码",
+                      "description": "响应编码"
+                    },
+                    "body": {
+                      "$ref": "#/components/schemas/DeliveryRecord",
+                      "x-apifox-overrides": {
+                        "id": null,
+                        "createdAt": null,
+                        "updatedAt": null,
+                        "deletedAt": null
+                      }
+                    }
+                  },
+                  "required": ["timestamp", "message", "status", "body"],
+                  "x-apifox-ignore-properties": [
+                    "timestamp",
+                    "message",
+                    "status",
+                    "body"
+                  ]
+                },
+                "examples": {
+                  "1": {
+                    "summary": "成功示例",
+                    "value": {
+                      "timestamp": "2009-07-25 01:27:05",
+                      "message": "Hioq Hljtpxil Wuzliu Wtynl Pglwneiy",
+                      "status": 243,
+                      "body": {
+                        "status": 5,
+                        "interviewTime": "1972-02-04",
+                        "positionId": "8dA5c136-B5F5-FaE0-deFC-94e2b48697A8",
+                        "applicantId": "8A10E61E-8978-Dc19-1aab-e2CA1318E05E",
+                        "id": "5Fc9a53E-2E03-CD43-0cb6-D9FED223CD24",
+                        "createdAt": "2020-11-14 22:10:13",
+                        "updatedAt": "2006-01-13 23:58:34",
+                        "companyId": "1db3fA4A-8Fe5-6bfb-Be1C-2ebeBD6DC891",
+                        "deletedAt": "2004-05-04 06:52:37"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-71503591-run"
       }
     },
     "/applicant/{applicantId}/attentionRecords": {

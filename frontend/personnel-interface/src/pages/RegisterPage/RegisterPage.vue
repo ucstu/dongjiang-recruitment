@@ -70,12 +70,9 @@
 </template>
 
 <script lang="ts" setup>
-import { encrypt } from "@/hooks/useMd5";
 import router from "@/router";
-import { getVerificationCode, postAccountInfos } from "@/services/services";
 import { useMainStore } from "@/stores/main";
-import { failResponseHandler } from "@/utils/handler";
-import { ElMessage, FormInstance } from "element-plus";
+import { ElMessage, type FormInstance } from "element-plus";
 const store = useMainStore();
 const ruleFormRef = ref<FormInstance>();
 const btn = ref(false);
@@ -126,11 +123,9 @@ const postverificationCode = (email: string) => {
     ElMessage.warning("请输入正确用户名");
     return;
   } else {
-    getVerificationCode({ email })
-      .then((res) => {
-        ElMessage.success("验证码已发送，请注意查收");
-      })
-      .catch(failResponseHandler);
+    commonService.sendVerificationCode({ email }).then((res) => {
+      ElMessage.success("验证码已发送，请注意查收");
+    });
     btn.value = true;
     let time = 60;
     const timer = setInterval(() => {
@@ -153,18 +148,18 @@ const submitForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   formEl.validate((valid) => {
     if (valid) {
-      postAccountInfos({
-        accountType: 2,
-        userName: ruleForm.user,
-        password: encrypt(ruleForm.pass),
-        verificationCode: ruleForm.verificationCode,
+      authenticationService.registerAccount({
+        requestBody: {
+          accountType: 2,
+          userName: ruleForm.user,
+          password: ruleForm.pass,
+          verificationCode: ruleForm.verificationCode,
+        }
       })
         .then((res) => {
-          store.accountInformation = res.data.body;
           ElMessage.success("注册成功");
           router.push("/login");
         })
-        .catch(failResponseHandler);
     } else {
       ElMessage.warning("请检查表单信息");
       return false;

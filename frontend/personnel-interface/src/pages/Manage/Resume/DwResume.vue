@@ -89,7 +89,7 @@ const valueMap = ref<Record>({
 applicantService
   .queryAllDeliveryRecord({
     query: {
-      companyId: ["$eq", store.companyInformation.companyInformationId],
+      companyId: ["$eq", store.companyInformation.id],
       status: ["$in", 2],
     },
   })
@@ -101,7 +101,7 @@ applicantService
       });
       companyPositionService
         .getPosition({
-          companyId: store.companyInformation.companyInformationId,
+          companyId: store.companyInformation.id,
           id: item.positionId,
         })
         .then((res) => {
@@ -117,7 +117,7 @@ onUpdated(() => {
   applicantService
     .queryAllDeliveryRecord({
       query: {
-        companyId: ["$eq", store.companyInformation.companyInformationId],
+        companyId: ["$eq", store.companyInformation.id],
         status: ["$in", 1],
       },
     })
@@ -129,7 +129,7 @@ onUpdated(() => {
         });
         companyPositionService
           .getPosition({
-            companyId: store.companyInformation.companyInformationId,
+            companyId: store.companyInformation.id,
             id: item.positionId,
           })
           .then((res) => {

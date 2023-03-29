@@ -121,16 +121,12 @@
 <script setup lang="ts">
 import useAvatarUpload from "@/hooks/useAvatarUpload";
 import Tag from "@/pages/Home/Tag.vue";
-import {
-  getCityInformations,
-  postAvatars,
-  putCompanyInfosP0,
-} from "@/services/services";
-import { CompanyInformation } from "@/services/types";
 import { useMainStore } from "@/stores/main";
-import { failResponseHandler } from "@/utils/handler";
+import type { Company } from "@dongjiang-recruitment/service-common";
 import { Plus } from "@element-plus/icons-vue";
-import { ElMessage, FormInstance } from "element-plus";
+import { ElMessage, type FormInstance } from "element-plus";
+import type { Ref } from "vue";
+
 const VITE_CDN_URL = import.meta.env.VITE_CDN_URL;
 const formRef = ref<FormInstance>();
 const store = useMainStore();
@@ -140,7 +136,7 @@ const marker = shallowRef<AMap.Marker>();
 const placeSearch = shallowRef();
 const aboutAddress = ref<any>([]);
 //表格数据
-const formCompany = reactive<CompanyInformation>(store.companyInformation);
+const formCompany = reactive<Company>(store.companyInformation);
 const cityInfo = ref<string[]>([]);
 const handleArea = (address: any) => {
   formCompany.address = address.address;
@@ -282,11 +278,13 @@ const dealfilechange = (e: Event) => {
   let files = input.files;
   if (files) {
     if (useAvatarUpload(files[files.length - 1])) {
-      postAvatars({ avatar: files[files.length - 1] })
-        .then((res) => {
-          formCompany.logoUrl = res.data.body;
-        })
-        .catch(failResponseHandler);
+      // postAvatars({ avatar: files[files.length - 1] })
+      //   .then((res) => {
+      //     formCompany.logoUrl = res.data.body;
+      //   })
+      //   .catch(failResponseHandler);
+      console.log("上传咱不可用");
+
     }
   }
 };
@@ -300,9 +298,9 @@ interface CityInfo {
   label: string;
 }
 const cityMap = ref<CityInfo[]>([]);
-getCityInformations()
+commonService.getCities()
   .then((res) => {
-    cityMap.value = res.data.body.map((item) => {
+    cityMap.value = res.map((item) => {
       return {
         value: item.provinceName,
         label: item.provinceName,
@@ -315,21 +313,19 @@ getCityInformations()
       };
     });
   })
-  .catch(failResponseHandler);
 
 const updateCompany = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   formEl.validate((valid) => {
     if (valid) {
-      putCompanyInfosP0(
-        store.companyInformation.companyInformationId,
-        formCompany
-      )
+      companyService.updateCompany({
+        id: store.companyInformation.id,
+        requestBody: formCompany,
+      })
         .then((res) => {
           ElMessage.success("修改成功");
-          store.companyInformation = res.data.body;
+          store.companyInformation = res;
         })
-        .catch(failResponseHandler);
     }
   });
 };

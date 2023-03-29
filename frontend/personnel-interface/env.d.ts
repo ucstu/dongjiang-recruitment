@@ -1,6 +1,6 @@
 /// <reference types="vite/client" />
-/// <reference types="vue/macros-global" />
-/// <reference types="vite-plugin-pages/client" />
+/// <reference types="amap-js-api" />
+/// <reference types="amap-js-sdk" />
 
 import "vue-router";
 

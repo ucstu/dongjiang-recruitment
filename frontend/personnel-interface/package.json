@@ -27,7 +27,10 @@
     "@dongjiang-recruitment/stylelint-config": "workspace:^1.0.0",
     "@dongjiang-recruitment/typescript-config": "workspace:^1.0.0",
     "@dongjiang-recruitment/vite-config": "workspace:^1.0.0",
+    "@types/amap-js-api": "^1.4.11",
+    "@types/amap-js-sdk": "^1.4.3",
     "@types/node": "^18.13.0",
+    "@types/nprogress": "^0.2.0",
     "vite": "^4.1.1"
   },
   "browserslist": {

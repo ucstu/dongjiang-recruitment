@@ -89,8 +89,8 @@ const messageStore = useMessageStore();
 
 const dataList = ref(["2022-05-01", "2022-05-01"]);
 watchEffect(() => {
-  if (!messageStore.messages[store.accountInformation.fullInformationId]) {
-    messageStore.messages[store.accountInformation.fullInformationId] = {};
+  if (!messageStore.messages[store.accountInformation.detailId.personnel!]) {
+    messageStore.messages[store.accountInformation.detailId.personnel!] = {};
   }
   dataList.value = useGetDayAll(Datainfo.value[0], Datainfo.value[1]);
 });
@@ -101,7 +101,7 @@ const handleWorkTimeChange = (val: Array<string>) => {
   Datainfo.value = [startTime.value, endTime.value];
   companyService
     .getBigData({
-      companyId: store.companyInformation.companyInformationId,
+      companyId: store.companyInformation.id,
       // query: {
       //   startDate: ["$eq", startTime.value]
       //   endDate: ["$eq", endTime.value]
@@ -131,12 +131,12 @@ const day = new Date();
 day.setDate(day.getDate() - 1);
 yesterday.value = useDate(day);
 yesterdayData.value.onlineCommunicateCount = Object.keys(
-  messageStore.messages[store.accountInformation.fullInformationId]
+  messageStore.messages[store.accountInformation.detailId.personnel!]
 ).length;
 
 companyService
   .getBigData({
-    companyId: store.companyInformation.companyInformationId,
+    companyId: store.companyInformation.id,
     // query: {
     //   startDate: ["$eq", startTime.value]
     //   endDate: ["$eq", endTime.value]

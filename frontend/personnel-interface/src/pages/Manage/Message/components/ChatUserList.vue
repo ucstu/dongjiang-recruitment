@@ -44,31 +44,19 @@
 </template>
 
 <script lang="ts" setup>
-import { UserInformation } from "@/services/types";
-import { withReadStateMessageRecord } from "@/stores/main";
+import type { withReadStateMessageRecord } from '@/stores/main';
+import type { Applicant } from '@dongjiang-recruitment/service-common';
+import type { PropType } from 'vue';
 
 const VITE_CDN_URL = import.meta.env.VITE_CDN_URL as string;
 
 const props = defineProps({
   messages: {
-    type: Object as PropType<{
-      [x: string]: {
-        haveRead: boolean;
-        content: string;
-        createdAt: string;
-        initiateId: string;
-        initiateType: number;
-        messageRecordId: string;
-        messageType: 1 | 2 | 3 | 4;
-        serviceId: string;
-        serviceType: number;
-        updatedAt: string;
-      }[];
-    }>,
+    type: Object as PropType<{ [key: string]: withReadStateMessageRecord[]; }>,
     default: () => ({}),
   },
   userInformations: {
-    type: Object as PropType<Map<string | number, UserInformation>>,
+    type: Object as PropType<Map<string | number, Applicant>>,
     default: () => new Map(),
   },
   activeUserInformationId: {

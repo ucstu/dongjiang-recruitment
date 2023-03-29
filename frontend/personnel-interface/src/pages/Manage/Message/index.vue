@@ -11,7 +11,7 @@
         <div style="height: calc(100% - 130px)">
           <ChatUserList
             :user-informations="userInformations"
-            :messages="messages[mainStore.accountInformation.fullInformationId]"
+            :messages="messages[mainStore.accountInformation.detailId.personnel!]"
             :active-user-information-id="activeUserInformationId"
             @chat-with-user="chatWithUser"
           />
@@ -23,7 +23,7 @@
           :chat-id="activeUserInformationId"
           :user-info="userInformations.get(activeUserInformationId)"
           :chat-list="
-            messages[mainStore.accountInformation.fullInformationId][
+            messages[mainStore.accountInformation.detailId.personnel!][
               activeUserInformationId
             ]
           "
@@ -68,7 +68,7 @@ const chatWithUser = (_activeUserInformationId: string | number) => {
 // 当用户单击聊天页面左侧的用户时将调用的函数。它会将来自用户的所有消息设置为已读
 const readAllMessage = (ActiveUserInformationId: string) => {
   for (const message of messages.value[
-    mainStore.accountInformation.fullInformationId
+    mainStore.accountInformation.id
   ][ActiveUserInformationId]) {
     message.haveRead = true;
   }
@@ -87,7 +87,7 @@ onBeforeMount(() => {
 
 watchEffect(() => {
   const messageKeys = Object.keys(
-    messages.value[mainStore.accountInformation.fullInformationId]
+    messages.value[mainStore.accountInformation.id]
   );
   const messageKeysCount = messageKeys.length;
   if (messageKeysCount > loadedInformationCount) {
@@ -100,7 +100,7 @@ watchEffect(() => {
               applicantId: ["$eq", messageKey],
               companyId: [
                 "$eq",
-                mainStore.companyInformation.companyInformationId,
+                mainStore.companyInformation.id,
               ],
               status: ["$in", 1, 2, 3, 4, 5],
             },
@@ -111,7 +111,7 @@ watchEffect(() => {
               deliveryRecords.value.set(messageKey, res.items[0]);
               companyPositionService
                 .getPosition({
-                  companyId: mainStore.companyInformation.companyInformationId,
+                  companyId: mainStore.companyInformation.id,
                   id: res.items[0].positionId,
                 })
                 .then((res) => {
@@ -124,7 +124,7 @@ watchEffect(() => {
     loadedInformationCount = messageKeysCount;
   }
   if (
-    messages.value[mainStore.accountInformation.fullInformationId][
+    messages.value[mainStore.accountInformation.id][
       activeUserInformationId.value
     ]
   ) {

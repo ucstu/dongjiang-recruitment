@@ -1,11 +1,11 @@
-import {
-  AccountInformation,
-  CompanyInformation,
+import type {
+  Account,
+  Company,
   DirectionTags,
-  HrInformation,
   MessageRecord,
-  PositionTypes
-} from "@/services/types";
+  Personnel,
+  PositionTypes,
+} from "@dongjiang-recruitment/service-common";
 import { defineStore } from "pinia";
 
 export interface withReadStateMessageRecord extends MessageRecord {
@@ -14,9 +14,9 @@ export interface withReadStateMessageRecord extends MessageRecord {
 export const useMainStore = defineStore("main", {
   state: () => ({
     jsonWebToken: null as unknown as string,
-    hrInformation: null as unknown as HrInformation,
-    accountInformation: null as unknown as AccountInformation,
-    companyInformation: null as unknown as CompanyInformation,
+    hrInformation: null as unknown as Personnel,
+    accountInformation: null as unknown as Account,
+    companyInformation: null as unknown as Company,
     positionTypes: null as unknown as PositionTypes,
     directionTags: null as unknown as DirectionTags,
   }),

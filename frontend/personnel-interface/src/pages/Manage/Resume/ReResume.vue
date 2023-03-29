@@ -112,20 +112,8 @@
 <script setup lang="ts">
 import useDate from "@/hooks/useDate";
 import useGetDayAll from "@/hooks/useGetdata";
-import {
-  getCompanyInfosP0DeliveryRecords,
-  getCompanyInfosP0PositionInfosP1,
-  getUserInfosP0,
-  putUserInfosP0DeliveryRecordsP1,
-} from "@/services/services";
-import {
-  DeliveryRecord,
-  GetCompanyInfosP0DeliveryRecordsQueryParams,
-  PositionInformation,
-  UserInformation,
-} from "@/services/types";
 import { useMainStore } from "@/stores/main";
-import { failResponseHandler } from "@/utils/handler";
+import type { Applicant, DeliveryRecord, Position } from "@dongjiang-recruitment/service-common";
 import { Search } from "@element-plus/icons-vue";
 import { ElMessage } from "element-plus";
 import ResumeInfo from "../Interview/resumeInfo.vue";
@@ -137,8 +125,8 @@ const interviewTime = ref("");
 const store = useMainStore();
 const dialogTableVisible = ref(false);
 const deliveryRecords = ref<DeliveryRecord[]>([]);
-const userInformations = ref<Map<string, UserInformation>>(new Map());
-const jobInformations = ref<Map<string, PositionInformation>>(new Map());
+const userInformations = ref<Map<string, Applicant>>(new Map());
+const jobInformations = ref<Map<string, Position>>(new Map());
 const workTimeing = ref([]);
 const deliveryDates = ref<Array<`${number}-${number}-${number}`>>([]);
 const submitInterviewTime = (data: { time: string }) => {
@@ -153,11 +141,11 @@ const deliveryRecordsCheckeds = ref<DeliveryRecordChecked[]>([]);
 // 确定面试时间设置
 const confirmInterviewTime = (delivery: DeliveryRecordChecked) => {
   dialogTableVisible.value = false;
-  putUserInfosP0DeliveryRecordsP1(
-    delivery.userInformationId,
-    delivery.deliveryRecordId,
-    delivery
-  ).then(() => {
+  applicantDeliveryRecordService.updateDeliveryRecord({
+    applicantId: delivery.applicantId,
+    id: delivery.id,
+    requestBody: delivery,
+  }).then(() => {
     ElMessage.success("操作成功");
   });
 };
@@ -176,6 +164,75 @@ const submitChecked = (data: { checked: boolean }) => {
     }
   );
 };
+
+interface GetCompanyInfosP0DeliveryRecordsQueryParams {
+  /**
+   *
+   * 投递状态枚举数组，{1:待查看,2:已查看,3:通过筛选,4:约面试,5:不合适}
+   */
+  status: Array<1 | 2 | 3 | 4 | 5>;
+  /**
+   *
+   * 年龄限制枚举数组，{1:18-25,2:25-35,3:35-45,4:45-55,5:55-65}
+   */
+  ages?: Array<number>;
+  /**
+   *
+   * 投递时间，eg：2022-04-02
+   */
+  createdAt?: string;
+  /**
+   *
+   * 投递日期数组，eg：[2007-02-22,2007-02-23]
+   */
+  deliveryDates?: Array<string>;
+  /**
+   *
+   * 面试时间，eg：2022-02-03
+   */
+  interviewTime?: string;
+  /**
+   *
+   * 当前页，eg：0
+   */
+  page?: number;
+  /**
+   *
+   * 职位信息ID数组，eg：[3d32dbEE-bbf8-A1Fc-f9Ad-F96f96dA5e8b]
+   */
+  positionInfoIds?: Array<string>;
+  /**
+   *
+   * 性别数组，eg：[男,女]
+   */
+  sexs?: Array<"男" | "女" | "未知">;
+  /**
+   *
+   * 页大小，eg：5
+   */
+  size?: number;
+  /**
+   *
+   * 排序方式，eg：[createdAt,desc]
+   */
+  sort?: Array<`${keyof DeliveryRecord},${"asc" | "desc"}`>;
+  /**
+   *
+   * 修改时间，eg：2022-04-06
+   */
+  updatedAt?: string;
+  /**
+   *
+   * 用户名，eg：张三
+   */
+  userName?: string;
+  /**
+   *
+   * 工作经验枚举数组，{1:经验不限,2:在校/应届,3:3年及以下,4:3-5年,5:5-10年,6:10年以上}
+   */
+  workingYears?: Array<1 | 2 | 3 | 4 | 5 | 6>;
+}
+
 const valueMap = ref<GetCompanyInfosP0DeliveryRecordsQueryParams>({
   status: [1, 2, 3, 4],
   size: 7,
@@ -227,82 +284,86 @@ const changState = (val: { state: 1 | 2 | 3 | 4 | 5 }) => {
 const handleChecked = (deliveryRecordId: string) => {
   if (deliveryRecordsCheckeds.value) {
     deliveryRecordsCheckeds.value.map((deliver: DeliveryRecordChecked) => {
-      if (deliver.deliveryRecordId === deliveryRecordId) {
+      if (deliver.id === deliveryRecordId) {
         deliver.checked = !deliver.checked;
       }
     });
   }
 };
 
-getCompanyInfosP0DeliveryRecords(
-  store.companyInformation.companyInformationId,
-  valueMap.value
-)
+applicantService.queryAllDeliveryRecord({
+  query: {
+    companyId: ["$eq", store.companyInformation.id],
+    status: ["$in", ...valueMap.value.status],
+    interviewTime: ["$eq", valueMap.value.interviewTime || ""],
+  }
+})
   .then((res) => {
-    totalCount.value = res.data.body.totalCount;
-    deliveryRecords.value = res.data.body.deliveryRecords;
+    totalCount.value = res.total;
+    deliveryRecords.value = res.items;
     deliveryRecords.value.forEach((item) => {
       deliveryRecordsCheckeds.value.push(
         Object.assign(item, { checked: false })
       );
-      getUserInfosP0(item.userInformationId)
+      applicantService.getApplicant({
+        id: item.applicantId,
+      })
         .then((response) => {
           userInformations.value.set(
-            item.userInformationId,
-            response.data.body
+            item.applicantId,
+            response
           );
         })
-        .catch(failResponseHandler);
-      getCompanyInfosP0PositionInfosP1(
-        store.companyInformation.companyInformationId,
-        item.positionInformationId
-      )
+      companyPositionService.getPosition({
+        companyId: store.companyInformation.id,
+        id: item.positionId,
+      })
         .then((respones) => {
           jobInformations.value.set(
-            item.positionInformationId,
-            respones.data.body
+            item.positionId,
+            respones
           );
         })
-        .catch(failResponseHandler);
     });
   })
-  .catch(failResponseHandler);
 
 const handleChange = () => {
-  getCompanyInfosP0DeliveryRecords(
-    store.companyInformation.companyInformationId,
-    valueMap.value
-  )
+  applicantService.queryAllDeliveryRecord({
+    query: {
+      companyId: ["$eq", store.companyInformation.id],
+      status: ["$in", ...valueMap.value.status],
+      interviewTime: ["$eq", valueMap.value.interviewTime || ""],
+    }
+  })
     .then((res) => {
-      totalCount.value = res.data.body.totalCount;
-      deliveryRecords.value = res.data.body.deliveryRecords;
+      totalCount.value = res.total;
+      deliveryRecords.value = res.items;
       deliveryRecordsCheckeds.value = [];
       deliveryRecords.value.forEach((item) => {
         deliveryRecordsCheckeds.value.push(
           Object.assign(item, { checked: false })
         );
-        getUserInfosP0(item.userInformationId)
+        applicantService.getApplicant({
+          id: item.applicantId,
+        })
           .then((response) => {
             userInformations.value.set(
-              item.userInformationId,
-              response.data.body
+              item.applicantId,
+              response
             );
           })
-          .catch(failResponseHandler);
-        getCompanyInfosP0PositionInfosP1(
-          store.companyInformation.companyInformationId,
-          item.positionInformationId
-        )
+        companyPositionService.getPosition({
+          companyId: store.companyInformation.id,
+          id: item.positionId,
+        })
           .then((respones) => {
             jobInformations.value.set(
-              item.positionInformationId,
-              respones.data.body
+              item.positionId,
+              respones
             );
           })
-          .catch(failResponseHandler);
-      });
+      })
     })
-    .catch(failResponseHandler);
 };
 const handleWorkTimeChange = (val: Array<string>) => {
   if (val !== null) {

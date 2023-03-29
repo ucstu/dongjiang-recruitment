@@ -224,17 +224,11 @@
 <script setup lang="ts">
 import useAvatarUpload from "@/hooks/useAvatarUpload";
 import router from "@/router";
-import {
-  getCityInformations,
-  postAvatars,
-  postCompanyInfos,
-  putHrInfosP0,
-} from "@/services/services";
-import { CompanyInformation } from "@/services/types";
 import { useMainStore } from "@/stores/main";
-import { failResponseHandler } from "@/utils/handler";
+import type { Company } from "@dongjiang-recruitment/service-common";
 import { Plus } from "@element-plus/icons-vue";
-import { ElMessage, FormInstance } from "element-plus";
+import { ElMessage, type FormInstance } from "element-plus";
+import type { Ref } from "vue";
 import { useRoute } from "vue-router";
 import State from "./State.vue";
 import tag from "./Tag.vue";
@@ -248,7 +242,7 @@ const route = useRoute();
 const dialogFormVisible = ref(false);
 const aboutAddress = ref<any>([]);
 //表格数据
-const formCompany = ref<CompanyInformation>({ ...store.companyInformation });
+const formCompany = ref<Company>({ ...store.companyInformation });
 const cityInfo = ref([]);
 
 onUpdated(() => {
@@ -341,11 +335,12 @@ const dealfilechange = (e: Event) => {
   let files = input.files;
   if (files) {
     if (useAvatarUpload(files[files.length - 1])) {
-      postAvatars({ avatar: files[files.length - 1] })
-        .then((res) => {
-          formCompany.value.logoUrl = res.data.body;
-        })
-        .catch(failResponseHandler);
+      // postAvatars({ avatar: files[files.length - 1] })
+      //   .then((res) => {
+      //     formCompany.value.logoUrl = res;
+      //   })
+      //   .catch(failResponseHandler);
+      console.log("上传图片咱不可用");
     }
   }
 };
@@ -439,22 +434,22 @@ onMounted(() => {
     }
   );
 });
-getCityInformations()
-  .then((res) => {
-    cityMap.value = res.data.body.map((item) => {
-      return {
-        value: item.provinceName,
-        label: item.provinceName,
-        children: item.cities.map((city) => {
-          return {
-            value: city,
-            label: city,
-          };
-        }),
-      };
-    });
-  })
-  .catch(failResponseHandler);
+
+// 获取城市信息
+commonService.getCities().then((res) => {
+  cityMap.value = res.map((item) => {
+    return {
+      value: item.provinceName,
+      label: item.provinceName,
+      children: item.cities.map((city) => {
+        return {
+          value: city,
+          label: city,
+        };
+      }),
+    };
+  });
+});
 // 当用户从下拉列表中选择地址时调用的函数。
 const handleArea = (address: any) => {
   formCompany.value.address = address.address;
@@ -476,22 +471,26 @@ const confirmCompany = (formEl: FormInstance | undefined) => {
   formEl.validate((valid) => {
     if (valid) {
       formCompany.value.fullName = route.params.companyName.toString();
-      postCompanyInfos(formCompany.value)
+      companyService
+        .updateCompany({
+          id: formCompany.value.id,
+          requestBody: formCompany.value,
+        })
         .then((res) => {
           let hrInformation = store.hrInformation;
-          hrInformation.companyInformationId =
-            res.data.body.companyInformationId;
-          putHrInfosP0(hrInformation.hrInformationId, hrInformation)
+          hrInformation.companyId = res.id;
+          personnelService.updatePersonnel({
+            id: hrInformation.id,
+            requestBody: hrInformation,
+          })
             .then((response) => {
-              store.hrInformation = response.data.body;
-              store.companyInformation = res.data.body;
+              store.hrInformation = response;
+              store.companyInformation = res;
               ElMessage.success("恭喜您，公司创建成功,将前往信息认证");
               dialogFormVisible.value = false;
               router.replace({ name: "Execution" });
             })
-            .catch(failResponseHandler);
         })
-        .catch(failResponseHandler);
     }
   });
 };

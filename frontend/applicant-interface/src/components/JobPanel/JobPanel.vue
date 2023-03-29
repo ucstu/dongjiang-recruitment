@@ -36,7 +36,7 @@ const emit = defineEmits(["stateClick"]);
 // 获取消息密钥的方法。
 if (props.collectionPosition) {
   for (const key in store.messages[
-    store.account.fullInformationId
+    store.account!.detailId.personnel
   ]) {
     if (key === props.collectionPosition?.hrInformationId) {
       messageKey.value = key;

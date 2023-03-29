@@ -104,15 +104,15 @@ const submitForm = (formEl: FormInstance | undefined) => {
             ruleForm.password = "";
           } else {
             request.config.TOKEN = "Bearer " + res.token;
-            personnelService.getPersonnel({id:mainStore.accountInformation.fullInformationId})
+            personnelService.getPersonnel({ id: mainStore.accountInformation.detailId.personnel! })
               .then((res) => {
                 if (
                   !messageStore.messages[
-                    mainStore.accountInformation.fullInformationId
+                  mainStore.accountInformation.detailId.personnel!
                   ]
                 ) {
                   messageStore.messages[
-                    mainStore.accountInformation.fullInformationId
+                    mainStore.accountInformation.detailId.personnel!
                   ] = {};
                 }
                 if (res.hrName !== null) {

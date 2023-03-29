@@ -108,15 +108,8 @@
 <script setup lang="ts">
 import useAvatarUpload from "@/hooks/useAvatarUpload";
 import router from "@/router";
-import {
-  getCompanyInfos,
-  getCompanyInfosP0,
-  postAvatars,
-  putHrInfosP0,
-} from "@/services/services";
-import { HrInformation } from "@/services/types";
 import { useMainStore } from "@/stores/main";
-import { failResponseHandler } from "@/utils/handler";
+import type { Personnel } from "@dongjiang-recruitment/service-common";
 import { Plus } from "@element-plus/icons-vue";
 import type { FormInstance } from "element-plus";
 import { ElMessage } from "element-plus";
@@ -126,7 +119,7 @@ const VITE_CDN_URL = import.meta.env.VITE_CDN_URL;
 const formRef = ref<FormInstance>();
 
 const store = useMainStore();
-const formLabelAlign = ref<HrInformation>({ ...store.hrInformation });
+const formLabelAlign = ref<Personnel>({ ...store.hrInformation });
 const company = ref({
   name: "",
 });
@@ -137,12 +130,13 @@ onMounted(() => {
 const alive = ref(true);
 // 更改公司名称时将调用的函数。它将检查公司名称是否已在数据库中。如果是，它将获取公司 id 并将其存储在 formLabelAlign.value.companyInformationId 中。
 const checkedCompany = (val: string) => {
-  return getCompanyInfos({ companyName: val }).then((res) => {
-    if (res.data.body.totalCount !== 0) {
-      formLabelAlign.value.companyInformationId =
-        res.data.body.companyInformations[0].companyInformationId;
-    }
-  });
+  return companyService
+    .queryCompany({ query: { companyName: ["$eq", val] } })
+    .then((res) => {
+      if (res.total !== 0) {
+        formLabelAlign.value.id = res.items[0].id;
+      }
+    });
 };
 //上传头像
 const uploadInput = ref<HTMLElement | null>(null);
@@ -151,11 +145,12 @@ const dealfilechange = (e: Event) => {
   let files = input.files;
   if (files) {
     if (useAvatarUpload(files[files.length - 1])) {
-      postAvatars({ avatar: files[files.length - 1] })
-        .then((res) => {
-          formLabelAlign.value.avatarUrl = res.data.body;
-        })
-        .catch(failResponseHandler);
+      // postAvatars({ avatar: files[files.length - 1] })
+      //   .then((res) => {
+      //     formLabelAlign.value.avatarUrl = res.data.body;
+      //   })
+      //   .catch(failResponseHandler);
+      console.log("上传暂时不可用");
     }
   }
 };
@@ -180,18 +175,18 @@ const confirmPerson = (formEl: FormInstance | undefined) => {
   formEl.validate((valid) => {
     if (valid) {
       if (alive.value) {
-        putHrInfosP0(
-          store.accountInformation.fullInformationId,
-          formLabelAlign.value
-        )
+        personnelService.updatePersonnel({
+          id: formLabelAlign.value.id,
+          requestBody: formLabelAlign.value,
+        })
           .then((res) => {
-            store.hrInformation = res.data.body;
+            store.hrInformation = res;
             // 如果companyInformationId不为null，则获取公司信息并存储在store中。然后它将替换到管理的路线。如果 companyInformationId 为
             // null，它将替换到 Company 的路由。
-            if (res.data.body.companyInformationId) {
-              getCompanyInfosP0(res.data.body.companyInformationId).then(
+            if (res.companyId) {
+              companyService.getCompany({ id: res.companyId }).then(
                 (response) => {
-                  store.companyInformation = response.data.body;
+                  store.companyInformation = response;
                 }
               );
 
@@ -203,7 +198,6 @@ const confirmPerson = (formEl: FormInstance | undefined) => {
               });
             }
           })
-          .catch(failResponseHandler);
       } else {
         ElMessage.warning("该公司已存在，请重新输入");
       }

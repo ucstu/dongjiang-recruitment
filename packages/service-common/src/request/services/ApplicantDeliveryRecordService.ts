@@ -169,4 +169,36 @@ export class ApplicantDeliveryRecordService {
       },
     });
   }
+
+  /**
+   * 修改投递记录
+   * @returns any 成功
+   * @throws ApiError
+   */
+  public updateDeliveryRecord({
+    applicantId,
+    id,
+    requestBody,
+  }: {
+    /**
+     * 求职者ID
+     */
+    applicantId: string;
+    /**
+     * 投递记录ID
+     */
+    id: string;
+    requestBody?: DeliveryRecord;
+  }): CancelablePromise<DeliveryRecord> {
+    return this.httpRequest.request({
+      method: "PUT",
+      url: "/applicant/{applicantId}/deliveryRecords/{id}",
+      path: {
+        applicantId: applicantId,
+        id: id,
+      },
+      body: requestBody,
+      mediaType: "application/json",
+    });
+  }
 }

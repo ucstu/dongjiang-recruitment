@@ -75,7 +75,7 @@
               <template v-if="TalentInfo[0].jobExpectationId">
                 <div
                   v-for="Talent in TalentInfo"
-                  :key="Talent.userInformationId"
+                    :key="Talent.applicantId"
                   class="resume-item"
                 >
                   <div class="item-header">
@@ -106,7 +106,7 @@
                     <el-button
                       type="primary"
                       @click="
-                        inspectionResume(Talent.userInformationId as string)
+                        inspectionResume(Talent.applicantId as string)
                       "
                     >
                       查看简历</el-button
@@ -125,7 +125,7 @@
 
 <script setup lang="ts">
 import router from "@/router";
-import { JobExpectation, UserInformation } from "@/services/types";
+import type { Applicant, JobExpectation } from "@dongjiang-recruitment/service-common";
 import { Search } from "@element-plus/icons-vue";
 import ResumeFooter from "../Resume/ResumeFooter.vue";
 
@@ -149,7 +149,7 @@ const workExperience = ["1年以下", "1-3年", "3-5年", "5-10年", "10年以�
 const age = ["18-25", "25-35", "35-45", "45-55", "55-65"];
 const slution = ["随时入职", "2周内入职", "1月内入职"];
 const educationMap = ["不限", "大专", "本科", "硕士", "博士"];
-const userInfo = ref<UserInformation>();
+const userInfo = ref<Applicant>();
 const JobExpectative = ref<JobExpectation[]>([]);
 // getRecommendations()
 //   .then((res) => {
@@ -168,8 +168,14 @@ const JobExpectative = ref<JobExpectation[]>([]);
 //   .catch(failResponseHandler);
 const TalentInfo = ref([
   {
-    ...userInfo.value,
-    ...JobExpectative.value[0],
+    ...{
+      ...userInfo.value,
+      applicantId: userInfo.value?.id,
+    },
+    ...{
+      ...JobExpectative.value[0],
+      jobExpectationId: JobExpectative.value[0].id,
+    },
     ...checked.value,
   },
 ]);
