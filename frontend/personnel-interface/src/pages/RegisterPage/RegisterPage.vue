@@ -44,7 +44,7 @@
           </el-form-item>
           <el-form-item label="验证码" prop="verificationCode">
             <el-input
-              v-model.number="ruleForm.verificationCode"
+              v-model="ruleForm.verificationCode"
               placeholder="输入验证码"
             >
               <template #append>
@@ -123,7 +123,7 @@ const postverificationCode = (email: string) => {
     ElMessage.warning("请输入正确用户名");
     return;
   } else {
-    commonService.sendVerificationCode({ email }).then((res) => {
+    void commonService.sendVerificationCode({ email }).then((res) => {
       ElMessage.success("验证码已发送，请注意查收");
     });
     btn.value = true;
@@ -148,18 +148,19 @@ const submitForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   formEl.validate((valid) => {
     if (valid) {
-      authenticationService.registerAccount({
-        requestBody: {
-          accountType: 2,
-          userName: ruleForm.user,
-          password: ruleForm.pass,
-          verificationCode: ruleForm.verificationCode,
-        }
-      })
+      authenticationService
+        .registerAccount({
+          requestBody: {
+            accountType: 2,
+            userName: ruleForm.user,
+            password: ruleForm.pass,
+            verificationCode: ruleForm.verificationCode,
+          },
+        })
         .then((res) => {
           ElMessage.success("注册成功");
           router.push("/login");
-        })
+        });
     } else {
       ElMessage.warning("请检查表单信息");
       return false;

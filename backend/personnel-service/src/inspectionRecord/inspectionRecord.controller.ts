@@ -18,16 +18,21 @@ import { UpdateInspectionRecordDto } from "./dto/update-inspectionRecord.dto";
 import { InspectionRecord } from "./entities/inspectionRecord.entity";
 import { InspectionRecordService } from "./inspectionRecord.service";
 
-@Controller("personnels/{personnelid}/inspectionRecord")
+@Controller("personnel/{personnelid}/inspectionRecord")
 export class InspectionRecordController {
-  constructor(private readonly inspectionRecordService: InspectionRecordService) {}
+  constructor(
+    private readonly inspectionRecordService: InspectionRecordService
+  ) {}
 
   @Post()
   create(
     @Param("personnelid") personnelid: string,
     @Body() createInspectionRecordDto: CreateInspectionRecordDto
   ) {
-    return this.inspectionRecordService.create(personnelid, createInspectionRecordDto);
+    return this.inspectionRecordService.create(
+      personnelid,
+      createInspectionRecordDto
+    );
   }
 
   @Get()
@@ -50,7 +55,11 @@ export class InspectionRecordController {
     @Param("id") id: string,
     @Body() updateInspectionRecordDto: UpdateInspectionRecordDto
   ) {
-    return this.inspectionRecordService.update(personnelid, id, updateInspectionRecordDto);
+    return this.inspectionRecordService.update(
+      personnelid,
+      id,
+      updateInspectionRecordDto
+    );
   }
 
   @Delete(":id")
