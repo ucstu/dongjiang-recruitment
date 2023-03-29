@@ -665,9 +665,6 @@ importers:
       '@dongjiang-recruitment/service-common':
         specifier: workspace:^1.0.0
         version: link:../../packages/service-common
-      normalize.css:
-        specifier: ^8.0.1
-        version: 8.0.1
       pinia:
         specifier: ^2.0.30
         version: 2.0.32(typescript@4.9.5)(vue@3.2.47)
