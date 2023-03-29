@@ -194,36 +194,6 @@
         }
       }
     },
-    "applicant-interface": {
-      "type": "frontend",
-      "name": "applicant-interface",
-      "workspace": "frontend/applicant-interface",
-      "scripts": {
-        "lint": {
-          "name": "lint",
-          "command": "pnpm -w lint-fix ./frontend/applicant-interface"
-        },
-        "build": {
-          "name": "build",
-          "command": "pnpm run build:h5",
-          "artifact": "dist/build"
-        },
-        "publish": {
-          "name": "publish",
-          "sub-type": "docker",
-          "artifact": "dist/build",
-          "context": "dist/build/h5",
-          "docker-file": "../Dockerfile.web"
-        },
-        "deploy": {
-          "name": "deploy",
-          "sub-type": "kubernetes",
-          "port": 80,
-          "path": "/",
-          "domain": "applicant.djzhaopin.ucstu.com"
-        }
-      }
-    },
     "manager-interface": {
       "type": "frontend",
       "name": "manager-interface",
