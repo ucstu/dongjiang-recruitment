@@ -47,7 +47,11 @@
 <script lang="ts" setup>
 import router from "@/router";
 import { useMainStore, useMessageStore } from "@/stores/main";
-import { Company, request, type Personnel } from "@dongjiang-recruitment/service-common";
+import {
+  Company,
+  request,
+  type Personnel,
+} from "@dongjiang-recruitment/service-common";
 import { ElMessage, type FormInstance } from "element-plus";
 
 const mainStore = useMainStore();
@@ -92,9 +96,12 @@ const submitForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   formEl.validate((valid) => {
     if (valid) {
-      authenticationService.loginAccount({requestBody: {
-        ...ruleForm
-      }})
+      authenticationService
+        .loginAccount({
+          requestBody: {
+            ...ruleForm,
+          },
+        })
         .then((res) => {
           mainStore.jsonWebToken = res.token;
           mainStore.accountInformation = res.account;
@@ -103,12 +110,15 @@ const submitForm = (formEl: FormInstance | undefined) => {
             ruleForm.userName = "";
             ruleForm.password = "";
           } else {
-            request.config.TOKEN = "Bearer " + res.token;
-            personnelService.getPersonnel({ id: mainStore.accountInformation.detailId.personnel! })
+            request.config.TOKEN = res.token;
+            personnelService
+              .getPersonnel({
+                id: mainStore.accountInformation.detailId.personnel!,
+              })
               .then((res) => {
                 if (
                   !messageStore.messages[
-                  mainStore.accountInformation.detailId.personnel!
+                    mainStore.accountInformation.detailId.personnel!
                   ]
                 ) {
                   messageStore.messages[
@@ -117,30 +127,29 @@ const submitForm = (formEl: FormInstance | undefined) => {
                 }
                 if (res.hrName !== null) {
                   if (res.companyId !== null) {
-                    companyService.getCompany({id:res.companyId})
+                    companyService
+                      .getCompany({ id: res.companyId })
                       .then((res) => {
                         mainStore.companyInformation = res;
                         router.replace("/Manage");
-                      })
+                      });
                     mainStore.hrInformation = res;
                   } else {
                     mainStore.hrInformation = res;
-                    mainStore.companyInformation =
-                      null as unknown as Company;
+                    mainStore.companyInformation = null as unknown as Company;
                     router.replace("/Home/Company");
                   }
                 } else {
                   mainStore.hrInformation = null as unknown as Personnel;
-                  mainStore.companyInformation =
-                    null as unknown as Company;
+                  mainStore.companyInformation = null as unknown as Company;
                   router.replace({
                     name: "Person",
                     params: { PersonEmail: ruleForm.userName },
                   });
                 }
-              })
+              });
           }
-        })
+        });
     } else {
       ElMessage.warning("校验不通过!");
       return false;

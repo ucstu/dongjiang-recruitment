@@ -43,7 +43,7 @@ axios.interceptors.response.use(
 
 // 检查用户是否登录，如果用户已经登录，它会为axios设置授权头，并获取用户的信息。如果用户没有登录，它会将用户重定向到登录页面。
 if (mainStore.jsonWebToken != null) {
-  request.config.TOKEN = `Bearer ${mainStore.jsonWebToken}`;
+  request.config.TOKEN = mainStore.jsonWebToken;
   void personnelService
     .getPersonnel({ id: mainStore.accountInformation.detailId.personnel! })
     .then(() => {
