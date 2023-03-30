@@ -18,7 +18,7 @@ import { UpdateEducationExperienceDto } from "./dto/update-educationExperience.d
 import { EducationExperienceService } from "./educationExperience.service";
 import { EducationExperience } from "./entities/educationExperience.entity";
 
-@Controller("applicant/{applicantid}/educationExperience")
+@Controller("applicant/:applicantid/educationExperiences")
 export class EducationExperienceController {
   constructor(
     private readonly educationExperienceService: EducationExperienceService

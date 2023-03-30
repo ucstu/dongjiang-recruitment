@@ -49,4 +49,7 @@ export class CompanyController {
   remove(@Param("id") id: string) {
     return this.companyService.remove(id);
   }
+
+  // @Get("positions")
+  // findAllPositions()
 }

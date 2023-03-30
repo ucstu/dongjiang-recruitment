@@ -72,19 +72,28 @@ const email = ref<string>("");
 const password = ref<string>("");
 const isAgree = ref<boolean>(false);
 
-const { refreshAsync: loginAccount } = authenticationService.useLoginAccount(() => ({
-  requestBody: {
-    userName: email.value,
-    password: password.value,
-  },
-}), {
-  manual: true,
-  onSuccess(data) {
-    authStore.token = data.token;
-    authStore.account = data.account;
-    uni.switchTab({ url: "/pages/main/shouyeyemian/shouyeyemian" });
-  },
-});
+const { refreshAsync: loginAccount } = authenticationService.useLoginAccount(
+  () => ({
+    requestBody: {
+      userName: email.value,
+      password: password.value,
+    },
+  }),
+  {
+    manual: true,
+    onSuccess(data) {
+      authStore.token = data.token;
+      authStore.account = data.account;
+      if (!data.account.detailId.applicant) {
+        uni.showToast({
+          title: "xxxx",
+        });
+      } else {
+        uni.switchTab({ url: "/pages/main/shouyeyemian/shouyeyemian" });
+      }
+    },
+  }
+);
 
 // 当用户单击登录按钮时调用的函数。
 const login = async () => {

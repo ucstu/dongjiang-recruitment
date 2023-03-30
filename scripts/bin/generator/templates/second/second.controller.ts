@@ -18,7 +18,7 @@ import { UpdateSecondDto } from "./dto/update-second.dto";
 import { Second } from "./entities/second.entity";
 import { SecondService } from "./second.service";
 
-@Controller("firsts/{firstid}/second")
+@Controller("firsts/:firstid/seconds")
 export class SecondController {
   constructor(private readonly secondService: SecondService) {}
 

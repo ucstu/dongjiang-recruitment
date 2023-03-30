@@ -2,7 +2,7 @@
   {
     "name": "advertiser-service",
     "prefix": "/advertisers",
-    "current": "local",
+    "current": "remote",
     "local": {
       "host": "localhost",
       "protocol": "http",
@@ -17,7 +17,7 @@
   {
     "name": "applicant-service",
     "prefix": "/applicant",
-    "current": "remote",
+    "current": "local",
     "local": {
       "host": "localhost",
       "protocol": "http",

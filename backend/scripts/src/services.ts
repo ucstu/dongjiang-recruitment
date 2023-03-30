@@ -36,20 +36,19 @@ const proxy = httpProxy.createProxyServer({
 });
 
 const server = http.createServer((req, res) => {
-  try {
-    for (const service of services) {
-      if (req.url?.startsWith(service.prefix)) {
-        const { host, protocol, port } = service[service.current];
-        proxy.web(req, res, {
-          target: `${protocol}://${host}:${port}`,
-        });
-        break;
-      }
+  for (const service of services) {
+    if (req.url?.startsWith(service.prefix)) {
+      const { host, protocol, port } = service[service.current];
+      proxy.web(req, res, {
+        target: `${protocol}://${host}:${port}`,
+      });
+      break;
     }
-  } catch (error) {
-    console.error(error);
   }
 });
 
 server.listen(3000);
 console.log("\x1b[34m%s\x1b[0m", "Proxy server started on port 3000");
+process.on("uncaughtException", (e) => {
+  console.error(e);
+});

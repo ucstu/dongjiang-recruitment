@@ -18,7 +18,7 @@ import { UpdateGarnerRecordDto } from "./dto/update-garnerRecord.dto";
 import { GarnerRecord } from "./entities/garnerRecord.entity";
 import { GarnerRecordService } from "./garnerRecord.service";
 
-@Controller("applicant/{applicantid}/garnerRecord")
+@Controller("applicant/:applicantid/garnerRecords")
 export class GarnerRecordController {
   constructor(private readonly garnerRecordService: GarnerRecordService) {}
 

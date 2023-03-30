@@ -16,7 +16,7 @@
           <input
             v-model="verification"
             style="width: 60%; padding-left: 20rpx"
-            :maxlength="4"
+            :maxlength="6"
             type="number"
             placeholder="请输入验证码"
           />
@@ -31,34 +31,34 @@
           <input
             v-model="passwordNew"
             style="width: 100%; padding-left: 20rpx"
-                                                      type="safe-password"
-                                                      placeholder="请输入新密码"
-                                                    />
-                                                  </view>
-                                                  <view class="items-center phone-number">
-                                                    <input
-                                                      v-model="passwordAffirm"
-                                                      style="width: 100%; padding-left: 20rpx"
-                                                      type="safe-password"
-                                                      placeholder="请确认密码"
-                                                    />
-                                                  </view>
-                                                </view>
-                                                <button
-                                                  class="justify-center items-center next"
-                                                  form-type="submit"
-                                                  @click="registeredAccount"
-                                                >
-                                                  保存
-                                                </button>
-                                              </view>
-                                              <view class="flex-col group-2">
-                                                <text>客服（投诉）电话：4008 2082 02（工作日9：00-18：00）</text>
-                                                <text>违法和不良信息举报、未成年人投诉举报渠道同上</text>
-                                                <text>客服邮箱：cc@dongjiang 北京市人社局电话：12333</text>
-                                                <text>营业执照|人力资源服务许可证|增值电信业务经营许可证</text>
-                                              </view>
-                                            </view>
+            type="safe-password"
+            placeholder="请输入新密码"
+          />
+        </view>
+        <view class="items-center phone-number">
+          <input
+            v-model="passwordAffirm"
+            style="width: 100%; padding-left: 20rpx"
+            type="safe-password"
+            placeholder="请确认密码"
+          />
+        </view>
+      </view>
+      <button
+        class="justify-center items-center next"
+        form-type="submit"
+        @click="registeredAccount"
+      >
+        保存
+      </button>
+    </view>
+    <view class="flex-col group-2">
+      <text>客服（投诉）电话：4008 2082 02（工作日9：00-18：00）</text>
+      <text>违法和不良信息举报、未成年人投诉举报渠道同上</text>
+      <text>客服邮箱：cc@dongjiang 北京市人社局电话：12333</text>
+      <text>营业执照|人力资源服务许可证|增值电信业务经营许可证</text>
+    </view>
+  </view>
 </template>
 
 <script lang="ts" setup>
@@ -69,36 +69,44 @@ const passwordNew = ref<string>("");
 const passwordAffirm = ref<string>("");
 const verification = ref<string>("");
 
-const { refreshAsync: sendVerificationCode } = commonService.useSendVerificationCode(() => ({
-  email: email.value,
-}), {
-  manual: true,
-  onSuccess() {
-    uni.showToast({
-      title: "验证码已发送",
-      icon: "none",
-      duration: 1500,
-    })
-  }
-});
+const { refreshAsync: sendVerificationCode } =
+  commonService.useSendVerificationCode(
+    () => ({
+      email: email.value,
+    }),
+    {
+      manual: true,
+      onSuccess() {
+        uni.showToast({
+          title: "验证码已发送",
+          icon: "none",
+          duration: 1500,
+        });
+      },
+    }
+  );
 
-const { refreshAsync: forgetPassword } = authenticationService.useForgetPassword(() => ({
-  requestBody: {
-    userName: email.value,
-    password: passwordNew.value,
-    verificationCode: verification.value,
-  }
-}), {
-  manual: true,
-  onSuccess() {
-    uni.showToast({
-      title: "修改成功",
-      icon: "none",
-      duration: 1500,
-    });
-    uni.navigateTo({ url: "/pages/account/denglu_zhuce/denglu" });
-  }
-});
+const { refreshAsync: forgetPassword } =
+  authenticationService.useForgetPassword(
+    () => ({
+      requestBody: {
+        userName: email.value,
+        password: passwordNew.value,
+        verificationCode: verification.value,
+      },
+    }),
+    {
+      manual: true,
+      onSuccess() {
+        uni.showToast({
+          title: "修改成功",
+          icon: "none",
+          duration: 1500,
+        });
+        uni.navigateTo({ url: "/pages/account/denglu_zhuce/denglu" });
+      },
+    }
+  );
 
 // 用于获取验证码的函数。
 const getVerifiable = async () => {
@@ -118,7 +126,7 @@ const getVerifiable = async () => {
       duration: 1500,
     });
   } else {
-    await sendVerificationCode()
+    await sendVerificationCode();
   }
 };
 
@@ -148,7 +156,7 @@ const registeredAccount = async () => {
     });
   } else {
     // 忘记密码调用接口
-    await forgetPassword()
+    await forgetPassword();
   }
 };
 </script>

@@ -18,7 +18,7 @@ import { CreateDeliveryRecordDto } from "./dto/create-deliveryRecord.dto";
 import { UpdateDeliveryRecordDto } from "./dto/update-deliveryRecord.dto";
 import { DeliveryRecord } from "./entities/deliveryRecord.entity";
 
-@Controller("applicant/{applicantid}/deliveryRecord")
+@Controller("applicant/:applicantid/deliveryRecords")
 export class DeliveryRecordController {
   constructor(private readonly deliveryRecordService: DeliveryRecordService) {}
 

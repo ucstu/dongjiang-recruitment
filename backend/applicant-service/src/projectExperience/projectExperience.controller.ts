@@ -18,7 +18,7 @@ import { UpdateProjectExperienceDto } from "./dto/update-projectExperience.dto";
 import { ProjectExperience } from "./entities/projectExperience.entity";
 import { ProjectExperienceService } from "./projectExperience.service";
 
-@Controller("applicant/{applicantid}/projectExperience")
+@Controller("applicant/:applicantid/projectExperiences")
 export class ProjectExperienceController {
   constructor(
     private readonly projectExperienceService: ProjectExperienceService

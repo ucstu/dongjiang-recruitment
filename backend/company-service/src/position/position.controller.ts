@@ -18,7 +18,7 @@ import { UpdatePositionDto } from "./dto/update-position.dto";
 import { Position } from "./entities/position.entity";
 import { PositionService } from "./position.service";
 
-@Controller("companies/{companyid}/position")
+@Controller("companies/:companyid/positions")
 export class PositionController {
   constructor(private readonly positionService: PositionService) {}
 

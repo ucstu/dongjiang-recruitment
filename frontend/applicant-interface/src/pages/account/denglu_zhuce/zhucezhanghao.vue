@@ -16,7 +16,7 @@
           <input
             v-model="verification"
             style="width: 60%; padding-left: 20rpx"
-            :maxlength="4"
+            :maxlength="6"
             type="number"
             placeholder="请输入验证码"
           />
@@ -31,37 +31,37 @@
           <input
             v-model="password"
             style="width: 100%; padding-left: 20rpx"
-                                          type="safe-password"
-                          placeholder="请输入密码(6-20位)"
-                        />
-                      </view>
-                    </view>
-                    <button
-                      class="justify-center items-center next"
-                      form-type="submit"
-                      @click="registeredAccount"
-                    >
-                      注册
-                    </button>
-                    <view class="flex-row items-center agree">
-                      <checkbox
-                        style="transform: scale(0.7)"
-                        :checked="isAgree"
-                        @click="isAgree = !isAgree"
-                      ></checkbox>
-                      <view
-                        >同意 <text style="color: rgb(35 193 158)">《东江用户协议》</text>和
-                        <text style="color: rgb(35 193 158)">《东江登录政策》</text>
-                      </view>
-                    </view>
-                  </view>
-                  <view class="flex-col group-2">
-                    <text>客服（投诉）电话：4008 2082 02（工作日9：00-18：00）</text>
-                    <text>违法和不良信息举报、未成年人投诉举报渠道同上</text>
-                    <text>客服邮箱：cc@dongjiang 北京市人社局电话：12333</text>
-                    <text>营业执照|人力资源服务许可证|增值电信业务经营许可证</text>
-                  </view>
-                </view>
+            type="safe-password"
+            placeholder="请输入密码(6-20位)"
+          />
+        </view>
+      </view>
+      <button
+        class="justify-center items-center next"
+        form-type="submit"
+        @click="registeredAccount"
+      >
+        注册
+      </button>
+      <view class="flex-row items-center agree">
+        <checkbox
+          style="transform: scale(0.7)"
+          :checked="isAgree"
+          @click="isAgree = !isAgree"
+        ></checkbox>
+        <view
+          >同意 <text style="color: rgb(35 193 158)">《东江用户协议》</text>和
+          <text style="color: rgb(35 193 158)">《东江登录政策》</text>
+        </view>
+      </view>
+    </view>
+    <view class="flex-col group-2">
+      <text>客服（投诉）电话：4008 2082 02（工作日9：00-18：00）</text>
+      <text>违法和不良信息举报、未成年人投诉举报渠道同上</text>
+      <text>客服邮箱：cc@dongjiang 北京市人社局电话：12333</text>
+      <text>营业执照|人力资源服务许可证|增值电信业务经营许可证</text>
+    </view>
+  </view>
 </template>
 
 <script lang="ts" setup>
@@ -75,36 +75,43 @@ const password = ref<string>("");
 const verification = ref<string>("");
 const isAgree = ref<boolean>(false);
 
-const { refreshAsync: registerAccount } = authenticationService.useRegisterAccount(() => ({
-  requestBody: {
-    accountType: 1,
-    userName: email.value,
-    password: password.value,
-    verificationCode: verification.value
+const { refreshAsync: registerAccount } =
+  authenticationService.useRegisterAccount(
+    () => ({
+      requestBody: {
+        accountType: 1,
+        userName: email.value,
+        password: password.value,
+        verificationCode: verification.value,
+      },
+    }),
+    {
+      manual: true,
+      async onSuccess() {
+        await loginAccount();
+      },
+    }
+  );
+const { refreshAsync: loginAccount } = authenticationService.useLoginAccount(
+  () => ({
+    requestBody: {
+      userName: email.value,
+      password: password.value,
+    },
+  }),
+  {
+    manual: true,
+    onSuccess(data) {
+      authStore.token = data.token;
+      authStore.account = data.account;
+      uni.showToast({
+        title: "注册成功",
+        icon: "none",
+        duration: 1500,
+      });
+    },
   }
-}), {
-  manual: true,
-  async onSuccess() {
-    await loginAccount()
-  },
-})
-const { refreshAsync: loginAccount } = authenticationService.useLoginAccount(() => ({
-  requestBody: {
-    userName: email.value,
-    password: password.value,
-  }
-}), {
-  manual: true,
-  onSuccess(data) {
-    authStore.token = data.token;
-    authStore.account = data.account;
-    uni.showToast({
-      title: "注册成功",
-      icon: "none",
-      duration: 1500,
-    });
-  },
-})
+);
 
 // 用于获取验证码的函数。
 const getVerifiable = async () => {
@@ -126,8 +133,8 @@ const getVerifiable = async () => {
   } else {
     //调用验证码接口
     await commonService.sendVerificationCode({
-      email: email.value
-    })
+      email: email.value,
+    });
     uni.showToast({
       title: "验证码已发送",
       icon: "none",
@@ -165,7 +172,7 @@ const registeredAccount = async () => {
       duration: 1500,
     });
   } else {
-    await registerAccount()
+    await registerAccount();
   }
 };
 </script>

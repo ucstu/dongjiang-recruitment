@@ -18,7 +18,7 @@ import { CreateAttentionRecordDto } from "./dto/create-attentionRecord.dto";
 import { UpdateAttentionRecordDto } from "./dto/update-attentionRecord.dto";
 import { AttentionRecord } from "./entities/attentionRecord.entity";
 
-@Controller("applicant/{applicantid}/attentionRecord")
+@Controller("applicant/:applicantid/attentionRecords")
 export class AttentionRecordController {
   constructor(
     private readonly attentionRecordService: AttentionRecordService

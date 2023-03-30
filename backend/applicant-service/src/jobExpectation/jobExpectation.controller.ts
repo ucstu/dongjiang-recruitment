@@ -18,7 +18,7 @@ import { UpdateJobExpectationDto } from "./dto/update-jobExpectation.dto";
 import { JobExpectation } from "./entities/jobExpectation.entity";
 import { JobExpectationService } from "./jobExpectation.service";
 
-@Controller("applicant/{applicantid}/jobExpectation")
+@Controller("applicant/:applicantid/jobExpectations")
 export class JobExpectationController {
   constructor(private readonly jobExpectationService: JobExpectationService) {}
 
@@ -39,6 +39,8 @@ export class JobExpectationController {
     @QueryParam() query: Array<FindOptionsWhere<JobExpectation>>,
     @Page() page: Pagination<JobExpectation>
   ) {
+    console.log(1);
+
     return this.jobExpectationService.findAll(applicantid, query, page);
   }
 

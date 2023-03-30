@@ -18,7 +18,7 @@ import { UpdateInspectionRecordDto } from "./dto/update-inspectionRecord.dto";
 import { InspectionRecord } from "./entities/inspectionRecord.entity";
 import { InspectionRecordService } from "./inspectionRecord.service";
 
-@Controller("applicant/{applicantid}/inspectionRecord")
+@Controller("applicant/:applicantid/inspectionRecords")
 export class InspectionRecordController {
   constructor(
     private readonly inspectionRecordService: InspectionRecordService

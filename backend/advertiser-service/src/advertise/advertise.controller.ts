@@ -18,7 +18,7 @@ import { CreateAdvertiseDto } from "./dto/create-advertise.dto";
 import { UpdateAdvertiseDto } from "./dto/update-advertise.dto";
 import { Advertise } from "./entities/advertise.entity";
 
-@Controller("advertisers/{advertiserid}/advertise")
+@Controller("advertisers/:advertiserid/advertise")
 export class AdvertiseController {
   constructor(private readonly advertiseService: AdvertiseService) {}
 
