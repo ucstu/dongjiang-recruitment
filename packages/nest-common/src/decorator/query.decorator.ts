@@ -33,6 +33,21 @@ type Query<T = unknown> = {
   [k in keyof T]: [keyof typeof methods, ...Array<T[k]>];
 };
 
+type Operator = [keyof typeof methods, ...unknown[]];
+
+const processOperator = (operator: Operator) => {
+  const [method, ...args] = operator;
+
+  switch (method) {
+    case "$not":
+      return methods[method](processOperator(args as Operator));
+    case "$in":
+      return methods[method].call(null, args);
+    default:
+      return methods[method].apply(null, args);
+  }
+};
+
 export const QueryParam = createParamDecorator(
   (data: unknown, ctx: ExecutionContext): Array<FindOptionsWhere<unknown>> => {
     const request = ctx.switchToHttp().getRequest<Request>();
@@ -42,22 +57,11 @@ export const QueryParam = createParamDecorator(
     return queries.map((query) => {
       const _query = Object.entries(
         JSON.parse(query.toString()) as Query<unknown>
-      ) as [keyof unknown, [keyof typeof methods, ...unknown[]]][];
+      ) as [keyof unknown, Operator][];
       return _query.reduce((acc, [key, value]) => {
-        const [method, ...args] = value;
-
         return {
           ...acc,
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-          [key]:
-            method === "$not"
-              ? methods[method](
-                  methods[args[0] as keyof typeof methods].apply(
-                    null,
-                    args.slice(1)
-                  )
-                )
-              : methods[method].apply(null, args),
+          [key]: processOperator(value),
         };
       }, {} as FindOptionsWhere<unknown>);
     });

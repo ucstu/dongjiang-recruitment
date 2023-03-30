@@ -38,8 +38,8 @@
     <!-- #endif -->
     <scroll-view class="group-info" :scroll-y="true" :scroll-top="scrollTop">
       <view
-        v-for="recode in infoStore.messages[
-          infoStore.applicant!.id
+        v-for="recode in mainStore.messages[
+          mainStore.applicant!.id
         ][messageKey]"
         :key="recode.id"
       >
@@ -86,19 +86,18 @@
 <script lang="ts" setup>
 import Left from "@/components/BubbleBox/BubbleBoxHr.vue";
 import Right from "@/components/BubbleBox/BubbleBoxUser.vue";
-import { useAuthStore, useInfoStore } from "@/stores";
+import { useMainStore } from "@/stores";
 import type { Personnel } from "@dongjiang-recruitment/service-common";
 
 const VITE_BASE_URL = import.meta.env.VITE_BASE_URL;
 
-const infoStore = useInfoStore();
-const authStore = useAuthStore();
+const mainStore = useMainStore();
 
 /* #ifdef MP-WEIXIN || MP-ALIPAY || MP-BAIDU || MP-TOUTIAO || MP-QQ */
 
-const navigationBarTop = infoStore.menu.top;
+const navigationBarTop = mainStore.menu.top;
 
-const navigationBarWidth = infoStore.menu.left - uni.upx2px(30);
+const navigationBarWidth = mainStore.menu.left - uni.upx2px(30);
 
 /* #endif */
 
@@ -109,9 +108,9 @@ const scrollTop = ref(0);
 
 watchEffect(() => {
   // 用于在页面高度发生变化时滚动到页面底部。
-  if (infoStore.messages[infoStore.applicant!.id][hrInfo.value.id]) {
+  if (mainStore.messages[mainStore.applicant!.id][hrInfo.value.id]) {
     const sTop =
-      infoStore.messages[infoStore.applicant!.id][hrInfo.value.id].length *
+      mainStore.messages[mainStore.applicant!.id][hrInfo.value.id].length *
       uni.upx2px(150);
     nextTick(() => {
       scrollTop.value = sTop;
@@ -119,10 +118,10 @@ watchEffect(() => {
   }
 
   // 这是为了检查用户是否已经与 HR 进行过对话。如果没有，它将创建一个新的对话。
-  if (!infoStore.messages[infoStore.applicant!.id]) {
-    infoStore.messages[infoStore.applicant!.id] = {};
+  if (!mainStore.messages[mainStore.applicant!.id]) {
+    mainStore.messages[mainStore.applicant!.id] = {};
   }
-  for (const key in infoStore.messages[infoStore.applicant!.id]) {
+  for (const key in mainStore.messages[mainStore.applicant!.id]) {
     if (key === hrInfo.value.id) {
       messageKey.value = key;
     }
@@ -176,7 +175,7 @@ const sendImage = () => {
         filePath: tempFilePath[0],
         name: "file",
         header: {
-          Authorization: "Bearer " + authStore.token,
+          Authorization: "Bearer " + mainStore.token,
         },
         success: (res) => {
           const response = JSON.parse(res.data) as {

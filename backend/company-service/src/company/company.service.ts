@@ -5,6 +5,7 @@ import {
   Repository,
 } from "@dongjiang-recruitment/nest-common/dist/typeorm";
 import { Injectable, NotFoundException } from "@nestjs/common";
+import { Position } from "src/position/entities/position.entity";
 import { CreateCompanyDto } from "./dto/create-company.dto";
 import { UpdateCompanyDto } from "./dto/update-company.dto";
 import { Company } from "./entities/company.entity";
@@ -13,7 +14,9 @@ import { Company } from "./entities/company.entity";
 export class CompanyService {
   constructor(
     @InjectRepository(Company)
-    private readonly companyRepository: Repository<Company>
+    private readonly companyRepository: Repository<Company>,
+    @InjectRepository(Position)
+    private readonly positionRepository: Repository<Position>
   ) {}
 
   async create(createCompanyDto: CreateCompanyDto) {
@@ -59,5 +62,22 @@ export class CompanyService {
     const { affected } = await this.companyRepository.softDelete(id);
     if (!affected) throw new NotFoundException();
     return id;
+  }
+
+  async findAllPositions(
+    query: FindOptionsWhere<Position>[],
+    { page, size, sort }: Pagination<Position>
+  ) {
+    return {
+      total: await this.positionRepository.count({
+        where: query,
+      }),
+      items: await this.positionRepository.find({
+        where: query,
+        skip: page * size,
+        take: size,
+        order: sort,
+      }),
+    };
   }
 }

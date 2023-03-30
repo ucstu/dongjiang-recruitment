@@ -1,12 +1,32 @@
-<script lang="ts" setup>
-import { useAuthStore } from "@/stores/auth";
-import { axios, AxiosError } from "@dongjiang-recruitment/service-common";
+<script setup lang="ts">
+import { useMainStore } from "@/stores";
+import {
+  axios,
+  AxiosError,
+  request,
+} from "@dongjiang-recruitment/service-common";
 
-const authStore = useAuthStore();
+const mainStore = useMainStore();
 
+let timer: NodeJS.Timeout;
+axios.interceptors.request.use(
+  (config) => {
+    timer = setTimeout(() => {
+      uni.showLoading({
+        title: "加载中...",
+      });
+    }, 500);
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
 // 添加响应拦截器，当返回401时，跳转到登录页面
 axios.interceptors.response.use(
   (response) => {
+    clearTimeout(timer);
+    uni.hideLoading();
     return response;
   },
   (error) => {
@@ -55,8 +75,13 @@ axios.interceptors.response.use(
   }
 );
 
-if (authStore.token === null || !authStore.account) {
+if (mainStore.token === null || !mainStore.account) {
   uni.reLaunch({ url: "/pages/account/denglu_zhuce/denglu" });
+} else {
+  request.config.TOKEN = mainStore.token;
+  mainStore.loadInfo().then(() => {
+    uni.reLaunch({ url: "/pages/main/shouyeyemian/shouyeyemian" });
+  });
 }
 </script>
 

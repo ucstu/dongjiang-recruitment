@@ -22,7 +22,7 @@
           class="flex-row list"
         >
           <text
-            v-for="jobExpectation in infoStore.jobExpectations"
+            v-for="jobExpectation in mainStore.jobExpectations"
             :key="jobExpectation.id"
             class="list-item"
             :class="activeJobExpectation === jobExpectation ? 'active' : ''"
@@ -57,7 +57,7 @@
         </view>
         <view class="flex-row group-4">
           <view class="flex-row">
-            <text @click="text_22OnClick">{{ jobFilter }}</text>
+            <text @click="text_22OnClick">{{ jobFilter.workCityName }}</text>
             <image
               src="https://codefun-proj-user-res-1256085488.cos.ap-guangzhou.myqcloud.com/623287845a7e3f0310c3a3f7/623446dc62a7d90011023514/16475959311313713900.png"
               class="image-3 image-4"
@@ -85,7 +85,7 @@
         <view class="justify-between items-center">
           <scroll-view :scroll-x="true" class="flex-row list">
             <text
-              v-for="jobExpectation in infoStore.jobExpectations"
+              v-for="jobExpectation in mainStore.jobExpectations"
               :key="jobExpectation.id"
               class="list-item"
               :class="activeJobExpectation === jobExpectation ? 'active' : ''"
@@ -121,7 +121,7 @@
           </view>
           <view class="flex-row group-4">
             <view class="flex-row">
-              <text @click="text_22OnClick">{{ jobFilter }}</text>
+              <text @click="text_22OnClick">{{ jobFilter.workCityName }}</text>
               <image
                 src="https://codefun-proj-user-res-1256085488.cos.ap-guangzhou.myqcloud.com/623287845a7e3f0310c3a3f7/623446dc62a7d90011023514/16475959311313713900.png"
                 class="image-3 image-4"
@@ -163,26 +163,69 @@
 </template>
 
 <script lang="ts" setup>
-import { useInfoStore } from "@/stores";
+import { useMainStore } from "@/stores";
 import type {
   JobExpectation,
   Position,
 } from "@dongjiang-recruitment/service-common";
 
-const infoStore = useInfoStore();
+const mainStore = useMainStore();
 
 /* #ifdef MP-WEIXIN || MP-ALIPAY || MP-BAIDU || MP-TOUTIAO || MP-QQ */
-const navigationBarHeight = infoStore.menu.height;
-const navigationBarTop = infoStore.menu.top;
-const navigationBarWidth = infoStore.menu.left - uni.upx2px(30);
-const expectationWidth = infoStore.menu.left - uni.upx2px(170);
+const navigationBarHeight = mainStore.menu.height;
+const navigationBarTop = mainStore.menu.top;
+const navigationBarWidth = mainStore.menu.left - uni.upx2px(30);
+const expectationWidth = mainStore.menu.left - uni.upx2px(170);
 /* #endif */
 
-const jobFilter = ref({});
+interface Filter {
+  /**
+   * 职位类型
+   */
+  positionType: string;
+  /**
+   * 工作年限，eg；{1:NoExperience,2:InSchoolOrFreshGraduate,3:Under3Year,4:With3To5Year,5:With5To10Year,6:MoreThen10Year}
+   */
+  workingYears: Position.workingYears;
+  /**
+   * 学历要求，eg；{0:Unlimited,1:JuniorCollege,2:Undergraduate,3:Postgraduate,4:Doctor}
+   */
+  education: Position.education;
+  /**
+   * 细分标签
+   */
+  directionTags: Array<string>;
+  /**
+   * 单位K
+   */
+  startingSalary: number;
+  /**
+   * 单位K
+   */
+  ceilingSalary: number;
+  /**
+   * 工作省份
+   */
+  workProvinceName: string;
+  /**
+   * 工作城市
+   */
+  workCityName: string;
+  /**
+   * 工作地区
+   */
+  workAreaName: string;
+  /**
+   * 职位类型，eg；{1:FullTime,2:PartTime,3:Practice}
+   */
+  workType: Position.workType;
+}
+
+const jobFilter = ref<Filter>({} as Filter);
 const positions = ref<Array<Position>>([]);
 const methods = ref<Array<"热门" | "附近" | "最新">>(["热门", "附近", "最新"]);
 const activeMethod = ref<"热门" | "附近" | "最新">(methods.value[0]);
-const activeJobExpectation = ref<JobExpectation>(infoStore.jobExpectations[0]);
+const activeJobExpectation = ref<JobExpectation>(mainStore.jobExpectations[0]);
 const paging = ref<{ complete: (param: Array<any> | boolean) => void }>();
 const queryList = async (pageNo: number, pageSize: number) => {
   paging.value?.complete(

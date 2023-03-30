@@ -79,9 +79,9 @@
 
 <script lang="ts" setup>
 import NavigationBar from "@/components/NavigationBar/NavigationBar.vue";
-import { useAuthStore } from "@/stores/auth";
+import { useMainStore } from "@/stores/main";
 
-const store = useAuthStore();
+const store = useMainStore();
 
 const password = ref("");
 const password2 = ref("");

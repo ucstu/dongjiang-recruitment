@@ -20,13 +20,13 @@
 <script lang="ts" setup>
 import CompanyPanel from "@/components/CompanyPanel/CompanyPanel.vue";
 import NavigationBar from "@/components/NavigationBar/NavigationBar.vue";
-import { useInfoStore } from "@/stores";
+import { useMainStore } from "@/stores";
 import type {
   AttentionRecord,
   Company,
 } from "@dongjiang-recruitment/service-common";
 
-const store = useInfoStore();
+const store = useMainStore();
 
 const attentionCompanies = ref<Company[]>([]);
 const focusCompany = ref<AttentionRecord[]>([]);

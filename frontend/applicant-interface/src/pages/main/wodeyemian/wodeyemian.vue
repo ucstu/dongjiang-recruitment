@@ -85,7 +85,7 @@
 </template>
 
 <script lang="ts" setup>
-import { useInfoStore } from "@/stores";
+import { useMainStore } from "@/stores";
 import type {
   Applicant,
   AttentionRecord,
@@ -94,7 +94,7 @@ import type {
 } from "@dongjiang-recruitment/service-common";
 
 const VITE_CDN_URL = import.meta.env.VITE_CDN_URL;
-const store = useInfoStore();
+const store = useMainStore();
 
 const userInfos = ref<Applicant>({} as Applicant);
 const education = ref(["未知", "大专", "本科", "硕士", "博士"]);
@@ -160,7 +160,7 @@ onShow(() => {
 
 // 编辑简历
 const toSelfInfo = () => {
-  uni.navigateTo({ url: "/mine/bianjijianli/bianjijianli" });
+  uni.navigateTo({ url: "/pages/mine/bianjijianli/bianjijianli" });
 };
 // 投递记录
 const onClick_1 = () => {
@@ -175,47 +175,47 @@ const onClick_1 = () => {
     .then((res) => {
       const item = encodeURIComponent(JSON.stringify(res.items));
       uni.navigateTo({
-        url: "/record/toudijilu/toudijilu?deliveryRecords=" + item,
+        url: "/pages/record/toudijilu/toudijilu?deliveryRecords=" + item,
       });
     });
 };
 // 收藏职位
 const onClick_2 = () => {
   uni.navigateTo({
-    url: "/record/shoucangzhiwei/shoucangzhiwei",
+    url: "/pages/record/shoucangzhiwei/shoucangzhiwei",
   });
 };
 // 关注公司
 const onClick_3 = () => {
   uni.navigateTo({
-    url: "/record/guanzhugongsi/guanzhugongsi",
+    url: "/pages/record/guanzhugongsi/guanzhugongsi",
   });
 };
 // 待面试
 const onClick_4 = () => {
   uni.navigateTo({
-    url: "/record/daimianshi/daimianshi?",
+    url: "/pages/record/daimianshi/daimianshi?",
   });
 };
 // 上传简历附件
 const onClick_5 = () => {
-  uni.navigateTo({ url: "/info/shangchuanjianli/shangchuanjianli" });
+  uni.navigateTo({ url: "/pages/info/shangchuanjianli/shangchuanjianli" });
 };
 // 求职期望
 const onClick_6 = () => {
-  uni.navigateTo({ url: "/info/qiuzhiyixiang/qiuzhiyixiang" });
+  uni.navigateTo({ url: "/pages/info/qiuzhiyixiang/qiuzhiyixiang" });
 };
 // 用户反馈
 const onClick_7 = () => {
-  uni.navigateTo({ url: "/setting/yonghufankui/yonghufankui" });
+  uni.navigateTo({ url: "/pages/setting/yonghufankui/yonghufankui" });
 };
 // 隐私设置
 const onClick_8 = () => {
-  uni.navigateTo({ url: "/setting/yinsishezhi/yinsishezhi" });
+  uni.navigateTo({ url: "/pages/setting/yinsishezhi/yinsishezhi" });
 };
 // 设置
 const onClick_9 = () => {
-  uni.navigateTo({ url: "/mine/shezhiyemian/shezhiyemian" });
+  uni.navigateTo({ url: "/pages/mine/shezhiyemian/shezhiyemian" });
 };
 </script>
 

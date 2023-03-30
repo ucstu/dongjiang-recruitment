@@ -19,10 +19,10 @@
 <script lang="ts" setup>
 import CompanyDetail from "@/components/CompanyDetail/CompanyDetail.vue";
 import NavigationBar from "@/components/NavigationBar/NavigationBar.vue";
-import { useInfoStore } from "@/stores";
+import { useMainStore } from "@/stores";
 import type { Company } from "@dongjiang-recruitment/service-common";
 
-const store = useInfoStore();
+const store = useMainStore();
 
 const companyInfo = ref<Company[]>([]);
 const emptyShow = ref(false);
@@ -52,7 +52,9 @@ applicantInspectionRecordService
   });
 
 const view_2OnClick = (c: string) => {
-  uni.navigateTo({ url: "/detail/gongsijieshao/gongsijieshao?companyId=" + c });
+  uni.navigateTo({
+    url: "/pages/detail/gongsijieshao/gongsijieshao?companyId=" + c,
+  });
 };
 </script>
 

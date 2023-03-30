@@ -19,13 +19,13 @@
 <script lang="ts" setup>
 import JobPanel from "@/components/JobPanel/JobPanel.vue";
 import NavigationBar from "@/components/NavigationBar/NavigationBar.vue";
-import { useInfoStore } from "@/stores";
+import { useMainStore } from "@/stores";
 import type {
   GarnerRecord,
   Position,
 } from "@dongjiang-recruitment/service-common";
 
-const store = useInfoStore();
+const store = useMainStore();
 
 const favorites = ref<GarnerRecord[]>([]);
 const favoritesPosition = ref<Position[]>([]);

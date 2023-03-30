@@ -96,7 +96,7 @@ onMounted(() => {
 });
 
 const filterCompany = () => {
-  uni.navigateTo({ url: "/most/shaixuanyemian/shaixuanyemian" });
+  uni.navigateTo({ url: "/pages/most/shaixuanyemian/shaixuanyemian" });
 };
 // 弹出层
 const popup = ref();
@@ -162,7 +162,7 @@ const sortChoose = (index: number) => {
 // 公司详情页面跳转
 const toCompanyInfo = (c: string) => {
   uni.navigateTo({
-    url: "/detail/gongsijieshao/gongsijieshao?companyId=" + c,
+    url: "/pages/detail/gongsijieshao/gongsijieshao?companyId=" + c,
   });
 };
 </script>

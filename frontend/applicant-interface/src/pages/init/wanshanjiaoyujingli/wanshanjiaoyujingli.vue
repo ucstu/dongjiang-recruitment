@@ -147,9 +147,9 @@
 <script lang="ts" setup>
 import NavigationBar from "@/components/NavigationBar/NavigationBar.vue";
 import wybPopup from "@/components/wyb-popup/wyb-popup.vue";
-import { useInfoStore } from "@/stores";
+import { useMainStore } from "@/stores";
 
-const store = useInfoStore();
+const store = useMainStore();
 
 const schoolName = ref("");
 const educationId = ref<0 | 1 | 2 | 3 | 4>(0);
@@ -246,14 +246,16 @@ const nextClick = () => {
       .then((res) => {
         store.applicant!.education = res.education;
         uni.navigateTo({
-          url: "/init/wanshangongzuojingli/wanshangongzuojingli",
+          url: "/pages/init/wanshangongzuojingli/wanshangongzuojingli",
         });
       });
   }
 };
 
 const skip = () => {
-  uni.navigateTo({ url: "/init/wanshangongzuojingli/wanshangongzuojingli" });
+  uni.navigateTo({
+    url: "/pages/init/wanshangongzuojingli/wanshangongzuojingli",
+  });
 };
 </script>
 

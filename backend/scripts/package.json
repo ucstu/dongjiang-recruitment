@@ -1,5 +1,5 @@
 {
-  "name": "@dongjiang-recruitment/scripts",
+  "name": "@dongjiang-recruitment/backend-scripts",
   "version": "1.0.0",
   "description": "scripts",
   "private": true,
@@ -7,7 +7,7 @@
     "vite"
   ],
   "scripts": {
-    "start": "ts-node src/services.ts"
+    "start": "concurrently \"kubectl port-forward services/postgresql-hl 5432:5432 -n dongjiang-recruitment-develop\" \"kubectl port-forward services/redis-master 6379:6379 -n dongjiang-recruitment-develop\" \"ts-node src/services.ts\" \"pnpm run --filter '@dongjiang-recruitment/*-service' start:dev\""
   },
   "dependencies": {
     "http-proxy": "^1.18.1",

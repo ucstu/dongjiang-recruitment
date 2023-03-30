@@ -46,19 +46,19 @@ const cityExpectation = ref("请选择");
 const salaryExpectation = ref("请选择");
 
 const view_6OnClick = () => {
-  uni.navigateTo({ url: "/most/zhiweileixing/zhiweileixing" });
+  uni.navigateTo({ url: "/pages/most/zhiweileixing/zhiweileixing" });
 };
 
 const view_7OnClick = () => {
-  uni.navigateTo({ url: "/most/chengshixuanze/chengshixuanze" });
+  uni.navigateTo({ url: "/pages/most/chengshixuanze/chengshixuanze" });
 };
 
 const nextStep = () => {
-  uni.switchTab({ url: "/pages/shouyeyemian/shouyeyemian" });
+  uni.switchTab({ url: "/pages/main/shouyeyemian/shouyeyemian" });
 };
 
 const skip = () => {
-  uni.switchTab({ url: "/pages/shouyeyemian/shouyeyemian" });
+  uni.switchTab({ url: "/pages/main/shouyeyemian/shouyeyemian" });
 };
 </script>
 

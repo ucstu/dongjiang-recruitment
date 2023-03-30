@@ -67,10 +67,10 @@ const checkVersion = async () => {
 };
 
 const text_7OnClick = () => {
-  uni.navigateTo({ url: "/setting/yonghuxieyi/yonghuxieyi" });
+  uni.navigateTo({ url: "/pages/setting/yonghuxieyi/yonghuxieyi" });
 };
 const text_9OnClick = () => {
-  uni.navigateTo({ url: "/setting/yinsicelve/yinsicelve" });
+  uni.navigateTo({ url: "/pages/setting/yinsicelve/yinsicelve" });
 };
 </script>
 

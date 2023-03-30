@@ -35,7 +35,7 @@ commonService.getFilterCriteria().then((res) => {
 });
 
 const toCompanyInfo = () => {
-  uni.navigateTo({ url: "/detail/gongsijieshao/gongsijieshao" });
+  uni.navigateTo({ url: "/pages/detail/gongsijieshao/gongsijieshao" });
 };
 </script>
 

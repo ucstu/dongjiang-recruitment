@@ -13,13 +13,12 @@
 </template>
 
 <script lang="ts" setup>
-
 const school = ref("电子科技大学");
 const date = ref("2019.09 - 2022.06");
 const levelAndProfession = ref("本科 | 计算机科学与技术");
 
 const rootViewOnClick = () => {
-  uni.navigateTo({ url: "/info/jiaoyujingli/jiaoyujingli" });
+  uni.navigateTo({ url: "/pages/info/jiaoyujingli/jiaoyujingli" });
 };
 </script>
 

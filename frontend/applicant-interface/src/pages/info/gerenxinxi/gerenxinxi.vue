@@ -142,16 +142,14 @@
 <script lang="ts" setup>
 import NavigationBar from "@/components/NavigationBar/NavigationBar.vue";
 import wybPopup from "@/components/wyb-popup/wyb-popup.vue";
-import { useInfoStore } from "@/stores";
-import { useAuthStore } from "@/stores/auth";
+import { useMainStore } from "@/stores";
 import type { Applicant } from "@dongjiang-recruitment/service-common";
 
 const VITE_BASE_URL = import.meta.env.VITE_BASE_URL;
 const VITE_CDN_URL = import.meta.env.VITE_CDN_URL;
-const authStore = useAuthStore();
-const infoStore = useInfoStore();
+const mainStore = useMainStore();
 
-const userInformation = ref<Applicant>({ ...infoStore.applicant! });
+const userInformation = ref<Applicant>({ ...mainStore.applicant! });
 
 const fullName = ref(""); // 姓名
 const birOrTime = ref(true);
@@ -228,7 +226,7 @@ const chooseImage = () => {
         filePath: tempFilePath[0],
         name: "avatar",
         header: {
-          Authorization: "Bearer " + authStore.token,
+          Authorization: "Bearer " + mainStore.token,
         },
         success: (res) => {
           const response = JSON.parse(res.data) as {
@@ -292,7 +290,7 @@ const isCancel = () => {
 };
 
 const changeCity = () => {
-  uni.navigateTo({ url: "/most/chengshixuanze/chengshixuanze" });
+  uni.navigateTo({ url: "/pages/most/chengshixuanze/chengshixuanze" });
 };
 
 // 保存修改用户基本信息
@@ -327,11 +325,11 @@ const saveInfos = () => {
     );
     applicantService
       .updateApplicant({
-        id: infoStore.applicant!.id,
+        id: mainStore.applicant!.id,
         requestBody: userInformation.value,
       })
       .then((res) => {
-        infoStore.applicant = res;
+        mainStore.applicant = res;
         uni.navigateBack({ delta: 1 });
       });
   }

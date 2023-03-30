@@ -118,11 +118,11 @@
 import JobDetail from "@/components/JobDetail/JobDetail.vue";
 import NavigationBar from "@/components/NavigationBar/NavigationBar.vue";
 import wybPopup from "@/components/wyb-popup/wyb-popup.vue";
-import { useInfoStore } from "@/stores";
+import { useMainStore } from "@/stores";
 import type { Company, Position } from "@dongjiang-recruitment/service-common";
 
 const VITE_CDN_URL = import.meta.env.VITE_CDN_URL;
-const store = useInfoStore();
+const store = useMainStore();
 
 const companyInfo = ref<Company>({} as Company);
 const positionInfo = ref<Position[]>([]);
@@ -256,7 +256,7 @@ const jobOpening = () => {
 const jobClick = (p: string, c: string) => {
   uni.navigateTo({
     url:
-      "/detail/zhiweixiangqing/zhiweixiangqing?companyId=" +
+      "/pages/detail/zhiweixiangqing/zhiweixiangqing?companyId=" +
       c +
       "&positionId=" +
       p,

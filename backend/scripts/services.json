@@ -2,7 +2,7 @@
   {
     "name": "advertiser-service",
     "prefix": "/advertisers",
-    "current": "remote",
+    "current": "local",
     "local": {
       "host": "localhost",
       "protocol": "http",
@@ -32,7 +32,7 @@
   {
     "name": "authentication-service",
     "prefix": "/authentication",
-    "current": "remote",
+    "current": "local",
     "local": {
       "host": "localhost",
       "protocol": "http",
@@ -47,7 +47,7 @@
   {
     "name": "common-service",
     "prefix": "/common",
-    "current": "remote",
+    "current": "local",
     "local": {
       "host": "localhost",
       "protocol": "http",
@@ -62,7 +62,7 @@
   {
     "name": "company-service",
     "prefix": "/companies",
-    "current": "remote",
+    "current": "local",
     "local": {
       "host": "localhost",
       "protocol": "http",
@@ -77,7 +77,7 @@
   {
     "name": "personnel-service",
     "prefix": "/personnel",
-    "current": "remote",
+    "current": "local",
     "local": {
       "host": "localhost",
       "protocol": "http",

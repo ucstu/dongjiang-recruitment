@@ -104,10 +104,10 @@
 <script lang="ts" setup>
 import NavigationBar from "@/components/NavigationBar/NavigationBar.vue";
 import wybPopup from "@/components/wyb-popup/wyb-popup.vue";
-import { useInfoStore } from "@/stores";
+import { useMainStore } from "@/stores";
 import type { Applicant } from "@dongjiang-recruitment/service-common";
 
-const store = useInfoStore();
+const store = useMainStore();
 
 const userInfo = ref<Applicant>(store.applicant!);
 
@@ -148,7 +148,7 @@ const bindChange = (e: { detail: { value: any } }) => {
 };
 
 const choseCity = () => {
-  uni.navigateTo({ url: "/most/chengshixuanze/chengshixuanze" });
+  uni.navigateTo({ url: "/pages/most/chengshixuanze/chengshixuanze" });
 };
 onLoad(() => {
   uni.$on("liveCity", (e) => {
@@ -195,7 +195,7 @@ const nextClick = () => {
       .then((res) => {
         store.applicant = res;
         uni.navigateTo({
-          url: "/init/wanshanjiaoyujingli/wanshanjiaoyujingli",
+          url: "/pages/init/wanshanjiaoyujingli/wanshanjiaoyujingli",
         });
       });
   }

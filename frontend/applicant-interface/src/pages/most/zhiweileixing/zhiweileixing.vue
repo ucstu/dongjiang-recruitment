@@ -158,7 +158,7 @@ const positiontypes = (index: number) => {
   if (value.value) {
     uni.navigateTo({
       url:
-        "/detail/xiangguanzhiwei/xiangguanzhiwei?name=" +
+        "/pages/detail/xiangguanzhiwei/xiangguanzhiwei?name=" +
         positions.value[index] +
         "&data=" +
         1 +

@@ -36,7 +36,7 @@ export class WorkExperienceService {
         where: query.map((q) => ({ ...q, applicantId })),
       }),
       items: await this.workExperienceRepository.find({
-        where: { ...query, applicantId },
+        where: query.map((q) => ({ ...q, applicantId })),
         skip: page * size,
         take: size,
         order: sort,

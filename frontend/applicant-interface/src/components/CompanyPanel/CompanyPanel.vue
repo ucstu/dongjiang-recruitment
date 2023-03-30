@@ -31,11 +31,11 @@ const emit = defineEmits(["unfocus"]);
 
 const toCompanyInfo = (c: string) => {
   uni.navigateTo({
-    url: "/detail/gongsijieshao/gongsijieshao?companyId=" + c,
+    url: "/pages/detail/gongsijieshao/gongsijieshao?companyId=" + c,
   });
 };
 const view_10OnClick = () => {
-  uni.navigateTo({ url: "/mine/liaotianyemian/liaotianyemian" });
+  uni.navigateTo({ url: "/pages/mine/liaotianyemian/liaotianyemian" });
 };
 </script>
 

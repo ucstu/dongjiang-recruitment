@@ -186,7 +186,7 @@ const sortChoose = (index: number) => {
 const toPositions = (p: string, c: string) => {
   uni.navigateTo({
     url:
-      "/detail/zhiweixiangqing/zhiweixiangqing?companyId=" +
+      "/pages/detail/zhiweixiangqing/zhiweixiangqing?companyId=" +
       c +
       "&positionId=" +
       p,
@@ -196,7 +196,7 @@ const toPositions = (p: string, c: string) => {
 // 筛选跳转
 const filter = () => {
   uni.navigateTo({
-    url: "/most/shaixuanyemian/shaixuanyemian",
+    url: "/pages/most/shaixuanyemian/shaixuanyemian",
   });
 };
 </script>

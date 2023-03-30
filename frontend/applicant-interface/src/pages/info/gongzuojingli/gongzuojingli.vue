@@ -208,9 +208,9 @@
 <script lang="ts" setup>
 import NavigationBar from "@/components/NavigationBar/NavigationBar.vue";
 import wybPopup from "@/components/wyb-popup/wyb-popup.vue";
-import { useInfoStore } from "@/stores";
+import { useMainStore } from "@/stores";
 import type { WorkExperience } from "@dongjiang-recruitment/service-common";
-const store = useInfoStore();
+const store = useMainStore();
 
 const companyName = ref(""); // 公司名称
 const companyIndustry = ref(""); // 公司行业
@@ -230,7 +230,7 @@ const workId = ref(); // 工作经历id
 
 // 获取职位名
 const getPosition = () => {
-  uni.navigateTo({ url: "/most/zhiweileixing/zhiweileixing" });
+  uni.navigateTo({ url: "/pages/most/zhiweileixing/zhiweileixing" });
 };
 onLoad((e) => {
   workId.value = e!.workId; // 工作经历id

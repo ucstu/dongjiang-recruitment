@@ -155,10 +155,10 @@
 <script lang="ts" setup>
 import NavigationBar from "@/components/NavigationBar/NavigationBar.vue";
 import WybPopup from "@/components/wyb-popup/wyb-popup.vue";
-import { useInfoStore } from "@/stores";
+import { useMainStore } from "@/stores";
 import type { ProjectExperience } from "@dongjiang-recruitment/service-common";
 
-const store = useInfoStore();
+const store = useMainStore();
 
 const projectExperience = ref<ProjectExperience>({
   id: "",

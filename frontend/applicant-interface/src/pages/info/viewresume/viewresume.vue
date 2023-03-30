@@ -2,15 +2,15 @@
   <NavigationBar title="预览简历"></NavigationBar>
   <view class="flex-col info-box">
     <text style="font-size: 45rpx; font-weight: bold"
-      >{{ infoStore.applicant!.firstName
-      }}{{ infoStore.applicant!.lastName }}</text
+      >{{ mainStore.applicant!.firstName
+      }}{{ mainStore.applicant!.lastName }}</text
     >
     <text v-if="schoolName" style="font-size: 28rpx"
-      >{{ schoolName }}/{{ education[infoStore.applicant!.education] }}</text
+      >{{ schoolName }}/{{ education[mainStore.applicant!.education] }}</text
     >
     <text style="margin-top: 20rpx"
-      >{{ workYear[infoStore.applicant!.workingYears] }}/{{
-        infoStore.applicant!.age
+      >{{ workYear[mainStore.applicant!.workingYears] }}/{{
+        mainStore.applicant!.age
       }}岁</text
     >
   </view>
@@ -32,12 +32,12 @@
   </view>
   <view v-if="change">
     <view
-      v-if="infoStore.applicant!.personalAdvantage"
+      v-if="mainStore.applicant!.personalAdvantage"
       class="flex-col expectation"
     >
       <text style="font-size: 40rpx; font-weight: bold">我的优势</text>
       <text class="ascendent">{{
-        infoStore.applicant!.personalAdvantage
+        mainStore.applicant!.personalAdvantage
       }}</text>
     </view>
     <view v-if="educationInfo.length" class="flex-col expectation">
@@ -86,7 +86,7 @@
       <image src="@/static/icons/heard.png" class="img" />
       <view class="flex-col" style="margin-left: 15rpx; line-height: 50rpx">
         <text>联系邮箱</text>
-        <text>{{ authStore.account!.userName }}</text>
+        <text>{{ mainStore.account!.userName }}</text>
       </view>
     </view>
   </view>
@@ -94,15 +94,14 @@
 
 <script lang="ts" setup>
 import NavigationBar from "@/components/NavigationBar/NavigationBar.vue";
-import { useAuthStore, useInfoStore } from "@/stores";
+import { useMainStore } from "@/stores";
 import type {
   EducationExperience,
   ProjectExperience,
   WorkExperience,
 } from "@dongjiang-recruitment/service-common";
 
-const authStore = useAuthStore();
-const infoStore = useInfoStore();
+const mainStore = useMainStore();
 const educationInfo = ref<EducationExperience[]>([]);
 const workInfo = ref<WorkExperience[]>([]);
 const positionInfo = ref<ProjectExperience[]>([]);
@@ -121,7 +120,7 @@ const change = ref(true);
 // 教育经历
 applicantEducationExperienceService
   .queryEducationExperience({
-    applicantId: infoStore.applicant!.id,
+    applicantId: mainStore.applicant!.id,
   })
   .then((res) => {
     educationInfo.value = res.items;
@@ -130,7 +129,7 @@ applicantEducationExperienceService
 // 工作经历
 applicantWorkExperienceService
   .queryWorkExperience({
-    applicantId: infoStore.applicant!.id,
+    applicantId: mainStore.applicant!.id,
   })
   .then((res) => {
     workInfo.value = res.items;
@@ -138,7 +137,7 @@ applicantWorkExperienceService
 // 项目经验
 applicantProjectExperienceService
   .queryProjectExperience({
-    applicantId: infoStore.applicant!.id,
+    applicantId: mainStore.applicant!.id,
   })
   .then((res) => {
     positionInfo.value = res.items;

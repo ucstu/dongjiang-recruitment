@@ -58,10 +58,10 @@
 
 <script lang="ts" setup>
 import NavigationBar from "@/components/NavigationBar/NavigationBar.vue";
-import { useInfoStore } from "@/stores";
+import { useMainStore } from "@/stores";
 import type { Areas } from "@dongjiang-recruitment/service-common";
 
-const store = useInfoStore();
+const store = useMainStore();
 
 const countries = ref<Areas>([
   {
@@ -148,7 +148,7 @@ const savePlace = () => {
 
 const changeCity = () => {
   uni.navigateTo({
-    url: "/most/chengshixuanze/chengshixuanze",
+    url: "/pages/most/chengshixuanze/chengshixuanze",
   });
 };
 </script>

@@ -66,18 +66,17 @@
 import NavigationBar from "@/components/NavigationBar/NavigationBar.vue";
 import wybModal from "@/components/wyb-modal/wyb-modal.vue";
 import wybPopup from "@/components/wyb-popup/wyb-popup.vue";
-import { useInfoStore } from "@/stores";
-import { useAuthStore } from "@/stores/auth";
+import { useMainStore } from "@/stores";
+import type { Account, Applicant } from "@dongjiang-recruitment/service-common";
 
-const authStore = useAuthStore();
-const infoStore = useInfoStore();
+const mainStore = useMainStore();
 
 const { runAsync: sendVerificationCode } =
   commonService.useSendVerificationCode(undefined, {
     manual: true,
   });
 // 隐藏账号
-const phoneNumber = authStore.account!.userName.replace(
+const phoneNumber = mainStore.account!.userName.replace(
   /(\d{3})\d{4}(\d{4})/,
   "$1****$2"
 );
@@ -97,7 +96,7 @@ const showDelete = () => {
 const { refreshAsync: destroyAccount } =
   authenticationService.useDestroyAccount(
     {
-      id: authStore.account!.id,
+      id: mainStore.account!.id,
       verificationCode: code.value,
     },
     {
@@ -131,12 +130,12 @@ const cancelDelete = () => {
 // 注销账号并退出登录
 const confirmDelete = async () => {
   await destroyAccount();
-  authStore.token = null;
-  authStore.account = null;
-  infoStore.applicant = null;
-  infoStore.jobExpectations = [];
+  mainStore.token = "";
+  mainStore.account = {} as Account;
+  mainStore.applicant = {} as Applicant;
+  mainStore.jobExpectations = [];
   uni.navigateTo({
-    url: "/account/denglu_zhuce/denglu",
+    url: "/pages/account/denglu_zhuce/denglu",
   });
   popup.value?.hide();
 };

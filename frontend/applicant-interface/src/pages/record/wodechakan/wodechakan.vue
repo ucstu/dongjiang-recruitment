@@ -15,10 +15,10 @@
 <script lang="ts" setup>
 import JobDetail from "@/components/JobDetail/JobDetail.vue";
 import NavigationBar from "@/components/NavigationBar/NavigationBar.vue";
-import { useInfoStore } from "@/stores";
+import { useMainStore } from "@/stores";
 import type { Position } from "@dongjiang-recruitment/service-common";
 
-const store = useInfoStore();
+const store = useMainStore();
 
 const myViews = ref<Position[]>([]);
 /* 查询所有查看记录 */
@@ -45,7 +45,7 @@ applicantInspectionRecordService
 const view_2OnClick = (c: string, p: string) => {
   uni.navigateTo({
     url:
-      "/detail/zhiweixiangqing/zhiweixiangqing?companyId=" +
+      "/pages/detail/zhiweixiangqing/zhiweixiangqing?companyId=" +
       c +
       "&positionId=" +
       p,

@@ -7,31 +7,31 @@
           <view class="flex-col" @click="changeInfo">
             <view class="flex-row items-center user">
               <text class="text-top" style="font-size: 40rpx; font-weight: 600"
-                >{{ infoStore.applicant!.firstName
-                }}{{ infoStore.applicant!.lastName }}</text
+                >{{ mainStore.applicant!.firstName
+                }}{{ mainStore.applicant!.lastName }}</text
               >
               <image class="image" src="@/static/icons/edit.png" />
             </view>
             <view>
               <text style="font-size: 30rpx"
-                >{{ workYear[infoStore.applicant!.workingYears] }}/{{
-                  infoStore.applicant!.age
-                }}岁/{{ education[infoStore.applicant!.education] }}</text
+                >{{ workYear[mainStore.applicant!.workingYears] }}/{{
+                  mainStore.applicant!.age
+                }}岁/{{ education[mainStore.applicant!.education] }}</text
               >
             </view>
           </view>
           <view class="image-box">
             <image
-              :src="VITE_CDN_URL + infoStore.applicant!.avatarUrl"
+              :src="VITE_CDN_URL + mainStore.applicant!.avatarUrl"
               class="photo"
             />
             <image
-              v-if="infoStore.applicant!.sex === '男'"
+              v-if="mainStore.applicant!.sex === '男'"
               class="sex-image"
               src="@/static/icons/man.png"
             />
             <image
-              v-if="infoStore.applicant!.sex === '女'"
+              v-if="mainStore.applicant!.sex === '女'"
               class="sex-image"
               src="@/static/icons/woman.png"
             />
@@ -42,7 +42,7 @@
             <text class="text-top">求职期望</text>
           </view>
           <view
-            v-for="(jobExcept, i) in infoStore.jobExpectations"
+            v-for="(jobExcept, i) in mainStore.jobExpectations"
             :key="i"
             class="flex-col"
             style="margin-top: 20rpx"
@@ -81,7 +81,7 @@
         </view>
         <view class="advantage-box">
           <text style="white-space: nowrap">{{
-            infoStore.applicant!.personalAdvantage
+            mainStore.applicant!.personalAdvantage
           }}</text>
         </view>
       </view>
@@ -164,7 +164,7 @@
 
 <script lang="ts" setup>
 import NavigationBar from "@/components/NavigationBar/NavigationBar.vue";
-import { useInfoStore } from "@/stores";
+import { useMainStore } from "@/stores";
 import type {
   EducationExperience,
   ProjectExperience,
@@ -172,7 +172,7 @@ import type {
 } from "@dongjiang-recruitment/service-common";
 
 const VITE_CDN_URL = import.meta.env.VITE_CDN_URL;
-const infoStore = useInfoStore();
+const mainStore = useMainStore();
 
 const education = ref(["未知", "大专", "本科", "硕士", "博士"]);
 const workYear = [
@@ -196,7 +196,7 @@ onShow(() => {
   // 查询所有工作经历
   applicantWorkExperienceService
     .queryWorkExperience({
-      applicantId: infoStore.applicant!.id,
+      applicantId: mainStore.applicant!.id,
     })
     .then((res) => {
       workExperiences.value = res.items;
@@ -204,30 +204,30 @@ onShow(() => {
   // 查询所有教育经历
   applicantEducationExperienceService
     .queryEducationExperience({
-      applicantId: infoStore.applicant!.id,
+      applicantId: mainStore.applicant!.id,
     })
     .then((res) => {
       if (res.total > 0) {
         educationExperiences.value = res.items;
-        infoStore.applicant!.education =
+        mainStore.applicant!.education =
           educationExperiences.value[0].education;
         for (let i = 0; i <= educationExperiences.value.length; i++) {
           if (
-            infoStore.applicant!.education <
+            mainStore.applicant!.education <
             educationExperiences.value[i].education
           ) {
-            infoStore.applicant!.education =
+            mainStore.applicant!.education =
               educationExperiences.value[i].education;
           }
         }
       } else {
-        infoStore.applicant!.education = 0;
+        mainStore.applicant!.education = 0;
       }
     });
   // 查询所有项目经历
   applicantProjectExperienceService
     .queryProjectExperience({
-      applicantId: infoStore.applicant!.id,
+      applicantId: mainStore.applicant!.id,
     })
     .then((res) => {
       projectExperiences.value = res.items;
@@ -236,27 +236,27 @@ onShow(() => {
 
 // 修改个人信息
 const changeInfo = () => {
-  uni.navigateTo({ url: "/info/gerenxinxi/gerenxinxi" });
+  uni.navigateTo({ url: "/pages/info/gerenxinxi/gerenxinxi" });
 };
 // 查看求职期望
 const ToJobExpectation = () => {
-  uni.navigateTo({ url: "/info/qiuzhiyixiang/qiuzhiyixiang" });
+  uni.navigateTo({ url: "/pages/info/qiuzhiyixiang/qiuzhiyixiang" });
 };
 // 添加个人优势
 const addAdvantage = () => {
-  uni.navigateTo({ url: "/info/gerenyoushi/gerenyoushi" });
+  uni.navigateTo({ url: "/pages/info/gerenyoushi/gerenyoushi" });
 };
 // 添加工作经历
 const addWork = () => {
-  uni.navigateTo({ url: "/info/gongzuojingli/gongzuojingli" });
+  uni.navigateTo({ url: "/pages/info/gongzuojingli/gongzuojingli" });
 };
 // 添加教育经历
 const addEducate = () => {
-  uni.navigateTo({ url: "/info/jiaoyujingli/jiaoyujingli" });
+  uni.navigateTo({ url: "/pages/info/jiaoyujingli/jiaoyujingli" });
 };
 // 添加项目经历
 const addProject = () => {
-  uni.navigateTo({ url: "/info/xiangmujingli/xiangmujingli" });
+  uni.navigateTo({ url: "/pages/info/xiangmujingli/xiangmujingli" });
 };
 
 // 查看、修改、删除工作经历
@@ -265,7 +265,7 @@ const alterWork = (index: number) => {
   const deleteWork = ref("删除");
   uni.navigateTo({
     url:
-      "/info/gongzuojingli/gongzuojingli?workId=" +
+      "/pages/info/gongzuojingli/gongzuojingli?workId=" +
       workId +
       "&deleteWork=" +
       deleteWork.value,
@@ -278,7 +278,7 @@ const alterEducate = (index: number) => {
   const deleteEducate = ref("删除");
   uni.navigateTo({
     url:
-      "/info/jiaoyujingli/jiaoyujingli?educateId=" +
+      "/pages/info/jiaoyujingli/jiaoyujingli?educateId=" +
       educateId +
       "&deleteEducate=" +
       deleteEducate.value,
@@ -291,7 +291,7 @@ const alterProject = (index: number) => {
   const deleteProject = ref("删除");
   uni.navigateTo({
     url:
-      "/info/xiangmujingli/xiangmujingli?projectId=" +
+      "/pages/info/xiangmujingli/xiangmujingli?projectId=" +
       projectId +
       "&deleteProject=" +
       deleteProject.value,
@@ -299,7 +299,7 @@ const alterProject = (index: number) => {
 };
 
 const viewResume = () => {
-  uni.navigateTo({ url: "/info/viewresume/viewresume" });
+  uni.navigateTo({ url: "/pages/info/viewresume/viewresume" });
 };
 </script>
 

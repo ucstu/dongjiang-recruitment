@@ -13,6 +13,7 @@ import {
   Post,
   Put,
 } from "@nestjs/common";
+import { Position } from "src/position/entities/position.entity";
 import { CompanyService } from "./company.service";
 import { CreateCompanyDto } from "./dto/create-company.dto";
 import { UpdateCompanyDto } from "./dto/update-company.dto";
@@ -35,6 +36,14 @@ export class CompanyController {
     return this.companyService.findAll(query, page);
   }
 
+  @Get("positions")
+  findAllPositions(
+    @QueryParam() query: Array<FindOptionsWhere<Position>>,
+    @Page() page: Pagination<Position>
+  ) {
+    return this.companyService.findAllPositions(query, page);
+  }
+
   @Get(":id")
   findOne(@Param("id") id: string) {
     return this.companyService.findOne(id);
@@ -50,6 +59,42 @@ export class CompanyController {
     return this.companyService.remove(id);
   }
 
-  // @Get("positions")
-  // findAllPositions()
+  @Get("bigData")
+  getBigData(
+    @QueryParam() query: Array<FindOptionsWhere<Company>>,
+    @Page() page: Pagination<Company>
+  ) {
+    return [
+      {
+        date: "2010-04-19",
+        inspectionRecordCount: 89,
+        deliveryRecordCount: 70,
+        onlineCommunicateCount: 80,
+      },
+      {
+        date: "2005-01-06",
+        inspectionRecordCount: 92,
+        deliveryRecordCount: 94,
+        onlineCommunicateCount: 91,
+      },
+      {
+        date: "2007-09-15",
+        inspectionRecordCount: 98,
+        deliveryRecordCount: 90,
+        onlineCommunicateCount: 81,
+      },
+      {
+        date: "1972-10-21",
+        inspectionRecordCount: 61,
+        deliveryRecordCount: 93,
+        onlineCommunicateCount: 76,
+      },
+      {
+        date: "1989-05-20",
+        inspectionRecordCount: 96,
+        deliveryRecordCount: 76,
+        onlineCommunicateCount: 67,
+      },
+    ];
+  }
 }

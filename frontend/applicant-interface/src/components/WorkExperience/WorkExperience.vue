@@ -16,14 +16,13 @@
 </template>
 
 <script lang="ts" setup>
-
 const date = ref("2020.03 - 2021.03");
 const company = ref("命通科技");
 const direction = ref("后端工程师");
 const work = ref("开发后台");
 
 const rootViewOnClick = () => {
-  uni.navigateTo({ url: "/info/gongzuojingli/gongzuojingli" });
+  uni.navigateTo({ url: "/pages/info/gongzuojingli/gongzuojingli" });
 };
 </script>
 

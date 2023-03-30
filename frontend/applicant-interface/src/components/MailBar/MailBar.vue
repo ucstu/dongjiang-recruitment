@@ -28,13 +28,13 @@
 </template>
 
 <script lang="ts" setup>
-import { useInfoStore } from "@/stores";
+import { useMainStore } from "@/stores";
 import type { Personnel } from "@dongjiang-recruitment/service-common";
 import type { PropType } from "vue";
 
 const VITE_CDN_URL = import.meta.env.VITE_CDN_URL;
 
-const store = useInfoStore();
+const store = useMainStore();
 
 const props = defineProps({
   hrInfo: {
@@ -75,7 +75,7 @@ const toChatPage = () => {
   const i = props.hrInfo.id;
   uni.navigateTo({
     url:
-      "/mine/liaotianyemian/liaotianyemian?Id=" +
+      "/pages/mine/liaotianyemian/liaotianyemian?Id=" +
       i +
       "&key=" +
       props.messageKey,

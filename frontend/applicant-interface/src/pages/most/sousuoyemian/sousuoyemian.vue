@@ -86,7 +86,7 @@ const searchType = () => {
   const value = true;
   uni.navigateTo({
     url:
-      `/most/zhiweileixing/zhiweileixing?value=` +
+      `/pages/most/zhiweileixing/zhiweileixing?value=` +
       value +
       `&city=` +
       cityName.value,
@@ -96,7 +96,7 @@ const searchType = () => {
 const positionClick = (index: number) => {
   uni.navigateTo({
     url:
-      "/detail/xiangguanzhiwei/xiangguanzhiwei?data=" +
+      "/pages/detail/xiangguanzhiwei/xiangguanzhiwei?data=" +
       1 +
       "&name=" +
       popularPositions[index] +
@@ -108,7 +108,7 @@ const positionClick = (index: number) => {
 const companyClick = (index: number) => {
   uni.navigateTo({
     url:
-      "/detail/xiangguanzhiwei/xiangguanzhiwei?data=" +
+      "/pages/detail/xiangguanzhiwei/xiangguanzhiwei?data=" +
       2 +
       "&name=" +
       popularCompanies[index] +

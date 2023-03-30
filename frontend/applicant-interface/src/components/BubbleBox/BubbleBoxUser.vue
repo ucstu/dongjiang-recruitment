@@ -16,10 +16,10 @@
 </template>
 
 <script lang="ts" setup>
-import { useInfoStore } from "@/stores";
+import { useMainStore } from "@/stores";
 
 const VITE_CDN_URL = import.meta.env.VITE_CDN_URL;
-const store = useInfoStore();
+const store = useMainStore();
 
 const props = defineProps({
   mes: {

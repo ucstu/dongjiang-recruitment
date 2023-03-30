@@ -36,7 +36,7 @@ export class EducationExperienceService {
         where: query.map((q) => ({ ...q, applicantId })),
       }),
       items: await this.educationExperienceRepository.find({
-        where: { ...query, applicantId },
+        where: query.map((q) => ({ ...q, applicantId })),
         skip: page * size,
         take: size,
         order: sort,

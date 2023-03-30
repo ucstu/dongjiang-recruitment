@@ -100,10 +100,10 @@
 <script lang="ts" setup>
 import NavigationBar from "@/components/NavigationBar/NavigationBar.vue";
 import wybPopup from "@/components/wyb-popup/wyb-popup.vue";
-import { useInfoStore } from "@/stores";
+import { useMainStore } from "@/stores";
 import type { JobExpectation } from "@dongjiang-recruitment/service-common";
 
-const store = useInfoStore();
+const store = useMainStore();
 
 const jobExpectation = ref<JobExpectation>({
   id: "",
@@ -301,7 +301,7 @@ const saveJobExcept = () => {
           })
           .then((res) => {
             if (saveBtn.value === saveOver.value) {
-              uni.switchTab({ url: "/pages/shouyeyemian/shouyeyemian" });
+              uni.switchTab({ url: "/pages/main/shouyeyemian/shouyeyemian" });
               store.jobExpectations.push(res);
             } else {
               uni.navigateBack({
@@ -333,13 +333,13 @@ const deleteExpectation = () => {
 };
 
 const expectJob = () => {
-  uni.navigateTo({ url: "/most/zhiweileixing/zhiweileixing" });
+  uni.navigateTo({ url: "/pages/most/zhiweileixing/zhiweileixing" });
 };
 const directTag = () => {
-  uni.navigateTo({ url: "/most/xifenshaixuan/xifenshaixuan" });
+  uni.navigateTo({ url: "/pages/most/xifenshaixuan/xifenshaixuan" });
 };
 const expectCity = () => {
-  uni.navigateTo({ url: "/most/chengshixuanze/chengshixuanze" });
+  uni.navigateTo({ url: "/pages/most/chengshixuanze/chengshixuanze" });
 };
 </script>
 

@@ -16,7 +16,10 @@ export class JobExpectationService {
     private readonly jobExpectationRepository: Repository<JobExpectation>
   ) {}
 
-  async create(applicantId: string, createJobExpectationDto: CreateJobExpectationDto) {
+  async create(
+    applicantId: string,
+    createJobExpectationDto: CreateJobExpectationDto
+  ) {
     return await this.jobExpectationRepository.save({
       ...createJobExpectationDto,
       applicantId,
@@ -33,7 +36,7 @@ export class JobExpectationService {
         where: query.map((q) => ({ ...q, applicantId })),
       }),
       items: await this.jobExpectationRepository.find({
-        where: { ...query, applicantId },
+        where: query.map((q) => ({ ...q, applicantId })),
         skip: page * size,
         take: size,
         order: sort,
@@ -49,9 +52,16 @@ export class JobExpectationService {
     return jobExpectation;
   }
 
-  async update(applicantId: string, id: string, updateJobExpectationDto: UpdateJobExpectationDto) {
+  async update(
+    applicantId: string,
+    id: string,
+    updateJobExpectationDto: UpdateJobExpectationDto
+  ) {
     const jobExpectation = { ...updateJobExpectationDto, applicantId, id };
-    const { affected } = await this.jobExpectationRepository.update(id, jobExpectation);
+    const { affected } = await this.jobExpectationRepository.update(
+      id,
+      jobExpectation
+    );
     if (!affected) throw new NotFoundException();
     return jobExpectation;
   }

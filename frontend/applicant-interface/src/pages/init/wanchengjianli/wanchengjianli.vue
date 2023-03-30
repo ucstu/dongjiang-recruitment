@@ -12,7 +12,7 @@
 
 <script lang="ts" setup>
 const viewOnClick = () => {
-  uni.navigateTo({ url: "/init/wanshangerenxinxi/wanshangerenxinxi" });
+  uni.navigateTo({ url: "/pages/init/wanshangerenxinxi/wanshangerenxinxi" });
 };
 </script>
 

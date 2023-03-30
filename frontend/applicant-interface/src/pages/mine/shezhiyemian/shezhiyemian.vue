@@ -44,44 +44,42 @@
 
 <script lang="ts" setup>
 import NavigationBar from "@/components/NavigationBar/NavigationBar.vue";
-import { useInfoStore } from "@/stores";
-import { useAuthStore } from "@/stores/auth";
+import { useMainStore } from "@/stores";
 import type { Account, Applicant } from "@dongjiang-recruitment/service-common";
 
-const authStore = useAuthStore();
-const infoStore = useInfoStore();
+const mainStore = useMainStore();
 
 // 我的账户
 const toMyAccount = () => {
-  uni.navigateTo({ url: "/setting/wodezhanghu/wodezhanghu" });
+  uni.navigateTo({ url: "/pages/setting/wodezhanghu/wodezhanghu" });
 };
 // 设置密码
 const toPassWord = () => {
-  uni.navigateTo({ url: "/setting/shezhimima/shezhimima" });
+  uni.navigateTo({ url: "/pages/setting/shezhimima/shezhimima" });
 };
 const toNotice = () => {
-  uni.navigateTo({ url: "/setting/tongzhishezhi/tongzhishezhi" });
+  uni.navigateTo({ url: "/pages/setting/tongzhishezhi/tongzhishezhi" });
 };
 // 用户协议
 const toUserAgreement = () => {
-  uni.navigateTo({ url: "/setting/yonghuxieyi/yonghuxieyi" });
+  uni.navigateTo({ url: "/pages/setting/yonghuxieyi/yonghuxieyi" });
 };
 // 隐私设置
 const toPrivacyPolicy = () => {
-  uni.navigateTo({ url: "/setting/yinsicelve/yinsicelve" });
+  uni.navigateTo({ url: "/pages/setting/yinsicelve/yinsicelve" });
 };
 // 版本更新
 const toVersion = () => {
-  uni.navigateTo({ url: "/setting/banbengengxin/banbengengxin" });
+  uni.navigateTo({ url: "/pages/setting/banbengengxin/banbengengxin" });
 };
 // 退出当前账号
 const exitAccount = () => {
   // 清除存储中的数据。
-  infoStore.jobExpectations = [];
-  authStore.token = null as unknown as string;
-  infoStore.applicant = null as unknown as Applicant;
-  authStore.account = null as unknown as Account;
-  uni.navigateTo({ url: "/account/denglu_zhuce/denglu" });
+  mainStore.jobExpectations = [];
+  mainStore.token = null as unknown as string;
+  mainStore.applicant = null as unknown as Applicant;
+  mainStore.account = null as unknown as Account;
+  uni.navigateTo({ url: "/pages/account/denglu_zhuce/denglu" });
 };
 </script>
 

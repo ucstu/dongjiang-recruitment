@@ -36,7 +36,7 @@ export class ProjectExperienceService {
         where: query.map((q) => ({ ...q, applicantId })),
       }),
       items: await this.projectExperienceRepository.find({
-        where: { ...query, applicantId },
+        where: query.map((q) => ({ ...q, applicantId })),
         skip: page * size,
         take: size,
         order: sort,

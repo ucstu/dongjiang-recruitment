@@ -72,10 +72,10 @@
 <script lang="ts" setup>
 import NavigationBar from "@/components/NavigationBar/NavigationBar.vue";
 import wybPopup from "@/components/wyb-popup/wyb-popup.vue";
-import { useInfoStore } from "@/stores";
+import { useMainStore } from "@/stores";
 import type { JobExpectation } from "@dongjiang-recruitment/service-common";
 
-const store = useInfoStore();
+const store = useMainStore();
 
 const jobExpectations = ref<JobExpectation[]>([]);
 const entryTime = ref("请选择");
@@ -105,11 +105,11 @@ const jobExpectationClick = (index: number) => {
   const jobId = jobExpectations.value[index].id;
   if (jobExpectations.value.length === 1) {
     uni.navigateTo({
-      url: "/info/qiuzhiqiwang/qiuzhiqiwang?id=" + jobId + "&type=" + 1,
+      url: "/pages/info/qiuzhiqiwang/qiuzhiqiwang?id=" + jobId + "&type=" + 1,
     });
   } else {
     uni.navigateTo({
-      url: `/info/qiuzhiqiwang/qiuzhiqiwang?id=` + jobId + `&data=` + 1,
+      url: `/pages/info/qiuzhiqiwang/qiuzhiqiwang?id=` + jobId + `&data=` + 1,
     });
   }
 };
@@ -123,7 +123,7 @@ const addExcept = () => {
       duration: 1500,
     });
   } else {
-    uni.navigateTo({ url: `/info/qiuzhiqiwang/qiuzhiqiwang?data=` + 1 });
+    uni.navigateTo({ url: `/pages/info/qiuzhiqiwang/qiuzhiqiwang?data=` + 1 });
   }
 };
 

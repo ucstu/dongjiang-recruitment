@@ -16,7 +16,10 @@ export class InspectionRecordService {
     private readonly inspectionRecordRepository: Repository<InspectionRecord>
   ) {}
 
-  async create(applicantId: string, createInspectionRecordDto: CreateInspectionRecordDto) {
+  async create(
+    applicantId: string,
+    createInspectionRecordDto: CreateInspectionRecordDto
+  ) {
     return await this.inspectionRecordRepository.save({
       ...createInspectionRecordDto,
       applicantId,
@@ -33,7 +36,7 @@ export class InspectionRecordService {
         where: query.map((q) => ({ ...q, applicantId })),
       }),
       items: await this.inspectionRecordRepository.find({
-        where: { ...query, applicantId },
+        where: query.map((q) => ({ ...q, applicantId })),
         skip: page * size,
         take: size,
         order: sort,
@@ -49,9 +52,16 @@ export class InspectionRecordService {
     return inspectionRecord;
   }
 
-  async update(applicantId: string, id: string, updateInspectionRecordDto: UpdateInspectionRecordDto) {
+  async update(
+    applicantId: string,
+    id: string,
+    updateInspectionRecordDto: UpdateInspectionRecordDto
+  ) {
     const inspectionRecord = { ...updateInspectionRecordDto, applicantId, id };
-    const { affected } = await this.inspectionRecordRepository.update(id, inspectionRecord);
+    const { affected } = await this.inspectionRecordRepository.update(
+      id,
+      inspectionRecord
+    );
     if (!affected) throw new NotFoundException();
     return inspectionRecord;
   }

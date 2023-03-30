@@ -64,9 +64,9 @@
 </template>
 
 <script lang="ts" setup>
-import { useInfoStore } from "@/stores";
+import { useMainStore } from "@/stores";
 
-const store = useInfoStore();
+const store = useMainStore();
 
 /* #ifdef MP-WEIXIN || MP-ALIPAY || MP-BAIDU || MP-TOUTIAO || MP-QQ */
 // 获取小程序胶囊高度等
@@ -91,13 +91,13 @@ const props = defineProps({
 const _searchContent = ref(props.searchContent);
 
 const textOnClick = () => {
-  uni.navigateTo({ url: "/most/chengshixuanze/chengshixuanze" });
+  uni.navigateTo({ url: "/pages/most/chengshixuanze/chengshixuanze" });
 };
 const searchOnClick = () => {
   if (_searchContent.value !== "") {
     uni.navigateTo({
       url:
-        "/detail/xiangguanzhiwei/xiangguanzhiwei?searchContent=" +
+        "/pages/detail/xiangguanzhiwei/xiangguanzhiwei?searchContent=" +
         _searchContent.value +
         "&city=" +
         props.city,
@@ -112,7 +112,7 @@ const searchOnClick = () => {
 };
 // 当用户单击“取消”按钮时将调用的函数。
 const text_1OnClick = () => {
-  uni.switchTab({ url: "/pages/shouyeyemian/shouyeyemian" });
+  uni.switchTab({ url: "/pages/main/shouyeyemian/shouyeyemian" });
 };
 </script>
 

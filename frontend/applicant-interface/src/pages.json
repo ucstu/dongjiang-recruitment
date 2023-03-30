@@ -5,15 +5,6 @@
       "^(?!z-paging-refresh|z-paging-load-more)z-paging(.*)": "z-paging/components/z-paging$1/z-paging$1.vue"
     }
   },
-  "condition": {
-    "current": 0,
-    "list": [
-      {
-        "name": "测试页面",
-        "path": "info/gerenxinxi/gerenxinxi"
-      }
-    ]
-  },
   "pages": [
     {
       "path": "pages/main/shouyeyemian/shouyeyemian",

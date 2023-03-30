@@ -51,11 +51,11 @@
 
 <script lang="ts" setup>
 import NavigationBar from "@/components/NavigationBar/NavigationBar.vue";
-import { useInfoStore } from "@/stores";
+import { useMainStore } from "@/stores";
 import { Applicant } from "@dongjiang-recruitment/service-common";
 const VITE_CDN_URL = import.meta.env.VITE_CDN_URL;
 
-const store = useInfoStore();
+const store = useMainStore();
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 const applicant = store.applicant!;
 

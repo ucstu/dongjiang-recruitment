@@ -38,14 +38,14 @@
         <view
           >同意
           <navigator
-            url="/setting/yonghuxieyi/yonghuxieyi"
+            url="/pages/setting/yonghuxieyi/yonghuxieyi"
             open-type="navigate"
             style="display: inline-block; color: rgb(35 193 158)"
             >《东江用户协议》
           </navigator>
           和
           <navigator
-            url="/setting/yinsicelve/yinsicelve"
+            url="/pages/setting/yinsicelve/yinsicelve"
             open-type="navigate"
             style="display: inline-block; color: rgb(35 193 158)"
             >《东江登录政策》
@@ -63,37 +63,14 @@
 </template>
 
 <script lang="ts" setup>
-import { useAuthStore } from "@/stores";
+import { useMainStore } from "@/stores";
 import { throttle } from "@/utils";
 
-const authStore = useAuthStore();
+const mainStore = useMainStore();
 
 const email = ref<string>("");
 const password = ref<string>("");
 const isAgree = ref<boolean>(false);
-
-const { refreshAsync: loginAccount } = authenticationService.useLoginAccount(
-  () => ({
-    requestBody: {
-      userName: email.value,
-      password: password.value,
-    },
-  }),
-  {
-    manual: true,
-    onSuccess(data) {
-      authStore.token = data.token;
-      authStore.account = data.account;
-      if (!data.account.detailId.applicant) {
-        uni.showToast({
-          title: "xxxx",
-        });
-      } else {
-        uni.switchTab({ url: "/pages/main/shouyeyemian/shouyeyemian" });
-      }
-    },
-  }
-);
 
 // 当用户单击登录按钮时调用的函数。
 const login = async () => {
@@ -118,7 +95,8 @@ const login = async () => {
       mask: true,
     });
   } else {
-    await loginAccount();
+    await mainStore.login(email.value, password.value);
+    uni.switchTab({ url: "/pages/main/shouyeyemian/shouyeyemian" });
   }
 };
 

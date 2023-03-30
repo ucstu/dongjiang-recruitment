@@ -17,11 +17,11 @@
 
 <script lang="ts" setup>
 import JobDetail from "@/components/JobDetail/JobDetail.vue";
-import { useInfoStore } from "@/stores";
+import { useMainStore } from "@/stores";
 import type { Position } from "@dongjiang-recruitment/service-common";
 import type { PropType } from "vue";
 
-const store = useInfoStore();
+const store = useMainStore();
 const messageKey = ref("");
 
 const props = defineProps({
@@ -49,7 +49,7 @@ const view_4OnClick = () => {
   const positionId = props.collectionPosition?.id;
   uni.navigateTo({
     url:
-      "/detail/zhiweixiangqing/zhiweixiangqing?companyId=" +
+      "/pages/detail/zhiweixiangqing/zhiweixiangqing?companyId=" +
       companyId +
       "&positionId=" +
       positionId,
@@ -58,7 +58,7 @@ const view_4OnClick = () => {
 const view_11OnClick = () => {
   uni.navigateTo({
     url:
-      "/mine/liaotianyemian/liaotianyemian?Id=" +
+      "/pages/mine/liaotianyemian/liaotianyemian?Id=" +
       props.collectionPosition?.personnelId +
       "&key=" +
       messageKey.value,

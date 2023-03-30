@@ -56,7 +56,7 @@
 
 <script lang="ts" setup>
 import MailBar from "@/components/MailBar/MailBar.vue";
-import { useInfoStore } from "@/stores";
+import { useMainStore } from "@/stores";
 import usetimeChange from "@/utils/useTimeChange";
 import type {
   DeliveryRecord,
@@ -64,7 +64,7 @@ import type {
 } from "@dongjiang-recruitment/service-common";
 
 const hrInfo = ref<Personnel[]>([]);
-const store = useInfoStore();
+const store = useMainStore();
 const mes = ref<Map<string, string>>(new Map());
 const time = ref<Map<string, string>>(new Map());
 const isRead = ref<Map<string, boolean>>(new Map());
@@ -145,14 +145,14 @@ const toMyDelivery = () => {
     });
   let item = encodeURIComponent(JSON.stringify(deliveryRecords));
   uni.navigateTo({
-    url: "/record/toudijilu/toudijilu?deliveryRecords=" + item,
+    url: "/pages/record/toudijilu/toudijilu?deliveryRecords=" + item,
   });
 };
 const toBeViewed = () => {
-  uni.navigateTo({ url: "/record/shuikanguowo/shuikanguowo" });
+  uni.navigateTo({ url: "/pages/record/shuikanguowo/shuikanguowo" });
 };
 const toFootprint = () => {
-  uni.navigateTo({ url: "/record/wodechakan/wodechakan" });
+  uni.navigateTo({ url: "/pages/record/wodechakan/wodechakan" });
 };
 </script>
 

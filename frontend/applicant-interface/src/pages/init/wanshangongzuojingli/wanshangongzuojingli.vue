@@ -136,10 +136,10 @@
 <script lang="ts" setup>
 import NavigationBar from "@/components/NavigationBar/NavigationBar.vue";
 import wybPopup from "@/components/wyb-popup/wyb-popup.vue";
-import { useInfoStore } from "@/stores";
+import { useMainStore } from "@/stores";
 import type { Company } from "@dongjiang-recruitment/service-common";
 
-const store = useInfoStore();
+const store = useMainStore();
 
 const companyName = ref<Company["companyName"]>("");
 const companyType = ref<Company["comprehensionName"]>("");
@@ -230,13 +230,15 @@ const nextClick = () => {
         },
       })
       .then(() => {
-        uni.navigateTo({ url: `/info/qiuzhiqiwang/qiuzhiqiwang?data=` + 0 });
+        uni.navigateTo({
+          url: `/pages/info/qiuzhiqiwang/qiuzhiqiwang?data=` + 0,
+        });
       });
   }
 };
 
 const skip = () => {
-  uni.navigateTo({ url: "/info/qiuzhiqiwang/qiuzhiqiwang?data=" + 0 });
+  uni.navigateTo({ url: "/pages/info/qiuzhiqiwang/qiuzhiqiwang?data=" + 0 });
 };
 </script>
 

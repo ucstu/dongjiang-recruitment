@@ -153,9 +153,9 @@
 <script lang="ts" setup>
 import NavigationBar from "@/components/NavigationBar/NavigationBar.vue";
 import WybPopup from "@/components/wyb-popup/wyb-popup.vue";
-import { useInfoStore } from "@/stores";
+import { useMainStore } from "@/stores";
 import type { EducationExperience } from "@dongjiang-recruitment/service-common";
-const store = useInfoStore();
+const store = useMainStore();
 
 const schoolName = ref(""); // 学校名称
 const education = ref<1 | 2 | 3 | 4>(0 as 1); // 学历

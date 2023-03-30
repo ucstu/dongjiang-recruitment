@@ -147,11 +147,11 @@
 <script lang="ts" setup>
 import NavigationBar from "@/components/NavigationBar/NavigationBar.vue";
 import wybPopup from "@/components/wyb-popup/wyb-popup.vue";
-import { useInfoStore } from "@/stores";
+import { useMainStore } from "@/stores";
 import type { Company, Position } from "@dongjiang-recruitment/service-common";
 
 const VITE_CDN_URL = import.meta.env.VITE_CDN_URL;
-const store = useInfoStore();
+const store = useMainStore();
 
 const jobInformation = ref<Position>({} as Position); // 职位信息
 
@@ -225,7 +225,8 @@ onLoad((e) => {
 const toCompanyIn = () => {
   companyId.value = companyInformation.value.id;
   uni.navigateTo({
-    url: "/detail/gongsijieshao/gongsijieshao?companyId=" + companyId.value,
+    url:
+      "/pages/detail/gongsijieshao/gongsijieshao?companyId=" + companyId.value,
   });
 };
 const popup = ref();
@@ -296,7 +297,11 @@ const communication = (i: string) => {
     }
   }
   uni.navigateTo({
-    url: "/mine/liaotianyemian/liaotianyemian?Id=" + i + "&key=" + messageKey,
+    url:
+      "/pages/mine/liaotianyemian/liaotianyemian?Id=" +
+      i +
+      "&key=" +
+      messageKey,
   });
 };
 // 投递简历
@@ -326,7 +331,7 @@ const send = () => {
 };
 
 const viewResume = () => {
-  uni.navigateTo({ url: "/info/viewresume/viewresume" });
+  uni.navigateTo({ url: "/pages/info/viewresume/viewresume" });
 };
 </script>
 

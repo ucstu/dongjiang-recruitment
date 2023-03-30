@@ -19,7 +19,6 @@
 </template>
 
 <script lang="ts" setup>
-
 const name = ref("前段工程师");
 const salary = ref("8K-9K");
 const direction = ref("React");
@@ -27,7 +26,7 @@ const city = ref("重庆");
 const entryTime = ref("1个月内入职");
 
 const rootViewOnClick = () => {
-  uni.navigateTo({ url: "/info/qiuzhiqiwang/qiuzhiqiwang" });
+  uni.navigateTo({ url: "/pages/info/qiuzhiqiwang/qiuzhiqiwang" });
 };
 </script>
 
