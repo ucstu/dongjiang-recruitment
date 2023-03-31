@@ -49,7 +49,9 @@ export class Company {
   /**
    * 扩展
    */
-  @Column()
+  @Column({
+    nullable: true,
+  })
   about: string;
   /**
    * 详细地址
@@ -79,7 +81,9 @@ export class Company {
   /**
    * 成立时间
    */
-  @Column()
+  @Column({
+    nullable: true,
+  })
   establishmentTime: Date;
   /**
    * 融资阶段，{1:未融资,2:天使轮,3:A轮,4:B轮,5:C轮,6:D轮及以上,7:上市公司,8:不需要融资}
@@ -94,7 +98,9 @@ export class Company {
   /**
    * 法定代表人
    */
-  @Column()
+  @Column({
+    nullable: true,
+  })
   legalRepresentative: string;
   /**
    * 公司地点
@@ -104,22 +110,30 @@ export class Company {
   /**
    * LOGO地址
    */
-  @Column()
+  @Column({
+    nullable: true,
+  })
   logoUrl: string;
   /**
    * 机构类型
    */
-  @Column()
+  @Column({
+    nullable: true,
+  })
   organizationType: string;
   /**
    * 在招职位
    */
-  @Column()
+  @Column({
+    nullable: true,
+  })
   recruitmentPosition: number;
   /**
    * 注册资本
    */
-  @Column()
+  @Column({
+    nullable: true,
+  })
   registeredCapital: string;
   /**
    * 公司规模，{1:少于15人,2:15-50人,3:50-150人,4:150-500人,5:500-2000人,6:2000以上}

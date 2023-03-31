@@ -1,3 +1,4 @@
+import concurrently from "concurrently";
 import httpProxy from "http-proxy";
 import { readFileSync, watchFile } from "node:fs";
 import http from "node:http";
@@ -22,6 +23,20 @@ type Services = Array<{
 let services = JSON.parse(
   readFileSync(resolve(process.cwd(), "services.json")).toString()
 ) as Services;
+
+services.filter(({ current }) => current === "local").length &&
+  concurrently(
+    services
+      .filter(({ current }) => current === "local")
+      .map(({ name }) => ({
+        name,
+        command: `"pnpm run --filter '@dongjiang-recruitment/${name}' start:dev"`,
+      })),
+    {
+      group: true,
+      cwd: process.cwd(),
+    }
+  );
 
 watchFile(resolve(process.cwd(), "services.json"), () => {
   console.log("\x1b[34m%s\x1b[0m", "services.json changed");

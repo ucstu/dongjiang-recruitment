@@ -11,7 +11,7 @@
       >
         <el-form-item label="验证码">
           <el-input
-            v-model.number="ruleForm.verificationCode"
+            v-model="ruleForm.verificationCode"
             placeholder="输入验证码"
           >
             <template #append>
@@ -35,7 +35,11 @@
 <script setup lang="ts">
 import router from "@/router";
 import { useMainStore } from "@/stores/main";
-import type { Account, Company, Personnel } from "@dongjiang-recruitment/service-common";
+import type {
+  Account,
+  Company,
+  Personnel,
+} from "@dongjiang-recruitment/service-common";
 import type { FormInstance } from "element-plus";
 import { ElMessage } from "element-plus";
 const ruleFormRef = ref<FormInstance>();
@@ -50,12 +54,13 @@ const ruleForm = reactive({
 });
 //发送验证码
 const postverificationCode = () => {
-  commonService.sendVerificationCode({
-    email: store.hrInformation.acceptEmail,
-  })
+  commonService
+    .sendVerificationCode({
+      email: store.hrInformation.acceptEmail,
+    })
     .then(() => {
       ElMessage.success("发送成功");
-    })
+    });
   btn.value = true;
   let time = 60;
   const timer = setInterval(() => {
@@ -72,10 +77,11 @@ const deleteForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   formEl.validate((valid) => {
     if (valid) {
-      authenticationService.destroyAccount({
-        id: store.accountInformation.id,
-        verificationCode: ruleForm.verificationCode,
-      })
+      authenticationService
+        .destroyAccount({
+          id: store.accountInformation.id,
+          verificationCode: ruleForm.verificationCode,
+        })
         .then(() => {
           store.jsonWebToken = null as unknown as string;
           store.hrInformation = null as unknown as Personnel;
@@ -83,7 +89,7 @@ const deleteForm = (formEl: FormInstance | undefined) => {
           store.companyInformation = null as unknown as Company;
           ElMessage.success("注销成功");
           router.push("/");
-        })
+        });
     } else {
       return false;
     }

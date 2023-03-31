@@ -67,6 +67,9 @@ export class Account {
    */
   @ManyToMany(() => AuthorityGroup, {
     eager: true,
+    cascade: true,
+    onDelete: "CASCADE",
+    onUpdate: "CASCADE",
   })
   @JoinTable()
   groups: AuthorityGroup[];

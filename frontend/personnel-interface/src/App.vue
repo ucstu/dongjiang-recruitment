@@ -31,11 +31,17 @@ axios.interceptors.response.use(
           mainStore.accountInformation = null as unknown as Account;
           mainStore.companyInformation = null as unknown as Company;
           void router.replace("/Login");
+          ElMessage.error("登录已过期，请重新登录");
+          break;
+        case 500:
+          ElMessage.error(
+            `服务器错误: ${(error.response.data as { error: string }).error}`
+          );
           break;
         default:
+          ElMessage.error((error.response.data as { error: string }).error);
           break;
       }
-      ElMessage.error((error.response.data as { error: string }).error);
     }
     return Promise.reject(error);
   }

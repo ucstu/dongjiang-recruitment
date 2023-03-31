@@ -28,7 +28,7 @@
         </el-form-item>
         <el-form-item label="验证码">
           <el-input
-            v-model.number="ruleForm.verificationCode"
+            v-model="ruleForm.verificationCode"
             placeholder="输入验证码"
           >
             <template #append>

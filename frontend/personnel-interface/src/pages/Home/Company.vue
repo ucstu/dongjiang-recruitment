@@ -472,27 +472,28 @@ const confirmCompany = (formEl: FormInstance | undefined) => {
   formEl.validate((valid) => {
     if (valid) {
       formCompany.value.fullName = route.params.companyName.toString();
-      companyService
-        .updateCompany({
-          id: formCompany.value.id,
-          requestBody: formCompany.value,
-        })
-        .then((res) => {
-          let hrInformation = store.hrInformation;
-          hrInformation.companyId = res.id;
-          personnelService
-            .updatePersonnel({
-              id: hrInformation.id,
-              requestBody: hrInformation,
-            })
-            .then((response) => {
-              store.hrInformation = response;
-              store.companyInformation = res;
-              ElMessage.success("恭喜您，公司创建成功,将前往信息认证");
-              dialogFormVisible.value = false;
-              router.replace({ name: "Execution" });
-            });
-        });
+      const method = formCompany.value.id
+        ? companyService.updateCompany.bind(commonService)
+        : companyService.addCompany.bind(commonService);
+      method({
+        id: formCompany.value.id,
+        requestBody: formCompany.value,
+      }).then((res) => {
+        let hrInformation = store.hrInformation;
+        hrInformation.companyId = res.id;
+        personnelService
+          .updatePersonnel({
+            id: hrInformation.id,
+            requestBody: hrInformation,
+          })
+          .then((response) => {
+            store.hrInformation = response;
+            store.companyInformation = res;
+            ElMessage.success("恭喜您，公司创建成功,将前往信息认证");
+            dialogFormVisible.value = false;
+            router.replace({ name: "Execution" });
+          });
+      });
     }
   });
 };
