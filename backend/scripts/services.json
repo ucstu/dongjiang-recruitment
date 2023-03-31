@@ -32,7 +32,7 @@
   {
     "name": "authentication-service",
     "prefix": "/authentication",
-    "current": "local",
+    "current": "remote",
     "local": {
       "host": "localhost",
       "protocol": "http",
@@ -47,7 +47,7 @@
   {
     "name": "common-service",
     "prefix": "/common",
-    "current": "remote",
+    "current": "local",
     "local": {
       "host": "localhost",
       "protocol": "http",
@@ -62,7 +62,7 @@
   {
     "name": "company-service",
     "prefix": "/companies",
-    "current": "local",
+    "current": "remote",
     "local": {
       "host": "localhost",
       "protocol": "http",

@@ -1,3 +1,7 @@
+import {
+  ConfigType,
+  minioConfig as _minioConfig,
+} from "@dongjiang-recruitment/nest-common/dist/config";
 import type {
   Areas,
   Cities,
@@ -6,17 +10,25 @@ import type {
   PositionTypes,
 } from "@dongjiang-recruitment/nest-common/dist/http";
 import { MailerService } from "@dongjiang-recruitment/nest-common/dist/mailer";
+import { MinioService } from "@dongjiang-recruitment/nest-common/dist/minio";
 import {
   Redis,
   RedisService,
 } from "@dongjiang-recruitment/nest-common/dist/redis";
-import { Injectable, InternalServerErrorException } from "@nestjs/common";
+import {
+  Inject,
+  Injectable,
+  InternalServerErrorException,
+} from "@nestjs/common";
 
 @Injectable()
 export class CommonService {
   private readonly redis: Redis;
 
   constructor(
+    private readonly minio: MinioService,
+    @Inject(_minioConfig.KEY)
+    private readonly minioConfig: ConfigType<typeof _minioConfig>,
     private readonly mailerService: MailerService,
     private readonly redisService: RedisService
   ) {
@@ -607,5 +619,27 @@ export class CommonService {
 
   getNewVersion() {
     return "1.0.0";
+  }
+
+  async uploadFile(file: Express.Multer.File) {
+    const fileNme = `${Date.now()}-${file.originalname}`;
+    await this.minio.client.putObject(
+      `${this.minioConfig.bucket}-files`,
+      fileNme,
+      file.buffer,
+      file.size
+    );
+    return `/${this.minioConfig.bucket}-files/${fileNme}`;
+  }
+
+  async uploadAvatar(avatar: Express.Multer.File) {
+    const avatarNme = `${Date.now()}-${avatar.originalname}`;
+    await this.minio.client.putObject(
+      `${this.minioConfig.bucket}-avatars`,
+      avatarNme,
+      avatar.buffer,
+      avatar.size
+    );
+    return `/${this.minioConfig.bucket}-avatars/${avatarNme}`;
   }
 }

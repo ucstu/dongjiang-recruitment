@@ -3,6 +3,7 @@ import { ConfigModule as _ConfigModule } from "@nestjs/config";
 import authorizationConfig from "./authorization.config";
 import databaseConfig from "./database.config";
 import mailerConfig from "./mailer.config";
+import minioConfig from "./minio.config";
 import redisConfig from "./redis.config";
 import serviceConfig from "./service.config";
 
@@ -13,6 +14,7 @@ import serviceConfig from "./service.config";
         databaseConfig,
         authorizationConfig,
         mailerConfig,
+        minioConfig,
         redisConfig,
         serviceConfig,
       ],
@@ -28,5 +30,6 @@ export { default as authorizationConfig } from "./authorization.config";
 export * from "./configuration.yaml";
 export { default as databaseConfig } from "./database.config";
 export { default as mailerConfig } from "./mailer.config";
+export { default as minioConfig } from "./minio.config";
 export { default as redisConfig } from "./redis.config";
 export { default as serviceConfig } from "./service.config";

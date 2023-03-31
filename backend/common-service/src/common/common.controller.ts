@@ -6,7 +6,15 @@ import type {
   FilterCriteria,
   PositionTypes,
 } from "@dongjiang-recruitment/nest-common/dist/http";
-import { Controller, Get, Query } from "@nestjs/common";
+import {
+  Controller,
+  Get,
+  Post,
+  Query,
+  UploadedFile,
+  UseInterceptors,
+} from "@nestjs/common";
+import { FileInterceptor } from "@nestjs/platform-express";
 import { CommonService } from "./common.service";
 
 @Public()
@@ -47,5 +55,17 @@ export class CommonController {
   @Get("newVersion")
   getNewVersion() {
     return this.commonService.getNewVersion();
+  }
+
+  @Post("files")
+  @UseInterceptors(FileInterceptor("file"))
+  uploadFile(@UploadedFile() file: Express.Multer.File) {
+    return this.commonService.uploadFile(file);
+  }
+
+  @Post("avatars")
+  @UseInterceptors(FileInterceptor("avatar"))
+  uploadAvatar(@UploadedFile() avatar: Express.Multer.File) {
+    return this.commonService.uploadAvatar(avatar);
   }
 }
