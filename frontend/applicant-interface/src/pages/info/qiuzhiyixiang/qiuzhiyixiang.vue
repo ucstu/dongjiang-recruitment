@@ -8,10 +8,10 @@
     </view>
     <view class="job-expectation">
       <view
-        v-for="(jobExpectation, i) in jobExpectations"
-        :key="i"
+        v-for="jobExpectation in mainStore.jobExpectations?.items || []"
+        :key="jobExpectation.id"
         class="justify-between items-center job-expects"
-        @click="jobExpectationClick(i)"
+        @click="jobExpectationClick(jobExpectation.id)"
       >
         <view>
           <text class="job-name">{{ jobExpectation.positionName }}</text>
@@ -73,50 +73,27 @@
 import NavigationBar from "@/components/NavigationBar/NavigationBar.vue";
 import wybPopup from "@/components/wyb-popup/wyb-popup.vue";
 import { useMainStore } from "@/stores";
-import type { JobExpectation } from "@dongjiang-recruitment/service-common";
 
-const store = useMainStore();
+const mainStore = useMainStore();
 
-const jobExpectations = ref<JobExpectation[]>([]);
 const entryTime = ref("请选择");
 const entryTimes = ["请选择", "随时入职", "2周内入职", "一个月内入职"];
-const definedValue = ref([store.applicant!.jobStatus]);
+const definedValue = ref([mainStore.applicant?.jobStatus || 0]);
 
-onLoad(() => {
-  if (store.applicant!.jobStatus !== null) {
-    entryTime.value = entryTimes[store.applicant!.jobStatus];
-  }
-});
-
-// 一个生命周期钩子。页面显示时调用。
-onShow(() => {
-  applicantJobExpectationService
-    .queryJobExpectation({
-      applicantId: store.applicant!.id,
-    })
-    .then((res) => {
-      jobExpectations.value = res.items;
-      store.jobExpectations = res.items;
-    });
-});
+if (mainStore.applicant?.jobStatus) {
+  entryTime.value = entryTimes[mainStore.applicant?.jobStatus];
+}
 
 /* 查看、修改、删除求职期望 */
-const jobExpectationClick = (index: number) => {
-  const jobId = jobExpectations.value[index].id;
-  if (jobExpectations.value.length === 1) {
-    uni.navigateTo({
-      url: "/pages/info/qiuzhiqiwang/qiuzhiqiwang?id=" + jobId + "&type=" + 1,
-    });
-  } else {
-    uni.navigateTo({
-      url: `/pages/info/qiuzhiqiwang/qiuzhiqiwang?id=` + jobId + `&data=` + 1,
-    });
-  }
+const jobExpectationClick = (id: string) => {
+  uni.navigateTo({
+    url: "/pages/info/qiuzhiqiwang/qiuzhiqiwang?id=" + id + "&type=" + 1,
+  });
 };
 
 /* 添加求职期望 */
 const addExcept = () => {
-  if (jobExpectations.value.length >= 3) {
+  if ((mainStore.jobExpectations?.items.length || 0) >= 3) {
     uni.showToast({
       title: "最多只能添加3个求职期望",
       icon: "none",
@@ -127,24 +104,24 @@ const addExcept = () => {
   }
 };
 
-const popup = ref();
+const popup = ref<InstanceType<typeof wybPopup>>();
 const jobStatus = () => {
-  popup.value.show();
+  popup.value?.show();
 };
 // 当用户更改选取器的值时调用的函数。
 const entryChange = (e: { detail: { value: number[] } }) => {
   entryTime.value = entryTimes[e.detail.value[0]];
-  store.applicant!.jobStatus = e.detail.value[0] as 1 | 2 | 3;
+  mainStore.applicant!.jobStatus = e.detail.value[0] as 1 | 2 | 3;
   definedValue.value = [e.detail.value[0] as 1 | 2 | 3];
   applicantService
     .updateApplicant({
-      id: store.applicant!.id,
-      requestBody: store.applicant!,
+      id: mainStore.applicant!.id,
+      requestBody: mainStore.applicant!,
     })
     .then((res) => {
-      store.applicant = res;
+      mainStore.applicant = res;
     });
-  popup.value.hide();
+  popup.value?.hide();
 };
 </script>
 

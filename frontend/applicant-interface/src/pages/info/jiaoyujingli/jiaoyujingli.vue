@@ -153,9 +153,10 @@
 <script lang="ts" setup>
 import NavigationBar from "@/components/NavigationBar/NavigationBar.vue";
 import WybPopup from "@/components/wyb-popup/wyb-popup.vue";
+import { until } from "@/hooks";
 import { useMainStore } from "@/stores";
 import type { EducationExperience } from "@dongjiang-recruitment/service-common";
-const store = useMainStore();
+const mainStore = useMainStore();
 
 const schoolName = ref(""); // 学校名称
 const education = ref<1 | 2 | 3 | 4>(0 as 1); // 学历
@@ -226,20 +227,25 @@ onLoad((e) => {
   educateId.value = e!.educateId;
   deleteEd.value = e!.deleteEducate;
   // 查询教育经历
-  if (educateId.value !== undefined) {
-    applicantEducationExperienceService
-      .getEducationExperience({
-        applicantId: store.applicant!.id,
-        id: educateId.value,
-      })
-      .then((res) => {
-        schoolName.value = res.schoolName;
-        education.value = res.education as 1 | 2 | 3 | 4;
-        subject.value = res.majorName;
-        startTime.value = res.admissionTime;
-        overTime.value = res.graduationTime;
-      });
-  }
+  until(
+    computed(() => !!mainStore.applicant?.id),
+    () => {
+      if (educateId.value !== undefined) {
+        applicantEducationExperienceService
+          .getEducationExperience({
+            applicantId: mainStore.applicant!.id,
+            id: educateId.value,
+          })
+          .then((res) => {
+            schoolName.value = res.schoolName;
+            education.value = res.education as 1 | 2 | 3 | 4;
+            subject.value = res.majorName;
+            startTime.value = res.admissionTime;
+            overTime.value = res.graduationTime;
+          });
+      }
+    }
+  );
 });
 // 增加、修改教育经历
 const saveEducation = () => {
@@ -260,7 +266,7 @@ const saveEducation = () => {
       //修改教育经历
       applicantEducationExperienceService
         .updateEducationExperience({
-          applicantId: store.applicant!.id,
+          applicantId: mainStore.applicant!.id,
           id: educateId.value,
           requestBody: {
             schoolName: schoolName.value,
@@ -277,7 +283,7 @@ const saveEducation = () => {
     } else {
       applicantEducationExperienceService
         .addEducationExperience({
-          applicantId: store.applicant!.id,
+          applicantId: mainStore.applicant!.id,
           requestBody: {
             schoolName: schoolName.value,
             education: education.value,
@@ -302,7 +308,7 @@ const deleteEducation = () => {
       if (res.confirm) {
         applicantEducationExperienceService
           .removeEducationExperience({
-            applicantId: store.applicant!.id,
+            applicantId: mainStore.applicant!.id,
             id: educateId.value,
           })
           .then(() => {

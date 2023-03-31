@@ -142,6 +142,7 @@
 <script lang="ts" setup>
 import NavigationBar from "@/components/NavigationBar/NavigationBar.vue";
 import wybPopup from "@/components/wyb-popup/wyb-popup.vue";
+import { until } from "@/hooks";
 import { useMainStore } from "@/stores";
 import type { Applicant } from "@dongjiang-recruitment/service-common";
 
@@ -149,7 +150,13 @@ const VITE_BASE_URL = import.meta.env.VITE_BASE_URL;
 const VITE_CDN_URL = import.meta.env.VITE_CDN_URL;
 const mainStore = useMainStore();
 
-const userInformation = ref<Applicant>({ ...mainStore.applicant! });
+const userInformation = ref<Applicant>({} as Applicant);
+until(
+  computed(() => !!mainStore.applicant),
+  () => {
+    userInformation.value = mainStore.applicant!;
+  }
+);
 
 const fullName = ref(""); // 姓名
 const birOrTime = ref(true);

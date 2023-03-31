@@ -155,10 +155,11 @@
 <script lang="ts" setup>
 import NavigationBar from "@/components/NavigationBar/NavigationBar.vue";
 import WybPopup from "@/components/wyb-popup/wyb-popup.vue";
+import { until } from "@/hooks";
 import { useMainStore } from "@/stores";
 import type { ProjectExperience } from "@dongjiang-recruitment/service-common";
 
-const store = useMainStore();
+const mainStore = useMainStore();
 
 const projectExperience = ref<ProjectExperience>({
   id: "",
@@ -216,16 +217,21 @@ onLoad((e) => {
   projectId.value = e!.projectId;
   deleteProject.value = e!.deleteProject;
   /*查询项目经历*/
-  if (projectId.value !== undefined) {
-    applicantProjectExperienceService
-      .getProjectExperience({
-        applicantId: store.applicant!.id,
-        projectExperienceId: projectId.value,
-      })
-      .then((res) => {
-        projectExperience.value = res as ProjectExperience;
-      });
-  }
+  until(
+    computed(() => !!mainStore.applicant?.id),
+    () => {
+      if (projectId.value !== undefined) {
+        applicantProjectExperienceService
+          .getProjectExperience({
+            applicantId: mainStore.applicant!.id,
+            projectExperienceId: projectId.value,
+          })
+          .then((res) => {
+            projectExperience.value = res as ProjectExperience;
+          });
+      }
+    }
+  );
 });
 
 // 添加、修改项目经历
@@ -254,7 +260,7 @@ const saveProjectExperience = () => {
       // 修改项目经历
       applicantProjectExperienceService
         .updateProjectExperience({
-          applicantId: store.applicant!.id,
+          applicantId: mainStore.applicant!.id,
           id: projectId.value,
           requestBody: projectExperience.value,
         })
@@ -270,7 +276,7 @@ const saveProjectExperience = () => {
       // 添加项目经历
       applicantProjectExperienceService
         .addProjectExperience({
-          applicantId: store.applicant!.id,
+          applicantId: mainStore.applicant!.id,
           requestBody: projectExperience.value,
         })
         .then(() => {
@@ -293,7 +299,7 @@ const deleteProjectExperience = () => {
       if (res.confirm) {
         applicantProjectExperienceService
           .removeProjectExperience({
-            applicantId: store.applicant!.id,
+            applicantId: mainStore.applicant!.id,
             id: projectId.value,
           })
           .then(() => {

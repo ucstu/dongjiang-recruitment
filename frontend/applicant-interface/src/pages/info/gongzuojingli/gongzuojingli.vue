@@ -208,9 +208,10 @@
 <script lang="ts" setup>
 import NavigationBar from "@/components/NavigationBar/NavigationBar.vue";
 import wybPopup from "@/components/wyb-popup/wyb-popup.vue";
+import { until } from "@/hooks";
 import { useMainStore } from "@/stores";
 import type { WorkExperience } from "@dongjiang-recruitment/service-common";
-const store = useMainStore();
+const mainStore = useMainStore();
 
 const companyName = ref(""); // 公司名称
 const companyIndustry = ref(""); // 公司行业
@@ -236,23 +237,28 @@ onLoad((e) => {
   workId.value = e!.workId; // 工作经历id
   deleteWork.value = e!.deleteWork; // 删除工作经历
   /* 查询工作经历 */
-  if (workId.value !== undefined) {
-    applicantWorkExperienceService
-      .getWorkExperience({
-        applicantId: store.applicant!.id,
-        id: workId.value,
-      })
-      .then((res) => {
-        companyName.value = res.companyName;
-        companyIndustry.value = res.companyIndustry;
-        companyStartTime.value = res.startTime;
-        companyEndTime.value = res.endTime;
-        companyPosition.value = res.positionType;
-        positionName.value = res.positionName;
-        companyDepartment.value = res.departmentName;
-        companyContent.value = res.jobContent;
-      });
-  }
+  until(
+    computed(() => !!mainStore.applicant?.id),
+    () => {
+      if (workId.value !== undefined) {
+        applicantWorkExperienceService
+          .getWorkExperience({
+            applicantId: mainStore.applicant!.id,
+            id: workId.value,
+          })
+          .then((res) => {
+            companyName.value = res.companyName;
+            companyIndustry.value = res.companyIndustry;
+            companyStartTime.value = res.startTime;
+            companyEndTime.value = res.endTime;
+            companyPosition.value = res.positionType;
+            positionName.value = res.positionName;
+            companyDepartment.value = res.departmentName;
+            companyContent.value = res.jobContent;
+          });
+      }
+    }
+  );
   /* 接收职位名*/
   uni.$on("positiontypes", (data) => {
     positionName.value = data;
@@ -314,7 +320,7 @@ const choosePosition = () => {
 const positionChange = (e: {
   detail: { value: WorkExperience["positionType"][] };
 }) => {
-  companyPosition.value = (e.detail.value[0] + 1) as 1 | 2 | 3;
+  companyPosition.value = e.detail.value[0] as 1 | 2 | 3;
   popup.value.hide();
 };
 /* 工作内容 */
@@ -359,7 +365,7 @@ const saveWorkExperience = () => {
   } else {
     applicantWorkExperienceService
       .addWorkExperience({
-        applicantId: store.applicant!.id,
+        applicantId: mainStore.applicant!.id,
         requestBody: {
           companyName: companyName.value,
           companyIndustry: companyIndustry.value,
@@ -377,6 +383,9 @@ const saveWorkExperience = () => {
           icon: "none",
           duration: 1500,
         });
+        uni.navigateBack({
+          delta: 1,
+        });
       });
   }
 };
@@ -390,7 +399,7 @@ const deleteWorkExperience = () => {
       if (res.confirm) {
         applicantWorkExperienceService
           .removeWorkExperience({
-            applicantId: store.applicant!.id,
+            applicantId: mainStore.applicant!.id,
             id: workId.value,
           })
           .then(() => {

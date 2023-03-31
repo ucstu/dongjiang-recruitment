@@ -671,6 +671,9 @@ importers:
       '@dongjiang-recruitment/service-common':
         specifier: workspace:^1.0.0
         version: link:../../packages/service-common
+      jwt-decode:
+        specifier: ^3.1.2
+        version: 3.1.2
       pinia:
         specifier: ^2.0.30
         version: 2.0.32(typescript@4.9.5)(vue@3.2.47)
@@ -5900,7 +5903,7 @@ packages:
       vite: ^4.0.0
       vue: ^3.2.25
     dependencies:
-      vite: 4.1.4(@types/node@18.13.0)(sass@1.58.3)(terser@5.16.5)
+      vite: 4.1.4(@types/node@18.13.0)
       vue: 3.2.47
     dev: false
 
@@ -12152,6 +12155,10 @@ packages:
       safe-buffer: 5.2.1
     dev: false
 
+  /jwt-decode@3.1.2:
+    resolution: {integrity: sha512-UfpWE/VZn0iP50d8cz9NrZLM9lSWhcJ+0Gt/nm4by88UL+J1SiKN8/5dkjMmbEzwL2CAe+67GsegCbIKtbp75A==}
+    dev: false
+
   /keyv@3.0.0:
     resolution: {integrity: sha512-eguHnq22OE3uVoSYG0LVWNP+4ppamWr9+zWBe1bsNcovIMy6huUJFPgy4mGwCd/rnl3vOLGW1MTlu4c57CT1xA==}
     dependencies:
@@ -17689,7 +17696,6 @@ packages:
       rollup: 3.18.0
     optionalDependencies:
       fsevents: 2.3.2
-    dev: true
 
   /vite@4.1.4(@types/node@18.13.0)(sass@1.58.3)(terser@5.16.5):
     resolution: {integrity: sha512-3knk/HsbSTKEin43zHu7jTwYWv81f8kgAL99G5NWBcA1LKvtvcVAC4JjBH1arBunO9kQka+1oGbrMKOjk4ZrBg==}

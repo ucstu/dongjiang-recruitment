@@ -19,40 +19,46 @@
 <script lang="ts" setup>
 import JobPanel from "@/components/JobPanel/JobPanel.vue";
 import NavigationBar from "@/components/NavigationBar/NavigationBar.vue";
+import { until } from "@/hooks";
 import { useMainStore } from "@/stores";
 import type {
   GarnerRecord,
   Position,
 } from "@dongjiang-recruitment/service-common";
 
-const store = useMainStore();
+const mainStore = useMainStore();
 
 const favorites = ref<GarnerRecord[]>([]);
 const favoritesPosition = ref<Position[]>([]);
 const cancelCollection = ref("取消收藏");
 const emptyShow = ref(true);
 
-// 查询收藏记录
-applicantGarnerRecordService
-  .queryGarnerRecord({
-    applicantId: store.applicant!.id,
-  })
-  .then((res) => {
-    favorites.value = res.items;
-    for (const favorite of favorites.value) {
-      companyPositionService
-        .getPosition({
-          companyId: favorite.companyId,
-          id: favorite.positionId,
-        })
-        .then((res) => {
-          favoritesPosition.value.push(res);
-          if (favoritesPosition.value.length) {
-            emptyShow.value = false;
-          }
-        });
-    }
-  });
+until(
+  computed(() => !!mainStore.applicant?.id),
+  () => {
+    // 查询收藏记录
+    applicantGarnerRecordService
+      .queryGarnerRecord({
+        applicantId: mainStore.applicant!.id,
+      })
+      .then((res) => {
+        favorites.value = res.items;
+        for (const favorite of favorites.value) {
+          companyPositionService
+            .getPosition({
+              companyId: favorite.companyId,
+              id: favorite.positionId,
+            })
+            .then((res) => {
+              favoritesPosition.value.push(res);
+              if (favoritesPosition.value.length) {
+                emptyShow.value = false;
+              }
+            });
+        }
+      });
+  }
+);
 
 onShow(() => {
   if (!favoritesPosition.value.length) {

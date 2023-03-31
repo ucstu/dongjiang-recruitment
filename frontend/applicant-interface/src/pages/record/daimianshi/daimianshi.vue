@@ -20,43 +20,49 @@
 <script lang="ts" setup>
 import JobPanel from "@/components/JobPanel/JobPanel.vue";
 import NavigationBar from "@/components/NavigationBar/NavigationBar.vue";
+import { until } from "@/hooks";
 import { useMainStore } from "@/stores";
 import type {
   DeliveryRecord,
   Position,
 } from "@dongjiang-recruitment/service-common";
 
-const store = useMainStore();
+const mainStore = useMainStore();
 
 const interviewedJobs = ref<Position[]>([]);
 const interviewed = ref<DeliveryRecord[]>([]);
 const sendType = ref("放弃面试");
 const emptyShow = ref(true);
 
-// 查询待面试信息
-applicantDeliveryRecordService
-  .queryDeliveryRecord({
-    applicantId: store.applicant!.id,
-    query: {
-      status: ["$eq", 4],
-    },
-  })
-  .then((res) => {
-    interviewed.value = res.items;
-    for (const interview of interviewed.value) {
-      companyPositionService
-        .getPosition({
-          companyId: interview.companyId,
-          id: interview.positionId,
-        })
-        .then((res) => {
-          interviewedJobs.value.push(res);
-          if (interviewedJobs.value.length) {
-            emptyShow.value = false;
-          }
-        });
-    }
-  });
+until(
+  computed(() => !!mainStore.applicant?.id),
+  () => {
+    // 查询待面试信息
+    applicantDeliveryRecordService
+      .queryDeliveryRecord({
+        applicantId: mainStore.applicant!.id,
+        query: {
+          status: ["$eq", 4],
+        },
+      })
+      .then((res) => {
+        interviewed.value = res.items;
+        for (const interview of interviewed.value) {
+          companyPositionService
+            .getPosition({
+              companyId: interview.companyId,
+              id: interview.positionId,
+            })
+            .then((res) => {
+              interviewedJobs.value.push(res);
+              if (interviewedJobs.value.length) {
+                emptyShow.value = false;
+              }
+            });
+        }
+      });
+  }
+);
 
 onShow(() => {
   if (!interviewed.value.length) {
@@ -72,7 +78,7 @@ const stateClick = (index: string) => {
     if (delivery.positionId === index) {
       applicantDeliveryRecordService
         .removeDeliveryRecord({
-          applicantId: store.applicant!.id,
+          applicantId: mainStore.applicant!.id,
           id: delivery.id,
         })
         .then(() => {

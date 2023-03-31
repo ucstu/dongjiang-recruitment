@@ -20,38 +20,45 @@
 <script lang="ts" setup>
 import CompanyPanel from "@/components/CompanyPanel/CompanyPanel.vue";
 import NavigationBar from "@/components/NavigationBar/NavigationBar.vue";
+import { until } from "@/hooks";
 import { useMainStore } from "@/stores";
 import type {
   AttentionRecord,
   Company,
 } from "@dongjiang-recruitment/service-common";
 
-const store = useMainStore();
+const mainStore = useMainStore();
 
 const attentionCompanies = ref<Company[]>([]);
 const focusCompany = ref<AttentionRecord[]>([]);
 const unfocus = ref("取消关注");
 const emptyShow = ref(true);
-// 查询关注公司记录
-applicantAttentionRecordService
-  .queryAttentionRecord({
-    applicantId: store.applicant!.id,
-  })
-  .then((res) => {
-    focusCompany.value = res.items;
-    for (const focus of focusCompany.value) {
-      companyService
-        .getCompany({
-          id: focus.companyId,
-        })
-        .then((res) => {
-          attentionCompanies.value.push(res);
-          if (attentionCompanies.value.length) {
-            emptyShow.value = false;
-          }
-        });
-    }
-  });
+
+until(
+  computed(() => !!mainStore.applicant?.id),
+  () => {
+    // 查询关注公司记录
+    applicantAttentionRecordService
+      .queryAttentionRecord({
+        applicantId: mainStore.applicant!.id,
+      })
+      .then((res) => {
+        focusCompany.value = res.items;
+        for (const focus of focusCompany.value) {
+          companyService
+            .getCompany({
+              id: focus.companyId,
+            })
+            .then((res) => {
+              attentionCompanies.value.push(res);
+              if (attentionCompanies.value.length) {
+                emptyShow.value = false;
+              }
+            });
+        }
+      });
+  }
+);
 
 onShow(() => {
   if (!attentionCompanies.value.length) {

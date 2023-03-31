@@ -81,7 +81,7 @@
 import NavigationBar from "@/components/NavigationBar/NavigationBar.vue";
 import { useMainStore } from "@/stores/main";
 
-const store = useMainStore();
+const mainStore = useMainStore();
 
 const password = ref("");
 const password2 = ref("");
@@ -104,7 +104,7 @@ const { runAsync: changePassword } = authenticationService.useChangePassword(
 
 // 获取验证码
 const getVerification = async () => {
-  await sendVerificationCode({ email: store.account!.userName });
+  await sendVerificationCode({ email: mainStore.account!.userName });
   uni.showToast({
     title: "验证码已发送",
     duration: 1500,
@@ -139,7 +139,7 @@ const savePassWord = async () => {
     });
   } else {
     await changePassword({
-      id: store.account!.id,
+      id: mainStore.account!.id,
       requestBody: {
         password: password.value,
         verificationCode: vCode.value,

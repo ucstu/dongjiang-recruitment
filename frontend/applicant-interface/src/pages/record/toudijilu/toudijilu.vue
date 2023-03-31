@@ -29,13 +29,14 @@
 <script lang="ts" setup>
 import JobPanel from "@/components/JobPanel/JobPanel.vue";
 import NavigationBar from "@/components/NavigationBar/NavigationBar.vue";
+import { until } from "@/hooks";
 import { useMainStore } from "@/stores";
 import type {
   DeliveryRecord,
   Position,
 } from "@dongjiang-recruitment/service-common";
 
-const store = useMainStore();
+const mainStore = useMainStore();
 
 const deliveryRecords = ref<Position[]>([]);
 const deliveryLength = ref<DeliveryRecord[]>([]);
@@ -43,32 +44,37 @@ const sendType = ["", "待查看", "已查看", "通过初筛", "约面试", "�
 const sendId = ref<DeliveryRecord["status"]>(1);
 const emptyShow = ref(true);
 
-/* 默认查看记录 */
-applicantDeliveryRecordService
-  .queryDeliveryRecord({
-    applicantId: store.applicant!.id,
-    query: {
-      status: ["$eq", 1],
-    },
-    size: 10,
-  })
-  .then((res) => {
-    deliveryLength.value = res.items;
-    for (const delivery of deliveryLength.value) {
-      companyPositionService
-        .getPosition({
-          companyId: delivery.companyId,
-          id: delivery.positionId,
-        })
-        .then((res) => {
-          res.companyId = delivery.companyId;
-          deliveryRecords.value.push(res);
-          if (deliveryRecords.value.length) {
-            emptyShow.value = false;
-          }
-        });
-    }
-  });
+until(
+  computed(() => !!mainStore.applicant?.id),
+  () => {
+    /* 默认查看记录 */
+    applicantDeliveryRecordService
+      .queryDeliveryRecord({
+        applicantId: mainStore.applicant!.id,
+        query: {
+          status: ["$eq", 1],
+        },
+        size: 10,
+      })
+      .then((res) => {
+        deliveryLength.value = res.items;
+        for (const delivery of deliveryLength.value) {
+          companyPositionService
+            .getPosition({
+              companyId: delivery.companyId,
+              id: delivery.positionId,
+            })
+            .then((res) => {
+              res.companyId = delivery.companyId;
+              deliveryRecords.value.push(res);
+              if (deliveryRecords.value.length) {
+                emptyShow.value = false;
+              }
+            });
+        }
+      });
+  }
+);
 
 onShow(() => {
   if (deliveryLength.value === null) {
@@ -81,7 +87,7 @@ const sendTypeId = (index: number) => {
   sendId.value = index as DeliveryRecord["status"];
   applicantDeliveryRecordService
     .queryDeliveryRecord({
-      applicantId: store.applicant!.id,
+      applicantId: mainStore.applicant!.id,
       query: {
         status: ["$eq", index],
       },
@@ -111,7 +117,7 @@ const clearRecord = () => {
   for (const delivery of deliveryLength.value) {
     applicantDeliveryRecordService
       .removeDeliveryRecord({
-        applicantId: store.applicant!.id,
+        applicantId: mainStore.applicant!.id,
         id: delivery.id,
       })
       .then((res) => {

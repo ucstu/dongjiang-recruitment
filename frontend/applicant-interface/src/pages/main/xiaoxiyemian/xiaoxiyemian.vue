@@ -64,7 +64,7 @@ import type {
 } from "@dongjiang-recruitment/service-common";
 
 const hrInfo = ref<Personnel[]>([]);
-const store = useMainStore();
+const mainStore = useMainStore();
 const mes = ref<Map<string, string>>(new Map());
 const time = ref<Map<string, string>>(new Map());
 const isRead = ref<Map<string, boolean>>(new Map());
@@ -73,9 +73,9 @@ const messageKey = ref<Map<string, string>>(new Map());
 
 onShow(() => {
   // 从store获取消息信息。
-  if (store.messages[store.applicant!.id]) {
+  if (mainStore.messages[mainStore.applicant?.id || 0]) {
     hrInfo.value = [];
-    for (const key in store.messages[store.applicant!.id]) {
+    for (const key in mainStore.messages[mainStore.applicant?.id || 0]) {
       messageKey.value.set(key, key);
       personnelService
         .getPersonnel({
@@ -85,28 +85,28 @@ onShow(() => {
           // 用于获取最新消息信息。
           mes.value.set(
             key,
-            store.messages[store.applicant!.id][key][
-              store.messages[store.applicant!.id][key].length - 1
+            mainStore.messages[mainStore.applicant!.id][key][
+              mainStore.messages[mainStore.applicant!.id][key].length - 1
             ].content
           );
           time.value.set(
             key,
             usetimeChange(
-              store.messages[store.applicant!.id][key][
-                store.messages[store.applicant!.id][key].length - 1
+              mainStore.messages[mainStore.applicant!.id][key][
+                mainStore.messages[mainStore.applicant!.id][key].length - 1
               ].createdAt
             )
           );
           isRead.value.set(
             key,
-            store.messages[store.applicant!.id][key][
-              store.messages[store.applicant!.id][key].length - 1
+            mainStore.messages[mainStore.applicant!.id][key][
+              mainStore.messages[mainStore.applicant!.id][key].length - 1
             ].haveRead
           );
           messageType.value.set(
             key,
-            store.messages[store.applicant!.id][key][
-              store.messages[store.applicant!.id][key].length - 1
+            mainStore.messages[mainStore.applicant!.id][key][
+              mainStore.messages[mainStore.applicant!.id][key].length - 1
             ].messageType
           );
           hrInfo.value.push(res);
@@ -116,14 +116,14 @@ onShow(() => {
 });
 // 一键已读
 const allRead = () => {
-  for (const key in store.messages[store.applicant!.id]) {
+  for (const key in mainStore.messages[mainStore.applicant!.id]) {
     if (
-      store.messages[store.applicant!.id][key][
-        store.messages[store.applicant!.id][key].length - 1
+      mainStore.messages[mainStore.applicant!.id][key][
+        mainStore.messages[mainStore.applicant!.id][key].length - 1
       ].initiateType === 2
     ) {
-      store.messages[store.applicant!.id][key][
-        store.messages[store.applicant!.id][key].length - 1
+      mainStore.messages[mainStore.applicant!.id][key][
+        mainStore.messages[mainStore.applicant!.id][key].length - 1
       ].haveRead = true;
       isRead.value.set(key, true);
     }
@@ -135,7 +135,7 @@ const toMyDelivery = () => {
   let deliveryRecords = <DeliveryRecord[]>[];
   applicantDeliveryRecordService
     .queryDeliveryRecord({
-      applicantId: store.applicant!.id,
+      applicantId: mainStore.applicant!.id,
       query: {
         status: ["$eq", 1],
       },

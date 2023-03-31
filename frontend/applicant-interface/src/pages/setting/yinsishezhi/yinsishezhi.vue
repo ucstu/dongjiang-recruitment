@@ -7,9 +7,9 @@
       @click="privacySet(Applicant.privacySettings.Anonymous)"
     >
       <view class="flex-row justify-center items-center group-box">
-        <image :src="VITE_CDN_URL + applicant.avatarUrl" class="image" />
+        <image :src="VITE_CDN_URL + applicant?.avatarUrl" class="image" />
         <text style="padding-left: 15rpx; font-size: 30rpx"
-          >{{ applicant.firstName }}{{ applicant.lastName }}</text
+          >{{ applicant?.firstName }}{{ applicant?.lastName }}</text
         >
         <text
           style="padding-left: 15rpx; font-size: 28rpx; color: rgb(0 0 0 / 60%)"
@@ -20,7 +20,7 @@
         style="transform: scale(0.7)"
         value="1"
         :checked="
-          applicant.privacySettings === Applicant.privacySettings.Anonymous
+          applicant!.privacySettings === Applicant.privacySettings.Anonymous
         "
       />
     </view>
@@ -29,9 +29,9 @@
       @click="privacySet(Applicant.privacySettings.RealName)"
     >
       <view class="flex-row justify-center items-center group-box">
-        <image :src="VITE_CDN_URL + applicant.avatarUrl" class="image" />
+        <image :src="VITE_CDN_URL + applicant?.avatarUrl" class="image" />
         <text style="padding-left: 15rpx; font-size: 30rpx"
-          >{{ applicant.firstName }}先生</text
+          >{{ applicant?.firstName }}先生</text
         >
         <text
           style="padding-left: 15rpx; font-size: 28rpx; color: rgb(0 0 0 / 60%)"
@@ -42,7 +42,7 @@
         style="transform: scale(0.7)"
         value="2"
         :checked="
-          applicant.privacySettings === Applicant.privacySettings.RealName
+          applicant!.privacySettings === Applicant.privacySettings.RealName
         "
       />
     </view>
@@ -53,20 +53,20 @@
 import NavigationBar from "@/components/NavigationBar/NavigationBar.vue";
 import { useMainStore } from "@/stores";
 import { Applicant } from "@dongjiang-recruitment/service-common";
+import { storeToRefs } from "pinia";
 const VITE_CDN_URL = import.meta.env.VITE_CDN_URL;
 
-const store = useMainStore();
-// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-const applicant = store.applicant!;
+const mainStore = useMainStore();
+const { applicant } = storeToRefs(mainStore);
 
 const { refreshAsync: updateApplicant } = applicantService.useUpdateApplicant(
-  () => ({ id: applicant.id, requestBody: applicant }),
+  () => ({ id: applicant.value!.id, requestBody: applicant.value! }),
   { manual: true }
 );
 
 // 改变显示状态
 const privacySet = async (privacySettings: Applicant.privacySettings) => {
-  applicant.privacySettings = privacySettings;
+  applicant.value!.privacySettings = privacySettings;
   await updateApplicant();
 };
 </script>

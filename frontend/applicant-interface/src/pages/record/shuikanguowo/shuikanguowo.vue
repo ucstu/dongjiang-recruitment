@@ -19,37 +19,44 @@
 <script lang="ts" setup>
 import CompanyDetail from "@/components/CompanyDetail/CompanyDetail.vue";
 import NavigationBar from "@/components/NavigationBar/NavigationBar.vue";
+import { until } from "@/hooks";
 import { useMainStore } from "@/stores";
 import type { Company } from "@dongjiang-recruitment/service-common";
 
-const store = useMainStore();
+const mainStore = useMainStore();
 
 const companyInfo = ref<Company[]>([]);
 const emptyShow = ref(false);
-// 查询查看记录
-applicantInspectionRecordService
-  .queryUserInspectionRecord({
-    applicantId: store.applicant!.id,
-  })
-  .then((res) => {
-    if (res.total === 0) {
-      emptyShow.value = true;
-    } else {
-      for (const item of res.items) {
-        companyService
-          .getCompany({
-            id: item.companyId,
-          })
-          .then((res) => {
-            const p = companyInfo.value.map((item) => item.id);
-            if (!p.includes(res.id)) {
-              companyInfo.value.push(res);
-            }
-          });
-      }
-      emptyShow.value = false;
-    }
-  });
+
+until(
+  computed(() => !!mainStore.applicant?.id),
+  () => {
+    // 查询查看记录
+    applicantInspectionRecordService
+      .queryUserInspectionRecord({
+        applicantId: mainStore.applicant!.id,
+      })
+      .then((res) => {
+        if (res.total === 0) {
+          emptyShow.value = true;
+        } else {
+          for (const item of res.items) {
+            companyService
+              .getCompany({
+                id: item.companyId,
+              })
+              .then((res) => {
+                const p = companyInfo.value.map((item) => item.id);
+                if (!p.includes(res.id)) {
+                  companyInfo.value.push(res);
+                }
+              });
+          }
+          emptyShow.value = false;
+        }
+      });
+  }
+);
 
 const view_2OnClick = (c: string) => {
   uni.navigateTo({

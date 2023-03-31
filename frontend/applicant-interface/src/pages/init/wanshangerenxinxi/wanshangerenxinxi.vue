@@ -107,9 +107,9 @@ import wybPopup from "@/components/wyb-popup/wyb-popup.vue";
 import { useMainStore } from "@/stores";
 import type { Applicant } from "@dongjiang-recruitment/service-common";
 
-const store = useMainStore();
+const mainStore = useMainStore();
 
-const userInfo = ref<Applicant>(store.applicant!);
+const userInfo = ref<Applicant>(mainStore.applicant || ({} as Applicant));
 
 const changeSex = ref(true); // 判断性别
 const city = ref("请选择"); // 城市
@@ -186,14 +186,14 @@ const nextClick = () => {
     });
   } else {
     userInfo.value.cityName = city.value;
-    store.applicant!.workingYears = 1;
+    mainStore.applicant!.workingYears = 1;
     applicantService
       .updateApplicant({
-        id: store.applicant!.id,
+        id: mainStore.applicant!.id,
         requestBody: userInfo.value,
       })
       .then((res) => {
-        store.applicant = res;
+        mainStore.applicant = res;
         uni.navigateTo({
           url: "/pages/init/wanshanjiaoyujingli/wanshanjiaoyujingli",
         });

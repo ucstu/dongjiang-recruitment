@@ -147,11 +147,12 @@
 <script lang="ts" setup>
 import NavigationBar from "@/components/NavigationBar/NavigationBar.vue";
 import wybPopup from "@/components/wyb-popup/wyb-popup.vue";
+import { until } from "@/hooks";
 import { useMainStore } from "@/stores";
 import type { Company, Position } from "@dongjiang-recruitment/service-common";
 
 const VITE_CDN_URL = import.meta.env.VITE_CDN_URL;
-const store = useMainStore();
+const mainStore = useMainStore();
 
 const jobInformation = ref<Position>({} as Position); // 职位信息
 
@@ -235,19 +236,24 @@ const isCollection = ref(false);
 const garnerRecordId = ref("");
 //判断是否收藏
 onMounted(() => {
-  applicantGarnerRecordService
-    .queryGarnerRecord({
-      applicantId: store.applicant!.id,
-      query: {
-        positionId: ["$eq", positionId.value],
-      },
-    })
-    .then((res) => {
-      if (res.total > 0) {
-        isCollection.value = true;
-        garnerRecordId.value = res.items[0].id;
-      }
-    });
+  until(
+    computed(() => !!mainStore.applicant?.id),
+    () => {
+      applicantGarnerRecordService
+        .queryGarnerRecord({
+          applicantId: mainStore.applicant!.id,
+          query: {
+            positionId: ["$eq", positionId.value],
+          },
+        })
+        .then((res) => {
+          if (res.total > 0) {
+            isCollection.value = true;
+            garnerRecordId.value = res.items[0].id;
+          }
+        });
+    }
+  );
 });
 
 // 上面的代码是用户点击收藏按钮时调用的函数。
@@ -257,11 +263,11 @@ const collection = () => {
   if (isCollection.value) {
     applicantGarnerRecordService
       .addGarnerRecord({
-        applicantId: store.applicant!.id,
+        applicantId: mainStore.applicant!.id,
         requestBody: {
           positionId: positionId.value,
           companyId: companyId.value,
-          applicantId: store.applicant!.id,
+          applicantId: mainStore.applicant!.id,
         },
       })
       .then((res) => {
@@ -274,7 +280,7 @@ const collection = () => {
   } else {
     applicantGarnerRecordService
       .removeGarnerRecord({
-        applicantId: store.applicant!.id,
+        applicantId: mainStore.applicant!.id,
         id: garnerRecordId.value,
       })
       .then(() => {
@@ -289,7 +295,7 @@ const collection = () => {
 // 沟通HR
 const communication = (i: string) => {
   let messageKey = "";
-  for (const key in store.messages[store.applicant!.id]) {
+  for (const key in mainStore.messages[mainStore.applicant!.id]) {
     if (key === jobInformation.value.personnelId) {
       messageKey = key;
     } else {
@@ -311,12 +317,12 @@ const sendResume = () => {
 const send = () => {
   applicantDeliveryRecordService
     .addDeliveryRecord({
-      applicantId: store.applicant!.id,
+      applicantId: mainStore.applicant!.id,
       requestBody: {
         status: 1,
         interviewTime: "",
         positionId: positionId.value,
-        applicantId: store.applicant!.id,
+        applicantId: mainStore.applicant!.id,
         companyId: companyId.value,
       },
     })

@@ -4,13 +4,21 @@ import { ExtractJwt, Strategy } from "passport-jwt";
 import * as zlib from "zlib";
 import { ConfigType } from "../config";
 import _authorizationConfig from "../config/authorization.config";
-import { User } from "./user.dto";
+import { DetailId, User } from "./user.dto";
 
 interface JwtPayload {
   /**
-   * 实际值
+   * ID
    */
-  value: string;
+  id: string;
+  /**
+   * DID
+   */
+  did: DetailId;
+  /**
+   * 权限
+   */
+  auth: string;
   /**
    * 签发时间
    */
@@ -38,14 +46,10 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   validate(payload: JwtPayload): User {
-    const { value } = payload;
-    const { id, auth, did } = JSON.parse(
-      zlib.unzipSync(Buffer.from(value, "base64")).toString()
-    ) as {
-      id: string;
-      auth: User["authorities"];
-      did: User["detailId"];
-    };
+    const { id, auth: _auth, did } = payload;
+    const auth = JSON.parse(
+      zlib.unzipSync(Buffer.from(_auth, "base64")).toString()
+    ) as User["authorities"];
 
     return {
       id: id,

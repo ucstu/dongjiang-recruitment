@@ -118,11 +118,12 @@
 import JobDetail from "@/components/JobDetail/JobDetail.vue";
 import NavigationBar from "@/components/NavigationBar/NavigationBar.vue";
 import wybPopup from "@/components/wyb-popup/wyb-popup.vue";
+import { until } from "@/hooks";
 import { useMainStore } from "@/stores";
 import type { Company, Position } from "@dongjiang-recruitment/service-common";
 
 const VITE_CDN_URL = import.meta.env.VITE_CDN_URL;
-const store = useMainStore();
+const mainStore = useMainStore();
 
 const companyInfo = ref<Company>({} as Company);
 const positionInfo = ref<Position[]>([]);
@@ -164,19 +165,24 @@ const focus = ref(false);
 const focusId = ref();
 /* 判断是否关注 */
 onMounted(() => {
-  applicantAttentionRecordService
-    .queryAttentionRecord({
-      applicantId: store.applicant!.id,
-      query: {
-        companyId: ["$eq", companyId.value],
-      },
-    })
-    .then((res) => {
-      if (res.total > 0) {
-        focus.value = true;
-        focusId.value = res.items[0].id;
-      }
-    });
+  until(
+    computed(() => !!mainStore.applicant?.id),
+    () => {
+      applicantAttentionRecordService
+        .queryAttentionRecord({
+          applicantId: mainStore.applicant!.id,
+          query: {
+            companyId: ["$eq", companyId.value],
+          },
+        })
+        .then((res) => {
+          if (res.total > 0) {
+            focus.value = true;
+            focusId.value = res.items[0].id;
+          }
+        });
+    }
+  );
 });
 
 // 一个生命周期钩子。它在页面加载时调用。
@@ -208,10 +214,10 @@ const focusOn = () => {
     // 增加关注记录接口
     applicantAttentionRecordService
       .addAttentionRecord({
-        applicantId: store.applicant!.id,
+        applicantId: mainStore.applicant!.id,
         requestBody: {
           companyId: companyId.value,
-          applicantId: store.applicant!.id,
+          applicantId: mainStore.applicant!.id,
         },
       })
       .then((res) => {
@@ -224,7 +230,7 @@ const focusOn = () => {
   } else {
     applicantAttentionRecordService
       .removeAttentionRecord({
-        applicantId: store.applicant!.id,
+        applicantId: mainStore.applicant!.id,
         id: focusId.value,
       })
       .then((res) => {

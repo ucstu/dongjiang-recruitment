@@ -23,16 +23,16 @@
 import NavigationBar from "@/components/NavigationBar/NavigationBar.vue";
 import { useMainStore } from "@/stores";
 
-const store = useMainStore();
+const mainStore = useMainStore();
 
 const inputValue = ref("");
 // 添加个人优势
 const saveAdvantage = () => {
-  store.applicant!.personalAdvantage = inputValue.value;
+  mainStore.applicant!.personalAdvantage = inputValue.value;
   applicantService
     .updateApplicant({
-      id: store.applicant!.id,
-      requestBody: store.applicant!,
+      id: mainStore.applicant!.id,
+      requestBody: mainStore.applicant!,
     })
     .then(() => {
       uni.navigateBack({

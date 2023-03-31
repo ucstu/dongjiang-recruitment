@@ -1,10 +1,6 @@
 <script setup lang="ts">
 import { useMainStore } from "@/stores";
-import {
-  axios,
-  AxiosError,
-  request,
-} from "@dongjiang-recruitment/service-common";
+import { axios, AxiosError } from "@dongjiang-recruitment/service-common";
 
 const mainStore = useMainStore();
 
@@ -15,8 +11,14 @@ axios.interceptors.request.use(
       uni.showLoading({
         title: "加载中...",
       });
-    }, 500);
-    return config;
+    }, 2000);
+    return {
+      ...config,
+      headers: {
+        ...config.headers,
+        Authorization: `Bearer ${mainStore.token}`,
+      } as any,
+    };
   },
   (error) => {
     return Promise.reject(error);
@@ -43,6 +45,7 @@ axios.interceptors.response.use(
             title: "登录过期，请重新登录",
             icon: "none",
           });
+          mainStore.token = "";
           uni.reLaunch({ url: "/pages/account/denglu_zhuce/denglu" });
           break;
         case 403:
@@ -70,19 +73,23 @@ axios.interceptors.response.use(
           });
           break;
       }
+    } else {
+      uni.showToast({
+        title: "服务器连接错误",
+        icon: "none",
+      });
     }
+    clearTimeout(timer);
+    uni.hideLoading();
     return Promise.reject(error);
   }
 );
 
-if (mainStore.token === null || !mainStore.account) {
-  uni.reLaunch({ url: "/pages/account/denglu_zhuce/denglu" });
-} else {
-  request.config.TOKEN = mainStore.token;
-  mainStore.loadInfo().then(() => {
-    uni.reLaunch({ url: "/pages/main/shouyeyemian/shouyeyemian" });
-  });
-}
+nextTick(() => {
+  if (mainStore.token === "") {
+    uni.reLaunch({ url: "/pages/account/denglu_zhuce/denglu" });
+  }
+});
 </script>
 
 <style lang="scss">

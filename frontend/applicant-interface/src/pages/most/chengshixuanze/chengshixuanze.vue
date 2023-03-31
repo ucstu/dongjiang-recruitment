@@ -33,9 +33,9 @@
 import NavigationBar from "@/components/NavigationBar/NavigationBar.vue";
 import { useMainStore } from "@/stores";
 
-const store = useMainStore();
+const mainStore = useMainStore();
 
-const provinces = store.cities;
+const provinces = mainStore.cities!;
 const provinceIndexOf = ref(0);
 
 // 计算属性。它是一个基于另一个属性的值返回值的函数。

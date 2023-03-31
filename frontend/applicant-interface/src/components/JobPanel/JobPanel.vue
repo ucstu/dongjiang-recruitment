@@ -17,11 +17,12 @@
 
 <script lang="ts" setup>
 import JobDetail from "@/components/JobDetail/JobDetail.vue";
+import { until } from "@/hooks";
 import { useMainStore } from "@/stores";
 import type { Position } from "@dongjiang-recruitment/service-common";
 import type { PropType } from "vue";
 
-const store = useMainStore();
+const mainStore = useMainStore();
 const messageKey = ref("");
 
 const props = defineProps({
@@ -36,13 +37,18 @@ const props = defineProps({
 const emit = defineEmits(["stateClick"]);
 
 // 获取消息密钥的方法。
-if (props.collectionPosition) {
-  for (const key in store.messages[store.applicant!.id]) {
-    if (key === props.collectionPosition?.personnelId) {
-      messageKey.value = key;
+until(
+  computed(() => !!mainStore.applicant?.id),
+  () => {
+    if (props.collectionPosition) {
+      for (const key in mainStore.messages[mainStore.applicant!.id]) {
+        if (key === props.collectionPosition?.personnelId) {
+          messageKey.value = key;
+        }
+      }
     }
   }
-}
+);
 
 const view_4OnClick = () => {
   const companyId = props.collectionPosition?.companyId;

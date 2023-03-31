@@ -1,11 +1,18 @@
 import type { Message } from "@/interfaces";
-import {
-  request,
-  type Account,
-  type Applicant,
-  type JobExpectation,
-} from "@dongjiang-recruitment/service-common";
+import type { Account } from "@dongjiang-recruitment/service-common";
+import jwtDecode from "jwt-decode";
 import { defineStore } from "pinia";
+
+const parseJwt = (
+  token: string
+): { id?: string; did?: Account["detailId"] } => {
+  if (!token) return {};
+  try {
+    return jwtDecode(token) as { id: string; did: Account["detailId"] };
+  } catch (e) {
+    return {};
+  }
+};
 
 export const useMainStore = defineStore(
   "main",
@@ -17,68 +24,95 @@ export const useMainStore = defineStore(
     );
     // 授权信息
     const token = ref<string>("");
-    const account = ref<Account>({} as Account);
-    const login = async (userName: string, password: string) => {
-      const { account: _account, token: _token } =
-        await authenticationService.loginAccount({
-          requestBody: { userName, password },
-        });
-      token.value = _token;
-      account.value = _account;
-      request.config.TOKEN = _token;
-      if (!_account.detailId.applicant) {
-        uni.showToast({
-          title: "请先完善个人信息",
-        });
-        uni.reLaunch({
-          url: "/pages/init/wanshangerenxinxi/wanshangerenxinxi",
-        });
-        return;
+    const checked = ref<boolean>(false);
+    const accountId = computed(() => parseJwt(token.value).id);
+    const {
+      data: account,
+      loading: loadingAccount,
+      mutate: setAccount,
+      refresh: refreshAccount,
+    } = authenticationAccountService.useGetAccount(
+      () => ({ id: accountId.value! }),
+      {
+        ready: computed(() => !!accountId.value),
+        refreshDeps: [accountId],
+        onSuccess(res) {
+          checked.value = true;
+          if (res && !res.detailId?.applicant) {
+            uni.showToast({
+              title: "当前账户不是求职者账户，请注册求职者账户",
+            });
+            uni.reLaunch({
+              url: "/pages/account/denglu_zhuce/zhucezhanghao",
+            });
+          }
+        },
+        onError(err) {
+          if (err?.message === "Not Found") {
+            checked.value = false;
+            uni.showToast({
+              title: "当前账户已被删除，请重新注册",
+            });
+            uni.reLaunch({
+              url: "/pages/account/denglu_zhuce/zhucezhanghao",
+            });
+            token.value = "";
+          }
+        },
       }
-    };
-    const logout = async () => {
-      token.value = "";
-      account.value = {} as Account;
-    };
-    // 用户信息
-    const applicantId = computed(
-      () => account.value?.detailId?.applicant || ""
     );
-    const applicant = ref<Applicant>({} as Applicant);
-    const jobExpectations = ref<JobExpectation[]>([]);
-    const loadInfo = async () => {
-      const _applicant = await applicantService.getApplicant({
-        id: applicantId.value,
-      });
-      if (!_applicant.email) {
-        uni.showToast({
-          title: "请先完善个人信息",
-        });
-        uni.reLaunch({
-          url: "/pages/init/wanshangerenxinxi/wanshangerenxinxi",
-        });
-        return;
+    // 用户信息
+    const applicantId = computed(() => parseJwt(token.value).did?.applicant);
+    const {
+      data: applicant,
+      loading: loadingApplicant,
+      mutate: setApplicant,
+      refresh: refreshApplicant,
+    } = applicantService.useGetApplicant(() => ({ id: applicantId.value! }), {
+      ready: computed(() => !!applicantId.value && checked.value),
+      refreshDeps: [applicantId],
+      onSuccess(res) {
+        if (res && !res.email) {
+          uni.showToast({
+            title: "请先完善个人信息",
+          });
+          uni.reLaunch({
+            url: "/pages/info/gerenxinxi/gerenxinxi",
+          });
+        }
+      },
+    });
+    const {
+      data: jobExpectations,
+      loading: loadingJobExpectations,
+      mutate: setJobExpectations,
+      refresh: refreshJobExpectations,
+    } = applicantJobExpectationService.useQueryJobExpectation(
+      () => ({
+        applicantId: applicantId.value!,
+      }),
+      {
+        ready: computed(() => !!applicantId.value && checked.value),
+        refreshDeps: [applicantId],
+        onSuccess(res) {
+          if (res && !res.items.length) {
+            uni.showToast({
+              title: "请先完善求职意向",
+            });
+            uni.reLaunch({
+              url: "/pages/info/qiuzhiyixiang/qiuzhiyixiang",
+            });
+          }
+        },
       }
-      applicant.value = _applicant;
-      const _jobExpectations = (
-        await applicantJobExpectationService.queryJobExpectation({
-          applicantId: applicantId.value,
-        })
-      ).items;
-      if (!_jobExpectations.length) {
-        uni.showToast({
-          title: "请先完善求职意向",
-        });
-        uni.reLaunch({
-          url: "/pages/init/wanshengqiuzhiyixiang/wanshengqiuzhiyixiang",
-        });
-        return;
-      }
-      jobExpectations.value = _jobExpectations;
-    };
-
+    );
     // 其他信息
-    const { data: cities } = commonService.useGetCities(undefined, {
+    const {
+      data: cities,
+      loading: loadingCities,
+      mutate: setCities,
+      refresh: refreshCities,
+    } = commonService.useGetCities(undefined, {
       initialData: [],
     });
     const messages = ref<{
@@ -90,18 +124,34 @@ export const useMainStore = defineStore(
       menu,
       token,
       account,
-      login,
-      logout,
+      setAccount,
+      refreshAccount,
+      loadingAccount,
       applicant,
+      setApplicant,
+      refreshApplicant,
+      loadingApplicant,
       jobExpectations,
-      loadInfo,
+      setJobExpectations,
+      refreshJobExpectations,
+      loadingJobExpectations,
       cities,
+      setCities,
+      refreshCities,
+      loadingCities,
       messages,
     };
   },
   {
     persist: {
       enabled: true,
+      H5Storage: window.localStorage,
+      detached: true,
+      strategies: [
+        {
+          paths: ["token"],
+        },
+      ],
     },
   }
 );

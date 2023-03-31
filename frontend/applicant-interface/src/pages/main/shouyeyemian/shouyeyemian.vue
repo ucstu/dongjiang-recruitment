@@ -22,7 +22,7 @@
           class="flex-row list"
         >
           <text
-            v-for="jobExpectation in mainStore.jobExpectations"
+            v-for="jobExpectation in mainStore.jobExpectations?.items || []"
             :key="jobExpectation.id"
             class="list-item"
             :class="activeJobExpectation === jobExpectation ? 'active' : ''"
@@ -85,7 +85,7 @@
         <view class="justify-between items-center">
           <scroll-view :scroll-x="true" class="flex-row list">
             <text
-              v-for="jobExpectation in mainStore.jobExpectations"
+              v-for="jobExpectation in mainStore.jobExpectations?.items || []"
               :key="jobExpectation.id"
               class="list-item"
               :class="activeJobExpectation === jobExpectation ? 'active' : ''"
@@ -225,7 +225,9 @@ const jobFilter = ref<Filter>({} as Filter);
 const positions = ref<Array<Position>>([]);
 const methods = ref<Array<"热门" | "附近" | "最新">>(["热门", "附近", "最新"]);
 const activeMethod = ref<"热门" | "附近" | "最新">(methods.value[0]);
-const activeJobExpectation = ref<JobExpectation>(mainStore.jobExpectations[0]);
+const activeJobExpectation = ref<JobExpectation>(
+  mainStore.jobExpectations?.items[0]!
+);
 const paging = ref<{ complete: (param: Array<any> | boolean) => void }>();
 const queryList = async (pageNo: number, pageSize: number) => {
   paging.value?.complete(

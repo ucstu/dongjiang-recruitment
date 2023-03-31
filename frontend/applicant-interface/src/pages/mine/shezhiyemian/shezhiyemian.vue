@@ -45,7 +45,6 @@
 <script lang="ts" setup>
 import NavigationBar from "@/components/NavigationBar/NavigationBar.vue";
 import { useMainStore } from "@/stores";
-import type { Account, Applicant } from "@dongjiang-recruitment/service-common";
 
 const mainStore = useMainStore();
 
@@ -75,10 +74,7 @@ const toVersion = () => {
 // 退出当前账号
 const exitAccount = () => {
   // 清除存储中的数据。
-  mainStore.jobExpectations = [];
-  mainStore.token = null as unknown as string;
-  mainStore.applicant = null as unknown as Applicant;
-  mainStore.account = null as unknown as Account;
+  mainStore.token = "";
   uni.navigateTo({ url: "/pages/account/denglu_zhuce/denglu" });
 };
 </script>

@@ -7,8 +7,8 @@ import type { DirectionTags } from "../models/DirectionTags";
 import type { FilterCriteria } from "../models/FilterCriteria";
 import type { PositionTypes } from "../models/PositionTypes";
 
-import type { CancelablePromise } from "../core/CancelablePromise";
 import type { BaseHttpRequest } from "../core/BaseHttpRequest";
+import type { CancelablePromise } from "../core/CancelablePromise";
 
 export class CommonService {
   constructor(public readonly httpRequest: BaseHttpRequest) {}
@@ -132,21 +132,11 @@ export class CommonService {
    * @returns any 成功
    * @throws ApiError
    */
-  public uploadFile({
-    formData,
-  }: {
-    formData?: {
-      /**
-       * 文件
-       */
-      file: Blob;
-    };
-  }): CancelablePromise<string> {
+  public uploadFile({ file }: { file: File }): CancelablePromise<string> {
     return this.httpRequest.request({
-      method: "POST",
+      method: "UPLOAD",
       url: "/common/files",
-      formData: formData,
-      mediaType: "multipart/form-data",
+      formData: file,
     });
   }
 
@@ -155,21 +145,11 @@ export class CommonService {
    * @returns any 成功
    * @throws ApiError
    */
-  public uploadAvatar({
-    formData,
-  }: {
-    formData?: {
-      /**
-       * 头像
-       */
-      avatar: Blob;
-    };
-  }): CancelablePromise<string> {
+  public uploadAvatar({ avatar }: { avatar: File }): CancelablePromise<string> {
     return this.httpRequest.request({
       method: "POST",
       url: "/common/avatars",
-      formData: formData,
-      mediaType: "multipart/form-data",
+      formData: avatar,
     });
   }
 }

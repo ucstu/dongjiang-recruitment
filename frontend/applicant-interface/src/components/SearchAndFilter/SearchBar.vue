@@ -66,15 +66,15 @@
 <script lang="ts" setup>
 import { useMainStore } from "@/stores";
 
-const store = useMainStore();
+const mainStore = useMainStore();
 
 /* #ifdef MP-WEIXIN || MP-ALIPAY || MP-BAIDU || MP-TOUTIAO || MP-QQ */
 // 获取小程序胶囊高度等
-const navigationBarHeight = store.menu.height;
+const navigationBarHeight = mainStore.menu.height;
 
-const navigationBarTop = store.menu.top - uni.upx2px(45);
+const navigationBarTop = mainStore.menu.top - uni.upx2px(45);
 
-const navigationBarWidth = store.menu.left - uni.upx2px(20);
+const navigationBarWidth = mainStore.menu.left - uni.upx2px(20);
 /* #endif */
 
 const props = defineProps({

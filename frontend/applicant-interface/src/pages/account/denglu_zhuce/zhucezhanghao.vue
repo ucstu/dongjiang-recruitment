@@ -75,6 +75,43 @@ const password = ref<string>("");
 const verification = ref<string>("");
 const isAgree = ref<boolean>(false);
 
+const { refreshAsync: registerAccount } =
+  authenticationService.useRegisterAccount(
+    () => ({
+      requestBody: {
+        accountType: 1,
+        userName: email.value,
+        password: password.value,
+        verificationCode: verification.value,
+      },
+    }),
+    {
+      manual: true,
+      async onSuccess() {
+        await loginAccount();
+      },
+    }
+  );
+const { refreshAsync: loginAccount } = authenticationService.useLoginAccount(
+  () => ({
+    requestBody: {
+      userName: email.value,
+      password: password.value,
+    },
+  }),
+  {
+    manual: true,
+    onSuccess(data) {
+      mainStore.token = data.token;
+      uni.showToast({
+        title: "注册成功",
+        icon: "none",
+        duration: 1500,
+      });
+    },
+  }
+);
+
 // 用于获取验证码的函数。
 const getVerifiable = async () => {
   if (email.value === "") {
@@ -134,11 +171,9 @@ const registeredAccount = async () => {
       duration: 1500,
     });
   } else {
-    await mainStore.login(email.value, password.value);
-    uni.showToast({
-      title: "注册成功",
-      icon: "none",
-      duration: 1500,
+    await registerAccount();
+    uni.reLaunch({
+      url: "/pages/init/wanchengjianli/wanchengjianli",
     });
   }
 };

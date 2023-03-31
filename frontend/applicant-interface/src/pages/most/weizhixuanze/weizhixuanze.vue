@@ -61,7 +61,7 @@ import NavigationBar from "@/components/NavigationBar/NavigationBar.vue";
 import { useMainStore } from "@/stores";
 import type { Areas } from "@dongjiang-recruitment/service-common";
 
-const store = useMainStore();
+const mainStore = useMainStore();
 
 const countries = ref<Areas>([
   {
@@ -81,7 +81,7 @@ onLoad((e) => {
     country.value = e!.city;
     c.value = e!.city;
     countries.value.splice(1, countries.value.length - 1);
-    // for (const item of store.areas) {
+    // for (const item of mainStore.areas) {
     //   countries.value.push(item);
     // }
     console.log("!!!!!!!!!!!!!!!!!");
@@ -109,7 +109,7 @@ onLoad((e) => {
       .then((res) => {
         countries.value.splice(1, countries.value.length - 1);
         countries.value.push(...res);
-        // store.areas = res;
+        // mainStore.areas = res;
       });
   });
 });

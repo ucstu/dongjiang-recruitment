@@ -2,15 +2,17 @@
   <NavigationBar title="预览简历"></NavigationBar>
   <view class="flex-col info-box">
     <text style="font-size: 45rpx; font-weight: bold"
-      >{{ mainStore.applicant!.firstName
-      }}{{ mainStore.applicant!.lastName }}</text
+      >{{ mainStore.applicant?.firstName
+      }}{{ mainStore.applicant?.lastName }}</text
     >
     <text v-if="schoolName" style="font-size: 28rpx"
-      >{{ schoolName }}/{{ education[mainStore.applicant!.education] }}</text
+      >{{ schoolName }}/{{
+        education[mainStore.applicant?.education || 0]
+      }}</text
     >
     <text style="margin-top: 20rpx"
-      >{{ workYear[mainStore.applicant!.workingYears] }}/{{
-        mainStore.applicant!.age
+      >{{ workYear[mainStore.applicant?.workingYears || 0] }}/{{
+        mainStore.applicant?.age
       }}岁</text
     >
   </view>
@@ -32,12 +34,12 @@
   </view>
   <view v-if="change">
     <view
-      v-if="mainStore.applicant!.personalAdvantage"
+      v-if="mainStore.applicant?.personalAdvantage"
       class="flex-col expectation"
     >
       <text style="font-size: 40rpx; font-weight: bold">我的优势</text>
       <text class="ascendent">{{
-        mainStore.applicant!.personalAdvantage
+        mainStore.applicant?.personalAdvantage
       }}</text>
     </view>
     <view v-if="educationInfo.length" class="flex-col expectation">
@@ -94,6 +96,7 @@
 
 <script lang="ts" setup>
 import NavigationBar from "@/components/NavigationBar/NavigationBar.vue";
+import { until } from "@/hooks";
 import { useMainStore } from "@/stores";
 import type {
   EducationExperience,
@@ -117,32 +120,37 @@ const workYear = [
 ];
 const schoolName = ref("");
 const change = ref(true);
-// 教育经历
-applicantEducationExperienceService
-  .queryEducationExperience({
-    applicantId: mainStore.applicant!.id,
-  })
-  .then((res) => {
-    educationInfo.value = res.items;
-    schoolName.value = educationInfo.value[0].schoolName;
-  });
-// 工作经历
-applicantWorkExperienceService
-  .queryWorkExperience({
-    applicantId: mainStore.applicant!.id,
-  })
-  .then((res) => {
-    workInfo.value = res.items;
-  });
-// 项目经验
-applicantProjectExperienceService
-  .queryProjectExperience({
-    applicantId: mainStore.applicant!.id,
-  })
-  .then((res) => {
-    positionInfo.value = res.items;
-  });
 
+until(
+  computed(() => !!mainStore.applicant?.id),
+  () => {
+    // 教育经历
+    applicantEducationExperienceService
+      .queryEducationExperience({
+        applicantId: mainStore.applicant!.id,
+      })
+      .then((res) => {
+        educationInfo.value = res.items;
+        schoolName.value = educationInfo.value[0].schoolName;
+      });
+    // 工作经历
+    applicantWorkExperienceService
+      .queryWorkExperience({
+        applicantId: mainStore.applicant!.id,
+      })
+      .then((res) => {
+        workInfo.value = res.items;
+      });
+    // 项目经验
+    applicantProjectExperienceService
+      .queryProjectExperience({
+        applicantId: mainStore.applicant!.id,
+      })
+      .then((res) => {
+        positionInfo.value = res.items;
+      });
+  }
+);
 // 改变变化值的函数。
 const changeValue = () => {
   change.value = !change.value;

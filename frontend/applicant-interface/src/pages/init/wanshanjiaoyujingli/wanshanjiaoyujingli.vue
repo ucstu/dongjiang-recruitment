@@ -149,7 +149,7 @@ import NavigationBar from "@/components/NavigationBar/NavigationBar.vue";
 import wybPopup from "@/components/wyb-popup/wyb-popup.vue";
 import { useMainStore } from "@/stores";
 
-const store = useMainStore();
+const mainStore = useMainStore();
 
 const schoolName = ref("");
 const educationId = ref<0 | 1 | 2 | 3 | 4>(0);
@@ -234,7 +234,7 @@ const nextClick = () => {
   } else {
     applicantEducationExperienceService
       .addEducationExperience({
-        applicantId: store.applicant!.id,
+        applicantId: mainStore.applicant!.id,
         requestBody: {
           schoolName: schoolName.value,
           education: educationId.value,
@@ -244,7 +244,7 @@ const nextClick = () => {
         },
       })
       .then((res) => {
-        store.applicant!.education = res.education;
+        mainStore.applicant!.education = res.education;
         uni.navigateTo({
           url: "/pages/init/wanshangongzuojingli/wanshangongzuojingli",
         });

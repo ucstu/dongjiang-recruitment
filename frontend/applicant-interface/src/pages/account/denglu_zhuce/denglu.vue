@@ -72,6 +72,21 @@ const email = ref<string>("");
 const password = ref<string>("");
 const isAgree = ref<boolean>(false);
 
+const { refreshAsync: loginAccount } = authenticationService.useLoginAccount(
+  () => ({
+    requestBody: {
+      userName: email.value,
+      password: password.value,
+    },
+  }),
+  {
+    manual: true,
+    onSuccess(data) {
+      mainStore.token = data.token;
+    },
+  }
+);
+
 // 当用户单击登录按钮时调用的函数。
 const login = async () => {
   if (email.value === "" || password.value === "") {
@@ -95,7 +110,7 @@ const login = async () => {
       mask: true,
     });
   } else {
-    await mainStore.login(email.value, password.value);
+    await loginAccount();
     uni.switchTab({ url: "/pages/main/shouyeyemian/shouyeyemian" });
   }
 };

@@ -70,21 +70,36 @@ export class AccountService {
       case AccountType.Applicant:
         detailId = (
           await this.serviceClient.applicant.addApplicant({
-            requestBody: detail as Applicant,
+            requestBody: {
+              ...detail,
+              avatarUrl:
+                (detail as Applicant)?.avatarUrl ||
+                "/common-avatars/applicant.png",
+            } as Applicant,
           })
         ).id;
         break;
       case AccountType.Personnel:
         detailId = (
           await this.serviceClient.personnel.addPersonnel({
-            requestBody: detail as Personnel,
+            requestBody: {
+              ...detail,
+              avatarUrl:
+                (detail as Personnel)?.avatarUrl ||
+                "/common-avatars/personnel.png",
+            } as Personnel,
           })
         ).id;
         break;
       case AccountType.Advertiser:
         detailId = (
           await this.serviceClient.advertiser.addAdvertiser({
-            requestBody: detail as Advertiser,
+            requestBody: {
+              ...detail,
+              logoUrl:
+                (detail as Advertiser)?.logoUrl ||
+                "/common-avatars/advertiser.png",
+            } as Advertiser,
           })
         ).id;
         break;

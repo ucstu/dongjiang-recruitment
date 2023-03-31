@@ -54,16 +54,16 @@
 
 <script lang="ts" setup>
 import { useMainStore } from "@/stores";
-const store = useMainStore();
+const mainStore = useMainStore();
 
 /* #ifdef MP-WEIXIN || MP-ALIPAY || MP-BAIDU || MP-TOUTIAO || MP-QQ */
 
 // 获取小程序胶囊的高度、顶部和左侧。
-const navigationBarHeight = store.menu.height;
+const navigationBarHeight = mainStore.menu.height;
 
-const navigationBarTop = store.menu.top;
+const navigationBarTop = mainStore.menu.top;
 
-const navigationBarWidth = store.menu.left;
+const navigationBarWidth = mainStore.menu.left;
 
 /* #endif */
 

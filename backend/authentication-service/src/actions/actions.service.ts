@@ -77,12 +77,12 @@ export class ActionsService {
     const authoritiesFilterMap = new Map();
     return {
       token: this.jwtService.sign({
-        value: zlib
+        id: accounts[0].id,
+        did: accounts[0].detailId,
+        auth: zlib
           .gzipSync(
-            JSON.stringify({
-              id: accounts[0].id,
-              did: accounts[0].detailId,
-              auth: accounts[0].authorities
+            JSON.stringify(
+              accounts[0].authorities
                 .concat(
                   accounts[0].groups.map((group) => group.authorities).flat()
                 )
@@ -93,8 +93,8 @@ export class ActionsService {
                     authoritiesFilterMap.set(authority.id, true);
                     return true;
                   }
-                }),
-            })
+                })
+            )
           )
           .toString("base64"),
       }),

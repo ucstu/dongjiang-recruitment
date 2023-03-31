@@ -66,8 +66,8 @@
 import NavigationBar from "@/components/NavigationBar/NavigationBar.vue";
 import wybModal from "@/components/wyb-modal/wyb-modal.vue";
 import wybPopup from "@/components/wyb-popup/wyb-popup.vue";
+import { until } from "@/hooks";
 import { useMainStore } from "@/stores";
-import type { Account, Applicant } from "@dongjiang-recruitment/service-common";
 
 const mainStore = useMainStore();
 
@@ -76,12 +76,19 @@ const { runAsync: sendVerificationCode } =
     manual: true,
   });
 // 隐藏账号
-const phoneNumber = mainStore.account!.userName.replace(
-  /(\d{3})\d{4}(\d{4})/,
-  "$1****$2"
-);
+const phoneNumber = ref<string>("");
 const code = ref<string>("");
 const focus = ref<boolean>(false);
+
+until(
+  computed(() => !!mainStore.account),
+  () => {
+    phoneNumber.value = mainStore.account!.userName.replace(
+      /(\d{3})\d{4}(\d{4})/,
+      "$1****$2"
+    );
+  }
+);
 
 const codeNum = () => {
   focus.value = true;
@@ -105,7 +112,7 @@ const { refreshAsync: destroyAccount } =
   );
 // 注销账号
 const deleteAccount = async () => {
-  await sendVerificationCode({ email: phoneNumber });
+  await sendVerificationCode({ email: phoneNumber.value });
   uni.showToast({
     title: "验证码已发送",
     icon: "none",
@@ -115,7 +122,7 @@ const deleteAccount = async () => {
 };
 // 重新获取验证码
 const sendVerification = async () => {
-  await sendVerificationCode({ email: phoneNumber });
+  await sendVerificationCode({ email: phoneNumber.value });
   uni.showToast({
     title: "验证码已发送",
     icon: "none",
@@ -131,9 +138,6 @@ const cancelDelete = () => {
 const confirmDelete = async () => {
   await destroyAccount();
   mainStore.token = "";
-  mainStore.account = {} as Account;
-  mainStore.applicant = {} as Applicant;
-  mainStore.jobExpectations = [];
   uni.navigateTo({
     url: "/pages/account/denglu_zhuce/denglu",
   });

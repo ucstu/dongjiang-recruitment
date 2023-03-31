@@ -34,7 +34,7 @@ import type { PropType } from "vue";
 
 const VITE_CDN_URL = import.meta.env.VITE_CDN_URL;
 
-const store = useMainStore();
+const mainStore = useMainStore();
 
 const props = defineProps({
   hrInfo: {
@@ -69,8 +69,8 @@ onShow(() => {
 
 // 当用户单击消息时调用的函数。它会将消息更改为已阅读，然后导航到聊天页面。
 const toChatPage = () => {
-  store.messages[store.applicant!.id][props.hrInfo.id][
-    store.messages[store.applicant!.id][props.hrInfo.id].length - 1
+  mainStore.messages[mainStore.applicant!.id][props.hrInfo.id][
+    mainStore.messages[mainStore.applicant!.id][props.hrInfo.id].length - 1
   ].haveRead = true;
   const i = props.hrInfo.id;
   uni.navigateTo({

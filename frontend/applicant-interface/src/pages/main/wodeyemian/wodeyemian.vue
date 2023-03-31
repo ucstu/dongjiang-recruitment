@@ -85,6 +85,7 @@
 </template>
 
 <script lang="ts" setup>
+import { until } from "@/hooks";
 import { useMainStore } from "@/stores";
 import type {
   Applicant,
@@ -94,7 +95,7 @@ import type {
 } from "@dongjiang-recruitment/service-common";
 
 const VITE_CDN_URL = import.meta.env.VITE_CDN_URL;
-const store = useMainStore();
+const mainStore = useMainStore();
 
 const userInfos = ref<Applicant>({} as Applicant);
 const education = ref(["未知", "大专", "本科", "硕士", "博士"]);
@@ -110,50 +111,55 @@ const interviewPosition = ref<DeliveryRecord[]>([]);
 
 const status = ref<(1 | 2 | 3 | 4 | 5)[]>([1, 2, 3, 4, 5]);
 onShow(() => {
-  userInfos.value = store.applicant!;
-  fullName.value = userInfos.value.firstName + userInfos.value.lastName;
-  /* 投递记录 */
-  applicantDeliveryRecordService
-    .queryDeliveryRecord({
-      applicantId: store.applicant!.id,
-      query: {
-        status: ["$in", ...status.value],
-      },
-      size: 10,
-    })
-    .then((res) => {
-      deliveryNum.value = res.total;
-    });
-  /* 收藏职位 */
-  applicantGarnerRecordService
-    .queryGarnerRecord({
-      applicantId: store.applicant!.id,
-    })
-    .then((res) => {
-      favoriteNum.value = res.total;
-      favoritePosition.value = res.items;
-    });
-  /* 关注公司 */
-  applicantAttentionRecordService
-    .queryAttentionRecord({
-      applicantId: store.applicant!.id,
-    })
-    .then((res) => {
-      focusNum.value = res.total;
-      focusCompany.value = res.items;
-    });
-  /* 待面试 */
-  applicantDeliveryRecordService
-    .queryDeliveryRecord({
-      applicantId: store.applicant!.id,
-      query: {
-        status: ["$eq", 4],
-      },
-    })
-    .then((res) => {
-      interviewNum.value = res.total;
-      interviewPosition.value = res.items;
-    });
+  until(
+    computed(() => !!mainStore.applicant?.id),
+    () => {
+      userInfos.value = mainStore.applicant!;
+      fullName.value = userInfos.value.firstName + userInfos.value.lastName;
+      /* 投递记录 */
+      applicantDeliveryRecordService
+        .queryDeliveryRecord({
+          applicantId: mainStore.applicant!.id,
+          query: {
+            status: ["$in", ...status.value],
+          },
+          size: 10,
+        })
+        .then((res) => {
+          deliveryNum.value = res.total;
+        });
+      /* 收藏职位 */
+      applicantGarnerRecordService
+        .queryGarnerRecord({
+          applicantId: mainStore.applicant!.id,
+        })
+        .then((res) => {
+          favoriteNum.value = res.total;
+          favoritePosition.value = res.items;
+        });
+      /* 关注公司 */
+      applicantAttentionRecordService
+        .queryAttentionRecord({
+          applicantId: mainStore.applicant!.id,
+        })
+        .then((res) => {
+          focusNum.value = res.total;
+          focusCompany.value = res.items;
+        });
+      /* 待面试 */
+      applicantDeliveryRecordService
+        .queryDeliveryRecord({
+          applicantId: mainStore.applicant!.id,
+          query: {
+            status: ["$eq", 4],
+          },
+        })
+        .then((res) => {
+          interviewNum.value = res.total;
+          interviewPosition.value = res.items;
+        });
+    }
+  );
 });
 
 /**跳转页面 */
@@ -166,7 +172,7 @@ const toSelfInfo = () => {
 const onClick_1 = () => {
   applicantDeliveryRecordService
     .queryDeliveryRecord({
-      applicantId: store.applicant!.id,
+      applicantId: mainStore.applicant!.id,
       query: {
         status: ["$eq", 1],
       },

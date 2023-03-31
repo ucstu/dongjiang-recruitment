@@ -139,7 +139,7 @@ import wybPopup from "@/components/wyb-popup/wyb-popup.vue";
 import { useMainStore } from "@/stores";
 import type { Company } from "@dongjiang-recruitment/service-common";
 
-const store = useMainStore();
+const mainStore = useMainStore();
 
 const companyName = ref<Company["companyName"]>("");
 const companyType = ref<Company["comprehensionName"]>("");
@@ -217,7 +217,7 @@ const nextClick = () => {
   } else {
     applicantWorkExperienceService
       .addWorkExperience({
-        applicantId: store.applicant!.id,
+        applicantId: mainStore.applicant!.id,
         requestBody: {
           companyName: companyName.value,
           companyIndustry: companyType.value,

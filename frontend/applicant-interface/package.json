@@ -51,6 +51,7 @@
     "@dcloudio/uni-mp-weixin": "3.0.0-alpha-3070120230210001",
     "@dcloudio/uni-quickapp-webview": "3.0.0-alpha-3070120230210001",
     "@dongjiang-recruitment/service-common": "workspace:^1.0.0",
+    "jwt-decode": "^3.1.2",
     "pinia": "^2.0.30",
     "pinia-plugin-persist-uni": "^1.2.0",
     "vue": "^3.2.47",

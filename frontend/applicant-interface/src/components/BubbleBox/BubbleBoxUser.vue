@@ -11,7 +11,7 @@
         class="img-photo"
       />
     </view>
-    <image :src="VITE_CDN_URL + store.applicant!.avatarUrl" class="img" />
+    <image :src="VITE_CDN_URL + mainStore.applicant?.avatarUrl" class="img" />
   </view>
 </template>
 
@@ -19,7 +19,7 @@
 import { useMainStore } from "@/stores";
 
 const VITE_CDN_URL = import.meta.env.VITE_CDN_URL;
-const store = useMainStore();
+const mainStore = useMainStore();
 
 const props = defineProps({
   mes: {
