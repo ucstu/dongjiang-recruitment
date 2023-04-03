@@ -1,7 +1,7 @@
+import ViewLayout from "@/layouts/view.vue";
 import ForgetPage from "@/pages/authentication/forget-page.vue";
 import LoginPage from "@/pages/authentication/login-page.vue";
 import { useMainStore } from "@/stores";
-import MainView from "@/views/main-view.vue";
 import {
   createRouter,
   createWebHistory,
@@ -30,7 +30,7 @@ export const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
     name: "Manage",
-    component: MainView,
+    component: ViewLayout,
     children: [
       {
         path: "account",

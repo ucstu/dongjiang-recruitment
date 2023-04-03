@@ -15,10 +15,15 @@ export class AuthenticationAuthorityService {
    * @returns any 成功
    * @throws ApiError
    */
-  public addAuthoritiy({
+  public addAuthority({
     requestBody,
   }: {
-    requestBody?: Authority;
+    requestBody?: {
+      /**
+       * 名称
+       */
+      name: string;
+    };
   }): CancelablePromise<Authority> {
     return this.httpRequest.request({
       method: "POST",

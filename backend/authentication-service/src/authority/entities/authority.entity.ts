@@ -3,9 +3,12 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  ManyToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "@dongjiang-recruitment/nest-common/dist/typeorm";
+import { Account } from "src/account/entities/account.entity";
+import { AuthorityGroup } from "src/authority-group/entities/authority-group.entity";
 /**
  * Authority
  */
@@ -38,4 +41,17 @@ export class Authority {
    */
   @UpdateDateColumn()
   updatedAt: Date;
+  /**
+   * 用户列表
+   */
+  @ManyToMany(() => Account, (account) => account.authorities)
+  accounts: Account[];
+  /**
+   * 权限组列表
+   */
+  @ManyToMany(
+    () => AuthorityGroup,
+    (authorityGroup) => authorityGroup.authorities
+  )
+  authorityGroups: AuthorityGroup[];
 }

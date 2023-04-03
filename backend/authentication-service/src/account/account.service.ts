@@ -15,6 +15,7 @@ import {
   Injectable,
   NotFoundException,
 } from "@nestjs/common";
+import { AuthorityGroup } from "src/authority-group/entities/authority-group.entity";
 import { BcryptService } from "src/bcrypt.module";
 import { AccountType, CreateAccountDto } from "./dto/create-account.dto";
 import { UpdateAccountDto } from "./dto/update-account.dto";
@@ -62,6 +63,15 @@ export class AccountService {
     }
 
     let detailId: string;
+    const authorityGroup: AuthorityGroup = (
+      await this.serviceClient.authenticationAuthorityGroup.queryAuthorityGroup(
+        {
+          query: {
+            name: ["$eq", accountTypeStr],
+          },
+        }
+      )
+    ).items[0] as unknown as AuthorityGroup;
     // 创建账号详细信息
     switch (accountType) {
       case AccountType.Manager:
@@ -111,7 +121,9 @@ export class AccountService {
       userName,
       password: await this.bcryptService.hash(password),
       authorities: [...(accounts[0]?.authorities || [])],
-      groups: [...(accounts[0]?.groups || [])],
+      groups: [...(accounts[0]?.authorityGroups || []), authorityGroup].filter(
+        Boolean
+      ),
       detailId: {
         ...STATIC_FULL_ID,
         ...accounts[0]?.detailId,
@@ -148,12 +160,14 @@ export class AccountService {
   async update(id: string, updateAccountDto: UpdateAccountDto) {
     const account: UpdateAccountDto = {
       ...updateAccountDto,
-      password: await this.bcryptService.hash(updateAccountDto.password),
+      password: updateAccountDto.password
+        ? await this.bcryptService.hash(updateAccountDto.password)
+        : undefined,
       id,
     };
-    const { affected } = await this.accountRepository.update(id, account);
-    if (!affected) throw new NotFoundException();
-    return account;
+    const newAccount = await this.accountRepository.save(account);
+    if (!newAccount) throw new NotFoundException();
+    return newAccount;
   }
 
   async remove(id: string) {

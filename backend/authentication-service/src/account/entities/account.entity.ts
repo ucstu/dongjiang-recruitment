@@ -42,8 +42,11 @@ export class Account {
   /**
    * 权限列表
    */
-  @ManyToMany(() => Authority, {
+  @ManyToMany(() => Authority, (authority) => authority.accounts, {
     eager: true,
+    cascade: true,
+    onUpdate: "CASCADE",
+    onDelete: "NO ACTION",
   })
   @JoinTable()
   authorities: Authority[];
@@ -67,14 +70,15 @@ export class Account {
   /**
    * 权限组列表
    */
-  @ManyToMany(() => AuthorityGroup, {
-    eager: true,
-    cascade: true,
-    onDelete: "CASCADE",
-    onUpdate: "CASCADE",
-  })
+  @ManyToMany(
+    () => AuthorityGroup,
+    (authorityGroup) => authorityGroup.accounts,
+    {
+      eager: true,
+    }
+  )
   @JoinTable()
-  groups: AuthorityGroup[];
+  authorityGroups: AuthorityGroup[];
   /**
    * 账号ID
    */

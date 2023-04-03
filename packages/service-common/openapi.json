@@ -15727,17 +15727,32 @@
         "x-apifox-status": "developing",
         "deprecated": false,
         "description": "",
-        "operationId": "AddAuthoritiy",
+        "operationId": "AddAuthority",
         "tags": ["Authentication/Authority"],
         "parameters": [],
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "mock": {
-                  "mock": "@guid"
+                "type": "object",
+                "x-apifox-refs": {
+                  "01GX43M50ENZYNS51KX4575QT5": {
+                    "mock": {
+                      "mock": "@guid"
+                    },
+                    "$ref": "#/components/schemas/Authority"
+                  }
                 },
-                "$ref": "#/components/schemas/Authority"
+                "x-apifox-orders": ["01GX43M50ENZYNS51KX4575QT5"],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "title": "名称",
+                    "description": "名称"
+                  }
+                },
+                "required": ["name"],
+                "x-apifox-ignore-properties": ["name"]
               },
               "example": {
                 "id": "19dfc5d6-53B0-5Ac5-BeFE-fF5c4dDD2623",

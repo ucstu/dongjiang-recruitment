@@ -7,6 +7,7 @@
     "vite"
   ],
   "scripts": {
+    "proxy": "concurrently \"kubectl port-forward services/postgresql-hl 5432:5432 -n dongjiang-recruitment-develop\" \"kubectl port-forward services/redis-master 6379:6379 -n dongjiang-recruitment-develop\" \"kubectl port-forward services/minio 9000:9000 9001:9001 -n dongjiang-recruitment-develop\"",
     "start": "concurrently \"kubectl port-forward services/postgresql-hl 5432:5432 -n dongjiang-recruitment-develop\" \"kubectl port-forward services/redis-master 6379:6379 -n dongjiang-recruitment-develop\" \"kubectl port-forward services/minio 9000:9000 9001:9001 -n dongjiang-recruitment-develop\" \"ts-node src/services.ts\""
   },
   "dependencies": {

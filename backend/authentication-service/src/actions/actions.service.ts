@@ -84,7 +84,9 @@ export class ActionsService {
             JSON.stringify(
               accounts[0].authorities
                 .concat(
-                  accounts[0].groups.map((group) => group.authorities).flat()
+                  accounts[0].authorityGroups
+                    .map((group) => group.authorities)
+                    .flat()
                 )
                 .filter((authority) => {
                   if (authoritiesFilterMap.has(authority.id)) {

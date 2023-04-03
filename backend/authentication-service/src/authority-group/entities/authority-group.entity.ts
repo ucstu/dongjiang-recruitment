@@ -8,6 +8,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "@dongjiang-recruitment/nest-common/dist/typeorm";
+import { Account } from "src/account/entities/account.entity";
 import { Authority } from "src/authority/entities/authority.entity";
 
 /**
@@ -16,10 +17,18 @@ import { Authority } from "src/authority/entities/authority.entity";
 @Entity()
 export class AuthorityGroup {
   /**
+   * 用户列表
+   */
+  @ManyToMany(() => Account, (account) => account.authorityGroups)
+  accounts: Account[];
+  /**
    * 权限列表
    */
-  @ManyToMany(() => Authority, {
+  @ManyToMany(() => Authority, (authority) => authority.authorityGroups, {
     eager: true,
+    cascade: true,
+    onUpdate: "CASCADE",
+    onDelete: "NO ACTION",
   })
   @JoinTable()
   authorities: Authority[];
