@@ -3,6 +3,8 @@
 /* eslint-disable */
 import type { Query, Sort } from "../../interfaces";
 import type { Account } from "../models/Account";
+import type { Authority } from "../models/Authority";
+import type { AuthorityGroup } from "../models/AuthorityGroup";
 
 import type { CancelablePromise } from "../core/CancelablePromise";
 import type { BaseHttpRequest } from "../core/BaseHttpRequest";
@@ -20,7 +22,7 @@ export class AuthenticationAccountService {
   }: {
     requestBody?: {
       /**
-       * 账号类型，eg；{0:Manager,1:Applicant,2:Personnel,3:Advertiser}
+       * 账号类型
        */
       accountType: 0 | 1 | 2 | 3;
       /**
@@ -272,11 +274,11 @@ export class AuthenticationAccountService {
       /**
        * 权限列表
        */
-      authorities: Array<string>;
+      authorities: Array<Authority>;
       /**
        * 权限组列表
        */
-      groups: Array<string>;
+      groups: Array<AuthorityGroup>;
       /**
        * 密码
        */

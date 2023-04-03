@@ -33,7 +33,7 @@ export const $AuthorityGroup = {
     authorities: {
       type: "array",
       contains: {
-        type: "string",
+        type: "Authority",
       },
       isRequired: true,
     },

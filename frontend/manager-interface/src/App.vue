@@ -1,5 +1,5 @@
 <template>
-  <n-config-provider :theme-overrides="themeOverrides">
+  <n-config-provider :theme-overrides="themeOverrides" class="h-full w-full">
     <n-notification-provider>
       <n-message-provider>
         <application />
@@ -14,8 +14,7 @@ import { useMainStore } from "@/stores";
 import { axios, AxiosError } from "@dongjiang-recruitment/service-common";
 import type { GlobalThemeOverrides, MessageReactive } from "naive-ui";
 
-const themeOverrides: GlobalThemeOverrides = {
-};
+const themeOverrides: GlobalThemeOverrides = {};
 
 const Application = defineComponent(() => {
   const router = useRouter();
@@ -28,7 +27,7 @@ const Application = defineComponent(() => {
   axios.interceptors.request.use(
     (config) => {
       timer = setTimeout(() => {
-        loading = $message.loading("加载中...", {
+        loading = $message.loading("处理中...", {
           duration: 3000,
         });
       }, 2000);

@@ -8,7 +8,7 @@
         </div>
         <div class="view-account-top-desc">
           <h2>欢迎使用忘记密码</h2>
-          <p>请使用您的账号重置密码</p>
+          <p>请使用您的电子邮箱重置密码</p>
         </div>
       </div>
       <div class="view-account-form">
@@ -22,7 +22,7 @@
           <n-form-item path="username">
             <n-input
               v-model:value="formInline.username"
-              placeholder="请输入用户名"
+              placeholder="请输入电子邮箱"
             >
               <template #prefix>
                 <n-icon size="18" color="#808695">
@@ -31,12 +31,41 @@
               </template>
             </n-input>
           </n-form-item>
+          <n-form-item path="verifyCode">
+            <n-input
+              v-model:value="formInline.verifyCode"
+              placeholder="请输入验证码"
+            >
+              <template #prefix>
+                <n-icon size="18" color="#808695">
+                  <ShieldCheckmarkOutline />
+                </n-icon>
+              </template>
+            </n-input>
+            <n-button class="ml-2" @click="verificationCode">
+              <span>获取验证码</span>
+            </n-button>
+          </n-form-item>
           <n-form-item path="password">
             <n-input
               v-model:value="formInline.password"
               type="password"
-              showPasswordOn="click"
-              placeholder="请输入密码"
+              show-password-on="click"
+              placeholder="请输入新密码"
+            >
+              <template #prefix>
+                <n-icon size="18" color="#808695">
+                  <LockClosedOutline />
+                </n-icon>
+              </template>
+            </n-input>
+          </n-form-item>
+          <n-form-item path="confirmPassword">
+            <n-input
+              v-model:value="formInline.confirmPassword"
+              type="password"
+              show-password-on="click"
+              placeholder="请输入再次输入新密码"
             >
               <template #prefix>
                 <n-icon size="18" color="#808695">
@@ -48,15 +77,8 @@
           <n-form-item class="default-color">
             <div class="flex justify-between w-full">
               <div class="flex-initial">
-                <a href="javascript:" @click="$router.push({ name: 'Forget' })"
-                  >忘记密码?</a
-                >
-              </div>
-              <div class="flex-initial" style="margin-left: auto">
-                <a
-                  href="javascript:"
-                  @click="$router.push({ name: 'Register' })"
-                  >注册账号</a
+                <a href="javascript:" @click="$router.push({ name: 'Login' })"
+                  >前往登录</a
                 >
               </div>
             </div>
@@ -64,15 +86,15 @@
           <n-form-item>
             <n-button
               type="primary"
-              @click="handleSubmit"
               size="large"
               :theme-overrides="{
                 textColorPrimary: '#000',
               }"
               :loading="loading"
               block
+              @click="handleSubmit"
             >
-              登录
+              重置
             </n-button>
           </n-form-item>
         </n-form>
@@ -83,41 +105,66 @@
 
 <script lang="ts" setup>
 import LogoImage from "@/assets/images/logo.png";
-import { useMainStore } from "@/stores";
-import { LockClosedOutline, PersonOutline } from "@vicons/ionicons5";
+import {
+LockClosedOutline,
+PersonOutline,
+ShieldCheckmarkOutline,
+} from "@vicons/ionicons5";
 
 const formRef = ref();
 const loading = ref(false);
 
 const formInline = reactive({
   username: "",
+  verifyCode: "",
   password: "",
+  confirmPassword: "",
 });
+
+const { refreshAsync: verificationCode } = commonService.useSendVerificationCode(() => ({
+  email: formInline.username,
+}), {
+  ready: computed(() => !!formInline.username),
+  onBefore: () => {
+    console.log(111);
+
+  },
+  manual: true
+})
 
 const rules = {
   username: { required: true, message: "请输入用户名", trigger: "blur" },
+  verifyCode: { required: true, message: "请输入验证码", trigger: "blur" },
   password: { required: true, message: "请输入密码", trigger: "blur" },
+  confirmPassword: {
+    required: true,
+    message: "请再次输入密码",
+    trigger: "blur",
+  },
 };
 
-const mainStore = useMainStore();
 const router = useRouter();
 
 const handleSubmit = (e: Event) => {
   e.preventDefault();
   formRef.value.validate(async (errors: any) => {
     if (!errors) {
-      const { username, password } = formInline;
+      const { username, verifyCode, password, confirmPassword } = formInline;
+      if (password !== confirmPassword) {
+        $message.error("两次输入的密码不一致");
+        return;
+      }
       loading.value = true;
       try {
-        const { token } = await authenticationService.loginAccount({
+        await authenticationService.forgetPassword({
           requestBody: {
             userName: username,
             password,
+            verificationCode: verifyCode,
           },
         });
-        mainStore.token = token;
-        $message.success("登录成功，即将进入系统");
-        router.replace("/");
+        $message.success("重置密码成功，请重新登录");
+        router.replace({ name: "Login" });
       } finally {
         loading.value = false;
       }
@@ -137,9 +184,9 @@ const handleSubmit = (e: Event) => {
 
   &-container {
     flex: 1;
-    padding: 32px 12px;
-    max-width: 384px;
     min-width: 320px;
+    max-width: 384px;
+    padding: 32px 12px;
     margin: 0 auto;
   }
 
@@ -175,7 +222,7 @@ const handleSubmit = (e: Event) => {
   }
 
   .page-account-container {
-    padding: 32px 0 24px 0;
+    padding: 32px 0 24px;
   }
 }
 </style>

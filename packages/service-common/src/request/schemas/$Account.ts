@@ -63,14 +63,14 @@ export const $Account = {
     authorities: {
       type: "array",
       contains: {
-        type: "string",
+        type: "Authority",
       },
       isRequired: true,
     },
     groups: {
       type: "array",
       contains: {
-        type: "string",
+        type: "AuthorityGroup",
       },
       isRequired: true,
     },

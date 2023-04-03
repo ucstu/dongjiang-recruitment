@@ -8,7 +8,7 @@
         </div>
         <div class="view-account-top-desc">
           <h2>欢迎登录</h2>
-          <p>请使用您的账号密码登录</p>
+          <p>请使用您的电子邮箱登录</p>
         </div>
       </div>
       <div class="view-account-form">
@@ -22,7 +22,7 @@
           <n-form-item path="username">
             <n-input
               v-model:value="formInline.username"
-              placeholder="请输入用户名"
+              placeholder="请输入电子邮箱"
             >
               <template #prefix>
                 <n-icon size="18" color="#808695">
@@ -52,13 +52,6 @@
                   >忘记密码?</a
                 >
               </div>
-              <div class="flex-initial" style="margin-left: auto">
-                <a
-                  href="javascript:"
-                  @click="$router.push({ name: 'Register' })"
-                  >注册账号</a
-                >
-              </div>
             </div>
           </n-form-item>
           <n-form-item>
@@ -85,6 +78,7 @@
 import LogoImage from "@/assets/images/logo.png";
 import { useMainStore } from "@/stores";
 import { LockClosedOutline, PersonOutline } from "@vicons/ionicons5";
+import type { NForm } from "naive-ui";
 
 const formRef = ref();
 const loading = ref(false);
@@ -137,9 +131,9 @@ const handleSubmit = (e: Event) => {
 
   &-container {
     flex: 1;
-    padding: 32px 12px;
-    max-width: 384px;
     min-width: 320px;
+    max-width: 384px;
+    padding: 32px 12px;
     margin: 0 auto;
   }
 
@@ -175,7 +169,7 @@ const handleSubmit = (e: Event) => {
   }
 
   .page-account-container {
-    padding: 32px 0 24px 0;
+    padding: 32px 0 24px;
   }
 }
 </style>

@@ -3705,7 +3705,7 @@
                       }
                     },
                     "x-enum-varnames": ["Active", "Expired"],
-                    "description": "已缴费用，eg；{1:Active,2:Expired}"
+                    "description": "已缴费用"
                   },
                   "startTime": {
                     "type": "string",
@@ -13561,7 +13561,7 @@
                       "Personnel",
                       "Advertiser"
                     ],
-                    "description": "账号类型，eg；{0:Manager,1:Applicant,2:Personnel,3:Advertiser}"
+                    "description": "账号类型"
                   },
                   "password": {
                     "type": "string",
@@ -13997,7 +13997,7 @@
                       "Personnel",
                       "Advertiser"
                     ],
-                    "description": "账号类型，eg；{0:Manager,1:Applicant,2:Personnel,3:Advertiser}"
+                    "description": "账号类型"
                   },
                   "userName": {
                     "type": "string",
@@ -14844,7 +14844,10 @@
                   "authorities": {
                     "type": "array",
                     "items": {
-                      "type": "string"
+                      "mock": {
+                        "mock": "@guid"
+                      },
+                      "$ref": "#/components/schemas/Authority"
                     },
                     "title": "权限列表",
                     "description": "权限列表"
@@ -14852,7 +14855,10 @@
                   "groups": {
                     "type": "array",
                     "items": {
-                      "type": "string"
+                      "mock": {
+                        "mock": "@guid"
+                      },
+                      "$ref": "#/components/schemas/AuthorityGroup"
                     },
                     "title": "权限组列表",
                     "description": "权限组列表"
@@ -15118,6 +15124,9 @@
           "content": {
             "application/json": {
               "schema": {
+                "mock": {
+                  "mock": "@guid"
+                },
                 "$ref": "#/components/schemas/AuthorityGroup"
               },
               "example": {
@@ -15171,6 +15180,9 @@
                       "description": "响应编码"
                     },
                     "body": {
+                      "mock": {
+                        "mock": "@guid"
+                      },
                       "$ref": "#/components/schemas/AuthorityGroup"
                     }
                   },
@@ -15330,6 +15342,9 @@
                         "items": {
                           "type": "array",
                           "items": {
+                            "mock": {
+                              "mock": "@guid"
+                            },
                             "$ref": "#/components/schemas/AuthorityGroup"
                           },
                           "title": "当页权限组",
@@ -15510,6 +15525,9 @@
           "content": {
             "application/json": {
               "schema": {
+                "mock": {
+                  "mock": "@guid"
+                },
                 "$ref": "#/components/schemas/AuthorityGroup"
               },
               "example": {
@@ -15560,6 +15578,9 @@
                       "description": "响应编码"
                     },
                     "body": {
+                      "mock": {
+                        "mock": "@guid"
+                      },
                       "$ref": "#/components/schemas/AuthorityGroup"
                     }
                   },
@@ -15656,6 +15677,9 @@
                       "description": "响应编码"
                     },
                     "body": {
+                      "mock": {
+                        "mock": "@guid"
+                      },
                       "$ref": "#/components/schemas/AuthorityGroup"
                     }
                   },
@@ -15710,6 +15734,9 @@
           "content": {
             "application/json": {
               "schema": {
+                "mock": {
+                  "mock": "@guid"
+                },
                 "$ref": "#/components/schemas/Authority"
               },
               "example": {
@@ -15759,6 +15786,9 @@
                       "description": "响应编码"
                     },
                     "body": {
+                      "mock": {
+                        "mock": "@guid"
+                      },
                       "$ref": "#/components/schemas/Authority"
                     }
                   },
@@ -15912,6 +15942,9 @@
                         "items": {
                           "type": "array",
                           "items": {
+                            "mock": {
+                              "mock": "@guid"
+                            },
                             "$ref": "#/components/schemas/Authority"
                           },
                           "title": "当页权限",
@@ -16133,6 +16166,9 @@
                     "description": "响应编码"
                   },
                   "body": {
+                    "mock": {
+                      "mock": "@guid"
+                    },
                     "$ref": "#/components/schemas/Authority"
                   }
                 },
@@ -16190,6 +16226,9 @@
                       "description": "响应编码"
                     },
                     "body": {
+                      "mock": {
+                        "mock": "@guid"
+                      },
                       "$ref": "#/components/schemas/Authority"
                     }
                   },
@@ -16281,6 +16320,9 @@
                       "description": "响应编码"
                     },
                     "body": {
+                      "mock": {
+                        "mock": "@guid"
+                      },
                       "$ref": "#/components/schemas/Authority"
                     }
                   },
@@ -17335,7 +17377,10 @@
           "authorities": {
             "type": "array",
             "items": {
-              "type": "string"
+              "mock": {
+                "mock": "@guid"
+              },
+              "$ref": "#/components/schemas/Authority"
             },
             "title": "权限列表",
             "description": "权限列表"
@@ -17470,7 +17515,10 @@
           "authorities": {
             "type": "array",
             "items": {
-              "type": "string"
+              "mock": {
+                "mock": "@guid"
+              },
+              "$ref": "#/components/schemas/Authority"
             },
             "title": "权限列表",
             "description": "权限列表"
@@ -17478,7 +17526,10 @@
           "groups": {
             "type": "array",
             "items": {
-              "type": "string"
+              "mock": {
+                "mock": "@guid"
+              },
+              "$ref": "#/components/schemas/AuthorityGroup"
             },
             "title": "权限组列表",
             "description": "权限组列表"
@@ -18503,7 +18554,7 @@
               }
             },
             "x-enum-varnames": ["Active", "Expired"],
-            "description": "已缴费用，eg；{1:Active,2:Expired}"
+            "description": "已缴费用"
           },
           "startTime": {
             "type": "string",

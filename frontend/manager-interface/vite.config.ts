@@ -6,6 +6,8 @@ const { NaiveUiResolver } = resolvers;
 
 export default mergeConfig(
   webConfig({
+    checker: false,
+    postcssPxToRem: false,
     autoImport: {
       imports: [
         "vue",

@@ -43,7 +43,7 @@ export type Advertise = {
    */
   status: Advertise.status;
   /**
-   * 已缴费用，eg；{1:Active,2:Expired}
+   * 已缴费用
    */
   payed: Advertise.payed;
   /**
@@ -73,7 +73,7 @@ export namespace Advertise {
   }
 
   /**
-   * 已缴费用，eg；{1:Active,2:Expired}
+   * 已缴费用
    */
   export enum payed {
     Active = 1,

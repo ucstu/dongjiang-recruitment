@@ -2,6 +2,9 @@
 /* tslint:disable */
 /* eslint-disable */
 
+import type { Authority } from "./Authority";
+import type { AuthorityGroup } from "./AuthorityGroup";
+
 /**
  * 账号
  */
@@ -50,9 +53,9 @@ export type Account = {
   /**
    * 权限列表
    */
-  authorities: Array<string>;
+  authorities: Array<Authority>;
   /**
    * 权限组列表
    */
-  groups: Array<string>;
+  groups: Array<AuthorityGroup>;
 };

@@ -2,6 +2,8 @@
 /* tslint:disable */
 /* eslint-disable */
 
+import type { Authority } from "./Authority";
+
 /**
  * 权限组
  */
@@ -29,5 +31,5 @@ export type AuthorityGroup = {
   /**
    * 权限列表
    */
-  authorities: Array<string>;
+  authorities: Array<Authority>;
 };

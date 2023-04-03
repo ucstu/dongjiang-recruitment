@@ -159,7 +159,7 @@ export class AuthenticationService {
        */
       verificationCode: string;
       /**
-       * 账号类型，eg；{0:Manager,1:Applicant,2:Personnel,3:Advertiser}
+       * 账号类型
        */
       accountType: 0 | 1 | 2 | 3;
       /**

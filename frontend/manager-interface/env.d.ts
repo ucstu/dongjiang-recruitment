@@ -6,9 +6,11 @@ import "vue-router";
 
 declare module "vue-router" {
   interface RouteMeta {
-    menu?: boolean;
+    show?: boolean;
     icon?: string;
     title?: string;
+    keep?: boolean;
+    pms?: string;
   }
 }
 

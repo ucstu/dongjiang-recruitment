@@ -1,6 +1,5 @@
 import ForgetPage from "@/pages/authentication/forget-page.vue";
 import LoginPage from "@/pages/authentication/login-page.vue";
-import RegisterPage from "@/pages/authentication/register-page.vue";
 import { useMainStore } from "@/stores";
 import MainView from "@/views/main-view.vue";
 import {
@@ -9,21 +8,24 @@ import {
   type RouteRecordRaw,
 } from "vue-router";
 
-const routes: Array<RouteRecordRaw> = [
+export const routes: Array<RouteRecordRaw> = [
   {
     path: "/login",
     name: "Login",
     component: LoginPage,
+    meta: {
+      show: false,
+      title: "登录",
+    },
   },
   {
     path: "/forget",
     name: "Forget",
     component: ForgetPage,
-  },
-  {
-    path: "/register",
-    name: "Register",
-    component: RegisterPage,
+    meta: {
+      show: false,
+      title: "忘记密码",
+    },
   },
   {
     path: "/",
@@ -34,8 +36,16 @@ const routes: Array<RouteRecordRaw> = [
         path: "account",
         name: "Account",
         component: () => import("@/pages/account-manage/account-manage.vue"),
+        meta: {
+          show: true,
+          title: "账户管理",
+        },
       },
     ],
+    meta: {
+      show: true,
+      title: "授权管理",
+    },
   },
 ];
 
@@ -48,7 +58,6 @@ const whiteList = ["Login", "Forget", "Register"];
 router.beforeEach((to, from, next) => {
   const mainStore = useMainStore();
   if (!mainStore.token && !whiteList.includes(to.name as string)) {
-    $message?.error("请先登录");
     next({ name: "Login" });
   } else {
     next();

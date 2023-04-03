@@ -11,13 +11,13 @@ interface WebOptions extends BaseOptions {
   vueJsx?: Parameters<typeof vueJsx>[0];
   legacy?: Parameters<typeof legacy>[0];
   cdnImport?: Parameters<typeof cdnImport>[0];
-  postcssPxToRem?: Parameters<typeof postcssPxToRem>[0];
+  postcssPxToRem?: Parameters<typeof postcssPxToRem>[0] | false;
 }
 export function webConfig(options?: WebOptions): UserConfigExport {
   return mergeConfig(
     baseConfig({
       autoImport: options?.autoImport,
-      // checker: options?.checker,
+      checker: options?.checker,
       visualizer: options?.visualizer,
       components: options?.components,
       tailwindcss: options?.tailwindcss,
@@ -60,21 +60,23 @@ export function webConfig(options?: WebOptions): UserConfigExport {
             ],
           }
         ),
-      ],
+      ].filter(Boolean),
       css: {
         modules: {
           localsConvention: "camelCaseOnly",
         },
         postcss: {
           plugins: [
-            postcssPxToRem(
-              options?.postcssPxToRem || {
-                rootValue: 16,
-                unitPrecision: 5,
-                propList: ["*"],
-              }
-            ),
-          ],
+            options?.postcssPxToRem !== false
+              ? postcssPxToRem(
+                  options?.postcssPxToRem || {
+                    rootValue: 16,
+                    unitPrecision: 5,
+                    propList: ["*"],
+                  }
+                )
+              : undefined,
+          ].filter(Boolean),
         },
       },
     }

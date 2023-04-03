@@ -45,7 +45,7 @@ export class AdvertiserAdvertiseService {
        */
       status: 1 | 2;
       /**
-       * 已缴费用，eg；{1:Active,2:Expired}
+       * 已缴费用
        */
       payed: 1 | 2;
       /**

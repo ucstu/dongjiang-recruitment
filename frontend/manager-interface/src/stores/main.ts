@@ -16,9 +16,6 @@ const parseJwt = (
 export const useMainStore = defineStore(
   "main",
   () => {
-    // 消息提示组件
-    const message = useMessage();
-
     // 授权信息
     const token = ref<string>("");
     const checked = ref<boolean>(false);
@@ -36,14 +33,14 @@ export const useMainStore = defineStore(
         onSuccess(res) {
           checked.value = true;
           if (res && !res.detailId?.manager) {
-            message.error("当前账户不是管理员账户");
+            $message.error("当前账户不是管理员账户");
             token.value = "";
           }
         },
         onError(err) {
           if (err?.message === "Not Found") {
             checked.value = false;
-            message.error("当前账户已被删除");
+            $message.error("当前账户已被删除");
             token.value = "";
           }
         },
@@ -61,6 +58,16 @@ export const useMainStore = defineStore(
   {
     persist: {
       enabled: true,
+      strategies: [
+        {
+          paths: ["token"],
+          storage: localStorage,
+        },
+        {
+          paths: ["account"],
+          storage: sessionStorage,
+        },
+      ],
     },
   }
 );
