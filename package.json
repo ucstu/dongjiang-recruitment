@@ -29,8 +29,6 @@
     "yorkie-pnpm": "^2.0.1"
   },
   "gitHooks": {
-    "pre-commit": "s-lint-staged",
-    "commit-msg": "commitlint -e -V "
   },
   "keywords": [
     "recruitment"

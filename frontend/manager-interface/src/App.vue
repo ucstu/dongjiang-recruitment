@@ -1,86 +1,95 @@
-<script setup lang="ts">
-// Do not delete this comment, it avoids triggering @vue/compiler-sfc's no script problem.
-</script>
-
 <template>
-  <header>
-    <img
-      alt="Vue logo"
-      class="logo"
-      src="@/assets/logo.svg"
-      width="125"
-      height="125"
-    />
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav>
-    </div>
-  </header>
-  <RouterView />
+  <n-config-provider :theme-overrides="themeOverrides">
+    <n-notification-provider>
+      <n-message-provider>
+        <application />
+        <router-view />
+      </n-message-provider>
+    </n-notification-provider>
+  </n-config-provider>
 </template>
 
-<style scoped>
-header {
-  max-height: 100vh;
-  line-height: 1.5;
-}
+<script setup lang="tsx">
+import { useMainStore } from "@/stores";
+import { axios, AxiosError } from "@dongjiang-recruitment/service-common";
+import type { GlobalThemeOverrides, MessageReactive } from "naive-ui";
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
+const themeOverrides: GlobalThemeOverrides = {
+};
 
-nav {
-  width: 100%;
-  margin-top: 2rem;
-  font-size: 12px;
-  text-align: center;
-}
+const Application = defineComponent(() => {
+  const router = useRouter();
+  // @ts-ignore
+  window.$message = useMessage();
+  const mainStore = useMainStore();
 
-nav a.router-link-exact-active {
-  color: var(--color-text);
-}
+  let timer: NodeJS.Timeout;
+  let loading: MessageReactive;
+  axios.interceptors.request.use(
+    (config) => {
+      timer = setTimeout(() => {
+        loading = $message.loading("加载中...", {
+          duration: 3000,
+        });
+      }, 2000);
+      return {
+        ...config,
+        headers: {
+          ...config.headers,
+          Authorization: `Bearer ${mainStore.token}`,
+        } as any,
+      };
+    },
+    (error) => {
+      return Promise.reject(error);
+    }
+  );
+  // 添加响应拦截器，当返回401时，跳转到登录页面
+  axios.interceptors.response.use(
+    (response) => {
+      clearTimeout(timer);
+      loading?.destroy();
+      return response;
+    },
+    (error) => {
+      if (error instanceof AxiosError) {
+        switch (error.response?.status) {
+          case 400:
+            $message.error(error.response.data.error);
+            break;
+          case 401:
+            $message.error("登录过期，请重新登录");
+            mainStore.token = "";
+            router.replace({ name: "Login" });
+            break;
+          case 403:
+            $message.error("您没有权限访问该资源");
+            break;
+          case 404:
+            $message.error("请求的资源不存在");
+            break;
+          case 500:
+            $message.error("服务器内部错误");
+            break;
+          default:
+            $message.error("服务器连接错误");
+            break;
+        }
+      } else {
+        $message.error("服务器连接错误");
+      }
+      clearTimeout(timer);
+      loading?.destroy();
+      return Promise.reject(error);
+    }
+  );
 
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
-}
+  nextTick(() => {
+    if (mainStore.token === "") {
+      router.replace({ name: "Login" });
+    }
+  });
+});
+</script>
 
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
-
-nav a:first-of-type {
-  border: 0;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    flex-wrap: wrap;
-    place-items: flex-start;
-  }
-
-  nav {
-    padding: 1rem 0;
-    margin-top: 1rem;
-    margin-left: -1rem;
-    font-size: 1rem;
-    text-align: left;
-  }
-}
-</style>
+<style scoped lang="scss"></style>

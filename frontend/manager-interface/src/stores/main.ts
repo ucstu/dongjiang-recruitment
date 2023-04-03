@@ -1,12 +1,66 @@
+import type { Account } from "@dongjiang-recruitment/service-common";
+import jwtDecode from "jwt-decode";
 import { defineStore } from "pinia";
-import { computed, ref } from "vue";
 
-export const useMainStore = defineStore("main", () => {
-  const count = ref(0);
-  const doubleCount = computed(() => count.value * 2);
-  function increment() {
-    count.value++;
+const parseJwt = (
+  token: string
+): { id?: string; did?: Account["detailId"] } => {
+  if (!token) return {};
+  try {
+    return jwtDecode(token) as { id: string; did: Account["detailId"] };
+  } catch (e) {
+    return {};
   }
+};
 
-  return { count, doubleCount, increment };
-});
+export const useMainStore = defineStore(
+  "main",
+  () => {
+    // 消息提示组件
+    const message = useMessage();
+
+    // 授权信息
+    const token = ref<string>("");
+    const checked = ref<boolean>(false);
+    const accountId = computed(() => parseJwt(token.value).id);
+    const {
+      data: account,
+      loading: loadingAccount,
+      mutate: setAccount,
+      refresh: refreshAccount,
+    } = authenticationAccountService.useGetAccount(
+      () => ({ id: accountId.value! }),
+      {
+        ready: computed(() => !!accountId.value),
+        refreshDeps: [accountId],
+        onSuccess(res) {
+          checked.value = true;
+          if (res && !res.detailId?.manager) {
+            message.error("当前账户不是管理员账户");
+            token.value = "";
+          }
+        },
+        onError(err) {
+          if (err?.message === "Not Found") {
+            checked.value = false;
+            message.error("当前账户已被删除");
+            token.value = "";
+          }
+        },
+      }
+    );
+
+    return {
+      token,
+      account,
+      setAccount,
+      refreshAccount,
+      loadingAccount,
+    };
+  },
+  {
+    persist: {
+      enabled: true,
+    },
+  }
+);

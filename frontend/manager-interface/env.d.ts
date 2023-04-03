@@ -1,6 +1,6 @@
 /// <reference types="vite/client" />
-/// <reference types="vue/macros-global" />
-/// <reference types="vite-plugin-pages/client" />
+/// <reference types="pinia-plugin-persist"  />
+
 
 import "vue-router";
 
@@ -18,4 +18,12 @@ interface ImportMetaEnv {
 
 interface ImportMeta {
   readonly env: ImportMetaEnv;
+}
+
+import { MessageApiInjection } from "naive-ui/lib/message/src/MessageProvider";
+declare global {
+  interface window {
+    $message: MessageApiInjection;
+  }
+  const $message: MessageApiInjection;
 }
