@@ -28,8 +28,7 @@
     "vue-tsc": "^1.1.7",
     "yorkie-pnpm": "^2.0.1"
   },
-  "gitHooks": {
-  },
+  "gitHooks": {},
   "keywords": [
     "recruitment"
   ],

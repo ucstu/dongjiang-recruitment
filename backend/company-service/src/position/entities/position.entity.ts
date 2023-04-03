@@ -71,82 +71,114 @@ export class Position {
   /**
    * 上限薪资，单位K
    */
-  @Column()
+  @Column({
+    nullable: true,
+  })
   ceilingSalary: number;
   /**
    * 公司ID
    */
-  @Column()
+  @Column({
+    nullable: true,
+  })
   companyId: string;
   /**
    * 所属部门
    */
-  @Column()
+  @Column({
+    nullable: true,
+  })
   departmentName: string;
   /**
    * 职位描述
    */
-  @Column()
+  @Column({
+    nullable: true,
+  })
   description: string;
   /**
    * 细分标签
    */
-  @Column("simple-array")
+  @Column("simple-array", {
+    nullable: true,
+  })
   directionTags: string[];
   /**
    * 学历要求，{1:不要求,2:大专,3:本科,4:硕士,5:博士}
    */
-  @Column()
+  @Column({
+    nullable: true,
+  })
   education: number;
   /**
    * 职位亮点
    */
-  @Column("simple-array")
+  @Column("simple-array", {
+    nullable: true,
+  })
   highlights: string[];
   /**
    * 面试
    */
-  @Column("simple-json")
+  @Column("simple-json", {
+    nullable: true,
+  })
   interviewInfo: InterviewInfo;
   /**
    * 下班时间
    */
-  @Column()
+  @Column({
+    nullable: true,
+  })
   overTime: string;
   /**
    * 人事ID
    */
-  @Column()
+  @Column({
+    nullable: true,
+  })
   personnelId: string;
   /**
    * 职位名称
    */
-  @Column()
+  @Column({
+    nullable: true,
+  })
   positionName: string;
   /**
    * 职位类型
    */
-  @Column()
+  @Column({
+    nullable: true,
+  })
   positionType: string;
   /**
    * 起始薪资，单位K
    */
-  @Column()
+  @Column({
+    nullable: true,
+  })
   startingSalary: number;
   /**
    * 周末休息时间，{1:周末双休:,2:周末单休,3:大小周}
    */
-  @Column()
+  @Column({
+    nullable: true,
+  })
   weekendReleaseTime: number;
   /**
    * 工作地区
    */
-  @Column()
+  @Column({
+    nullable: true,
+  })
   workAreaName: string;
   /**
    * 工作城市
    */
-  @Column()
+  @Column({
+    nullable: true,
+  })
   workCityName: string;
   /**
    * 上班地点
@@ -156,21 +188,29 @@ export class Position {
   /**
    * 工作年限，{1:经验不限,2:在校/应届,3:3年及以下,4:3-5年,5:5-10年,6:10年以上}
    */
-  @Column()
+  @Column({
+    nullable: true,
+  })
   workingYears: number;
   /**
    * 工作省份
    */
-  @Column()
+  @Column({
+    nullable: true,
+  })
   workProvinceName: string;
   /**
    * 上班时间
    */
-  @Column()
+  @Column({
+    nullable: true,
+  })
   workTime: string;
   /**
    * 职位类型，{1:全职,2:兼职,3:实习}
    */
-  @Column()
+  @Column({
+    nullable: true,
+  })
   workType: number;
 }

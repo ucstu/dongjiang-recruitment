@@ -75,7 +75,7 @@
               <template v-if="TalentInfo[0].jobExpectationId">
                 <div
                   v-for="Talent in TalentInfo"
-                    :key="Talent.applicantId"
+                  :key="Talent.applicantId"
                   class="resume-item"
                 >
                   <div class="item-header">
@@ -105,9 +105,7 @@
                   <div>
                     <el-button
                       type="primary"
-                      @click="
-                        inspectionResume(Talent.applicantId as string)
-                      "
+                      @click="inspectionResume(Talent.applicantId as string)"
                     >
                       查看简历</el-button
                     >
@@ -125,7 +123,10 @@
 
 <script setup lang="ts">
 import router from "@/router";
-import type { Applicant, JobExpectation } from "@dongjiang-recruitment/service-common";
+import type {
+  Applicant,
+  JobExpectation,
+} from "@dongjiang-recruitment/service-common";
 import { Search } from "@element-plus/icons-vue";
 import ResumeFooter from "../Resume/ResumeFooter.vue";
 

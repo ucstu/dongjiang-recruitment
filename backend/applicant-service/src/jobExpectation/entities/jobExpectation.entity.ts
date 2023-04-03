@@ -1,10 +1,10 @@
 import {
-Column,
-CreateDateColumn,
-DeleteDateColumn,
-Entity,
-PrimaryGeneratedColumn,
-UpdateDateColumn
+  Column,
+  CreateDateColumn,
+  DeleteDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from "@dongjiang-recruitment/nest-common/dist/typeorm";
 
 /**
@@ -35,36 +35,50 @@ export class JobExpectation {
   /**
    * 上限薪资，单位K
    */
-  @Column()
+  @Column({
+    nullable: true,
+  })
   ceilingSalary: number;
   /**
    * 期望城市
    */
-  @Column()
+  @Column({
+    nullable: true,
+  })
   cityName: string;
   /**
    * 细分标签
    */
-  @Column("simple-array")
+  @Column("simple-array", {
+    nullable: true,
+  })
   directionTags: string[];
   /**
    * 职位名称
    */
-  @Column()
+  @Column({
+    nullable: true,
+  })
   positionName: string;
   /**
    * 职位类型，{1:全职,2:兼职,3:实习}
    */
-  @Column()
+  @Column({
+    nullable: true,
+  })
   positionType: number;
   /**
    * 起始薪资，单位K
    */
-  @Column()
+  @Column({
+    nullable: true,
+  })
   startingSalary: number;
   /**
    * 求职者ID
    */
-  @Column()
+  @Column({
+    nullable: true,
+  })
   applicantId: string;
 }

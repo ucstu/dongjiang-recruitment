@@ -1,44 +1,48 @@
 <template>
   <div
     v-for="deliveryRecordsChecked in props.deliveryRecordsCheckeds"
-        :key="deliveryRecordsChecked.id"
-      class="resume-item"
-    >
-      <div class="resume-item">
-        <div class="item-header">
-          <input
-            type="checkbox"
-            :checked="deliveryRecordsChecked.checked"
-            @change="handleChecked(deliveryRecordsChecked.id)"
-          />
-          <img
-            :src="
-              VITE_CDN_URL +
+    :key="deliveryRecordsChecked.id"
+    class="resume-item"
+  >
+    <div class="resume-item">
+      <div class="item-header">
+        <input
+          type="checkbox"
+          :checked="deliveryRecordsChecked.checked"
+          @change="handleChecked(deliveryRecordsChecked.id)"
+        />
+        <img
+          :src="
+            VITE_CDN_URL +
+            userInformations.get(deliveryRecordsChecked.applicantId)?.avatarUrl
+          "
+          alt=""
+        />
+        <div class="header-person">
+          <div>
+            <span>{{
               userInformations.get(deliveryRecordsChecked.applicantId)
-                ?.avatarUrl
-            "
-            alt=""
-          />
-          <div class="header-person">
-            <div>
-              <span>{{
-                userInformations.get(deliveryRecordsChecked.applicantId)
-                  ?.firstName +
-                "" +
-                userInformations.get(deliveryRecordsChecked.applicantId)
-                  ?.lastName
-              }}</span>
-              <span
-                >·{{
+                ?.firstName +
+              "" +
+              userInformations.get(deliveryRecordsChecked.applicantId)?.lastName
+            }}</span>
+            <span
+              >·{{
+                userInformations.get(deliveryRecordsChecked.applicantId)?.sex
+              }}·<span>{{
+                userInformations.get(deliveryRecordsChecked.applicantId)?.age
+              }}</span
+              >岁·<span>{{
+                educations[
                   userInformations.get(deliveryRecordsChecked.applicantId)
-                    ?.sex
-                }}·<span>{{
-  userInformations.get(deliveryRecordsChecked.applicantId)
-    ?.age
-}}</span
-                >岁·<span
-                  >{{ educations[userInformations.get(deliveryRecordsChecked.applicantId)?.education as 1 | 2 | 3 | 4] }}</span
-                >·{{ slution[userInformations.get(deliveryRecordsChecked.applicantId)?.jobStatus as 1 | 2 | 3 ]
+                    ?.education as 1 | 2 | 3 | 4
+                ]
+              }}</span
+              >·{{
+                slution[
+                  userInformations.get(deliveryRecordsChecked.applicantId)
+                    ?.jobStatus as 1 | 2 | 3
+                ]
               }}</span
             >
           </div>
@@ -50,17 +54,14 @@
               }}</span
             >|<span
               >{{
-                jobInformations.get(
-                  deliveryRecordsChecked.positionId
-                )?.positionName
+                jobInformations.get(deliveryRecordsChecked.positionId)
+                  ?.positionName
               }}|{{
-                jobInformations.get(
-                  deliveryRecordsChecked.positionId
-                )?.startingSalary +
+                jobInformations.get(deliveryRecordsChecked.positionId)
+                  ?.startingSalary +
                 "K-" +
-                jobInformations.get(
-                  deliveryRecordsChecked.positionId
-                )?.ceilingSalary +
+                jobInformations.get(deliveryRecordsChecked.positionId)
+                  ?.ceilingSalary +
                 "K"
               }}</span
             >
@@ -82,7 +83,11 @@
 </template>
 <script setup lang="ts">
 import router from "@/router";
-import type { Applicant, DeliveryRecord, Position } from "@dongjiang-recruitment/service-common";
+import type {
+  Applicant,
+  DeliveryRecord,
+  Position,
+} from "@dongjiang-recruitment/service-common";
 import type { PropType } from "vue";
 
 export interface DeliveryRecordChecked extends DeliveryRecord {
@@ -125,19 +130,21 @@ const inspectionResume = (delivery: DeliveryRecordChecked) => {
   // 变更状态函数，将选中的简历信息的状态进行变更
   if (delivery.status === 1) {
     delivery.status = 2;
-    applicantDeliveryRecordService.updateDeliveryRecord({
-      applicantId: delivery.applicantId,
-      id: delivery.id,
-      requestBody: delivery,
-    }).then(() => {
-      router.push({
-        name: "Resume",
-        params: {
-          userId: delivery.applicantId,
-          postId: delivery.positionId,
-        },
+    applicantDeliveryRecordService
+      .updateDeliveryRecord({
+        applicantId: delivery.applicantId,
+        id: delivery.id,
+        requestBody: delivery,
+      })
+      .then(() => {
+        router.push({
+          name: "Resume",
+          params: {
+            userId: delivery.applicantId,
+            postId: delivery.positionId,
+          },
+        });
       });
-    });
   } else {
     router.push({
       name: "Resume",

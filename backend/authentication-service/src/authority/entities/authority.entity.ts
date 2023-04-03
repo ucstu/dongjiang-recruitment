@@ -29,7 +29,9 @@ export class Authority {
   /**
    * 名称
    */
-  @Column()
+  @Column({
+    nullable: true,
+  })
   name: string;
   /**
    * 修改时间

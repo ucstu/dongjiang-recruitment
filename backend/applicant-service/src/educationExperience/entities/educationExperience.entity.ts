@@ -35,31 +35,43 @@ export class EducationExperience {
   /**
    * 入学时间
    */
-  @Column()
+  @Column({
+    nullable: true,
+  })
   admissionTime: string;
   /**
    * 学历层次，{1:大专,2:本科,3:硕士,4:博士}
    */
-  @Column()
+  @Column({
+    nullable: true,
+  })
   education: number;
   /**
    * 毕业时间
    */
-  @Column()
+  @Column({
+    nullable: true,
+  })
   graduationTime: string;
   /**
    * 专业名称
    */
-  @Column()
+  @Column({
+    nullable: true,
+  })
   majorName: string;
   /**
    * 学校名称
    */
-  @Column()
+  @Column({
+    nullable: true,
+  })
   schoolName: string;
   /**
    * 求职者ID
    */
-  @Column()
+  @Column({
+    nullable: true,
+  })
   applicantId: string;
 }

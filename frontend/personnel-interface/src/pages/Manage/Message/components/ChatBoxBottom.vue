@@ -58,10 +58,10 @@
 import router from "@/router";
 import { useCompriseStore } from "@/stores/main";
 import {
-ArrowDown,
-FolderOpened,
-PictureFilled,
-Plus
+  ArrowDown,
+  FolderOpened,
+  PictureFilled,
+  Plus,
 } from "@element-plus/icons-vue";
 import { ElMessage } from "element-plus";
 const VITE_CDN_URL = import.meta.env.VITE_CDN_URL as string;

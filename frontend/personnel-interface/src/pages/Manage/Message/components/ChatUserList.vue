@@ -44,15 +44,15 @@
 </template>
 
 <script lang="ts" setup>
-import type { withReadStateMessageRecord } from '@/stores/main';
-import type { Applicant } from '@dongjiang-recruitment/service-common';
-import type { PropType } from 'vue';
+import type { withReadStateMessageRecord } from "@/stores/main";
+import type { Applicant } from "@dongjiang-recruitment/service-common";
+import type { PropType } from "vue";
 
 const VITE_CDN_URL = import.meta.env.VITE_CDN_URL as string;
 
 const props = defineProps({
   messages: {
-    type: Object as PropType<{ [key: string]: withReadStateMessageRecord[]; }>,
+    type: Object as PropType<{ [key: string]: withReadStateMessageRecord[] }>,
     default: () => ({}),
   },
   userInformations: {

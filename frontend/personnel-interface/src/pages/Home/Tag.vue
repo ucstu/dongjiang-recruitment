@@ -43,16 +43,15 @@ const changeDirection = (
 };
 const checkableJobTypes = ref<Ref<PositionType>[]>([]);
 
-commonService.getPositionTypes()
-  .then((res) => {
-    checkableJobTypes.value = res.map((jobType) => {
-      let fieldName = jobType.fieldName;
-      return ref({
-        fieldName,
-        checked: false,
-      });
+commonService.getPositionTypes().then((res) => {
+  checkableJobTypes.value = res.map((jobType) => {
+    let fieldName = jobType.fieldName;
+    return ref({
+      fieldName,
+      checked: false,
     });
-  })
+  });
+});
 </script>
 <style scoped lang="scss">
 .tag {

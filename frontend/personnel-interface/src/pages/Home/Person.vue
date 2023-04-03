@@ -175,20 +175,21 @@ const confirmPerson = (formEl: FormInstance | undefined) => {
   formEl.validate((valid) => {
     if (valid) {
       if (alive.value) {
-        personnelService.updatePersonnel({
-          id: formLabelAlign.value.id,
-          requestBody: formLabelAlign.value,
-        })
+        personnelService
+          .updatePersonnel({
+            id: formLabelAlign.value.id,
+            requestBody: formLabelAlign.value,
+          })
           .then((res) => {
             store.hrInformation = res;
             // 如果companyInformationId不为null，则获取公司信息并存储在store中。然后它将替换到管理的路线。如果 companyInformationId 为
             // null，它将替换到 Company 的路由。
             if (res.companyId) {
-              companyService.getCompany({ id: res.companyId }).then(
-                (response) => {
+              companyService
+                .getCompany({ id: res.companyId })
+                .then((response) => {
                   store.companyInformation = response;
-                }
-              );
+                });
 
               router.replace({ name: "Manage" });
             } else {
@@ -197,7 +198,7 @@ const confirmPerson = (formEl: FormInstance | undefined) => {
                 params: { companyName: company.value.name },
               });
             }
-          })
+          });
       } else {
         ElMessage.warning("该公司已存在，请重新输入");
       }

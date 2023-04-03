@@ -22,8 +22,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import type { PropType, Ref } from 'vue';
-
+import type { PropType, Ref } from "vue";
 
 const props = defineProps({
   title: {

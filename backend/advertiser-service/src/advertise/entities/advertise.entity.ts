@@ -32,7 +32,9 @@ export class Advertise {
   /**
    * 图片地址
    */
-  @Column()
+  @Column({
+    nullable: true,
+  })
   banner: string;
   /**
    * 创建时间
@@ -47,7 +49,9 @@ export class Advertise {
   /**
    * 结束时间
    */
-  @Column()
+  @Column({
+    nullable: true,
+  })
   endTime: Date;
   /**
    * 广告ID
@@ -57,36 +61,46 @@ export class Advertise {
   /**
    * 名称
    */
-  @Column()
+  @Column({
+    nullable: true,
+  })
   name: string;
   /**
    * 网页地址
    */
-  @Column()
+  @Column({
+    nullable: true,
+  })
   pageUrl: string;
   /**
    * 已缴费用
    */
-  @Column()
+  @Column({
+    nullable: true,
+  })
   payed: number;
   /**
    * 投放位置，{1:Master}
    */
   @Column({
     type: "enum",
+    nullable: true,
     enum: AdvertisePosition,
   })
   position: AdvertisePosition;
   /**
    * 开始时间
    */
-  @Column()
+  @Column({
+    nullable: true,
+  })
   startTime: Date;
   /**
    * 投放状态，{1:Active,2:Expired}
    */
   @Column({
     type: "enum",
+    nullable: true,
     enum: AdvertiseStatus,
   })
   status: AdvertiseStatus;
@@ -98,6 +112,8 @@ export class Advertise {
   /**
    * 广告商ID
    */
-  @Column()
+  @Column({
+    nullable: true,
+  })
   advertiserId: string;
 }

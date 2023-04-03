@@ -35,11 +35,15 @@ export class AttentionRecord {
   /**
    * 求职者ID
    */
-  @Column()
+  @Column({
+    nullable: true,
+  })
   applicantId: string;
   /**
    * 公司ID
    */
-  @Column()
+  @Column({
+    nullable: true,
+  })
   companyId: string;
 }

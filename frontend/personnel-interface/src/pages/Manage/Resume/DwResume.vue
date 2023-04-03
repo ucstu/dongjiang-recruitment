@@ -59,9 +59,9 @@
 <script setup lang="ts">
 import { useMainStore } from "@/stores/main";
 import type {
-Applicant,
-DeliveryRecord,
-Position
+  Applicant,
+  DeliveryRecord,
+  Position,
 } from "@dongjiang-recruitment/service-common";
 import { Search } from "@element-plus/icons-vue";
 import ResumeInfo from "../Interview/resumeInfo.vue";

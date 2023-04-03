@@ -35,46 +35,64 @@ export class WorkExperience {
   /**
    * 公司领域
    */
-  @Column()
+  @Column({
+    nullable: true,
+  })
   companyIndustry: string;
   /**
    * 公司名称
    */
-  @Column()
+  @Column({
+    nullable: true,
+  })
   companyName: string;
   /**
    * 部门名称
    */
-  @Column()
+  @Column({
+    nullable: true,
+  })
   departmentName: string;
   /**
    * 离职时间
    */
-  @Column()
+  @Column({
+    nullable: true,
+  })
   endTime: string;
   /**
    * 工作内容
    */
-  @Column()
+  @Column({
+    nullable: true,
+  })
   jobContent: string;
   /**
    * 职位名称
    */
-  @Column()
+  @Column({
+    nullable: true,
+  })
   positionName: string;
   /**
    * 职位类型，{1:全职,2:兼职,3:实习}
    */
-  @Column()
+  @Column({
+    nullable: true,
+  })
   positionType: number;
   /**
    * 就职时间
    */
-  @Column()
+  @Column({
+    nullable: true,
+  })
   startTime: string;
   /**
    * 求职者ID
    */
-  @Column()
+  @Column({
+    nullable: true,
+  })
   applicantId: string;
 }

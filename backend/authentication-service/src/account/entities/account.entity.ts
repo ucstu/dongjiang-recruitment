@@ -60,7 +60,9 @@ export class Account {
   /**
    * 详情ID
    */
-  @Column("simple-json")
+  @Column("simple-json", {
+    nullable: true,
+  })
   detailId: DetailId;
   /**
    * 权限组列表
@@ -86,12 +88,16 @@ export class Account {
   /**
    * 用户名
    */
-  @Column()
+  @Column({
+    nullable: true,
+  })
   userName: string;
   /**
    * 密码
    */
-  @Column()
+  @Column({
+    nullable: true,
+  })
   @Exclude()
   password: string;
 }

@@ -35,16 +35,22 @@ export class GarnerRecord {
   /**
    * 求职者ID
    */
-  @Column()
+  @Column({
+    nullable: true,
+  })
   applicantId: string;
   /**
    * 公司ID
    */
-  @Column()
+  @Column({
+    nullable: true,
+  })
   companyId: string;
   /**
    * 职位ID
    */
-  @Column()
+  @Column({
+    nullable: true,
+  })
   positionId: string;
 }

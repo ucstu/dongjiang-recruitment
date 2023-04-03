@@ -106,9 +106,9 @@
 <script lang="ts" setup>
 import LogoImage from "@/assets/images/logo.png";
 import {
-LockClosedOutline,
-PersonOutline,
-ShieldCheckmarkOutline,
+  LockClosedOutline,
+  PersonOutline,
+  ShieldCheckmarkOutline,
 } from "@vicons/ionicons5";
 
 const formRef = ref();
@@ -121,16 +121,19 @@ const formInline = reactive({
   confirmPassword: "",
 });
 
-const { refreshAsync: verificationCode } = commonService.useSendVerificationCode(() => ({
-  email: formInline.username,
-}), {
-  ready: computed(() => !!formInline.username),
-  onBefore: () => {
-    console.log(111);
-
-  },
-  manual: true
-})
+const { refreshAsync: verificationCode } =
+  commonService.useSendVerificationCode(
+    () => ({
+      email: formInline.username,
+    }),
+    {
+      ready: computed(() => !!formInline.username),
+      onBefore: () => {
+        console.log(111);
+      },
+      manual: true,
+    }
+  );
 
 const rules = {
   username: { required: true, message: "请输入用户名", trigger: "blur" },

@@ -75,9 +75,8 @@
                           <el-divider direction="vertical" />
                           <p>
                             应聘职位：{{
-                              jobInformations.get(
-                                interview.positionId
-                              )?.positionName
+                              jobInformations.get(interview.positionId)
+                                ?.positionName
                             }}
                           </p>
                         </div>
@@ -109,7 +108,11 @@ import SystemHeader from "@/components/System/SystemHeader.vue";
 import useDate from "@/hooks/useDate";
 import router from "@/router";
 import { useMainStore } from "@/stores/main";
-import type { Applicant, DeliveryRecord, Position } from "@dongjiang-recruitment/service-common";
+import type {
+  Applicant,
+  DeliveryRecord,
+  Position,
+} from "@dongjiang-recruitment/service-common";
 
 const store = useMainStore();
 const ho = new Date().getHours();
@@ -139,41 +142,41 @@ const valueMap = ref<Record>({
 });
 const recruitmentPosition = ref(0);
 // 获取位置信息的总数。
-companyPositionService.queryPosition({
-  companyId: store.companyInformation.id,
-  size: 0,
-}).then((res) => {
-  recruitmentPosition.value = res.total;
-});
+companyPositionService
+  .queryPosition({
+    companyId: store.companyInformation.id,
+    size: 0,
+  })
+  .then((res) => {
+    recruitmentPosition.value = res.total;
+  });
 
 // 获取面试信息
-applicantService.queryAllDeliveryRecord({
-  query: {
-    companyId: ["$eq", store.companyInformation.id],
-    status: ["$in", ...valueMap.value.status],
-  }
-})
+applicantService
+  .queryAllDeliveryRecord({
+    query: {
+      companyId: ["$eq", store.companyInformation.id],
+      status: ["$in", ...valueMap.value.status],
+    },
+  })
   .then((res) => {
     interviewNum.value = res.items;
     interviewNum.value.forEach((item) => {
-      companyPositionService.getPosition({
-        companyId: item.companyId,
-        id: item.positionId,
-      })
+      companyPositionService
+        .getPosition({
+          companyId: item.companyId,
+          id: item.positionId,
+        })
         .then((response) => {
-          jobInformations.value.set(
-            item.positionId,
-            response
-          );
+          jobInformations.value.set(item.positionId, response);
+        });
+      applicantService
+        .getApplicant({
+          id: item.applicantId,
         })
-      applicantService.getApplicant({
-        id: item.applicantId,
-      }).then((responseable) => {
-          userInformations.value.set(
-            item.applicantId,
-            responseable
-          );
-        })
+        .then((responseable) => {
+          userInformations.value.set(item.applicantId, responseable);
+        });
 
       if (item.status === 1) {
         num.value.countCommunication = num.value.countCommunication + 1;
@@ -184,7 +187,7 @@ applicantService.queryAllDeliveryRecord({
         num.value.countInterviewed = num.value.countInterviewed + 1;
       }
     });
-  })
+  });
 
 const goPosition = () => {
   router.push("/System/Position");
@@ -194,19 +197,21 @@ const inspectionResume = (delivery: DeliveryRecord) => {
   // 变更状态函数，将选中的简历信息的状态进行变更
   if (delivery.status === 1) {
     delivery.status = 2;
-    applicantDeliveryRecordService.updateDeliveryRecord({
-      applicantId: delivery.applicantId,
-      id: delivery.id,
-      requestBody: delivery,
-    }).then(() => {
-      router.push({
-        name: "Resume",
-        params: {
-          userId: delivery.applicantId,
-          postId: delivery.positionId,
-        },
+    applicantDeliveryRecordService
+      .updateDeliveryRecord({
+        applicantId: delivery.applicantId,
+        id: delivery.id,
+        requestBody: delivery,
+      })
+      .then(() => {
+        router.push({
+          name: "Resume",
+          params: {
+            userId: delivery.applicantId,
+            postId: delivery.positionId,
+          },
+        });
       });
-    });
   } else {
     router.push({
       name: "Resume",

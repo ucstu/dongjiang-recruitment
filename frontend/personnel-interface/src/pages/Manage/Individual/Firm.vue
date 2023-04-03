@@ -284,7 +284,6 @@ const dealfilechange = (e: Event) => {
       //   })
       //   .catch(failResponseHandler);
       console.log("上传咱不可用");
-
     }
   }
 };
@@ -298,34 +297,34 @@ interface CityInfo {
   label: string;
 }
 const cityMap = ref<CityInfo[]>([]);
-commonService.getCities()
-  .then((res) => {
-    cityMap.value = res.map((item) => {
-      return {
-        value: item.provinceName,
-        label: item.provinceName,
-        children: item.cities.map((city) => {
-          return {
-            value: city,
-            label: city,
-          };
-        }),
-      };
-    });
-  })
+commonService.getCities().then((res) => {
+  cityMap.value = res.map((item) => {
+    return {
+      value: item.provinceName,
+      label: item.provinceName,
+      children: item.cities.map((city) => {
+        return {
+          value: city,
+          label: city,
+        };
+      }),
+    };
+  });
+});
 
 const updateCompany = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   formEl.validate((valid) => {
     if (valid) {
-      companyService.updateCompany({
-        id: store.companyInformation.id,
-        requestBody: formCompany,
-      })
+      companyService
+        .updateCompany({
+          id: store.companyInformation.id,
+          requestBody: formCompany,
+        })
         .then((res) => {
           ElMessage.success("修改成功");
           store.companyInformation = res;
-        })
+        });
     }
   });
 };

@@ -69,9 +69,7 @@
                   </div>
                 </div>
                 <div class="position-button">
-                  <el-button
-                    type="primary"
-                    @click="updatePosition(position.id)"
+                  <el-button type="primary" @click="updatePosition(position.id)"
                     >编辑职位</el-button
                   >
                   <el-popconfirm
@@ -254,7 +252,7 @@ const deletePosition = (id: string) => {
     .then((res) => {
       jobTypeList.value = jobTypeList.value?.filter((item) => item.id !== res);
       ElMessage.success("删除成功");
-    })
+    });
 };
 </script>
 

@@ -9,7 +9,6 @@
 </template>
 
 <script lang="ts" setup>
-
 const info = ref("empty");
 </script>
 

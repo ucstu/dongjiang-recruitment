@@ -5,94 +5,124 @@
         <div class="total">
           <div class="left">
             <div class="avatar">
-                    <img :src="
-                      userInfo?.avatarUrl
-                        ? VITE_CDN_URL + userInfo.avatarUrl
-                        : VITE_CDN_URL + imgUrl
-                    " alt="avatar" />
-                  </div>
-                  <div class="info">
-                    <span class="name">{{ userInfo ? userName : "" }}</span>
-                    <span class="state">
-                      <el-breadcrumb separator="/">
-                        <el-breadcrumb-item>{{ userInfo?.sex }}</el-breadcrumb-item>
-                        <el-breadcrumb-item>{{
-                          userInfo?.age + "岁"
-                        }}</el-breadcrumb-item>
-                        <el-breadcrumb-item>{{
-                          educationMap[(userInfo.education + 1) as 1 | 2 | 3 | 4]
-                        }}</el-breadcrumb-item>
-                        <el-breadcrumb-item>{{
-                          userInfo?.workingYears
-                          ? userInfo.workingYears + "年"
-                          : "无经验"
-                        }}</el-breadcrumb-item>
-                      </el-breadcrumb></span>
-                    <span class="state">求职状态：{{
-                      jobStatusMap[(userInfo!.jobStatus + 1) as 1 | 2 | 3]
-                    }}</span>
-                    <span class="state">期望职位：{{ positionInfo?.positionName }}</span>
-                    <span class="state">期望地点：{{ userInfo?.cityName }}</span>
-                    <span class="state">期望薪资：{{
-                      positionInfo?.startingSalary +
-                      "k" +
-                      "-" +
-                      positionInfo?.ceilingSalary +
-                      "k"
-                    }}</span>
-                    <el-button type="primary" @click="toMessage(userInfo!.id)">在线沟通</el-button>
-                    <div v-if="works.length > 0" class="project-docu">
-                      <h3>工作经历:</h3>
-                      <div v-for="work in works" :key="work.id">
-                        <span>公司名称：{{ work.companyName }}</span>
-                        <span>公司领域：{{ work.companyIndustry }}</span>
-                        <span>部门名称{{ work.departmentName }}</span>
-                        <span>职位名称{{ work.positionName }}</span>
-                        <span>工作内容{{ work.jobContent }}</span>
-                        <span>就职时间{{ work.startTime }}</span>
-                        <span>离职时间{{ work.endTime }}</span>
-                      </div>
-                    </div>
-                    <div v-else>
-                      <h3>项目经历：</h3>
-                      <img style="width: 250px; height: 200px" src="@/assets/nocontent.jpg" alt="" />
-                    </div>
-                  </div>
-                  <div class="info2">
-                    <div v-if="works.length > 0" class="img-docu">
-                      <h3>图片作品：</h3>
-                      <div v-for="(imageurl, i) in userInfo.pictureWorks" :key="i">
-                        <img :src="imageurl" alt="图片作品" />
-                      </div>
-                    </div>
-                    <div v-else>
-                      <h3>图片作品：</h3>
-                      <img style="width: 250px; height: 200px" src="@/assets/nocontent.jpg" alt="" />
-                    </div>
-                    <div v-if="projects.length > 0" class="project-docu">
-                      <h3>项目经历:</h3>
-                      <div v-for="project in projects" :key="project.id">
-                        <span>项目名：{{ project.projectName }}</span>
-                        <span>项目描述：{{ project.projectDescription }}</span>
-                        <span>项目成就：{{ project.achievement }}</span>
-                        <span>项目开始时间：{{ project.startTime }}</span>
-                        <span>项目结束时间：{{ project.endTime }}</span>
-                        <span>项目链接：{{ project.projectLink }}</span>
-                        <span>项目开始时间-项目截至时间{{
-                          project.startTime + "-" + project.endTime
-                        }}</span>
-                        <span>{{ project.achievement }}</span>
-                        <span>{{ project.projectLink }}</span>
-                      </div>
-                    </div>
-                    <div v-else>
-                      <h3>项目经历：</h3>
-                      <img style="width: 250px; height: 200px" src="@/assets/nocontent.jpg" alt="" />
-                    </div>
-                  </div>
+              <img
+                :src="
+                  userInfo?.avatarUrl
+                    ? VITE_CDN_URL + userInfo.avatarUrl
+                    : VITE_CDN_URL + imgUrl
+                "
+                alt="avatar"
+              />
+            </div>
+            <div class="info">
+              <span class="name">{{ userInfo ? userName : "" }}</span>
+              <span class="state">
+                <el-breadcrumb separator="/">
+                  <el-breadcrumb-item>{{ userInfo?.sex }}</el-breadcrumb-item>
+                  <el-breadcrumb-item>{{
+                    userInfo?.age + "岁"
+                  }}</el-breadcrumb-item>
+                  <el-breadcrumb-item>{{
+                    educationMap[(userInfo.education + 1) as 1 | 2 | 3 | 4]
+                  }}</el-breadcrumb-item>
+                  <el-breadcrumb-item>{{
+                    userInfo?.workingYears
+                      ? userInfo.workingYears + "年"
+                      : "无经验"
+                  }}</el-breadcrumb-item>
+                </el-breadcrumb></span
+              >
+              <span class="state"
+                >求职状态：{{
+                  jobStatusMap[(userInfo!.jobStatus + 1) as 1 | 2 | 3]
+                }}</span
+              >
+              <span class="state"
+                >期望职位：{{ positionInfo?.positionName }}</span
+              >
+              <span class="state">期望地点：{{ userInfo?.cityName }}</span>
+              <span class="state"
+                >期望薪资：{{
+                  positionInfo?.startingSalary +
+                  "k" +
+                  "-" +
+                  positionInfo?.ceilingSalary +
+                  "k"
+                }}</span
+              >
+              <el-button type="primary" @click="toMessage(userInfo!.id)"
+                >在线沟通</el-button
+              >
+              <div v-if="works.length > 0" class="project-docu">
+                <h3>工作经历:</h3>
+                <div v-for="work in works" :key="work.id">
+                  <span>公司名称：{{ work.companyName }}</span>
+                  <span>公司领域：{{ work.companyIndustry }}</span>
+                  <span>部门名称{{ work.departmentName }}</span>
+                  <span>职位名称{{ work.positionName }}</span>
+                  <span>工作内容{{ work.jobContent }}</span>
+                  <span>就职时间{{ work.startTime }}</span>
+                  <span>离职时间{{ work.endTime }}</span>
                 </div>
-                <div class="right">
-                  <el-divider direction="vertical" border-style="dashed" style="height: 80%" />
+              </div>
+              <div v-else>
+                <h3>项目经历：</h3>
+                <img
+                  style="width: 250px; height: 200px"
+                  src="@/assets/nocontent.jpg"
+                  alt=""
+                />
+              </div>
+            </div>
+            <div class="info2">
+              <div v-if="works.length > 0" class="img-docu">
+                <h3>图片作品：</h3>
+                <div v-for="(imageurl, i) in userInfo.pictureWorks" :key="i">
+                  <img :src="imageurl" alt="图片作品" />
+                </div>
+              </div>
+              <div v-else>
+                <h3>图片作品：</h3>
+                <img
+                  style="width: 250px; height: 200px"
+                  src="@/assets/nocontent.jpg"
+                  alt=""
+                />
+              </div>
+              <div v-if="projects.length > 0" class="project-docu">
+                <h3>项目经历:</h3>
+                <div v-for="project in projects" :key="project.id">
+                  <span>项目名：{{ project.projectName }}</span>
+                  <span>项目描述：{{ project.projectDescription }}</span>
+                  <span>项目成就：{{ project.achievement }}</span>
+                  <span>项目开始时间：{{ project.startTime }}</span>
+                  <span>项目结束时间：{{ project.endTime }}</span>
+                  <span>项目链接：{{ project.projectLink }}</span>
+                  <span
+                    >项目开始时间-项目截至时间{{
+                      project.startTime + "-" + project.endTime
+                    }}</span
+                  >
+                  <span>{{ project.achievement }}</span>
+                  <span>{{ project.projectLink }}</span>
+                </div>
+              </div>
+              <div v-else>
+                <h3>项目经历：</h3>
+                <img
+                  style="width: 250px; height: 200px"
+                  src="@/assets/nocontent.jpg"
+                  alt=""
+                />
+              </div>
+            </div>
+          </div>
+          <div class="right">
+            <el-divider
+              direction="vertical"
+              border-style="dashed"
+              style="height: 80%"
+            />
             <div class="comment">
               <h4>个人优势</h4>
               <div class="font">{{ userInfo?.personalAdvantage }}</div>
@@ -165,21 +195,23 @@ if (typeof route.params.userId === "string") {
     });
 }
 if (typeof route.params.postId === "string") {
-  companyPositionService.getPosition({
-    companyId: store.companyInformation.id,
-    id: route.params.postId,
-  })
+  companyPositionService
+    .getPosition({
+      companyId: store.companyInformation.id,
+      id: route.params.postId,
+    })
     .then((res) => {
       positionInfo.value = res;
-    })
+    });
 } else {
-  companyPositionService.getPosition({
-    companyId: store.companyInformation.id,
-    id: route.params.postId[1],
-  })
+  companyPositionService
+    .getPosition({
+      companyId: store.companyInformation.id,
+      id: route.params.postId[1],
+    })
     .then((res) => {
       positionInfo.value = res;
-    })
+    });
 }
 const messageStore = useMessageStore();
 // 用于将用户推送到消息页面的功能。
@@ -190,8 +222,9 @@ const toMessage = (userId: string) => {
   if (
     !messageStore.messages[store.accountInformation.detailId.personnel!][userId]
   ) {
-    messageStore.messages[store.accountInformation.detailId.personnel!][userId] =
-      [];
+    messageStore.messages[store.accountInformation.detailId.personnel!][
+      userId
+    ] = [];
   }
   void router.push({
     name: "Message",

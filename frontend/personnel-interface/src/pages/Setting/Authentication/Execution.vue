@@ -101,15 +101,16 @@ const confirmCompany = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   formEl.validate((valid) => {
     if (valid) {
-      companyService.updateCompany({
-        id: store.companyInformation.id,
-        requestBody: companyForm,
-      })
+      companyService
+        .updateCompany({
+          id: store.companyInformation.id,
+          requestBody: companyForm,
+        })
         .then((res) => {
           ElMessage.success("恭喜您，企业认证成功");
           store.companyInformation = res;
           router.replace({ name: "PublishJob" });
-        })
+        });
     }
   });
 };

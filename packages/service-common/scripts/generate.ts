@@ -7,7 +7,7 @@ import {
   readdirSync,
   readFileSync,
   rmSync,
-  writeFileSync
+  writeFileSync,
 } from "node:fs";
 
 const json = JSON.parse(readFileSync("openapi.json").toString());
@@ -18,13 +18,13 @@ const fix = (json: { [x: string]: any }) => {
     json["x-enum-varnames"] = Object.values(
       json["x-apifox"]["enumDescriptions"]
     );
-    const patchedDescription =  `，eg；{${
-      Object.entries(json["x-apifox"]["enumDescriptions"]).map(
-        ([key, value]) => `${key}:${value}`
-      ).join(",")
-    }}`
+    const patchedDescription = `，eg；{${Object.entries(
+      json["x-apifox"]["enumDescriptions"]
+    )
+      .map(([key, value]) => `${key}:${value}`)
+      .join(",")}}`;
     if (!json["description"]?.includes(patchedDescription)) {
-      json["description"] = `${json["title"]}${patchedDescription}`
+      json["description"] = `${json["title"]}${patchedDescription}`;
     }
   } else {
     for (const key of keys) {

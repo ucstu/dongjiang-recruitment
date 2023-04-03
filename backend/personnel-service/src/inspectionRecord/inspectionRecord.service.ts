@@ -16,7 +16,10 @@ export class InspectionRecordService {
     private readonly inspectionRecordRepository: Repository<InspectionRecord>
   ) {}
 
-  async create(personnelId: string, createInspectionRecordDto: CreateInspectionRecordDto) {
+  async create(
+    personnelId: string,
+    createInspectionRecordDto: CreateInspectionRecordDto
+  ) {
     return await this.inspectionRecordRepository.save({
       ...createInspectionRecordDto,
       personnelId,
@@ -49,9 +52,16 @@ export class InspectionRecordService {
     return inspectionRecord;
   }
 
-  async update(personnelId: string, id: string, updateInspectionRecordDto: UpdateInspectionRecordDto) {
+  async update(
+    personnelId: string,
+    id: string,
+    updateInspectionRecordDto: UpdateInspectionRecordDto
+  ) {
     const inspectionRecord = { ...updateInspectionRecordDto, personnelId, id };
-    const { affected } = await this.inspectionRecordRepository.update(id, inspectionRecord);
+    const { affected } = await this.inspectionRecordRepository.update(
+      id,
+      inspectionRecord
+    );
     if (!affected) throw new NotFoundException();
     return inspectionRecord;
   }

@@ -1,6 +1,10 @@
 <template>
   <div class="w-full">
-    <div class="w-fit flex justify-center items-center h-5 p-2 space-x-1 border- border-lime-500" v-for="route in history" :key="route.path">
+    <div
+      class="w-fit flex justify-center items-center h-5 p-2 space-x-1 border- border-lime-500"
+      v-for="route in history"
+      :key="route.path"
+    >
       <span>
         {{ route.meta?.title }}
       </span>

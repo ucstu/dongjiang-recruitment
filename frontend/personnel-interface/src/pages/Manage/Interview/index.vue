@@ -61,7 +61,11 @@
 import useDate from "@/hooks/useDate";
 import useGetDayAll from "@/hooks/useGetdata";
 import { useMainStore } from "@/stores/main";
-import type { Applicant, DeliveryRecord, Position } from "@dongjiang-recruitment/service-common";
+import type {
+  Applicant,
+  DeliveryRecord,
+  Position,
+} from "@dongjiang-recruitment/service-common";
 import { ElMessage } from "element-plus";
 import ResumeInfo from "./resumeInfo.vue";
 const store = useMainStore();
@@ -83,15 +87,14 @@ const handleWorkTimeChange = (val: Array<string>) => {
   } else {
     deliveryDates.value = [];
   }
-  applicantService.queryAllDeliveryRecord(
-    {
+  applicantService
+    .queryAllDeliveryRecord({
       query: {
         companyId: ["$eq", store.companyInformation.id],
         status: ["$eq", 4],
         interviewTime: ["$in", ...deliveryDates.value],
-      }
-    }
-  )
+      },
+    })
     .then((res) => {
       totalCount.value = res.total;
       deliveryRecordsCheckeds.value = [];
@@ -100,21 +103,23 @@ const handleWorkTimeChange = (val: Array<string>) => {
         deliveryRecordsCheckeds.value.push(
           Object.assign(item, { checked: false })
         );
-        applicantService.getApplicant({
-          id: item.applicantId,
-        })
+        applicantService
+          .getApplicant({
+            id: item.applicantId,
+          })
           .then((response) => {
             userInformations.value.set(item.applicantId, response);
+          });
+        companyPositionService
+          .getPosition({
+            companyId: store.companyInformation.id,
+            id: item.positionId,
           })
-        companyPositionService.getPosition({
-          companyId: store.companyInformation.id,
-          id: item.positionId,
-        })
           .then((response) => {
             jobInformations.value.set(item.positionId, response);
-          })
+          });
       });
-    })
+    });
 };
 // 更改所选简历信息状态的功能。
 const changeState = (val: 1 | 2 | 3 | 4 | 5) => {
@@ -128,13 +133,15 @@ const changeState = (val: 1 | 2 | 3 | 4 | 5) => {
     // 更改所选简历信息的状态。
     newDeliver.map((delivery: DeliveryRecordChecked) => {
       delivery.status = val;
-      applicantDeliveryRecordService.updateDeliveryRecord({
-        applicantId: delivery.applicantId,
-        id: delivery.id,
-        requestBody: delivery,
-      }).then(() => {
-        ElMessage.success("操作成功");
-      });
+      applicantDeliveryRecordService
+        .updateDeliveryRecord({
+          applicantId: delivery.applicantId,
+          id: delivery.id,
+          requestBody: delivery,
+        })
+        .then(() => {
+          ElMessage.success("操作成功");
+        });
     });
   }
 };
@@ -172,12 +179,13 @@ const total = computed(() => {
   return Math.ceil(num);
 });
 
-applicantService.queryAllDeliveryRecord({
-  query: {
-    companyId: ["$eq", store.companyInformation.id],
-    status: ["$eq", 4],
-  }
-})
+applicantService
+  .queryAllDeliveryRecord({
+    query: {
+      companyId: ["$eq", store.companyInformation.id],
+      status: ["$eq", 4],
+    },
+  })
   .then((res) => {
     totalCount.value = res.total;
     deliveryRecords.value = res.items;
@@ -185,21 +193,23 @@ applicantService.queryAllDeliveryRecord({
       deliveryRecordsCheckeds.value.push(
         Object.assign(item, { checked: false })
       );
-      applicantService.getApplicant({
-        id: item.applicantId,
-      })
+      applicantService
+        .getApplicant({
+          id: item.applicantId,
+        })
         .then((response) => {
           userInformations.value.set(item.applicantId, response);
+        });
+      companyPositionService
+        .getPosition({
+          companyId: store.companyInformation.id,
+          id: item.positionId,
         })
-      companyPositionService.getPosition({
-        companyId: store.companyInformation.id,
-        id: item.positionId,
-      })
         .then((response) => {
           jobInformations.value.set(item.positionId, response);
-        })
+        });
     });
-  })
+  });
 </script>
 
 <style scoped lang="scss">

@@ -1,7 +1,6 @@
 /// <reference types="vite/client" />
 /// <reference types="pinia-plugin-persist"  />
 
-
 import "vue-router";
 
 declare module "vue-router" {

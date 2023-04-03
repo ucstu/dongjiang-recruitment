@@ -35,36 +35,50 @@ export class ProjectExperience {
   /**
    * 我的成就
    */
-  @Column()
+  @Column({
+    nullable: true,
+  })
   achievement: string;
   /**
    * 结束时间
    */
-  @Column()
+  @Column({
+    nullable: true,
+  })
   endTime: string;
   /**
    * 项目描述
    */
-  @Column()
+  @Column({
+    nullable: true,
+  })
   projectDescription: string;
   /**
    * 项目链接
    */
-  @Column()
+  @Column({
+    nullable: true,
+  })
   projectLink: string;
   /**
    * 项目名称
    */
-  @Column()
+  @Column({
+    nullable: true,
+  })
   projectName: string;
   /**
    * 开始时间
    */
-  @Column()
+  @Column({
+    nullable: true,
+  })
   startTime: string;
   /**
    * 求职者ID
    */
-  @Column()
+  @Column({
+    nullable: true,
+  })
   applicantId: string;
 }

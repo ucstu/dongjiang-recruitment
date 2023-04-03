@@ -35,11 +35,15 @@ export class InspectionRecord {
   /**
    * 求职者ID
    */
-  @Column()
+  @Column({
+    nullable: true,
+  })
   applicantId: string;
   /**
    * 人事ID
    */
-  @Column()
+  @Column({
+    nullable: true,
+  })
   personnelId: string;
 }

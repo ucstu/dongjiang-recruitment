@@ -56,27 +56,37 @@ export class Company {
   /**
    * 详细地址
    */
-  @Column()
+  @Column({
+    nullable: true,
+  })
   address: string;
   /**
    * 公司福利
    */
-  @Column("simple-array")
+  @Column("simple-array", {
+    nullable: true,
+  })
   benefits: string[];
   /**
    * 所在城市
    */
-  @Column()
+  @Column({
+    nullable: true,
+  })
   cityName: string;
   /**
    * 公司名称
    */
-  @Column()
+  @Column({
+    nullable: true,
+  })
   companyName: string;
   /**
    * 领域名称
    */
-  @Column()
+  @Column({
+    nullable: true,
+  })
   comprehensionName: string;
   /**
    * 成立时间
@@ -88,12 +98,16 @@ export class Company {
   /**
    * 融资阶段，{1:未融资,2:天使轮,3:A轮,4:B轮,5:C轮,6:D轮及以上,7:上市公司,8:不需要融资}
    */
-  @Column()
+  @Column({
+    nullable: true,
+  })
   financingStage: number;
   /**
    * 公司全称
    */
-  @Column()
+  @Column({
+    nullable: true,
+  })
   fullName: string;
   /**
    * 法定代表人
@@ -105,7 +119,9 @@ export class Company {
   /**
    * 公司地点
    */
-  @Column("simple-json")
+  @Column("simple-json", {
+    nullable: true,
+  })
   location: Location;
   /**
    * LOGO地址
@@ -138,6 +154,8 @@ export class Company {
   /**
    * 公司规模，{1:少于15人,2:15-50人,3:50-150人,4:150-500人,5:500-2000人,6:2000以上}
    */
-  @Column()
+  @Column({
+    nullable: true,
+  })
   scale: number;
 }

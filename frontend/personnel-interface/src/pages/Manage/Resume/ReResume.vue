@@ -113,7 +113,11 @@
 import useDate from "@/hooks/useDate";
 import useGetDayAll from "@/hooks/useGetdata";
 import { useMainStore } from "@/stores/main";
-import type { Applicant, DeliveryRecord, Position } from "@dongjiang-recruitment/service-common";
+import type {
+  Applicant,
+  DeliveryRecord,
+  Position,
+} from "@dongjiang-recruitment/service-common";
 import { Search } from "@element-plus/icons-vue";
 import { ElMessage } from "element-plus";
 import ResumeInfo from "../Interview/resumeInfo.vue";
@@ -141,13 +145,15 @@ const deliveryRecordsCheckeds = ref<DeliveryRecordChecked[]>([]);
 // 确定面试时间设置
 const confirmInterviewTime = (delivery: DeliveryRecordChecked) => {
   dialogTableVisible.value = false;
-  applicantDeliveryRecordService.updateDeliveryRecord({
-    applicantId: delivery.applicantId,
-    id: delivery.id,
-    requestBody: delivery,
-  }).then(() => {
-    ElMessage.success("操作成功");
-  });
+  applicantDeliveryRecordService
+    .updateDeliveryRecord({
+      applicantId: delivery.applicantId,
+      id: delivery.id,
+      requestBody: delivery,
+    })
+    .then(() => {
+      ElMessage.success("操作成功");
+    });
 };
 const Ages = ref<Array<number>>([]);
 // 创建一个将在年龄更改时调用的函数。
@@ -291,13 +297,14 @@ const handleChecked = (deliveryRecordId: string) => {
   }
 };
 
-applicantService.queryAllDeliveryRecord({
-  query: {
-    companyId: ["$eq", store.companyInformation.id],
-    status: ["$in", ...valueMap.value.status],
-    interviewTime: ["$eq", valueMap.value.interviewTime || ""],
-  }
-})
+applicantService
+  .queryAllDeliveryRecord({
+    query: {
+      companyId: ["$eq", store.companyInformation.id],
+      status: ["$in", ...valueMap.value.status],
+      interviewTime: ["$eq", valueMap.value.interviewTime || ""],
+    },
+  })
   .then((res) => {
     totalCount.value = res.total;
     deliveryRecords.value = res.items;
@@ -305,36 +312,33 @@ applicantService.queryAllDeliveryRecord({
       deliveryRecordsCheckeds.value.push(
         Object.assign(item, { checked: false })
       );
-      applicantService.getApplicant({
-        id: item.applicantId,
-      })
+      applicantService
+        .getApplicant({
+          id: item.applicantId,
+        })
         .then((response) => {
-          userInformations.value.set(
-            item.applicantId,
-            response
-          );
+          userInformations.value.set(item.applicantId, response);
+        });
+      companyPositionService
+        .getPosition({
+          companyId: store.companyInformation.id,
+          id: item.positionId,
         })
-      companyPositionService.getPosition({
-        companyId: store.companyInformation.id,
-        id: item.positionId,
-      })
         .then((respones) => {
-          jobInformations.value.set(
-            item.positionId,
-            respones
-          );
-        })
+          jobInformations.value.set(item.positionId, respones);
+        });
     });
-  })
+  });
 
 const handleChange = () => {
-  applicantService.queryAllDeliveryRecord({
-    query: {
-      companyId: ["$eq", store.companyInformation.id],
-      status: ["$in", ...valueMap.value.status],
-      interviewTime: ["$eq", valueMap.value.interviewTime || ""],
-    }
-  })
+  applicantService
+    .queryAllDeliveryRecord({
+      query: {
+        companyId: ["$eq", store.companyInformation.id],
+        status: ["$in", ...valueMap.value.status],
+        interviewTime: ["$eq", valueMap.value.interviewTime || ""],
+      },
+    })
     .then((res) => {
       totalCount.value = res.total;
       deliveryRecords.value = res.items;
@@ -343,27 +347,23 @@ const handleChange = () => {
         deliveryRecordsCheckeds.value.push(
           Object.assign(item, { checked: false })
         );
-        applicantService.getApplicant({
-          id: item.applicantId,
-        })
+        applicantService
+          .getApplicant({
+            id: item.applicantId,
+          })
           .then((response) => {
-            userInformations.value.set(
-              item.applicantId,
-              response
-            );
+            userInformations.value.set(item.applicantId, response);
+          });
+        companyPositionService
+          .getPosition({
+            companyId: store.companyInformation.id,
+            id: item.positionId,
           })
-        companyPositionService.getPosition({
-          companyId: store.companyInformation.id,
-          id: item.positionId,
-        })
           .then((respones) => {
-            jobInformations.value.set(
-              item.positionId,
-              respones
-            );
-          })
-      })
-    })
+            jobInformations.value.set(item.positionId, respones);
+          });
+      });
+    });
 };
 const handleWorkTimeChange = (val: Array<string>) => {
   if (val !== null) {

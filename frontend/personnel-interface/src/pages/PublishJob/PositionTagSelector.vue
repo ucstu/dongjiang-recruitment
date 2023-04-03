@@ -51,10 +51,9 @@ const handleTagSelect = (
 };
 const { positionTypes } = storeToRefs(store);
 if (positionTypes.value === null) {
-  commonService.getPositionTypes()
-    .then((res) => {
-      store.positionTypes = res;
-    })
+  commonService.getPositionTypes().then((res) => {
+    store.positionTypes = res;
+  });
 }
 </script>
 <style scoped lang="scss">

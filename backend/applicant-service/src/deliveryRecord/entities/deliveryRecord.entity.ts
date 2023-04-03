@@ -35,26 +35,36 @@ export class DeliveryRecord {
   /**
    * 求职者ID
    */
-  @Column()
+  @Column({
+    nullable: true,
+  })
   applicantId: string;
   /**
    * 公司ID
    */
-  @Column()
+  @Column({
+    nullable: true,
+  })
   companyId: string;
   /**
    * 面试时间
    */
-  @Column()
+  @Column({
+    nullable: true,
+  })
   interviewTime: Date;
   /**
    * 职位ID
    */
-  @Column()
+  @Column({
+    nullable: true,
+  })
   positionId: string;
   /**
    * 投递状态，{1:待查看,2:已查看,3:通过筛选,4:约面试,5:不合适}
    */
-  @Column()
+  @Column({
+    nullable: true,
+  })
   status: number;
 }

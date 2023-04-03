@@ -41,9 +41,9 @@
 <script setup lang="ts">
 import { useMainStore, useMessageStore } from "@/stores/main";
 import type {
-Applicant,
-DeliveryRecord,
-Position
+  Applicant,
+  DeliveryRecord,
+  Position,
 } from "@dongjiang-recruitment/service-common";
 import { storeToRefs } from "pinia";
 import { useRoute } from "vue-router";
@@ -67,9 +67,9 @@ const chatWithUser = (_activeUserInformationId: string | number) => {
 };
 // 当用户单击聊天页面左侧的用户时将调用的函数。它会将来自用户的所有消息设置为已读
 const readAllMessage = (ActiveUserInformationId: string) => {
-  for (const message of messages.value[
-    mainStore.accountInformation.id
-  ][ActiveUserInformationId]) {
+  for (const message of messages.value[mainStore.accountInformation.id][
+    ActiveUserInformationId
+  ]) {
     message.haveRead = true;
   }
 };
@@ -98,10 +98,7 @@ watchEffect(() => {
           .queryAllDeliveryRecord({
             query: {
               applicantId: ["$eq", messageKey],
-              companyId: [
-                "$eq",
-                mainStore.companyInformation.id,
-              ],
+              companyId: ["$eq", mainStore.companyInformation.id],
               status: ["$in", 1, 2, 3, 4, 5],
             },
             size: 1,
