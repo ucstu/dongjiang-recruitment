@@ -4,6 +4,7 @@ import { mergeConfig } from "vite";
 
 export default mergeConfig(
   uniConfig({
+    checker: false,
     autoImport: {
       imports: [
         "vue",

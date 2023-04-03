@@ -4,6 +4,8 @@ import { mergeConfig } from "vite";
 
 export default mergeConfig(
   webConfig({
+    checker: false,
+    postcssPxToRem: false,
     autoImport: {
       imports: [
         "vue",
