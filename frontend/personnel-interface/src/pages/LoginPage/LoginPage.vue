@@ -48,9 +48,9 @@
 import router from "@/router";
 import { useMainStore, useMessageStore } from "@/stores/main";
 import {
-  Company,
-  request,
-  type Personnel,
+Company,
+request,
+type Personnel
 } from "@dongjiang-recruitment/service-common";
 import { ElMessage, type FormInstance } from "element-plus";
 
@@ -115,7 +115,7 @@ const submitForm = (formEl: FormInstance | undefined) => {
               .getPersonnel({
                 id: mainStore.accountInformation.detailId.personnel!,
               })
-              .then((res) => {
+              .then((res:Personnel) => {
                 if (
                   !messageStore.messages[
                     mainStore.accountInformation.detailId.personnel!
@@ -141,9 +141,10 @@ const submitForm = (formEl: FormInstance | undefined) => {
                   }
                 } else {
                   mainStore.hrInformation = null as unknown as Personnel;
+                  mainStore.hrInformation = res;
                   mainStore.companyInformation = null as unknown as Company;
                   router.replace({
-                    name: "Person",
+                    name: "/Home/Person",
                     params: { PersonEmail: ruleForm.userName },
                   });
                 }
