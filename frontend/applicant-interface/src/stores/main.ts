@@ -8,7 +8,7 @@ const parseJwt = (
 ): { id?: string; did?: Account["detailId"] } => {
   if (!token) return {};
   try {
-    return jwtDecode(token) as { id: string; did: Account["detailId"] };
+    return jwtDecode(token) ;
   } catch (e) {
     return {};
   }
