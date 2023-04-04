@@ -119,18 +119,9 @@ export class AuthenticationAuthorityService {
     id: string;
     requestBody?: {
       /**
-       * 响应时间
+       * 名称
        */
-      timestamp: string;
-      /**
-       * 响应
-       */
-      message: string;
-      /**
-       * 响应编码
-       */
-      status: number;
-      body: Authority;
+      name: string;
     };
   }): CancelablePromise<Authority> {
     return this.httpRequest.request({

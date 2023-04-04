@@ -1,32 +1,44 @@
 <template>
-  <div class="h-full w-full">
-    <header class="h-16 border-b-2">
+  <div class="h-full w-full flex flex-col">
+    <header class="h-16 border-b-2" v-if="route.meta.showHeader !== false">
       <header-cmp />
     </header>
-    <div class="flex" style="height: calc(100% - 64px)">
+    <div class="flex flex-1 overflow-auto">
       <n-layout has-sider class="h-full">
         <n-layout-sider
+          v-if="route.meta.showMenu !== false"
           bordered
           collapse-mode="width"
           :collapsed-width="64"
           :width="240"
           :collapsed="collapsed"
-          show-trigger
-          @collapse="collapsed = true"
-          @expand="collapsed = false"
         >
           <menu-cmp
             v-model:collapsed="collapsed"
             class="w-full h-full overflow-auto"
           />
         </n-layout-sider>
-        <n-layout>
-          <nav-bar-cmp />
-          <router-view v-slot="{ Component }">
-            <keep-alive>
-              <component :is="Component" />
-            </keep-alive>
-          </router-view>
+        <n-layout
+          class="flex flex-col"
+          content-style="display: flex; flex-direction: column;"
+        >
+          <nav-bar-cmp
+            v-if="route.meta.showNav !== false"
+            v-model:collapsed="collapsed"
+          />
+          <main class="flex-1 overflow-auto" ref="main">
+            <router-view v-slot="{ Component, route }">
+              <keep-alive
+                v-if="
+                  route.meta.keepAlive !== false &&
+                  mainStore.history.some((r) => r.path === route.path)
+                "
+              >
+                <component :is="Component" />
+              </keep-alive>
+              <component v-else :is="Component" />
+            </router-view>
+          </main>
         </n-layout>
       </n-layout>
     </div>
@@ -35,7 +47,9 @@
 
 <script setup lang="ts">
 import { useMainStore } from "@/stores";
+import { isNullOrUndef } from "@/utils";
 import { axios, AxiosError } from "@dongjiang-recruitment/service-common";
+import type { ConfirmDialogOptions } from "env";
 import type { MessageReactive } from "naive-ui";
 import HeaderCmp from "./components/header.vue";
 import MenuCmp from "./components/menu.vue";
@@ -43,17 +57,35 @@ import NavBarCmp from "./components/nav-bar.vue";
 
 const collapsed = ref(false);
 
-const router = useRouter();
 // @ts-ignore
 window.$message = useMessage();
+const NDialog = useDialog();
+// @ts-ignore
+window.$dialog = {
+  ...NDialog,
+  confirm(option = {} as ConfirmDialogOptions) {
+    const showIcon = !isNullOrUndef(option.title);
+    return NDialog[(option.type || "warning") as keyof typeof NDialog]({
+      showIcon,
+      positiveText: "确定",
+      negativeText: "取消",
+      onPositiveClick: option.confirm,
+      onNegativeClick: option.cancel,
+      onMaskClick: option.cancel,
+      ...option,
+    });
+  },
+};
 const mainStore = useMainStore();
+const router = useRouter();
+const route = useRoute();
 
 let timer: NodeJS.Timeout;
 let loading: MessageReactive;
 axios.interceptors.request.use(
   (config) => {
     timer = setTimeout(() => {
-      loading = $message.loading("处理中...", {
+      loading = $message.loading("仍在处理中...", {
         duration: 3000,
       });
     }, 2000);
@@ -85,6 +117,8 @@ axios.interceptors.response.use(
         case 401:
           $message.error("登录过期，请重新登录");
           mainStore.token = "";
+          mainStore.history = [];
+          mainStore.account = undefined;
           router.replace({ name: "Login" });
           break;
         case 403:
@@ -115,5 +149,3 @@ nextTick(() => {
   }
 });
 </script>
-
-<style scoped lang="scss"></style>

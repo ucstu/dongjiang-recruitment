@@ -278,7 +278,7 @@ export class AuthenticationAccountService {
       /**
        * 权限组列表
        */
-      groups: Array<AuthorityGroup>;
+      authorityGroups: Array<AuthorityGroup>;
       /**
        * 密码
        */

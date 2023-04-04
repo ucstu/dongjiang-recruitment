@@ -57,5 +57,5 @@ export type Account = {
   /**
    * 权限组列表
    */
-  groups: Array<AuthorityGroup>;
+  authorityGroups: Array<AuthorityGroup>;
 };

@@ -14844,20 +14844,14 @@
                   "authorities": {
                     "type": "array",
                     "items": {
-                      "mock": {
-                        "mock": "@guid"
-                      },
                       "$ref": "#/components/schemas/Authority"
                     },
                     "title": "权限列表",
                     "description": "权限列表"
                   },
-                  "groups": {
+                  "authorityGroups": {
                     "type": "array",
                     "items": {
-                      "mock": {
-                        "mock": "@guid"
-                      },
                       "$ref": "#/components/schemas/AuthorityGroup"
                     },
                     "title": "权限组列表",
@@ -14878,7 +14872,7 @@
                   "userName",
                   "detailId",
                   "authorities",
-                  "groups"
+                  "authorityGroups"
                 ],
                 "x-apifox-orders": ["01GVJ5WA0B6QFZNYDB4BAKH0CJ", "password"],
                 "x-apifox-ignore-properties": [
@@ -14889,7 +14883,7 @@
                   "userName",
                   "detailId",
                   "authorities",
-                  "groups"
+                  "authorityGroups"
                 ]
               },
               "example": {
@@ -15124,9 +15118,6 @@
           "content": {
             "application/json": {
               "schema": {
-                "mock": {
-                  "mock": "@guid"
-                },
                 "$ref": "#/components/schemas/AuthorityGroup"
               },
               "example": {
@@ -15180,9 +15171,6 @@
                       "description": "响应编码"
                     },
                     "body": {
-                      "mock": {
-                        "mock": "@guid"
-                      },
                       "$ref": "#/components/schemas/AuthorityGroup"
                     }
                   },
@@ -15342,9 +15330,6 @@
                         "items": {
                           "type": "array",
                           "items": {
-                            "mock": {
-                              "mock": "@guid"
-                            },
                             "$ref": "#/components/schemas/AuthorityGroup"
                           },
                           "title": "当页权限组",
@@ -15525,9 +15510,6 @@
           "content": {
             "application/json": {
               "schema": {
-                "mock": {
-                  "mock": "@guid"
-                },
                 "$ref": "#/components/schemas/AuthorityGroup"
               },
               "example": {
@@ -15578,9 +15560,6 @@
                       "description": "响应编码"
                     },
                     "body": {
-                      "mock": {
-                        "mock": "@guid"
-                      },
                       "$ref": "#/components/schemas/AuthorityGroup"
                     }
                   },
@@ -15677,9 +15656,6 @@
                       "description": "响应编码"
                     },
                     "body": {
-                      "mock": {
-                        "mock": "@guid"
-                      },
                       "$ref": "#/components/schemas/AuthorityGroup"
                     }
                   },
@@ -15737,9 +15713,6 @@
                 "type": "object",
                 "x-apifox-refs": {
                   "01GX43M50ENZYNS51KX4575QT5": {
-                    "mock": {
-                      "mock": "@guid"
-                    },
                     "$ref": "#/components/schemas/Authority"
                   }
                 },
@@ -15801,9 +15774,6 @@
                       "description": "响应编码"
                     },
                     "body": {
-                      "mock": {
-                        "mock": "@guid"
-                      },
                       "$ref": "#/components/schemas/Authority"
                     }
                   },
@@ -15957,9 +15927,6 @@
                         "items": {
                           "type": "array",
                           "items": {
-                            "mock": {
-                              "mock": "@guid"
-                            },
                             "$ref": "#/components/schemas/Authority"
                           },
                           "title": "当页权限",
@@ -16152,48 +16119,20 @@
               "schema": {
                 "type": "object",
                 "x-apifox-refs": {
-                  "01GV58CYM566TWV9QVER0DV6X3": {
-                    "$ref": "#/components/schemas/BaseResponse",
-                    "x-apifox-overrides": {
-                      "body": {
-                        "$ref": "#/components/schemas/Advertiser",
-                        "x-apifox-overrides": {}
-                      }
-                    },
-                    "required": ["body"]
-                  }
-                },
-                "x-apifox-orders": ["01GV58CYM566TWV9QVER0DV6X3"],
-                "properties": {
-                  "timestamp": {
-                    "type": "string",
-                    "title": "响应时间",
-                    "description": "响应时间"
-                  },
-                  "message": {
-                    "type": "string",
-                    "title": "响应",
-                    "description": "响应"
-                  },
-                  "status": {
-                    "type": "integer",
-                    "title": "响应编码",
-                    "description": "响应编码"
-                  },
-                  "body": {
-                    "mock": {
-                      "mock": "@guid"
-                    },
+                  "01GX5PN4F9DQEZV4WSB4NV1W7S": {
                     "$ref": "#/components/schemas/Authority"
                   }
                 },
-                "required": ["timestamp", "message", "status", "body"],
-                "x-apifox-ignore-properties": [
-                  "timestamp",
-                  "message",
-                  "status",
-                  "body"
-                ]
+                "x-apifox-orders": ["01GX5PN4F9DQEZV4WSB4NV1W7S"],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "title": "名称",
+                    "description": "名称"
+                  }
+                },
+                "required": ["name"],
+                "x-apifox-ignore-properties": ["name"]
               },
               "example": {
                 "authorityId": "DCb6cA9D-38f6-F8b3-5BBd-F249CCBbeFeD",
@@ -16241,9 +16180,6 @@
                       "description": "响应编码"
                     },
                     "body": {
-                      "mock": {
-                        "mock": "@guid"
-                      },
                       "$ref": "#/components/schemas/Authority"
                     }
                   },
@@ -16335,9 +16271,6 @@
                       "description": "响应编码"
                     },
                     "body": {
-                      "mock": {
-                        "mock": "@guid"
-                      },
                       "$ref": "#/components/schemas/Authority"
                     }
                   },
@@ -17392,9 +17325,6 @@
           "authorities": {
             "type": "array",
             "items": {
-              "mock": {
-                "mock": "@guid"
-              },
               "$ref": "#/components/schemas/Authority"
             },
             "title": "权限列表",
@@ -17530,20 +17460,14 @@
           "authorities": {
             "type": "array",
             "items": {
-              "mock": {
-                "mock": "@guid"
-              },
               "$ref": "#/components/schemas/Authority"
             },
             "title": "权限列表",
             "description": "权限列表"
           },
-          "groups": {
+          "authorityGroups": {
             "type": "array",
             "items": {
-              "mock": {
-                "mock": "@guid"
-              },
               "$ref": "#/components/schemas/AuthorityGroup"
             },
             "title": "权限组列表",
@@ -17558,7 +17482,7 @@
           "detailId",
           "deletedAt",
           "authorities",
-          "groups"
+          "authorityGroups"
         ],
         "x-apifox-orders": [
           "id",
@@ -17568,7 +17492,7 @@
           "userName",
           "detailId",
           "authorities",
-          "groups"
+          "authorityGroups"
         ],
         "title": "账号",
         "x-apifox-ignore-properties": [],

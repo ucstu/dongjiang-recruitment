@@ -53,7 +53,7 @@ export const buildHooks = (client: ApiClient): ClientWithHooks => {
             return {
               // 保留已处理的请求方法
               ...fAcc,
-              [fKey]: request,
+              [fKey]: request.bind(service),
               [`use${fKey.charAt(0).toUpperCase()}${fKey.slice(1)}`]: (
                 params?:
                   | Parameters<typeof request>[0]

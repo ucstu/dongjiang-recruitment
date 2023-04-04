@@ -2,8 +2,9 @@
   <n-menu
     :collapsed="collapsed"
     :value="route.path"
+    collapse-mode="width"
     :collapsed-width="64"
-    :collapsed-icon-size="22"
+    :width="240"
     :options="menuOptions"
     @update:value="router.push($event)"
   />
@@ -11,8 +12,9 @@
 
 <script setup lang="ts">
 import { hasPermission } from "@/hooks";
-import router, { routes } from "@/router";
+import { routes } from "@/router/index.jsx";
 import { useMainStore } from "@/stores";
+import type { MenuOption } from "naive-ui";
 import type { RouteRecordRaw } from "vue-router";
 
 const props = defineProps<{
@@ -20,43 +22,53 @@ const props = defineProps<{
 }>();
 
 const emits = defineEmits<{
-  (e:'update:collapsed', val: boolean):void
+  (e: "update:collapsed", val: boolean): void;
 }>();
 
 const { collapsed } = useVModels(props, emits);
 
 const mainStore = useMainStore();
+const router = useRouter();
 const route = useRoute();
 
-const convertRouteToMenuOption = (route: RouteRecordRaw): any => {
+const completeRoutePath = (
+  route: RouteRecordRaw,
+  prefix: string
+): RouteRecordRaw => {
   if (route.children && route.children.length > 0) {
     return {
-      type: "group",
-      key: route.path,
-      label: route.meta?.title || route.name,
-      show:
-        (route.meta?.show !== false && hasPermission(route.meta?.pms)) ||
-        mainStore.account?.userName === "2219454275@qq.com",
-      children: route.children.map(convertRouteToMenuOption).filter(Boolean),
+      ...route,
+      children: route.children.map((child) =>
+        completeRoutePath(child, route.path)
+      ),
     };
   } else {
     return {
-      key: route.path,
-      label: route.meta?.title || route.name,
-      show:
-        (route.meta?.show !== false && hasPermission(route.meta?.pms)) ||
-        mainStore.account?.userName === "2219454275@qq.com",
+      ...route,
+      path: prefix + route.path,
     };
   }
 };
 
-const menuOptions = ref<any[]>([]);
+const convertRouteToMenuOption = (route: RouteRecordRaw): MenuOption => {
+  return {
+    key: route.path,
+    icon: route.meta?.icon,
+    label: route.meta?.title || route.name,
+    show: route.meta?.onMenu !== false && hasPermission(route.meta?.pms),
+    children: route.children?.map(convertRouteToMenuOption).filter(Boolean),
+  };
+};
+
+const menuOptions = ref<MenuOption[]>([]);
 watch(
   () => mainStore.account?.authorities,
   () => {
-    menuOptions.value = routes.map(convertRouteToMenuOption).filter(Boolean);
+    const newRoutes = routes.map((route) => completeRoutePath(route, ""));
+    menuOptions.value = newRoutes.map(convertRouteToMenuOption).filter(Boolean);
+  },
+  {
+    immediate: true,
   }
 );
 </script>
-
-<style scoped></style>

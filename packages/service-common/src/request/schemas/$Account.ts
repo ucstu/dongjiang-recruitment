@@ -67,7 +67,7 @@ export const $Account = {
       },
       isRequired: true,
     },
-    groups: {
+    authorityGroups: {
       type: "array",
       contains: {
         type: "AuthorityGroup",

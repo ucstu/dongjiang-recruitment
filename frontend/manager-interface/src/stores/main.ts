@@ -1,6 +1,7 @@
 import type { Account } from "@dongjiang-recruitment/service-common";
 import jwtDecode from "jwt-decode";
 import { defineStore } from "pinia";
+import type { RouteLocationNormalized } from "vue-router";
 
 const parseJwt = (
   token: string
@@ -47,12 +48,16 @@ export const useMainStore = defineStore(
       }
     );
 
+    // 路由历史
+    const history = ref<RouteLocationNormalized[]>([]);
+
     return {
       token,
       account,
       setAccount,
       refreshAccount,
       loadingAccount,
+      history,
     };
   },
   {

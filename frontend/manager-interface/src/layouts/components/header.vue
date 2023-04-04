@@ -24,8 +24,8 @@ const router = useRouter();
 
 const logout = () => {
   mainStore.token = "";
+  mainStore.history = [];
+  mainStore.account = undefined;
   router.replace({ name: "Login" });
 };
 </script>
-
-<style scoped lang="scss"></style>

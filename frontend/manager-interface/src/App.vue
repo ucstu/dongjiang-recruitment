@@ -1,9 +1,11 @@
 <template>
   <n-config-provider :theme-overrides="themeOverrides" class="h-full w-full">
     <n-notification-provider>
-      <n-message-provider>
-        <main-layout />
-      </n-message-provider>
+      <n-dialog-provider>
+        <n-message-provider>
+          <main-layout />
+        </n-message-provider>
+      </n-dialog-provider>
     </n-notification-provider>
   </n-config-provider>
 </template>
@@ -12,5 +14,11 @@
 import MainLayout from "@/layouts/main.vue";
 import type { GlobalThemeOverrides } from "naive-ui";
 
-const themeOverrides: GlobalThemeOverrides = {};
+const themeOverrides: GlobalThemeOverrides = {
+  Button: {
+    textColorPrimary: "#36ad6a",
+    textColorWarning: "#fcb040",
+    textColorError: "#de576d",
+  },
+};
 </script>

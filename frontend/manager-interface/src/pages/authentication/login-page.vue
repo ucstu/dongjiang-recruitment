@@ -59,9 +59,6 @@
               type="primary"
               @click="handleSubmit"
               size="large"
-              :theme-overrides="{
-                textColorPrimary: '#000',
-              }"
               :loading="loading"
               block
             >
@@ -126,11 +123,15 @@ const handleSubmit = (e: Event) => {
 .view-account {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: 100%;
   overflow: auto;
 
   &-container {
     flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     min-width: 320px;
     max-width: 384px;
     padding: 32px 12px;
