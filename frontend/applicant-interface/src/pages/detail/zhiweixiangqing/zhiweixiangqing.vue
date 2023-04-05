@@ -149,7 +149,7 @@ import NavigationBar from "@/components/NavigationBar/NavigationBar.vue";
 import wybPopup from "@/components/wyb-popup/wyb-popup.vue";
 import { until } from "@/hooks";
 import { useMainStore } from "@/stores";
-import type { Company, Position } from "@dongjiang-recruitment/service-common";
+import type { Company, DeliveryRecord, Position } from "@dongjiang-recruitment/service-common";
 
 const VITE_CDN_URL = import.meta.env.VITE_CDN_URL;
 const mainStore = useMainStore();
@@ -276,6 +276,7 @@ const collection = () => {
           icon: "none",
           duration: 1500,
         });
+        garnerRecordId.value = res.id;
       });
   } else {
     applicantGarnerRecordService
@@ -289,6 +290,7 @@ const collection = () => {
           icon: "none",
           duration: 1500,
         });
+        garnerRecordId.value = "";
       });
   }
 };
@@ -320,11 +322,10 @@ const send = () => {
       applicantId: mainStore.applicant!.id,
       requestBody: {
         status: 1,
-        interviewTime: "",
         positionId: positionId.value,
         applicantId: mainStore.applicant!.id,
         companyId: companyId.value,
-      },
+      } as DeliveryRecord,
     })
     .then(() => {
       uni.showToast({

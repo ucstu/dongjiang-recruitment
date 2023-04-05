@@ -13,6 +13,8 @@ import {
   Post,
   Put,
 } from "@nestjs/common";
+import { DeliveryRecord } from "src/deliveryRecord/entities/deliveryRecord.entity";
+import { InspectionRecord } from "src/inspectionRecord/entities/inspectionRecord.entity";
 import { ApplicantService } from "./applicant.service";
 import { CreateApplicantDto } from "./dto/create-applicant.dto";
 import { UpdateApplicantDto } from "./dto/update-applicant.dto";
@@ -33,6 +35,22 @@ export class ApplicantController {
     @Page() page: Pagination<Applicant>
   ) {
     return this.applicantService.findAll(query, page);
+  }
+
+  @Get("deliveryRecords")
+  findAllDeliveryRecords(
+    @QueryParam() query: Array<FindOptionsWhere<DeliveryRecord>>,
+    @Page() page: Pagination<DeliveryRecord>
+  ) {
+    return this.applicantService.findAllDeliveryRecords(query, page);
+  }
+
+  @Get("inspectionRecords")
+  findAllInspectionRecords(
+    @QueryParam() query: Array<FindOptionsWhere<InspectionRecord>>,
+    @Page() page: Pagination<InspectionRecord>
+  ) {
+    return this.applicantService.findAllInspectionRecords(query, page);
   }
 
   @Get(":id")

@@ -133,11 +133,22 @@ export class CommonService {
    * @throws ApiError
    */
   public uploadFile({ file }: { file: File }): CancelablePromise<string> {
-    return this.httpRequest.request({
-      method: "UPLOAD",
-      url: "/common/files",
-      formData: file,
-    });
+    return this.httpRequest.request(
+      "uni" in globalThis
+        ? {
+            method: "UPLOAD",
+            url: "/common/files",
+            formData: file,
+          }
+        : {
+            method: "POST",
+            url: "/common/files",
+            formData: {
+              file: new Blob([file], { type: file.type }),
+            },
+            mediaType: "multipart/form-data",
+          }
+    );
   }
 
   /**
@@ -146,10 +157,21 @@ export class CommonService {
    * @throws ApiError
    */
   public uploadAvatar({ avatar }: { avatar: File }): CancelablePromise<string> {
-    return this.httpRequest.request({
-      method: "POST",
-      url: "/common/avatars",
-      formData: avatar,
-    });
+    return this.httpRequest.request(
+      "uni" in globalThis
+        ? {
+            method: "UPLOAD",
+            url: "/common/avatars",
+            formData: avatar,
+          }
+        : {
+            method: "POST",
+            url: "/common/avatars",
+            formData: {
+              avatar: new Blob([avatar], { type: avatar.type }),
+            },
+            mediaType: "multipart/form-data",
+          }
+    );
   }
 }

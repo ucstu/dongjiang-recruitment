@@ -36,7 +36,7 @@ axios.interceptors.response.use(
       switch (error.response?.status) {
         case 400:
           uni.showToast({
-            title: "请求参数错误",
+            title: (error.response.data as { error: string }).error,
             icon: "none",
           });
           break;
@@ -50,19 +50,19 @@ axios.interceptors.response.use(
           break;
         case 403:
           uni.showToast({
-            title: "您没有权限访问该资源",
+            title: (error.response.data as { error: string }).error,
             icon: "none",
           });
           break;
         case 404:
           uni.showToast({
-            title: "请求的资源不存在",
+            title: (error.response.data as { error: string }).error,
             icon: "none",
           });
           break;
         case 500:
           uni.showToast({
-            title: "服务器内部错误",
+            title: "服务器错误" + (error.response.data as { error: string }).error,
             icon: "none",
           });
           break;

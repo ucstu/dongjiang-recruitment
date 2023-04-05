@@ -8,5 +8,6 @@ import { InspectionRecordService } from "./inspectionRecord.service";
   imports: [TypeOrmModule.forFeature([InspectionRecord])],
   controllers: [InspectionRecordController],
   providers: [InspectionRecordService],
+  exports: [TypeOrmModule.forFeature([InspectionRecord])],
 })
 export class InspectionRecordModule {}

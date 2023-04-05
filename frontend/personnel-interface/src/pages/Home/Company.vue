@@ -331,17 +331,14 @@ const rule = reactive({
 
 //上传头像
 const uploadInput = ref<HTMLElement | null>(null);
-const dealfilechange = (e: Event) => {
+const dealfilechange = async (e: Event) => {
   const input = e.target as HTMLInputElement;
   let files = input.files;
   if (files) {
     if (useAvatarUpload(files[files.length - 1])) {
-      // postAvatars({ avatar: files[files.length - 1] })
-      //   .then((res) => {
-      //     formCompany.value.logoUrl = res;
-      //   })
-      //   .catch(failResponseHandler);
-      console.log("上传图片咱不可用");
+      formCompany.value.logoUrl = await commonService.uploadAvatar({
+        avatar: files[files.length - 1],
+      })
     }
   }
 };

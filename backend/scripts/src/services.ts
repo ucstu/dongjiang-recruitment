@@ -8,6 +8,7 @@ type Services = Array<{
   name: string;
   prefix: string;
   current: "local" | "remote";
+  autoStart: boolean;
   local: {
     host: string;
     protocol: "http" | "https";
@@ -24,10 +25,14 @@ let services = JSON.parse(
   readFileSync(resolve(process.cwd(), "services.json")).toString()
 ) as Services;
 
-services.filter(({ current }) => current === "local").length &&
+services.filter(
+  ({ current, autoStart }) => current === "local" && autoStart !== false
+).length &&
   concurrently(
     services
-      .filter(({ current }) => current === "local")
+      .filter(
+        ({ current, autoStart }) => current === "local" && autoStart !== false
+      )
       .map(({ name }) => ({
         name,
         command: `"pnpm run --filter '@dongjiang-recruitment/${name}' start:dev"`,

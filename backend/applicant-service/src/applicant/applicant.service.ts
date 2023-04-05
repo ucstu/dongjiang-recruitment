@@ -5,6 +5,8 @@ import {
   Repository,
 } from "@dongjiang-recruitment/nest-common/dist/typeorm";
 import { Injectable, NotFoundException } from "@nestjs/common";
+import { DeliveryRecord } from "src/deliveryRecord/entities/deliveryRecord.entity";
+import { InspectionRecord } from "src/inspectionRecord/entities/inspectionRecord.entity";
 import { CreateApplicantDto } from "./dto/create-applicant.dto";
 import { UpdateApplicantDto } from "./dto/update-applicant.dto";
 import { Applicant } from "./entities/applicant.entity";
@@ -13,7 +15,11 @@ import { Applicant } from "./entities/applicant.entity";
 export class ApplicantService {
   constructor(
     @InjectRepository(Applicant)
-    private readonly applicantRepository: Repository<Applicant>
+    private readonly applicantRepository: Repository<Applicant>,
+    @InjectRepository(DeliveryRecord)
+    private readonly deliveryRecordRepository: Repository<DeliveryRecord>,
+    @InjectRepository(InspectionRecord)
+    private readonly inspectionRecordRepository: Repository<InspectionRecord>
   ) {}
 
   async create(createApplicantDto: CreateApplicantDto) {
@@ -33,6 +39,40 @@ export class ApplicantService {
         skip: page * size,
         take: size,
         order: sort,
+      }),
+    };
+  }
+
+  async findAllInspectionRecords(
+    query: FindOptionsWhere<InspectionRecord>[],
+    page: Pagination<InspectionRecord>
+  ) {
+    return {
+      total: await this.inspectionRecordRepository.count({
+        where: query,
+      }),
+      items: await this.inspectionRecordRepository.find({
+        where: query,
+        skip: page.page * page.size,
+        take: page.size,
+        order: page.sort,
+      }),
+    };
+  }
+
+  async findAllDeliveryRecords(
+    query: FindOptionsWhere<DeliveryRecord>[],
+    page: Pagination<DeliveryRecord>
+  ) {
+    return {
+      total: await this.deliveryRecordRepository.count({
+        where: query,
+      }),
+      items: await this.deliveryRecordRepository.find({
+        where: query,
+        skip: page.page * page.size,
+        take: page.size,
+        order: page.sort,
       }),
     };
   }

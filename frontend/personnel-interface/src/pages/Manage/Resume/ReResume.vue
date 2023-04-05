@@ -114,12 +114,13 @@ import useDate from "@/hooks/useDate";
 import useGetDayAll from "@/hooks/useGetdata";
 import { useMainStore } from "@/stores/main";
 import type {
-  Applicant,
-  DeliveryRecord,
-  Position,
+Applicant,
+DeliveryRecord,
+Position,
 } from "@dongjiang-recruitment/service-common";
 import { Search } from "@element-plus/icons-vue";
-import { ElMessage } from "element-plus";
+import { ElMessage, dayjs } from "element-plus";
+import * as _ from "lodash";
 import ResumeInfo from "../Interview/resumeInfo.vue";
 import ResumeFooter from "./ResumeFooter.vue";
 interface DeliveryRecordChecked extends DeliveryRecord {
@@ -134,7 +135,7 @@ const jobInformations = ref<Map<string, Position>>(new Map());
 const workTimeing = ref([]);
 const deliveryDates = ref<Array<`${number}-${number}-${number}`>>([]);
 const submitInterviewTime = (data: { time: string }) => {
-  interviewTime.value = data.time;
+  interviewTime.value = dayjs(data.time).toISOString();
 };
 const totalCount = ref(0);
 const total = computed(() => {
@@ -149,7 +150,7 @@ const confirmInterviewTime = (delivery: DeliveryRecordChecked) => {
     .updateDeliveryRecord({
       applicantId: delivery.applicantId,
       id: delivery.id,
-      requestBody: delivery,
+      requestBody: _.omit(delivery, ["checked"]),
     })
     .then(() => {
       ElMessage.success("操作成功");
@@ -302,7 +303,9 @@ applicantService
     query: {
       companyId: ["$eq", store.companyInformation.id],
       status: ["$in", ...valueMap.value.status],
-      interviewTime: ["$eq", valueMap.value.interviewTime || ""],
+      interviewTime: valueMap.value.interviewTime
+        ? ["$eq", valueMap.value.interviewTime]
+        : undefined,
     },
   })
   .then((res) => {
@@ -336,7 +339,9 @@ const handleChange = () => {
       query: {
         companyId: ["$eq", store.companyInformation.id],
         status: ["$in", ...valueMap.value.status],
-        interviewTime: ["$eq", valueMap.value.interviewTime || ""],
+      interviewTime: valueMap.value.interviewTime
+        ? ["$eq", valueMap.value.interviewTime]
+        : undefined,
       },
     })
     .then((res) => {

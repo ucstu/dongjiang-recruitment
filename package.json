@@ -12,7 +12,8 @@
     "lint-staged": "s-lint-staged",
     "lint-fix": "s-lint-fix",
     "up-version": "s-up-version",
-    "format": "s-format"
+    "format": "s-format",
+    "dev": "pnpm run --filter \"@dongjiang-recruitment/backend-scripts\" dev"
   },
   "devDependencies": {
     "@changesets/cli": "^2.26.0",

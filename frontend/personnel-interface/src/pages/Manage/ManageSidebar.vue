@@ -29,18 +29,12 @@
           </el-icon>
           <span>面试管理</span>
         </el-menu-item>
-        <el-menu-item index="/System/Talent">
-          <el-icon>
-            <search />
-          </el-icon>
-          <span>匹配人才</span>
-        </el-menu-item>
-        <el-menu-item index="/System/Data">
+        <!-- <el-menu-item index="/System/Data">
           <el-icon>
             <files />
           </el-icon>
           <span>数据中心</span>
-        </el-menu-item>
+        </el-menu-item> -->
         <el-menu-item index="/System/Individual">
           <el-icon>
             <user />
@@ -54,13 +48,11 @@
 
 <script setup lang="ts">
 import {
-  AlarmClock,
-  ChatDotSquare,
-  Document,
-  Files,
-  House,
-  Search,
-  User,
+AlarmClock,
+ChatDotSquare,
+Document,
+House,
+User
 } from "@element-plus/icons-vue";
 </script>
 

@@ -92,17 +92,14 @@ const ruleFormRef = ref<FormInstance>();
 const formHr = reactive<Personnel>({ ...store.hrInformation });
 //上传头像
 const uploadInput = ref<HTMLElement | null>(null);
-const dealfilechange = (e: Event) => {
+const dealfilechange = async (e: Event) => {
   const input = e.target as HTMLInputElement;
   let files = input.files;
   if (files) {
     if (useAvatarUpload(files[files.length - 1])) {
-      // postAvatars({ avatar: files[files.length - 1] })
-      //   .then((res) => {
-      //     formHr.avatarUrl = res.data.body;
-      //   })
-      //   .catch(failResponseHandler);
-      console.log("上传暂时不可用");
+      formHr.avatarUrl = await commonService.uploadAvatar({
+        avatar: files[files.length - 1],
+      })
     }
   }
 };
