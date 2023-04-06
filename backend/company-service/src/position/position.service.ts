@@ -30,6 +30,7 @@ export class PositionService {
     query: Array<FindOptionsWhere<Position>>,
     { page, size, sort }: Pagination<Position>
   ) {
+    if (query.length === 0) query.push({});
     return {
       total: await this.positionRepository.count({
         where: query.map((q) => ({
@@ -40,12 +41,12 @@ export class PositionService {
         })),
       }),
       items: await this.positionRepository.find({
-        where: {
-          ...query,
+        where: query.map((q) => ({
+          ...q,
           company: {
             id: companyId,
           },
-        },
+        })),
         skip: page * size,
         take: size,
         order: sort,

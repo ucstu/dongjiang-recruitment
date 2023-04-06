@@ -33,6 +33,7 @@ export class WorkExperienceService {
     query: Array<FindOptionsWhere<WorkExperience>>,
     { page, size, sort }: Pagination<WorkExperience>
   ) {
+    if (query.length === 0) query.push({});
     return {
       total: await this.workExperienceRepository.count({
         where: query.map((q) => ({

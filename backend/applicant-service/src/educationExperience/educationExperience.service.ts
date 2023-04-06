@@ -33,6 +33,7 @@ export class EducationExperienceService {
     query: Array<FindOptionsWhere<EducationExperience>>,
     { page, size, sort }: Pagination<EducationExperience>
   ) {
+    if (query.length === 0) query.push({});
     return {
       total: await this.educationExperienceRepository.count({
         where: query.map((q) => ({

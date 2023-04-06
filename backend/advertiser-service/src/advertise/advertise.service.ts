@@ -30,6 +30,7 @@ export class AdvertiseService {
     query: Array<FindOptionsWhere<Advertise>>,
     { page, size, sort }: Pagination<Advertise>
   ) {
+    if (query.length === 0) query.push({});
     return {
       total: await this.advertiseRepository.count({
         where: query.map((q) => ({
@@ -40,12 +41,12 @@ export class AdvertiseService {
         })),
       }),
       items: await this.advertiseRepository.find({
-        where: {
-          ...query,
+        where: query.map((q) => ({
+          ...q,
           advertiser: {
             id: advertiserId,
           },
-        },
+        })),
         skip: page * size,
         take: size,
         order: sort,

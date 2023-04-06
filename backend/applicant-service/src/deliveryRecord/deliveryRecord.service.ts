@@ -20,6 +20,21 @@ export class DeliveryRecordService {
     applicantId: string,
     createDeliveryRecordDto: CreateDeliveryRecordDto
   ) {
+    const deliveryRecord = await this.deliveryRecordRepository.findOne({
+      // @ts-ignore
+      where: {
+        ...createDeliveryRecordDto,
+        applicant: {
+          id: applicantId,
+        },
+      },
+    });
+    if (deliveryRecord && deliveryRecord.deletedAt === null) {
+      throw new NotFoundException("已经投递过该职位");
+    } else if (deliveryRecord && deliveryRecord.deletedAt !== null) {
+      await this.deliveryRecordRepository.restore(deliveryRecord.id);
+      return deliveryRecord;
+    }
     return await this.deliveryRecordRepository.save({
       ...createDeliveryRecordDto,
       applicant: {
@@ -33,6 +48,7 @@ export class DeliveryRecordService {
     query: Array<FindOptionsWhere<DeliveryRecord>>,
     { page, size, sort }: Pagination<DeliveryRecord>
   ) {
+    if (query.length === 0) query.push({});
     return {
       total: await this.deliveryRecordRepository.count({
         where: query.map((q) => ({

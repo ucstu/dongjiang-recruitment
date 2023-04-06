@@ -4,9 +4,9 @@ import {
   DeleteDateColumn,
   Entity,
   JoinColumn,
-  OneToOne,
+  ManyToOne,
   PrimaryGeneratedColumn,
-  UpdateDateColumn,
+  UpdateDateColumn
 } from "@dongjiang-recruitment/nest-common/dist/typeorm";
 
 /**
@@ -204,7 +204,7 @@ export class Personnel {
   /**
    * 公司
    */
-  @OneToOne(() => Company, (company) => company.id, {
+  @ManyToOne(() => Company, (company) => company.id, {
     eager: true,
   })
   @JoinColumn()
@@ -296,7 +296,7 @@ export class Position {
   /**
    * 公司
    */
-  @OneToOne(() => Company, (company) => company.id, {
+  @ManyToOne(() => Company, (company) => company.id, {
     eager: true,
   })
   @JoinColumn()
@@ -353,7 +353,7 @@ export class Position {
   /**
    * 人事
    */
-  @OneToOne(() => Personnel, (personnel) => personnel.id, {
+  @ManyToOne(() => Personnel, (personnel) => personnel.id, {
     eager: true,
   })
   @JoinColumn()

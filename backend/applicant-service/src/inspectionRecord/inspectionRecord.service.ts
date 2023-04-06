@@ -20,6 +20,21 @@ export class InspectionRecordService {
     applicantId: string,
     createInspectionRecordDto: CreateInspectionRecordDto
   ) {
+    const inspectionRecord = await this.inspectionRecordRepository.findOne({
+      // @ts-ignore
+      where: {
+        ...createInspectionRecordDto,
+        applicant: {
+          id: applicantId,
+        },
+      },
+    });
+    if (inspectionRecord && inspectionRecord.deletedAt === null) {
+      throw new NotFoundException("已经查看过该公司的该职位");
+    } else if (inspectionRecord && inspectionRecord.deletedAt !== null) {
+      await this.inspectionRecordRepository.restore(inspectionRecord.id);
+      return inspectionRecord;
+    }
     return await this.inspectionRecordRepository.save({
       ...createInspectionRecordDto,
       applicant: {
@@ -33,6 +48,7 @@ export class InspectionRecordService {
     query: Array<FindOptionsWhere<InspectionRecord>>,
     { page, size, sort }: Pagination<InspectionRecord>
   ) {
+    if (query.length === 0) query.push({});
     return {
       total: await this.inspectionRecordRepository.count({
         where: query.map((q) => ({

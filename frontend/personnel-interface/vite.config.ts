@@ -41,6 +41,15 @@ export default mergeConfig(
     tailwindcss: path.resolve(__dirname, "./tailwind.config.js"),
   }),
   {
+    server: {
+      proxy: {
+        "/api": {
+          target: "http://localhost:3000",
+          changeOrigin: true,
+          rewrite: (path: string) => path.replace(/^\/api/, ""),
+        },
+      },
+    },
     resolve: {
       alias: {
         "@": path.resolve(__dirname, "src"),

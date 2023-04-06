@@ -20,6 +20,21 @@ export class AttentionRecordService {
     applicantId: string,
     createAttentionRecordDto: CreateAttentionRecordDto
   ) {
+    const attentionRecord = await this.attentionRecordRepository.findOne({
+      // @ts-ignore
+      where: {
+        ...createAttentionRecordDto,
+        applicant: {
+          id: applicantId,
+        },
+      },
+    });
+    if (attentionRecord && attentionRecord.deletedAt === null) {
+      throw new NotFoundException("已经关注过该公司");
+    } else if (attentionRecord && attentionRecord.deletedAt !== null) {
+      await this.attentionRecordRepository.restore(attentionRecord.id);
+      return attentionRecord;
+    }
     return await this.attentionRecordRepository.save({
       ...createAttentionRecordDto,
       applicant: {
@@ -33,6 +48,7 @@ export class AttentionRecordService {
     query: Array<FindOptionsWhere<AttentionRecord>>,
     { page, size, sort }: Pagination<AttentionRecord>
   ) {
+    if (query.length === 0) query.push({});
     return {
       total: await this.attentionRecordRepository.count({
         where: query.map((q) => ({

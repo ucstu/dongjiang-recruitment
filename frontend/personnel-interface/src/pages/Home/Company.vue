@@ -477,7 +477,9 @@ const confirmCompany = (formEl: FormInstance | undefined) => {
         requestBody: formCompany.value,
       }).then((res) => {
         let hrInformation = store.hrInformation;
-        hrInformation.company.id = res.id;
+        hrInformation.company = {
+          id: res.id
+        } as Company;
         personnelService
           .updatePersonnel({
             id: hrInformation.id,

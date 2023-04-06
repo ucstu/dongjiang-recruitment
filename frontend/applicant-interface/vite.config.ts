@@ -54,6 +54,15 @@ export default mergeConfig(
         },
       },
     },
+    server: {
+      proxy: {
+        "/api": {
+          target: "http://localhost:3000",
+          changeOrigin: true,
+          rewrite: (path: string) => path.replace(/^\/api/, ""),
+        },
+      },
+    },
     resolve: {
       alias: {
         "@": path.resolve(__dirname, "src"),

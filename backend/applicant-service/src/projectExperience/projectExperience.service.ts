@@ -33,6 +33,7 @@ export class ProjectExperienceService {
     query: Array<FindOptionsWhere<ProjectExperience>>,
     { page, size, sort }: Pagination<ProjectExperience>
   ) {
+    if (query.length === 0) query.push({});
     return {
       total: await this.projectExperienceRepository.count({
         where: query.map((q) => ({

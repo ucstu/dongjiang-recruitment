@@ -72,6 +72,7 @@ export class AccountService {
         }
       )
     ).items[0] as unknown as AuthorityGroup;
+
     // 创建账号详细信息
     switch (accountType) {
       case AccountType.Manager:
@@ -121,9 +122,10 @@ export class AccountService {
       userName,
       password: await this.bcryptService.hash(password),
       authorities: [...(accounts[0]?.authorities || [])],
-      groups: [...(accounts[0]?.authorityGroups || []), authorityGroup].filter(
-        Boolean
-      ),
+      authorityGroups: [
+        ...(accounts[0]?.authorityGroups || []),
+        authorityGroup,
+      ].filter(Boolean),
       detailId: {
         ...STATIC_FULL_ID,
         ...accounts[0]?.detailId,

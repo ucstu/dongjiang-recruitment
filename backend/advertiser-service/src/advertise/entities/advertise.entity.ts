@@ -4,7 +4,7 @@ import {
   DeleteDateColumn,
   Entity,
   JoinColumn,
-  OneToOne,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "@dongjiang-recruitment/nest-common/dist/typeorm";
@@ -115,9 +115,9 @@ export class Advertise {
   /**
    * 广告商
    */
-  @OneToOne(() => Advertiser, (advertiser) => advertiser.id, {
+  @ManyToOne(() => Advertiser, (advertiser) => advertiser.id, {
     eager: true,
   })
   @JoinColumn()
-  advertiser: Advertise;
+  advertiser: Advertiser;
 }

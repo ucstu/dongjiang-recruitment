@@ -33,6 +33,7 @@ export class JobExpectationService {
     query: Array<FindOptionsWhere<JobExpectation>>,
     { page, size, sort }: Pagination<JobExpectation>
   ) {
+    if (query.length === 0) query.push({});
     return {
       total: await this.jobExpectationRepository.count({
         where: query.map((q) => ({

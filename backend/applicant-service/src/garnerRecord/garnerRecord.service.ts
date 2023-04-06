@@ -20,12 +20,31 @@ export class GarnerRecordService {
     applicantId: string,
     createGarnerRecordDto: CreateGarnerRecordDto
   ) {
-    return await this.garnerRecordRepository.save({
-      ...createGarnerRecordDto,
-      applicant: {
-        id: applicantId,
+    const garnerRecord = await this.garnerRecordRepository.findOne({
+      // @ts-ignore
+      where: {
+        ...createGarnerRecordDto,
+        applicant: {
+          id: applicantId,
+        },
       },
     });
+    if (garnerRecord && garnerRecord.deletedAt === null) {
+      throw new NotFoundException("已经添加过该收藏记录");
+    } else if (garnerRecord && garnerRecord.deletedAt !== null) {
+      await this.garnerRecordRepository.restore(garnerRecord.id);
+      return garnerRecord;
+    }
+    try {
+      return await this.garnerRecordRepository.save({
+        ...createGarnerRecordDto,
+        applicant: {
+          id: applicantId,
+        },
+      });
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   async findAll(
@@ -33,6 +52,7 @@ export class GarnerRecordService {
     query: Array<FindOptionsWhere<GarnerRecord>>,
     { page, size, sort }: Pagination<GarnerRecord>
   ) {
+    if (query.length === 0) query.push({});
     return {
       total: await this.garnerRecordRepository.count({
         where: query.map((q) => ({

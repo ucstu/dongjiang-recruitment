@@ -9,7 +9,7 @@
                 :src="
                   userInfo?.avatarUrl
                     ? VITE_CDN_URL + userInfo.avatarUrl
-                    : VITE_CDN_URL + imgUrl
+                    : imgUrl
                 "
                 alt="avatar"
               />

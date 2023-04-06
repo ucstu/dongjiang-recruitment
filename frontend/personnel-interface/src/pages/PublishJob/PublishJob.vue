@@ -353,7 +353,11 @@ import SystemHeader from "@/components/System/SystemHeader.vue";
 import useTime from "@/hooks/useTime";
 import router from "@/router";
 import { useMainStore } from "@/stores/main";
-import type { Position } from "@dongjiang-recruitment/service-common";
+import type {
+Company,
+Personnel,
+Position,
+} from "@dongjiang-recruitment/service-common";
 import { ElMessage, type FormInstance } from "element-plus";
 import { storeToRefs } from "pinia";
 import type { Ref } from "vue";
@@ -655,9 +659,12 @@ const publishPost = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   formEl.validate((valid) => {
     if (valid) {
-      jobTypeList.value.personnel.id =
-        store.accountInformation.detailId.personnel!;
-      jobTypeList.value.company.id = store.companyInformation.id;
+      jobTypeList.value.personnel = {
+        id: store.accountInformation.detailId.personnel!,
+      } as Personnel;
+      jobTypeList.value.company = {
+        id: store.companyInformation.id,
+      } as Company;
       handleWorkTimeChange(workTimeing.value);
       companyPositionService
         .addPosition({
@@ -675,9 +682,12 @@ const updatePost = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   formEl.validate((valid) => {
     if (valid) {
-      jobTypeList.value.personnel.id =
-        store.accountInformation.detailId.personnel!;
-      jobTypeList.value.company.id = store.hrInformation.id;
+      jobTypeList.value.personnel = {
+        id: store.accountInformation.detailId.personnel!
+      } as Personnel;
+      jobTypeList.value.company = {
+        id: store.hrInformation.id
+      } as Company;
       companyPositionService
         .updatePosition({
           companyId: store.companyInformation.id,

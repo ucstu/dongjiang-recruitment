@@ -126,7 +126,7 @@ const submitForm = (formEl: FormInstance | undefined) => {
                   ] = {};
                 }
                 if (res.hrName !== null) {
-                  if (res.company.id !== null) {
+                  if (res.company?.id) {
                     companyService
                       .getCompany({ id: res.company.id })
                       .then((res) => {

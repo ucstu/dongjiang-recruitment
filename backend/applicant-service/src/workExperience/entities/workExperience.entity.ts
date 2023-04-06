@@ -4,9 +4,9 @@ import {
   DeleteDateColumn,
   Entity,
   JoinColumn,
-  OneToOne,
+  ManyToOne,
   PrimaryGeneratedColumn,
-  UpdateDateColumn,
+  UpdateDateColumn
 } from "@dongjiang-recruitment/nest-common/dist/typeorm";
 import { Applicant } from "src/applicant/entities/applicant.entity";
 
@@ -94,7 +94,7 @@ export class WorkExperience {
   /**
    * 求职者
    */
-  @OneToOne(() => Applicant, (applicant) => applicant.id, {
+  @ManyToOne(() => Applicant, (applicant) => applicant.id, {
     eager: true,
   })
   @JoinColumn()
