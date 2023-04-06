@@ -7,6 +7,7 @@ import type {
   PositionTypes,
 } from "@dongjiang-recruitment/service-common";
 import { defineStore } from "pinia";
+import io from "socket.io-client";
 
 export interface withReadStateMessageRecord extends MessageRecord {
   haveRead: boolean;
@@ -45,19 +46,49 @@ export const useCompriseStore = defineStore("comprise", {
   },
 });
 
-export const useMessageStore = defineStore("message", {
-  state: () => ({
-    messages: {} as {
-      [key: string]: { [key: string]: withReadStateMessageRecord[] };
-    },
-  }),
-  persist: {
-    enabled: true,
-    strategies: [
-      {
-        key: "pinia-message",
-        storage: localStorage,
-      },
-    ],
-  },
+const socket = io(`http://127.0.0.1:3004`, {
+  path: "/common/socket.io",
+  transports: ["websocket", "polling"],
+  timeout: 5000,
 });
+
+export const sendMessage = (message: MessageRecord) => {
+  socket.emit("message", message);
+};
+
+export const useMessageStore = defineStore(
+  "message",
+  () => {
+    const messages = ref<{
+      [key: string]: { [key: string]: withReadStateMessageRecord[] };
+    }>({});
+
+    socket.on("connect", () => {
+      socket.on(socket.id, (message: MessageRecord) => {
+        const { initiateId, serviceId } = message;
+        if (!messages.value[initiateId]) messages.value[initiateId] = {};
+        if (!messages.value[initiateId][serviceId])
+          messages.value[initiateId][serviceId] = [];
+        messages.value[initiateId][serviceId].push({
+          ...message,
+          haveRead: false,
+        });
+      });
+    });
+
+    return {
+      messages,
+    };
+  },
+  {
+    persist: {
+      enabled: true,
+      strategies: [
+        {
+          key: "pinia-message",
+          storage: localStorage,
+        },
+      ],
+    },
+  }
+);

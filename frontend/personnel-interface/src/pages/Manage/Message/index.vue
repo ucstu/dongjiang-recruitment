@@ -41,9 +41,9 @@
 <script setup lang="ts">
 import { useMainStore, useMessageStore } from "@/stores/main";
 import type {
-  Applicant,
-  DeliveryRecord,
-  Position,
+Applicant,
+DeliveryRecord,
+Position,
 } from "@dongjiang-recruitment/service-common";
 import { storeToRefs } from "pinia";
 import { useRoute } from "vue-router";
@@ -86,6 +86,9 @@ onBeforeMount(() => {
 });
 
 watchEffect(() => {
+  if (!messages.value[mainStore.accountInformation.id]) {
+    messages.value[mainStore.accountInformation.id] = {};
+  }
   const messageKeys = Object.keys(
     messages.value[mainStore.accountInformation.id]
   );

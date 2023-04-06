@@ -226,6 +226,7 @@ const focusOn = () => {
           icon: "none",
           duration: 1500,
         });
+        focusId.value = res.id;
       });
   } else {
     applicantAttentionRecordService

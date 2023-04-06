@@ -19,7 +19,6 @@
         <scroll-view
           :scroll-x="true"
           :style="'width: ' + expectationWidth + 'px'"
-          class="flex-row list"
         >
           <text
             v-for="jobExpectation in mainStore.jobExpectations?.items || []"
@@ -57,7 +56,7 @@
         </view>
         <view class="flex-row group-4">
           <view class="flex-row">
-            <text @click="text_22OnClick">{{ jobFilter.workCityName }}</text>
+            <text @click="text_22OnClick">{{ workCityName }}</text>
             <image
               src="https://codefun-proj-user-res-1256085488.cos.ap-guangzhou.myqcloud.com/623287845a7e3f0310c3a3f7/623446dc62a7d90011023514/16475959311313713900.png"
               class="image-3 image-4"
@@ -121,7 +120,7 @@
           </view>
           <view class="flex-row group-4">
             <view class="flex-row">
-              <text @click="text_22OnClick">{{ jobFilter.workCityName }}</text>
+              <text @click="text_22OnClick">{{ workCityName }}</text>
               <image
                 src="https://codefun-proj-user-res-1256085488.cos.ap-guangzhou.myqcloud.com/623287845a7e3f0310c3a3f7/623446dc62a7d90011023514/16475959311313713900.png"
                 class="image-3 image-4"
@@ -165,8 +164,8 @@
 <script lang="ts" setup>
 import { useMainStore } from "@/stores";
 import type {
-  JobExpectation,
-  Position,
+JobExpectation,
+Position,
 } from "@dongjiang-recruitment/service-common";
 
 const mainStore = useMainStore();
@@ -178,50 +177,32 @@ const navigationBarWidth = mainStore.menu.left - uni.upx2px(30);
 const expectationWidth = mainStore.menu.left - uni.upx2px(170);
 /* #endif */
 
-interface Filter {
-  /**
-   * 职位类型
-   */
-  positionType: string;
-  /**
-   * 工作年限，eg；{1:NoExperience,2:InSchoolOrFreshGraduate,3:Under3Year,4:With3To5Year,5:With5To10Year,6:MoreThen10Year}
-   */
-  workingYears: Position.workingYears;
-  /**
-   * 学历要求，eg；{0:Unlimited,1:JuniorCollege,2:Undergraduate,3:Postgraduate,4:Doctor}
-   */
-  education: Position.education;
-  /**
-   * 细分标签
-   */
-  directionTags: Array<string>;
-  /**
-   * 单位K
-   */
-  startingSalary: number;
-  /**
-   * 单位K
-   */
-  ceilingSalary: number;
-  /**
-   * 工作省份
-   */
-  workProvinceName: string;
-  /**
-   * 工作城市
-   */
-  workCityName: string;
-  /**
-   * 工作地区
-   */
-  workAreaName: string;
-  /**
-   * 职位类型，eg；{1:FullTime,2:PartTime,3:Practice}
-   */
-  workType: Position.workType;
-}
+const workCityName = ref("");
+const workAreaName = ref<string[]>([]);
+const jobFilter = ref({
+  salary: "", // 期望薪资
+  workingYears: <number[]>[], // 工作经验
+  educations: <number[]>[], // 学历
+  workTypes: <number[]>[], // 工作性质
+  scales: <number[]>[], // 公司规模
+  financingStages: <number[]>[], // 融资阶段
+  comprehensions: <string[]>[], // 行业领域
+});
+watch(
+  () => mainStore.jobExpectations?.items[0]?.cityName,
+  (cityName) => {
+    workCityName.value = cityName!;
+  }
+);
 
-const jobFilter = ref<Filter>({} as Filter);
+uni.$on("city", (city: string) => (workCityName.value = city));
+uni.$on("place", (place: string[]) => (workAreaName.value = place));
+uni.$on("filterValue", (filter) => {
+  console.log("filter", filter);
+  jobFilter.value = filter;
+  paging.value?.complete(true);
+});
+
 const positions = ref<Array<Position>>([]);
 const methods = ref<Array<"热门" | "附近" | "最新">>(["热门", "附近", "最新"]);
 const activeMethod = ref<"热门" | "附近" | "最新">(methods.value[0]);
@@ -230,9 +211,32 @@ const activeJobExpectation = ref<JobExpectation>(
 );
 const paging = ref<{ complete: (param: Array<any> | boolean) => void }>();
 const queryList = async (pageNo: number, pageSize: number) => {
+  const salaries = jobFilter.value.salary.split("-");
+  const query = {
+    workCityName: workCityName.value ? ["$eq", workCityName.value] : undefined,
+    startingSalary: salaries[0] ? ["$gte", parseInt(salaries[0])] : undefined,
+    ceilingSalary: salaries[1] ? ["$lte", parseInt(salaries[1])] : undefined,
+    workingYears: jobFilter.value.workingYears.length
+      ? ["$in", ...jobFilter.value.workingYears]
+      : undefined,
+    education: jobFilter.value.educations.length
+      ? ["$in", ...jobFilter.value.educations]
+      : undefined,
+    workType: jobFilter.value.workTypes.length
+      ? ["$in", ...jobFilter.value.workTypes]
+      : undefined,
+    workAreaName: workAreaName.value.length
+      ? ["$in", ...workAreaName.value]
+      : undefined,
+  } as any;
   paging.value?.complete(
     (
       await companyService.queryAllPosition({
+        query: Object.values(query).every((item) => !item)
+          ? undefined
+          : Object.fromEntries(
+              Object.entries(query).filter(([, value]) => value)
+            ),
         page: pageNo,
         size: pageSize,
         sort: activeMethod.value === "最新" ? ["createdAt,desc"] : undefined,
@@ -258,9 +262,9 @@ const text_22OnClick = () => {
   uni.navigateTo({
     url:
       `/pages/most/weizhixuanze/weizhixuanze?city=` +
-      jobFilter.value +
-      "&areas=",
-    // JSON.stringify(city.value),
+      workCityName.value +
+      "&areas=" +
+      JSON.stringify(workAreaName.value),
   });
 };
 const text_23OnClick = () => {

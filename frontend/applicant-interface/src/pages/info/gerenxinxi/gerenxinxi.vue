@@ -151,12 +151,6 @@ const VITE_CDN_URL = import.meta.env.VITE_CDN_URL;
 const mainStore = useMainStore();
 
 const userInformation = ref<Applicant>({} as Applicant);
-until(
-  computed(() => !!mainStore.applicant),
-  () => {
-    userInformation.value = mainStore.applicant!;
-  }
-);
 
 const fullName = ref(""); // 姓名
 const birOrTime = ref(true);
@@ -174,11 +168,33 @@ const workTime = ref(workYear[userInformation.value.workingYears]); // 工作时
 const valueYear = ref();
 const valueMonth = ref();
 const valueDay = ref();
-fullName.value =
-  userInformation.value.firstName + userInformation.value.lastName;
-valueYear.value = parseInt(userInformation.value.dateOfBirth.slice(0, 4), 10);
-valueMonth.value = parseInt(userInformation.value.dateOfBirth.slice(5, 7), 10);
-valueDay.value = parseInt(userInformation.value.dateOfBirth.slice(8, 10), 10);
+const value = ref();
+
+until(
+  computed(() => !!mainStore.applicant),
+  () => {
+    userInformation.value = mainStore.applicant!;
+    fullName.value =
+      userInformation.value.firstName + userInformation.value.lastName;
+    valueYear.value = parseInt(
+      userInformation.value.dateOfBirth.slice(0, 4),
+      10
+    );
+    valueMonth.value = parseInt(
+      userInformation.value.dateOfBirth.slice(5, 7),
+      10
+    );
+    valueDay.value = parseInt(
+      userInformation.value.dateOfBirth.slice(8, 10),
+      10
+    );
+    value.value = [
+      valueYear.value - 1960,
+      valueMonth.value - 1,
+      valueDay.value - 1,
+    ]; //选择器默认值
+  }
+);
 
 onLoad(() => {
   uni.$on("liveCity", (data) => {
@@ -216,12 +232,6 @@ for (let i = 1; i <= 12; i++) {
 for (let i = 1; i <= 31; i++) {
   days.value.push(i);
 }
-const value = ref();
-value.value = [
-  valueYear.value - 1960,
-  valueMonth.value - 1,
-  valueDay.value - 1,
-]; //选择器默认值
 
 /* 上传头像 */
 const chooseImage = () => {

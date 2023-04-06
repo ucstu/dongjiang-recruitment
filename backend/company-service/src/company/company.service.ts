@@ -22,7 +22,7 @@ export class CompanyService {
   async create(createCompanyDto: CreateCompanyDto) {
     return await this.companyRepository.save({
       ...createCompanyDto,
-      logoUrl: createCompanyDto.logoUrl || "/common-avatars/company.png",
+      logoUrl: createCompanyDto.logoUrl || "/common-avatars/company.jpg",
     });
   }
 

@@ -56,16 +56,17 @@
 
 <script lang="ts" setup>
 import router from "@/router";
-import { useCompriseStore } from "@/stores/main";
+import { sendMessage, useCompriseStore, useMainStore } from "@/stores/main";
 import {
-  ArrowDown,
-  FolderOpened,
-  PictureFilled,
-  Plus,
+ArrowDown,
+FolderOpened,
+PictureFilled,
+Plus,
 } from "@element-plus/icons-vue";
 import { ElMessage } from "element-plus";
 const VITE_CDN_URL = import.meta.env.VITE_CDN_URL as string;
 const content = ref("");
+const mainStore = useMainStore();
 const store = useCompriseStore();
 const comprise = store.comprise;
 let props = defineProps({
@@ -124,8 +125,11 @@ const sentMessage = (e: KeyboardEvent) => {
     if (props.chatId) {
       if (content.value) {
         // sendMessage(content.value, 1, props.chatId, 1);
-        console.log("临时关闭消息发送功能");
-
+        sendMessage({
+          initiateId: mainStore.accountInformation.id,
+          serviceId: props.chatId,
+          content: content.value,
+        } as any)
         content.value = "";
       }
     } else {
@@ -141,8 +145,11 @@ const sentMessage1 = () => {
   if (props.chatId) {
     if (content.value) {
       // sendMessage(content.value, 1, props.chatId, 1);
-
-      console.log("临时关闭消息发送功能");
+      sendMessage({
+        initiateId: mainStore.accountInformation.id,
+        serviceId: props.chatId,
+        content: content.value,
+      } as any)
       content.value = "";
     }
   } else {

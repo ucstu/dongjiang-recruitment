@@ -12,7 +12,10 @@ import {
 } from "@nestjs/websockets";
 import { Server } from "socket.io";
 
-@WebSocketGateway({ cors: "*" })
+@WebSocketGateway({
+  path: "/common/socket.io",
+  cors: "*",
+})
 export class MessageGateWay implements OnModuleInit {
   private readonly redis: Redis;
 

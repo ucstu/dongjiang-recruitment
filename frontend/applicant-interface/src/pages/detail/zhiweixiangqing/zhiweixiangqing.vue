@@ -149,7 +149,11 @@ import NavigationBar from "@/components/NavigationBar/NavigationBar.vue";
 import wybPopup from "@/components/wyb-popup/wyb-popup.vue";
 import { until } from "@/hooks";
 import { useMainStore } from "@/stores";
-import type { Company, DeliveryRecord, Position } from "@dongjiang-recruitment/service-common";
+import type {
+Company,
+DeliveryRecord,
+Position,
+} from "@dongjiang-recruitment/service-common";
 
 const VITE_CDN_URL = import.meta.env.VITE_CDN_URL;
 const mainStore = useMainStore();
@@ -220,6 +224,19 @@ onLoad((e) => {
       .then((res) => {
         companyInformation.value = res;
       });
+    until(
+      computed(() => !!mainStore.applicant?.id),
+      () => {
+        applicantInspectionRecordService.addUserInspectionRecord({
+          applicantId: mainStore.applicant!.id,
+          requestBody: {
+            positionId: positionId.value,
+            applicantId: mainStore.applicant!.id,
+            companyId: companyId.value,
+          },
+        });
+      }
+    );
   }
 });
 // 相关公司

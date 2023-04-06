@@ -138,10 +138,10 @@
 import router from "@/router";
 import { useMainStore, useMessageStore } from "@/stores/main";
 import type {
-  Applicant,
-  Position,
-  ProjectExperience,
-  WorkExperience,
+Applicant,
+Position,
+ProjectExperience,
+WorkExperience,
 } from "@dongjiang-recruitment/service-common";
 import { useRoute } from "vue-router";
 
@@ -162,6 +162,14 @@ void applicantProjectExperienceService
   .then((res) => {
     projects.value = res.items;
   });
+
+void personnelInspectionRecordService.addHrInspectionRecord({
+  personnelId: store.hrInformation.id,
+  requestBody: {
+    applicantId: route.params.userId as string,
+    personnelId: store.hrInformation.id,
+  },
+})
 
 void applicantWorkExperienceService
   .queryWorkExperience({

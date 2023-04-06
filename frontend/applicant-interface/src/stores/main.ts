@@ -1,5 +1,11 @@
 import type { Message } from "@/interfaces";
-import type { Account } from "@dongjiang-recruitment/service-common";
+import type {
+  Account,
+  MessageRecord,
+} from "@dongjiang-recruitment/service-common";
+// @ts-ignore
+import io from "@hyoga/uni-socket.io";
+import dayjs from "dayjs";
 import jwtDecode from "jwt-decode";
 import { defineStore } from "pinia";
 
@@ -8,10 +14,21 @@ const parseJwt = (
 ): { id?: string; did?: Account["detailId"] } => {
   if (!token) return {};
   try {
-    return jwtDecode(token) ;
+    return jwtDecode(token);
   } catch (e) {
     return {};
   }
+};
+
+// const socket = io(`${import.meta.env.VITE_BASE_URL}`, {
+const socket = io(`http://127.0.0.1:3004`, {
+  path: "/common/socket.io",
+  transports: ["websocket", "polling"],
+  timeout: 5000,
+});
+
+export const sendMessage = (message: MessageRecord) => {
+  socket.emit("message", message);
 };
 
 export const useMainStore = defineStore(
@@ -79,6 +96,23 @@ export const useMainStore = defineStore(
           uni.reLaunch({
             url: "/pages/info/gerenxinxi/gerenxinxi",
           });
+        } else {
+          messages.value[applicantId.value!] = {};
+          applicantEducationExperienceService
+            .queryEducationExperience({
+              applicantId: applicantId.value!,
+            })
+            .then((res1) => {
+              setApplicant({
+                ...res,
+                age: dayjs().diff(res.dateOfBirth, "year"),
+                education: res1.items.reduce(
+                  (prev, curr) =>
+                    curr.education > prev ? curr.education : prev,
+                  res1.items[0].education as any
+                ),
+              });
+            });
         }
       },
     });
@@ -118,6 +152,18 @@ export const useMainStore = defineStore(
     const messages = ref<{
       [key: string]: { [key: string]: Message[] };
     }>({});
+    socket.on("connect", () => {
+      socket.on(socket.id, (message: MessageRecord) => {
+        const { initiateId, serviceId } = message;
+        if (!messages.value[initiateId]) messages.value[initiateId] = {};
+        if (!messages.value[initiateId][serviceId])
+          messages.value[initiateId][serviceId] = [];
+        messages.value[initiateId][serviceId].push({
+          ...message,
+          haveRead: false,
+        });
+      });
+    });
 
     return {
       system,

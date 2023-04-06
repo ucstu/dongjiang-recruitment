@@ -19,7 +19,7 @@
                   :value="index + 1"
                 />
               </el-select>
-              <el-select
+              <!-- <el-select
                 v-model="valueMap.workingYears"
                 class="m-2"
                 placeholder="工作经验"
@@ -32,7 +32,7 @@
                   :label="item"
                   :value="index + 1"
                 />
-              </el-select>
+              </el-select> -->
               <div style="width: 350px">
                 <el-date-picker
                   v-model="workTimeing"
@@ -45,7 +45,7 @@
                 />
               </div>
             </div>
-            <div class="second-line">
+            <!-- <div class="second-line">
               <el-select
                 v-model="valueMap.sexs"
                 class="m-2"
@@ -82,7 +82,7 @@
                 clearable
                 @change="handleChange"
               />
-            </div>
+            </div> -->
           </div>
           <div class="resume">
             <el-scrollbar height="490px">
@@ -118,7 +118,6 @@ Applicant,
 DeliveryRecord,
 Position,
 } from "@dongjiang-recruitment/service-common";
-import { Search } from "@element-plus/icons-vue";
 import { ElMessage, dayjs } from "element-plus";
 import * as _ from "lodash";
 import ResumeInfo from "../Interview/resumeInfo.vue";
@@ -302,9 +301,15 @@ applicantService
   .queryAllDeliveryRecord({
     query: {
       companyId: ["$eq", store.companyInformation.id],
-      status: ["$in", ...valueMap.value.status],
-      interviewTime: valueMap.value.interviewTime
-        ? ["$eq", valueMap.value.interviewTime]
+      status: [
+        "$in",
+        ...[
+          // @ts-ignore
+          valueMap.value.status === "" ? [1, 2, 3, 4] : valueMap.value.status,
+        ].flat(),
+      ],
+      createdAt: valueMap.value.deliveryDates?.length
+        ? ["$in", ...valueMap.value.deliveryDates]
         : undefined,
     },
   })
@@ -338,10 +343,16 @@ const handleChange = () => {
     .queryAllDeliveryRecord({
       query: {
         companyId: ["$eq", store.companyInformation.id],
-        status: ["$in", ...valueMap.value.status],
-      interviewTime: valueMap.value.interviewTime
-        ? ["$eq", valueMap.value.interviewTime]
-        : undefined,
+        status: [
+          "$in",
+          ...[
+            // @ts-ignore
+            valueMap.value.status === "" ? [1, 2, 3, 4] : valueMap.value.status,
+          ].flat(),
+        ],
+        createdAt: valueMap.value.deliveryDates?.length
+          ? ["$in", ...valueMap.value.deliveryDates]
+          : undefined,
       },
     })
     .then((res) => {

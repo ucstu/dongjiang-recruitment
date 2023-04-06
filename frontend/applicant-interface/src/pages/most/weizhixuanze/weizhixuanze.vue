@@ -80,23 +80,25 @@ onLoad((e) => {
   if (e!.city) {
     country.value = e!.city;
     c.value = e!.city;
-    countries.value.splice(1, countries.value.length - 1);
-    // for (const item of mainStore.areas) {
-    //   countries.value.push(item);
-    // }
-    console.log("!!!!!!!!!!!!!!!!!");
-
-    if (e!.areas) {
-      filterValue.value = JSON.parse(e!.areas);
-      if (filterValue.value.length) {
-        const count = countries.value.map((item) => item.countyName);
-        countriesIndex.value = count.indexOf(c.value);
-        areas.value = countries.value[countriesIndex.value].areas;
-      } else {
-        countriesIndex.value = 0;
-        areas.value = countries.value[countriesIndex.value].areas;
-      }
-    }
+    commonService
+      .getAreas({
+        cityName: country.value,
+      })
+      .then((res) => {
+        countries.value.splice(1, countries.value.length - 1);
+        countries.value.push(...res);
+        if (e!.areas) {
+          filterValue.value = JSON.parse(e!.areas);
+          if (filterValue.value.length) {
+            const count = countries.value.map((item) => item.countyName);
+            countriesIndex.value = count.indexOf(c.value);
+            areas.value = countries.value[countriesIndex.value].areas;
+          } else {
+            countriesIndex.value = 0;
+            areas.value = countries.value[countriesIndex.value].areas;
+          }
+        }
+      });
   }
   // 监听事件`liveCity`，当它被触发时，会执行回调函数。
   uni.$on("liveCity", (city) => {

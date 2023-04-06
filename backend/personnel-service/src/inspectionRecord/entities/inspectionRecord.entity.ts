@@ -10,7 +10,7 @@ import {
 /**
  * InspectionRecord
  */
-@Entity()
+@Entity("personnel_inspection_record")
 export class InspectionRecord {
   /**
    * ID

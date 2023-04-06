@@ -44,7 +44,7 @@
             <div class="whole">
               <span>全部({{ interviewNum.length }})</span>
               <el-divider direction="vertical" />
-              <span>面试({{ num.count }})</span>
+              <span>面试({{ num.countInterviewed }})</span>
             </div>
             <div class="add"></div>
           </div>
@@ -109,10 +109,11 @@ import useDate from "@/hooks/useDate";
 import router from "@/router";
 import { useMainStore } from "@/stores/main";
 import type {
-  Applicant,
-  DeliveryRecord,
-  Position,
+Applicant,
+DeliveryRecord,
+Position,
 } from "@dongjiang-recruitment/service-common";
+import { dayjs } from "element-plus";
 
 const store = useMainStore();
 const ho = new Date().getHours();
@@ -180,10 +181,10 @@ applicantService
 
       if (item.status === 1) {
         num.value.countCommunication = num.value.countCommunication + 1;
-        if (useDate(item.createdAt) === day) {
+        if (useDate(dayjs(item.createdAt).add(8, "h").toISOString()) === day) {
           num.value.count = num.value.count + 1;
         }
-      } else if (item.status === 4 && item.interviewTime === day) {
+      } else if (item.status === 4 && useDate(dayjs(item.interviewTime).subtract(8, "h").toISOString()) === day) {
         num.value.countInterviewed = num.value.countInterviewed + 1;
       }
     });

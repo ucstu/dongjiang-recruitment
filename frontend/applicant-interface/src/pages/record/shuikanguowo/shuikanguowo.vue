@@ -32,24 +32,32 @@ until(
   computed(() => !!mainStore.applicant?.id),
   () => {
     // 查询查看记录
-    applicantInspectionRecordService
-      .queryUserInspectionRecord({
-        applicantId: mainStore.applicant!.id,
+    personnelService
+      .queryAllPersonnelInspectionRecord({
+        query: {
+          applicantId: ["$eq", mainStore.applicant!.id]
+        },
       })
       .then((res) => {
         if (res.total === 0) {
           emptyShow.value = true;
         } else {
           for (const item of res.items) {
-            companyService
-              .getCompany({
-                id: item.companyId,
+            personnelService
+              .getPersonnel({
+                id: item.personnelId,
               })
               .then((res) => {
-                const p = companyInfo.value.map((item) => item.id);
-                if (!p.includes(res.id)) {
-                  companyInfo.value.push(res);
-                }
+                companyService
+                  .getCompany({
+                    id: res.companyId,
+                  })
+                  .then((res) => {
+                    const p = companyInfo.value.map((item) => item.id);
+                    if (!p.includes(res.id)) {
+                      companyInfo.value.push(res);
+                    }
+                  });
               });
           }
           emptyShow.value = false;

@@ -86,7 +86,7 @@
 <script lang="ts" setup>
 import Left from "@/components/BubbleBox/BubbleBoxHr.vue";
 import Right from "@/components/BubbleBox/BubbleBoxUser.vue";
-import { useMainStore } from "@/stores";
+import { sendMessage, useMainStore } from "@/stores";
 import type { Personnel } from "@dongjiang-recruitment/service-common";
 
 const VITE_BASE_URL = import.meta.env.VITE_BASE_URL;
@@ -153,8 +153,10 @@ const goBack = () => {
 const sendMes = () => {
   if (inputValue.value.length) {
     // sendMessage(inputValue.value, 1, hrInfo.value.hrInformationId, 2);
-    console.log("fasongzaibukeyong");
-
+    sendMessage({
+      initiateId: mainStore.applicant!.id,
+      serviceId: hrInfo.value.id,
+    } as any)
     inputValue.value = "";
   } else {
     uni.showToast({

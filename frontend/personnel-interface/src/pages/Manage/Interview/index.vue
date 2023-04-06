@@ -3,7 +3,7 @@
     <div class="main">
       <div class="center">
         <div class="total">
-          <div class="top">
+          <!-- <div class="top">
             <div class="first-line">
               <h1>面试时间：</h1>
               <el-date-picker
@@ -15,7 +15,7 @@
                 @change="handleWorkTimeChange(workTimeing)"
               />
             </div>
-          </div>
+          </div> -->
           <div class="resume">
             <el-scrollbar height="400px">
               <ResumeInfo
@@ -62,9 +62,9 @@ import useDate from "@/hooks/useDate";
 import useGetDayAll from "@/hooks/useGetdata";
 import { useMainStore } from "@/stores/main";
 import type {
-  Applicant,
-  DeliveryRecord,
-  Position,
+Applicant,
+DeliveryRecord,
+Position,
 } from "@dongjiang-recruitment/service-common";
 import { ElMessage } from "element-plus";
 import ResumeInfo from "./resumeInfo.vue";
