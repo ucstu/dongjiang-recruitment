@@ -86,12 +86,14 @@ import router from "@/router";
 import type { Company } from "@dongjiang-recruitment/service-common";
 import dayjs from "dayjs";
 import * as _ from "lodash";
-import type {
-DataTableColumns,
-FormRules,
-NDataTable,
-NForm,
-PaginationProps,
+import {
+NButton,
+NSpace,
+type DataTableColumns,
+type FormRules,
+type NDataTable,
+type NForm,
+type PaginationProps,
 } from "naive-ui";
 import type {
 FilterState,
@@ -290,28 +292,28 @@ const columns = computed<DataTableColumns<Company>>(() => [
     key: "action",
     render: (row) => {
       return (
-        <n-space>
+        <NSpace>
           {hasPermission("/companies/:id,GET") && (
-            <n-button size="small" type="primary" onClick={() => get(row)}>
+            <NButton size="small" type="primary" onClick={() => get(row)}>
               查看
-            </n-button>
+            </NButton>
           )}
           {hasPermission("/companies/:companyId/positions,GET") && (
-            <n-button size="small" type="primary" onClick={() => getPosition(row)}>
+            <NButton size="small" type="primary" onClick={() => getPosition(row)}>
               查看职位
-            </n-button>
+            </NButton>
           )}
           {hasPermission("/companies/:id,PUT") && (
-            <n-button size="small" type="primary" onClick={() => update(row)}>
+            <NButton size="small" type="primary" onClick={() => update(row)}>
               编辑
-            </n-button>
+            </NButton>
           )}
           {hasPermission("/companies/:id,DELETE") && (
-            <n-button size="small" type="error" onClick={() => remove(row)}>
+            <NButton size="small" type="error" onClick={() => remove(row)}>
               删除
-            </n-button>
+            </NButton>
           )}
-        </n-space>
+        </NSpace>
       );
     },
   },

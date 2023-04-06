@@ -114,12 +114,15 @@ import { hasPermission } from "@/hooks";
 import type { Account as _Account } from "@dongjiang-recruitment/service-common";
 import dayjs from "dayjs";
 import * as _ from "lodash";
-import type {
-DataTableColumns,
-FormRules,
-NDataTable,
-NForm,
-PaginationProps,
+import {
+NButton,
+NSpace,
+NTag,
+type DataTableColumns,
+type FormRules,
+type NDataTable,
+type NForm,
+type PaginationProps,
 } from "naive-ui";
 import type {
 FilterState,
@@ -401,13 +404,13 @@ const columns = computed<DataTableColumns<Account>>(() => [
     key: "authorityGroups",
     render: (row) => {
       return (
-        <n-space>
+        <NSpace>
           {row.authorityGroups.map((item) => (
-            <n-tag type="primary" key={item.id}>
+            <NTag type="primary" key={item.id}>
               {item.name}
-            </n-tag>
+            </NTag>
           ))}
-        </n-space>
+        </NSpace>
       );
     },
   },
@@ -416,23 +419,23 @@ const columns = computed<DataTableColumns<Account>>(() => [
     key: "action",
     render: (row) => {
       return (
-        <n-space>
+        <NSpace>
           {hasPermission("/authentication/accounts/:id,GET") && (
-            <n-button size="small" type="primary" onClick={() => get(row)}>
+            <NButton size="small" type="primary" onClick={() => get(row)}>
               查看
-            </n-button>
+            </NButton>
           )}
           {hasPermission("/authentication/accounts/:id,PUT") && (
-            <n-button size="small" type="primary" onClick={() => update(row)}>
+            <NButton size="small" type="primary" onClick={() => update(row)}>
               编辑
-            </n-button>
+            </NButton>
           )}
           {hasPermission("/authentication/accounts/:id,DELETE") && (
-            <n-button size="small" type="error" onClick={() => remove(row)}>
+            <NButton size="small" type="error" onClick={() => remove(row)}>
               删除
-            </n-button>
+            </NButton>
           )}
-        </n-space>
+        </NSpace>
       );
     },
   },

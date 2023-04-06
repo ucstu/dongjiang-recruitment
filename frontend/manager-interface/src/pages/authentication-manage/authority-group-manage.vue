@@ -93,12 +93,14 @@ import { hasPermission } from "@/hooks";
 import type { AuthorityGroup } from "@dongjiang-recruitment/service-common";
 import dayjs from "dayjs";
 import * as _ from "lodash";
-import type {
-DataTableColumns,
-FormRules,
-NDataTable,
-NForm,
-PaginationProps,
+import {
+NButton,
+NSpace,
+type DataTableColumns,
+type FormRules,
+type NDataTable,
+type NForm,
+type PaginationProps,
 } from "naive-ui";
 import type {
 FilterState,
@@ -328,23 +330,23 @@ const columns = computed<DataTableColumns<AuthorityGroup>>(() => [
     key: "action",
     render: (row) => {
       return (
-        <n-space>
+        <NSpace>
           {hasPermission("/authentication/authorityGroups/:id,GET") && (
-            <n-button size="small" type="primary" onClick={() => get(row)}>
+            <NButton size="small" type="primary" onClick={() => get(row)}>
               查看
-            </n-button>
+            </NButton>
           )}
           {hasPermission("/authentication/authorityGroups/:id,PUT") && (
-            <n-button size="small" type="primary" onClick={() => update(row)}>
+            <NButton size="small" type="primary" onClick={() => update(row)}>
               编辑
-            </n-button>
+            </NButton>
           )}
           {hasPermission("/authentication/authorityGroups/:id,DELETE") && (
-            <n-button size="small" type="error" onClick={() => remove(row)}>
+            <NButton size="small" type="error" onClick={() => remove(row)}>
               删除
-            </n-button>
+            </NButton>
           )}
-        </n-space>
+        </NSpace>
       );
     },
   },
