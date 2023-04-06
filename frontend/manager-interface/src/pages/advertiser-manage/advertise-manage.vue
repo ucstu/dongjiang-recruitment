@@ -2,7 +2,7 @@
   <div class="p-2 w-full h-full" ref="div">
     <n-space justify="space-between" align="center">
       <n-button
-        v-if="hasPermission('/advertisers/:id/advertises,POST')"
+        v-if="hasPermission('/advertisers/:advertiserId/advertise,POST')"
         type="primary"
         size="small"
         @click="add"
@@ -11,7 +11,7 @@
         新增
       </n-button>
       <n-button
-        v-if="hasPermission('/advertisers/:id/advertises,GET')"
+        v-if="hasPermission('/advertisers/:advertiserId/advertise,GET')"
         text
         size="small"
         @click="refresh"

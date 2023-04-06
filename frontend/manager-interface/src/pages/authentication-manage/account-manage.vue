@@ -397,6 +397,21 @@ const columns = computed<DataTableColumns<Account>>(() => [
       false,
   },
   {
+    title: "权限组",
+    key: "authorityGroups",
+    render: (row) => {
+      return (
+        <n-space>
+          {row.authorityGroups.map((item) => (
+            <n-tag type="primary" key={item.id}>
+              {item.name}
+            </n-tag>
+          ))}
+        </n-space>
+      );
+    },
+  },
+  {
     title: "操作",
     key: "action",
     render: (row) => {
