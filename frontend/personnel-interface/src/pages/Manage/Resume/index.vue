@@ -139,6 +139,7 @@ import router from "@/router";
 import { useMainStore, useMessageStore } from "@/stores/main";
 import type {
 Applicant,
+Personnel,
 Position,
 ProjectExperience,
 WorkExperience,
@@ -166,8 +167,12 @@ void applicantProjectExperienceService
 void personnelInspectionRecordService.addHrInspectionRecord({
   personnelId: store.hrInformation.id,
   requestBody: {
-    applicantId: route.params.userId as string,
-    personnelId: store.hrInformation.id,
+    applicant: {
+      id: route.params.userId as string
+    } as Applicant,
+    personnel: {
+      id: store.hrInformation.id
+    } as Personnel,
   },
 })
 

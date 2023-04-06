@@ -2,6 +2,8 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { Query, Sort } from "../../interfaces";
+import type { Applicant } from "../models/Applicant";
+import type { Personnel } from "../models/Personnel";
 import type { PersonnelInspectionRecord } from "../models/PersonnelInspectionRecord";
 
 import type { CancelablePromise } from "../core/CancelablePromise";
@@ -138,13 +140,13 @@ export class PersonnelInspectionRecordService {
     personnelId: string;
     requestBody?: {
       /**
-       * 人事ID
+       * 人事
        */
-      personnelId: string;
+      personnel: Personnel;
       /**
-       * 求职者ID
+       * 求职者
        */
-      applicantId: string;
+      applicant: Applicant;
     };
   }): CancelablePromise<PersonnelInspectionRecord> {
     return this.httpRequest.request({

@@ -25,14 +25,14 @@ export const $AttentionRecord = {
       isRequired: true,
       isNullable: true,
     },
-    applicantId: {
-      type: "string",
-      description: `求职者ID`,
+    applicant: {
+      type: "Applicant",
+      description: `求职者`,
       isRequired: true,
     },
-    companyId: {
-      type: "string",
-      description: `公司ID`,
+    company: {
+      type: "Company",
+      description: `公司`,
       isRequired: true,
     },
   },

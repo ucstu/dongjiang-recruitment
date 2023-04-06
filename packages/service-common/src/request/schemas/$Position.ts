@@ -75,14 +75,14 @@ export const $Position = {
       description: `工作地区`,
       isRequired: true,
     },
-    companyId: {
-      type: "string",
-      description: `公司ID`,
+    company: {
+      type: "Company",
+      description: `公司`,
       isRequired: true,
     },
-    personnelId: {
-      type: "string",
-      description: `人事ID`,
+    personnel: {
+      type: "Personnel",
+      description: `人事`,
       isRequired: true,
     },
     workType: {

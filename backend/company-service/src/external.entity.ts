@@ -8,15 +8,15 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "@dongjiang-recruitment/nest-common/dist/typeorm";
-import { Applicant } from "src/applicant/entities/applicant.entity";
+import { Company } from "./company/entities/company.entity";
 
 /**
- * EducationExperience
+ * Personnel
  */
 @Entity()
-export class EducationExperience {
+export class Personnel {
   /**
-   * 教育经历ID
+   * ID
    */
   @PrimaryGeneratedColumn("uuid")
   id: string;
@@ -36,46 +36,39 @@ export class EducationExperience {
   @DeleteDateColumn()
   deletedAt: Date;
   /**
-   * 入学时间
+   * 电子邮箱
    */
   @Column({
     nullable: true,
   })
-  admissionTime: string;
+  acceptEmail: string;
   /**
-   * 学历层次，{1:大专,2:本科,3:硕士,4:博士}
+   * 头像地址
    */
   @Column({
     nullable: true,
   })
-  education: number;
+  avatarUrl: string;
   /**
-   * 毕业时间
+   * 公司
    */
-  @Column({
-    nullable: true,
-  })
-  graduationTime: string;
-  /**
-   * 专业名称
-   */
-  @Column({
-    nullable: true,
-  })
-  majorName: string;
-  /**
-   * 学校名称
-   */
-  @Column({
-    nullable: true,
-  })
-  schoolName: string;
-  /**
-   * 求职者
-   */
-  @OneToOne(() => Applicant, (applicant) => applicant.id, {
+  @OneToOne(() => Company, (company) => company.id, {
     eager: true,
   })
   @JoinColumn()
-  applicant: Applicant;
+  company: Company;
+  /**
+   * 人事姓名
+   */
+  @Column({
+    nullable: true,
+  })
+  hrName: string;
+  /**
+   * 职位名称
+   */
+  @Column({
+    nullable: true,
+  })
+  postName: string;
 }

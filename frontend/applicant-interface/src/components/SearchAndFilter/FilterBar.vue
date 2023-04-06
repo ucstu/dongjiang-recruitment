@@ -32,7 +32,7 @@
         :key="i"
         class="list-item"
         :position="JobDetailer"
-        @job-click="toPositions(JobDetailer.id, JobDetailer.companyId)"
+        @job-click="toPositions(JobDetailer.id, JobDetailer.company.id)"
       />
     </scroll-view>
   </view>

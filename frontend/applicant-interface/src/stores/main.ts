@@ -106,11 +106,13 @@ export const useMainStore = defineStore(
               setApplicant({
                 ...res,
                 age: dayjs().diff(res.dateOfBirth, "year"),
-                education: res1.items.reduce(
-                  (prev, curr) =>
-                    curr.education > prev ? curr.education : prev,
-                  res1.items[0].education as any
-                ),
+                education: res1.items.length
+                  ? res1.items.reduce(
+                      (prev, curr) =>
+                        curr.education > prev ? curr.education : prev,
+                      res1.items[0].education as any
+                    )
+                  : null,
               });
             });
         }

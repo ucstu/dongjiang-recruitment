@@ -274,7 +274,7 @@ const text_23OnClick = () => {
   });
 };
 /* 查看职位详情 */
-const jobDescription = ({ companyId, id }: Position) => {
+const jobDescription = ({ company: { id: companyId }, id }: Position) => {
   uni.navigateTo({
     url: `/pages/detail/zhiweixiangqing/zhiweixiangqing?companyId=${companyId}&positionId=${id}`,
   });

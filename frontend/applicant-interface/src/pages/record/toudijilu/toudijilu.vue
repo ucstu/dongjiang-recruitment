@@ -32,8 +32,8 @@ import NavigationBar from "@/components/NavigationBar/NavigationBar.vue";
 import { until } from "@/hooks";
 import { useMainStore } from "@/stores";
 import type {
-  DeliveryRecord,
-  Position,
+DeliveryRecord,
+Position,
 } from "@dongjiang-recruitment/service-common";
 
 const mainStore = useMainStore();
@@ -61,11 +61,11 @@ until(
         for (const delivery of deliveryLength.value) {
           companyPositionService
             .getPosition({
-              companyId: delivery.companyId,
-              id: delivery.positionId,
+              companyId: delivery.company.id,
+              id: delivery.position.id,
             })
             .then((res) => {
-              res.companyId = delivery.companyId;
+              res.company.id = delivery.company.id;
               deliveryRecords.value.push(res);
               if (deliveryRecords.value.length) {
                 emptyShow.value = false;
@@ -100,11 +100,11 @@ const sendTypeId = (index: number) => {
         for (const delivery of res.items) {
           companyPositionService
             .getPosition({
-              companyId: delivery.companyId,
-              id: delivery.positionId,
+              companyId: delivery.company.id,
+              id: delivery.position.id,
             })
             .then((res) => {
-              res.companyId = delivery.companyId;
+              res.company.id = delivery.company.id;
               deliveryRecords.value.push(res);
             });
         }

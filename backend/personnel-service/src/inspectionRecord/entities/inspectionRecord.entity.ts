@@ -1,11 +1,14 @@
 import {
-  Column,
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  JoinColumn,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "@dongjiang-recruitment/nest-common/dist/typeorm";
+import { Applicant } from "src/external.entity";
+import { Personnel } from "src/personnel/entities/personnel.entity";
 
 /**
  * InspectionRecord
@@ -33,17 +36,19 @@ export class InspectionRecord {
   @DeleteDateColumn()
   deletedAt: Date;
   /**
-   * 求职者ID
+   * 求职者
    */
-  @Column({
-    nullable: true,
+  @OneToOne(() => Applicant, (applicant) => applicant.id, {
+    eager: true,
   })
-  applicantId: string;
+  @JoinColumn()
+  applicant: Applicant;
   /**
-   * 人事ID
+   * 人事
    */
-  @Column({
-    nullable: true,
+  @OneToOne(() => Personnel, (personnel) => personnel.id, {
+    eager: true,
   })
-  personnelId: string;
+  @JoinColumn()
+  personnel: Personnel;
 }

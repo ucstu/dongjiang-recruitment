@@ -106,7 +106,7 @@
       v-for="(position, i) in positionInfo"
       :key="i"
       :position="position"
-      @job-click="jobClick(position.id, position.companyId)"
+      @job-click="jobClick(position.id, position.company.id)"
     />
     <view v-if="emptyShow" class="justify-center image">
       <image src="@/static/icons/nodata.svg" />
@@ -120,7 +120,7 @@ import NavigationBar from "@/components/NavigationBar/NavigationBar.vue";
 import wybPopup from "@/components/wyb-popup/wyb-popup.vue";
 import { until } from "@/hooks";
 import { useMainStore } from "@/stores";
-import type { Company, Position } from "@dongjiang-recruitment/service-common";
+import type { Applicant, Company, Position } from "@dongjiang-recruitment/service-common";
 
 const VITE_CDN_URL = import.meta.env.VITE_CDN_URL;
 const mainStore = useMainStore();
@@ -172,7 +172,7 @@ onMounted(() => {
         .queryAttentionRecord({
           applicantId: mainStore.applicant!.id,
           query: {
-            companyId: ["$eq", companyId.value],
+            "company.id": ["$eq", companyId.value],
           },
         })
         .then((res) => {
@@ -216,8 +216,12 @@ const focusOn = () => {
       .addAttentionRecord({
         applicantId: mainStore.applicant!.id,
         requestBody: {
-          companyId: companyId.value,
-          applicantId: mainStore.applicant!.id,
+          company: {
+            id: companyId.value
+          } as Company,
+          applicant: {
+            id: mainStore.applicant!.id
+          } as Applicant
         },
       })
       .then((res) => {

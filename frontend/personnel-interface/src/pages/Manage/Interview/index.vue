@@ -90,7 +90,7 @@ const handleWorkTimeChange = (val: Array<string>) => {
   applicantService
     .queryAllDeliveryRecord({
       query: {
-        companyId: ["$eq", store.companyInformation.id],
+        "company.id": ["$eq", store.companyInformation.id],
         status: ["$eq", 4],
         interviewTime: ["$in", ...deliveryDates.value],
       },
@@ -105,18 +105,18 @@ const handleWorkTimeChange = (val: Array<string>) => {
         );
         applicantService
           .getApplicant({
-            id: item.applicantId,
+            id: item.applicant.id,
           })
           .then((response) => {
-            userInformations.value.set(item.applicantId, response);
+            userInformations.value.set(item.applicant.id, response);
           });
         companyPositionService
           .getPosition({
             companyId: store.companyInformation.id,
-            id: item.positionId,
+            id: item.position.id,
           })
           .then((response) => {
-            jobInformations.value.set(item.positionId, response);
+            jobInformations.value.set(item.position.id, response);
           });
       });
     });
@@ -135,7 +135,7 @@ const changeState = (val: 1 | 2 | 3 | 4 | 5) => {
       delivery.status = val;
       applicantDeliveryRecordService
         .updateDeliveryRecord({
-          applicantId: delivery.applicantId,
+          applicantId: delivery.applicant.id,
           id: delivery.id,
           requestBody: delivery,
         })
@@ -182,7 +182,7 @@ const total = computed(() => {
 applicantService
   .queryAllDeliveryRecord({
     query: {
-      companyId: ["$eq", store.companyInformation.id],
+      "company.id": ["$eq", store.companyInformation.id],
       status: ["$eq", 4],
     },
   })
@@ -195,18 +195,18 @@ applicantService
       );
       applicantService
         .getApplicant({
-          id: item.applicantId,
+          id: item.applicant.id,
         })
         .then((response) => {
-          userInformations.value.set(item.applicantId, response);
+          userInformations.value.set(item.applicant.id, response);
         });
       companyPositionService
         .getPosition({
           companyId: store.companyInformation.id,
-          id: item.positionId,
+          id: item.position.id,
         })
         .then((response) => {
-          jobInformations.value.set(item.positionId, response);
+          jobInformations.value.set(item.position.id, response);
         });
     });
   });

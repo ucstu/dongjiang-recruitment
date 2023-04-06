@@ -2,6 +2,9 @@
 /* tslint:disable */
 /* eslint-disable */
 
+import type { Company } from "./Company";
+import type { Personnel } from "./Personnel";
+
 /**
  * 职位
  */
@@ -63,13 +66,13 @@ export type Position = {
    */
   workAreaName: string;
   /**
-   * 公司ID
+   * 公司
    */
-  companyId: string;
+  company: Company;
   /**
-   * 人事ID
+   * 人事
    */
-  personnelId: string;
+  personnel: Personnel;
   /**
    * 职位类型，eg；{1:FullTime,2:PartTime,3:Practice}
    */

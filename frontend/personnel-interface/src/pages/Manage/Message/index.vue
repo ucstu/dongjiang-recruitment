@@ -100,8 +100,8 @@ watchEffect(() => {
         applicantService
           .queryAllDeliveryRecord({
             query: {
-              applicantId: ["$eq", messageKey],
-              companyId: ["$eq", mainStore.companyInformation.id],
+              "applicant.id": ["$eq", messageKey],
+              "company.id": ["$eq", mainStore.companyInformation.id],
               status: ["$in", 1, 2, 3, 4, 5],
             },
             size: 1,
@@ -112,7 +112,7 @@ watchEffect(() => {
               companyPositionService
                 .getPosition({
                   companyId: mainStore.companyInformation.id,
-                  id: res.items[0].positionId,
+                  id: res.items[0].position.id,
                 })
                 .then((res) => {
                   positionInformations.value.set(res.id, res);

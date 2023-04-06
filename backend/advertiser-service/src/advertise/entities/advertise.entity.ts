@@ -3,9 +3,12 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  JoinColumn,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "@dongjiang-recruitment/nest-common/dist/typeorm";
+import { Advertiser } from "src/advertiser/entities/advertiser.entity";
 
 export enum AdvertisePosition {
   /**
@@ -110,10 +113,11 @@ export class Advertise {
   @UpdateDateColumn()
   updatedAt: Date;
   /**
-   * 广告商ID
+   * 广告商
    */
-  @Column({
-    nullable: true,
+  @OneToOne(() => Advertiser, (advertiser) => advertiser.id, {
+    eager: true,
   })
-  advertiserId: string;
+  @JoinColumn()
+  advertiser: Advertise;
 }

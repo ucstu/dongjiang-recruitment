@@ -2,6 +2,7 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { Query, Sort } from "../../interfaces";
+import type { Company } from "../models/Company";
 import type { Personnel } from "../models/Personnel";
 import type { PersonnelInspectionRecord } from "../models/PersonnelInspectionRecord";
 
@@ -21,9 +22,9 @@ export class PersonnelService {
   }: {
     requestBody?: {
       /**
-       * 公司ID
+       * 公司
        */
-      companyId: string;
+      company: Company;
       /**
        * 头像地址
        */

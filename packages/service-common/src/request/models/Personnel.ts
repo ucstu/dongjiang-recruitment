@@ -2,6 +2,8 @@
 /* tslint:disable */
 /* eslint-disable */
 
+import type { Company } from "./Company";
+
 /**
  * 人事
  */
@@ -23,9 +25,9 @@ export type Personnel = {
    */
   deletedAt: string | null;
   /**
-   * 公司ID
+   * 公司
    */
-  companyId: string;
+  company: Company;
   /**
    * 头像地址
    */

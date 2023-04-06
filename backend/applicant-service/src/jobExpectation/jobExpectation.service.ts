@@ -22,7 +22,9 @@ export class JobExpectationService {
   ) {
     return await this.jobExpectationRepository.save({
       ...createJobExpectationDto,
-      applicantId,
+      applicant: {
+        id: applicantId,
+      },
     });
   }
 
@@ -33,10 +35,21 @@ export class JobExpectationService {
   ) {
     return {
       total: await this.jobExpectationRepository.count({
-        where: query.map((q) => ({ ...q, applicantId })),
+        where: query.map((q) => ({
+          ...q,
+          applicant: {
+            id: applicantId,
+          },
+        })),
+        relations: ["applicant"],
       }),
       items: await this.jobExpectationRepository.find({
-        where: query.map((q) => ({ ...q, applicantId })),
+        where: query.map((q) => ({
+          ...q,
+          applicant: {
+            id: applicantId,
+          },
+        })),
         skip: page * size,
         take: size,
         order: sort,
@@ -46,7 +59,12 @@ export class JobExpectationService {
 
   async findOne(applicantId: string, id: string) {
     const jobExpectation = await this.jobExpectationRepository.findOne({
-      where: { applicantId, id },
+      where: {
+        applicant: {
+          id: applicantId,
+        },
+        id,
+      },
     });
     if (!jobExpectation) throw new NotFoundException();
     return jobExpectation;
@@ -57,7 +75,13 @@ export class JobExpectationService {
     id: string,
     updateJobExpectationDto: UpdateJobExpectationDto
   ) {
-    const jobExpectation = { ...updateJobExpectationDto, applicantId, id };
+    const jobExpectation = {
+      ...updateJobExpectationDto,
+      applicant: {
+        id: applicantId,
+      },
+      id,
+    };
     const { affected } = await this.jobExpectationRepository.update(
       id,
       jobExpectation

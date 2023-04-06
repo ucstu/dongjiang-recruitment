@@ -65,17 +65,17 @@
                         <div class="hint">
                           <p>
                             候选人:{{
-                              userInformations.get(interview.applicantId)
+                              userInformations.get(interview.applicant.id)
                                 ?.firstName +
                               "" +
-                              userInformations.get(interview.applicantId)
+                              userInformations.get(interview.applicant.id)
                                 ?.lastName
                             }}
                           </p>
                           <el-divider direction="vertical" />
                           <p>
                             应聘职位：{{
-                              jobInformations.get(interview.positionId)
+                              jobInformations.get(interview.position.id)
                                 ?.positionName
                             }}
                           </p>
@@ -156,7 +156,7 @@ companyPositionService
 applicantService
   .queryAllDeliveryRecord({
     query: {
-      companyId: ["$eq", store.companyInformation.id],
+      "company.id": ["$eq", store.companyInformation.id],
       status: ["$in", ...valueMap.value.status],
     },
   })
@@ -165,18 +165,18 @@ applicantService
     interviewNum.value.forEach((item) => {
       companyPositionService
         .getPosition({
-          companyId: item.companyId,
-          id: item.positionId,
+          companyId: item.company.id,
+          id: item.position.id,
         })
         .then((response) => {
-          jobInformations.value.set(item.positionId, response);
+          jobInformations.value.set(item.position.id, response);
         });
       applicantService
         .getApplicant({
-          id: item.applicantId,
+          id: item.applicant.id,
         })
         .then((responseable) => {
-          userInformations.value.set(item.applicantId, responseable);
+          userInformations.value.set(item.applicant.id, responseable);
         });
 
       if (item.status === 1) {
@@ -184,7 +184,11 @@ applicantService
         if (useDate(dayjs(item.createdAt).add(8, "h").toISOString()) === day) {
           num.value.count = num.value.count + 1;
         }
-      } else if (item.status === 4 && useDate(dayjs(item.interviewTime).subtract(8, "h").toISOString()) === day) {
+      } else if (
+        item.status === 4 &&
+        useDate(dayjs(item.interviewTime).subtract(8, "h").toISOString()) ===
+          day
+      ) {
         num.value.countInterviewed = num.value.countInterviewed + 1;
       }
     });
@@ -200,7 +204,7 @@ const inspectionResume = (delivery: DeliveryRecord) => {
     delivery.status = 2;
     applicantDeliveryRecordService
       .updateDeliveryRecord({
-        applicantId: delivery.applicantId,
+        applicantId: delivery.applicant.id,
         id: delivery.id,
         requestBody: delivery,
       })
@@ -208,8 +212,8 @@ const inspectionResume = (delivery: DeliveryRecord) => {
         router.push({
           name: "Resume",
           params: {
-            userId: delivery.applicantId,
-            postId: delivery.positionId,
+            userId: delivery.applicant.id,
+            postId: delivery.position.id,
           },
         });
       });
@@ -217,8 +221,8 @@ const inspectionResume = (delivery: DeliveryRecord) => {
     router.push({
       name: "Resume",
       params: {
-        userId: delivery.applicantId,
-        postId: delivery.positionId,
+        userId: delivery.applicant.id,
+        postId: delivery.position.id,
       },
     });
   }

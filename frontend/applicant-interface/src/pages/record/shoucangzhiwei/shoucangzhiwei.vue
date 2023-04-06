@@ -22,8 +22,8 @@ import NavigationBar from "@/components/NavigationBar/NavigationBar.vue";
 import { until } from "@/hooks";
 import { useMainStore } from "@/stores";
 import type {
-  GarnerRecord,
-  Position,
+GarnerRecord,
+Position,
 } from "@dongjiang-recruitment/service-common";
 
 const mainStore = useMainStore();
@@ -46,8 +46,8 @@ until(
         for (const favorite of favorites.value) {
           companyPositionService
             .getPosition({
-              companyId: favorite.companyId,
-              id: favorite.positionId,
+              companyId: favorite.company.id,
+              id: favorite.position.id,
             })
             .then((res) => {
               favoritesPosition.value.push(res);
@@ -72,7 +72,7 @@ const emptyFavorites = () => {
   for (const favorite of favorites.value) {
     applicantGarnerRecordService
       .removeGarnerRecord({
-        applicantId: favorite.applicantId,
+        applicantId: favorite.applicant.id,
         id: favorite.id,
       })
       .then(() => {

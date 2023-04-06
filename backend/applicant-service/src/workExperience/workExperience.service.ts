@@ -22,7 +22,9 @@ export class WorkExperienceService {
   ) {
     return await this.workExperienceRepository.save({
       ...createWorkExperienceDto,
-      applicantId,
+      applicant: {
+        id: applicantId,
+      },
     });
   }
 
@@ -33,10 +35,20 @@ export class WorkExperienceService {
   ) {
     return {
       total: await this.workExperienceRepository.count({
-        where: query.map((q) => ({ ...q, applicantId })),
+        where: query.map((q) => ({
+          ...q,
+          applicant: {
+            id: applicantId,
+          },
+        })),
       }),
       items: await this.workExperienceRepository.find({
-        where: query.map((q) => ({ ...q, applicantId })),
+        where: query.map((q) => ({
+          ...q,
+          applicant: {
+            id: applicantId,
+          },
+        })),
         skip: page * size,
         take: size,
         order: sort,
@@ -46,7 +58,12 @@ export class WorkExperienceService {
 
   async findOne(applicantId: string, id: string) {
     const workExperience = await this.workExperienceRepository.findOne({
-      where: { applicantId, id },
+      where: {
+        applicant: {
+          id: applicantId,
+        },
+        id,
+      },
     });
     if (!workExperience) throw new NotFoundException();
     return workExperience;
@@ -57,7 +74,13 @@ export class WorkExperienceService {
     id: string,
     updateWorkExperienceDto: UpdateWorkExperienceDto
   ) {
-    const workExperience = { ...updateWorkExperienceDto, applicantId, id };
+    const workExperience = {
+      ...updateWorkExperienceDto,
+      applicant: {
+        id: applicantId,
+      },
+      id,
+    };
     const { affected } = await this.workExperienceRepository.update(
       id,
       workExperience

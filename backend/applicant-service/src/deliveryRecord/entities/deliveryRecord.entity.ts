@@ -3,9 +3,13 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  JoinColumn,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "@dongjiang-recruitment/nest-common/dist/typeorm";
+import { Applicant } from "src/applicant/entities/applicant.entity";
+import { Company, Position } from "src/external.entity";
 
 /**
  * DeliveryRecord
@@ -33,19 +37,21 @@ export class DeliveryRecord {
   @DeleteDateColumn()
   deletedAt: Date;
   /**
-   * 求职者ID
+   * 求职者
    */
-  @Column({
-    nullable: true,
+  @OneToOne(() => Applicant, (applicant) => applicant.id, {
+    eager: true,
   })
-  applicantId: string;
+  @JoinColumn()
+  applicant: Applicant;
   /**
-   * 公司ID
+   * 公司
    */
-  @Column({
-    nullable: true,
+  @OneToOne(() => Company, (company) => company.id, {
+    eager: true,
   })
-  companyId: string;
+  @JoinColumn()
+  company: Company;
   /**
    * 面试时间
    */
@@ -54,12 +60,13 @@ export class DeliveryRecord {
   })
   interviewTime: Date;
   /**
-   * 职位ID
+   * 职位
    */
-  @Column({
-    nullable: true,
+  @OneToOne(() => Position, (position) => position.id, {
+    eager: true,
   })
-  positionId: string;
+  @JoinColumn()
+  position: Position;
   /**
    * 投递状态，{1:待查看,2:已查看,3:通过筛选,4:约面试,5:不合适}
    */

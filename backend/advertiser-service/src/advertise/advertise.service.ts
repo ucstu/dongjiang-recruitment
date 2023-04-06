@@ -19,7 +19,9 @@ export class AdvertiseService {
   async create(advertiserId: string, createAdvertiseDto: CreateAdvertiseDto) {
     return await this.advertiseRepository.save({
       ...createAdvertiseDto,
-      advertiserId,
+      advertiser: {
+        id: advertiserId,
+      },
     });
   }
 
@@ -30,10 +32,20 @@ export class AdvertiseService {
   ) {
     return {
       total: await this.advertiseRepository.count({
-        where: query.map((q) => ({ ...q, advertiserId })),
+        where: query.map((q) => ({
+          ...q,
+          advertiser: {
+            id: advertiserId,
+          },
+        })),
       }),
       items: await this.advertiseRepository.find({
-        where: { ...query, advertiserId },
+        where: {
+          ...query,
+          advertiser: {
+            id: advertiserId,
+          },
+        },
         skip: page * size,
         take: size,
         order: sort,
@@ -43,7 +55,12 @@ export class AdvertiseService {
 
   async findOne(advertiserId: string, id: string) {
     const advertise = await this.advertiseRepository.findOne({
-      where: { advertiserId, id },
+      where: {
+        advertiser: {
+          id: advertiserId,
+        },
+        id,
+      },
     });
     if (!advertise) throw new NotFoundException();
     return advertise;
@@ -54,7 +71,13 @@ export class AdvertiseService {
     id: string,
     updateAdvertiseDto: UpdateAdvertiseDto
   ) {
-    const advertise = { ...updateAdvertiseDto, advertiserId, id };
+    const advertise = {
+      ...updateAdvertiseDto,
+      advertiser: {
+        id: advertiserId,
+      },
+      id,
+    };
     const { affected } = await this.advertiseRepository.update(id, advertise);
     if (!affected) throw new NotFoundException();
     return advertise;

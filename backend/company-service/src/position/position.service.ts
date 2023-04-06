@@ -19,7 +19,9 @@ export class PositionService {
   async create(companyId: string, createPositionDto: CreatePositionDto) {
     return await this.positionRepository.save({
       ...createPositionDto,
-      companyId,
+      company: {
+        id: companyId,
+      },
     });
   }
 
@@ -30,10 +32,20 @@ export class PositionService {
   ) {
     return {
       total: await this.positionRepository.count({
-        where: query.map((q) => ({ ...q, companyId })),
+        where: query.map((q) => ({
+          ...q,
+          company: {
+            id: companyId,
+          },
+        })),
       }),
       items: await this.positionRepository.find({
-        where: { ...query, companyId },
+        where: {
+          ...query,
+          company: {
+            id: companyId,
+          },
+        },
         skip: page * size,
         take: size,
         order: sort,
@@ -43,7 +55,12 @@ export class PositionService {
 
   async findOne(companyId: string, id: string) {
     const position = await this.positionRepository.findOne({
-      where: { companyId, id },
+      where: {
+        company: {
+          id: companyId,
+        },
+        id,
+      },
     });
     if (!position) throw new NotFoundException();
     return position;
@@ -54,7 +71,13 @@ export class PositionService {
     id: string,
     updatePositionDto: UpdatePositionDto
   ) {
-    const position = { ...updatePositionDto, companyId, id };
+    const position = {
+      ...updatePositionDto,
+      company: {
+        id: companyId,
+      },
+      id,
+    };
     const { affected } = await this.positionRepository.update(id, position);
     if (!affected) throw new NotFoundException();
     return position;

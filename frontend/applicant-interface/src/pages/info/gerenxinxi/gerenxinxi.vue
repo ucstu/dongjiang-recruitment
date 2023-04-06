@@ -177,15 +177,15 @@ until(
     fullName.value =
       userInformation.value.firstName + userInformation.value.lastName;
     valueYear.value = parseInt(
-      userInformation.value.dateOfBirth.slice(0, 4),
+      userInformation.value.dateOfBirth?.slice(0, 4),
       10
     );
     valueMonth.value = parseInt(
-      userInformation.value.dateOfBirth.slice(5, 7),
+      userInformation.value.dateOfBirth?.slice(5, 7),
       10
     );
     valueDay.value = parseInt(
-      userInformation.value.dateOfBirth.slice(8, 10),
+      userInformation.value.dateOfBirth?.slice(8, 10),
       10
     );
     value.value = [

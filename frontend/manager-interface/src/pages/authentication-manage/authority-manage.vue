@@ -39,10 +39,11 @@
           :label-width="80"
           :loading="addLoading"
         >
-          <n-form-item label="权限名称" name="name">
+          <n-form-item label="权限名称" path="name">
             <n-input
               v-model:value="current.name"
               :readonly="modalType === 'view'"
+              placeholder="请输入权限名称"
             />
           </n-form-item>
         </n-form>

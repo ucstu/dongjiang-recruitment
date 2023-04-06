@@ -42,7 +42,7 @@ until(
   () => {
     if (props.collectionPosition) {
       for (const key in mainStore.messages[mainStore.applicant!.id]) {
-        if (key === props.collectionPosition?.personnelId) {
+        if (key === props.collectionPosition?.personnel.id) {
           messageKey.value = key;
         }
       }
@@ -51,7 +51,7 @@ until(
 );
 
 const view_4OnClick = () => {
-  const companyId = props.collectionPosition?.companyId;
+  const companyId = props.collectionPosition?.company.id;
   const positionId = props.collectionPosition?.id;
   uni.navigateTo({
     url:
@@ -65,7 +65,7 @@ const view_11OnClick = () => {
   uni.navigateTo({
     url:
       "/pages/mine/liaotianyemian/liaotianyemian?Id=" +
-      props.collectionPosition?.personnelId +
+      props.collectionPosition?.personnel.id +
       "&key=" +
       messageKey.value,
   });

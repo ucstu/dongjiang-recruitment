@@ -23,8 +23,8 @@ import NavigationBar from "@/components/NavigationBar/NavigationBar.vue";
 import { until } from "@/hooks";
 import { useMainStore } from "@/stores";
 import type {
-  AttentionRecord,
-  Company,
+AttentionRecord,
+Company,
 } from "@dongjiang-recruitment/service-common";
 
 const mainStore = useMainStore();
@@ -47,7 +47,7 @@ until(
         for (const focus of focusCompany.value) {
           companyService
             .getCompany({
-              id: focus.companyId,
+              id: focus.company.id,
             })
             .then((res) => {
               attentionCompanies.value.push(res);
@@ -69,11 +69,11 @@ onShow(() => {
 // 删除关注记录
 const unsubscribe = (id: string) => {
   const attentionRecordId = focusCompany.value.find((item) => {
-    return item.companyId === id;
+    return item.company.id === id;
   });
   applicantAttentionRecordService
     .removeAttentionRecord({
-      applicantId: attentionRecordId!.applicantId,
+      applicantId: attentionRecordId!.applicant.id,
       id: attentionRecordId!.id,
     })
     .then((res) => {

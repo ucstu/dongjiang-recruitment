@@ -59,9 +59,9 @@
 <script setup lang="ts">
 import { useMainStore } from "@/stores/main";
 import type {
-  Applicant,
-  DeliveryRecord,
-  Position,
+Applicant,
+DeliveryRecord,
+Position,
 } from "@dongjiang-recruitment/service-common";
 import { Search } from "@element-plus/icons-vue";
 import ResumeInfo from "../Interview/resumeInfo.vue";
@@ -89,20 +89,20 @@ const valueMap = ref<Record>({
 applicantService
   .queryAllDeliveryRecord({
     query: {
-      companyId: ["$eq", store.companyInformation.id],
+      "company.id": ["$eq", store.companyInformation.id],
       status: ["$in", 2],
     },
   })
   .then((res) => {
     deliveryRecords.value = res.items;
     deliveryRecords.value.forEach((item) => {
-      applicantService.getApplicant({ id: item.applicantId }).then((res) => {
+      applicantService.getApplicant({ id: item.applicant.id }).then((res) => {
         userInformations.value.set(item.id, res);
       });
       companyPositionService
         .getPosition({
           companyId: store.companyInformation.id,
-          id: item.positionId,
+          id: item.position.id,
         })
         .then((res) => {
           jobInformations.value.set(item.id, res);
@@ -117,20 +117,20 @@ onUpdated(() => {
   applicantService
     .queryAllDeliveryRecord({
       query: {
-        companyId: ["$eq", store.companyInformation.id],
+        "company.id": ["$eq", store.companyInformation.id],
         status: ["$in", 1],
       },
     })
     .then((res) => {
       deliveryRecords.value = res.items;
       deliveryRecords.value.forEach((item) => {
-        applicantService.getApplicant({ id: item.applicantId }).then((res) => {
+        applicantService.getApplicant({ id: item.applicant.id }).then((res) => {
           userInformations.value.set(res.id, res);
         });
         companyPositionService
           .getPosition({
             companyId: store.companyInformation.id,
-            id: item.positionId,
+            id: item.position.id,
           })
           .then((res) => {
             jobInformations.value.set(res.id, res);

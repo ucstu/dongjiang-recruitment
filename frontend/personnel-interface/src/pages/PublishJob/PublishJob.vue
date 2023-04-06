@@ -655,9 +655,9 @@ const publishPost = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   formEl.validate((valid) => {
     if (valid) {
-      jobTypeList.value.personnelId =
+      jobTypeList.value.personnel.id =
         store.accountInformation.detailId.personnel!;
-      jobTypeList.value.companyId = store.companyInformation.id;
+      jobTypeList.value.company.id = store.companyInformation.id;
       handleWorkTimeChange(workTimeing.value);
       companyPositionService
         .addPosition({
@@ -675,9 +675,9 @@ const updatePost = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   formEl.validate((valid) => {
     if (valid) {
-      jobTypeList.value.personnelId =
+      jobTypeList.value.personnel.id =
         store.accountInformation.detailId.personnel!;
-      jobTypeList.value.companyId = store.hrInformation.id;
+      jobTypeList.value.company.id = store.hrInformation.id;
       companyPositionService
         .updatePosition({
           companyId: store.companyInformation.id,

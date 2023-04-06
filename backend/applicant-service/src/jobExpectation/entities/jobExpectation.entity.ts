@@ -3,9 +3,12 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  JoinColumn,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "@dongjiang-recruitment/nest-common/dist/typeorm";
+import { Applicant } from "src/applicant/entities/applicant.entity";
 
 /**
  * JobExpectation
@@ -75,10 +78,11 @@ export class JobExpectation {
   })
   startingSalary: number;
   /**
-   * 求职者ID
+   * 求职者
    */
-  @Column({
-    nullable: true,
+  @OneToOne(() => Applicant, (applicant) => applicant.id, {
+    eager: true,
   })
-  applicantId: string;
+  @JoinColumn()
+  applicant: Applicant;
 }

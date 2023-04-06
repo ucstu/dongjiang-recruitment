@@ -22,7 +22,9 @@ export class GarnerRecordService {
   ) {
     return await this.garnerRecordRepository.save({
       ...createGarnerRecordDto,
-      applicantId,
+      applicant: {
+        id: applicantId,
+      },
     });
   }
 
@@ -33,10 +35,20 @@ export class GarnerRecordService {
   ) {
     return {
       total: await this.garnerRecordRepository.count({
-        where: query.map((q) => ({ ...q, applicantId })),
+        where: query.map((q) => ({
+          ...q,
+          applicant: {
+            id: applicantId,
+          },
+        })),
       }),
       items: await this.garnerRecordRepository.find({
-        where: query.map((q) => ({ ...q, applicantId })),
+        where: query.map((q) => ({
+          ...q,
+          applicant: {
+            id: applicantId,
+          },
+        })),
         skip: page * size,
         take: size,
         order: sort,
@@ -46,7 +58,12 @@ export class GarnerRecordService {
 
   async findOne(applicantId: string, id: string) {
     const garnerRecord = await this.garnerRecordRepository.findOne({
-      where: { applicantId, id },
+      where: {
+        applicant: {
+          id: applicantId,
+        },
+        id,
+      },
     });
     if (!garnerRecord) throw new NotFoundException();
     return garnerRecord;
@@ -57,7 +74,13 @@ export class GarnerRecordService {
     id: string,
     updateGarnerRecordDto: UpdateGarnerRecordDto
   ) {
-    const garnerRecord = { ...updateGarnerRecordDto, applicantId, id };
+    const garnerRecord = {
+      ...updateGarnerRecordDto,
+      applicant: {
+        id: applicantId,
+      },
+      id,
+    };
     const { affected } = await this.garnerRecordRepository.update(
       id,
       garnerRecord

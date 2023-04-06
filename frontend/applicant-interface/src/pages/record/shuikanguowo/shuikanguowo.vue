@@ -35,7 +35,7 @@ until(
     personnelService
       .queryAllPersonnelInspectionRecord({
         query: {
-          applicantId: ["$eq", mainStore.applicant!.id]
+          "applicant.id": ["$eq", mainStore.applicant!.id]
         },
       })
       .then((res) => {
@@ -45,12 +45,12 @@ until(
           for (const item of res.items) {
             personnelService
               .getPersonnel({
-                id: item.personnelId,
+                id: item.personnel.id,
               })
               .then((res) => {
                 companyService
                   .getCompany({
-                    id: res.companyId,
+                    id: res.company.id,
                   })
                   .then((res) => {
                     const p = companyInfo.value.map((item) => item.id);

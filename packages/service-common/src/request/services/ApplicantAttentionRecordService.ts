@@ -2,7 +2,9 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { Query, Sort } from "../../interfaces";
+import type { Applicant } from "../models/Applicant";
 import type { AttentionRecord } from "../models/AttentionRecord";
+import type { Company } from "../models/Company";
 
 import type { CancelablePromise } from "../core/CancelablePromise";
 import type { BaseHttpRequest } from "../core/BaseHttpRequest";
@@ -25,13 +27,13 @@ export class ApplicantAttentionRecordService {
     applicantId: string;
     requestBody?: {
       /**
-       * 求职者ID
+       * 求职者
        */
-      applicantId: string;
+      applicant: Applicant;
       /**
-       * 公司ID
+       * 公司
        */
-      companyId: string;
+      company: Company;
     };
   }): CancelablePromise<AttentionRecord> {
     return this.httpRequest.request({

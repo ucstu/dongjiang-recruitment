@@ -3,6 +3,7 @@
 /* eslint-disable */
 import type { Query, Sort } from "../../interfaces";
 import type { Advertise } from "../models/Advertise";
+import type { Advertiser } from "../models/Advertiser";
 
 import type { CancelablePromise } from "../core/CancelablePromise";
 import type { BaseHttpRequest } from "../core/BaseHttpRequest";
@@ -56,6 +57,10 @@ export class AdvertiserAdvertiseService {
        * 结束时间
        */
       endTime: string;
+      /**
+       * 广告商
+       */
+      advertiser: Advertiser;
     };
   }): CancelablePromise<Advertise> {
     return this.httpRequest.request({

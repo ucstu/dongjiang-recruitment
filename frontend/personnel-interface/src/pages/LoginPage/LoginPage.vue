@@ -126,9 +126,9 @@ const submitForm = (formEl: FormInstance | undefined) => {
                   ] = {};
                 }
                 if (res.hrName !== null) {
-                  if (res.companyId !== null) {
+                  if (res.company.id !== null) {
                     companyService
-                      .getCompany({ id: res.companyId })
+                      .getCompany({ id: res.company.id })
                       .then((res) => {
                         mainStore.companyInformation = res;
                         router.replace("/Manage");
@@ -144,7 +144,7 @@ const submitForm = (formEl: FormInstance | undefined) => {
                   mainStore.hrInformation = res;
                   mainStore.companyInformation = null as unknown as Company;
                   router.replace({
-                    name: "/Home/Person",
+                    path: "/Home/Person",
                     params: { PersonEmail: ruleForm.userName },
                   });
                 }

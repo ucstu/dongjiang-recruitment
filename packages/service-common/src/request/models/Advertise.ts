@@ -2,6 +2,8 @@
 /* tslint:disable */
 /* eslint-disable */
 
+import type { Advertiser } from "./Advertiser";
+
 /**
  * 广告
  */
@@ -54,6 +56,10 @@ export type Advertise = {
    * 结束时间
    */
   endTime: string;
+  /**
+   * 广告商
+   */
+  advertiser: Advertiser;
 };
 
 export namespace Advertise {

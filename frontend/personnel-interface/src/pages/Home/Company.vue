@@ -164,7 +164,7 @@
           <img
             :src="
               VITE_CDN_URL +
-              (formCompany.logoUrl ? formCompany.logoUrl : '/image/heard3.webp')
+              (formCompany.logoUrl ? formCompany.logoUrl : '/common-avatars/company.jpg')
             "
             alt=""
           />
@@ -477,7 +477,7 @@ const confirmCompany = (formEl: FormInstance | undefined) => {
         requestBody: formCompany.value,
       }).then((res) => {
         let hrInformation = store.hrInformation;
-        hrInformation.companyId = res.id;
+        hrInformation.company.id = res.id;
         personnelService
           .updatePersonnel({
             id: hrInformation.id,

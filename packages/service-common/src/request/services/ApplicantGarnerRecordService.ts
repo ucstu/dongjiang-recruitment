@@ -2,7 +2,10 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { Query, Sort } from "../../interfaces";
+import type { Applicant } from "../models/Applicant";
+import type { Company } from "../models/Company";
 import type { GarnerRecord } from "../models/GarnerRecord";
+import type { Position } from "../models/Position";
 
 import type { CancelablePromise } from "../core/CancelablePromise";
 import type { BaseHttpRequest } from "../core/BaseHttpRequest";
@@ -25,17 +28,17 @@ export class ApplicantGarnerRecordService {
     applicantId: string;
     requestBody?: {
       /**
-       * 求职者ID
+       * 求职者
        */
-      applicantId: string;
+      applicant: Applicant;
       /**
-       * 公司ID
+       * 公司
        */
-      companyId: string;
+      company: Company;
       /**
-       * 职位ID
+       * 职位
        */
-      positionId: string;
+      position: Position;
     };
   }): CancelablePromise<GarnerRecord> {
     return this.httpRequest.request({

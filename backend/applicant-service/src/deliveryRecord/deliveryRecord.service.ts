@@ -22,7 +22,9 @@ export class DeliveryRecordService {
   ) {
     return await this.deliveryRecordRepository.save({
       ...createDeliveryRecordDto,
-      applicantId,
+      applicant: {
+        id: applicantId,
+      },
     });
   }
 
@@ -33,10 +35,20 @@ export class DeliveryRecordService {
   ) {
     return {
       total: await this.deliveryRecordRepository.count({
-        where: query.map((q) => ({ ...q, applicantId })),
+        where: query.map((q) => ({
+          ...q,
+          applicant: {
+            id: applicantId,
+          },
+        })),
       }),
       items: await this.deliveryRecordRepository.find({
-        where: query.map((q) => ({ ...q, applicantId })),
+        where: query.map((q) => ({
+          ...q,
+          applicant: {
+            id: applicantId,
+          },
+        })),
         skip: page * size,
         take: size,
         order: sort,
@@ -46,7 +58,12 @@ export class DeliveryRecordService {
 
   async findOne(applicantId: string, id: string) {
     const deliveryRecord = await this.deliveryRecordRepository.findOne({
-      where: { applicantId, id },
+      where: {
+        applicant: {
+          id: applicantId,
+        },
+        id,
+      },
     });
     if (!deliveryRecord) throw new NotFoundException();
     return deliveryRecord;
@@ -57,7 +74,13 @@ export class DeliveryRecordService {
     id: string,
     updateDeliveryRecordDto: UpdateDeliveryRecordDto
   ) {
-    const deliveryRecord = { ...updateDeliveryRecordDto, applicantId, id };
+    const deliveryRecord = {
+      ...updateDeliveryRecordDto,
+      applicant: {
+        id: applicantId,
+      },
+      id,
+    };
     const { affected } = await this.deliveryRecordRepository.update(
       id,
       deliveryRecord

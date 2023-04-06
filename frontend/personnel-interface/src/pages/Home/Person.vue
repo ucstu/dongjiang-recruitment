@@ -181,9 +181,9 @@ const confirmPerson = (formEl: FormInstance | undefined) => {
             store.hrInformation = res;
             // 如果companyInformationId不为null，则获取公司信息并存储在store中。然后它将替换到管理的路线。如果 companyInformationId 为
             // null，它将替换到 Company 的路由。
-            if (res.companyId) {
+            if (res.company?.id) {
               companyService
-                .getCompany({ id: res.companyId })
+                .getCompany({ id: res.company.id })
                 .then((response) => {
                   store.companyInformation = response;
                 });

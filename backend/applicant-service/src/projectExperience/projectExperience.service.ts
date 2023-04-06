@@ -22,7 +22,9 @@ export class ProjectExperienceService {
   ) {
     return await this.projectExperienceRepository.save({
       ...createProjectExperienceDto,
-      applicantId,
+      applicant: {
+        id: applicantId,
+      },
     });
   }
 
@@ -33,10 +35,20 @@ export class ProjectExperienceService {
   ) {
     return {
       total: await this.projectExperienceRepository.count({
-        where: query.map((q) => ({ ...q, applicantId })),
+        where: query.map((q) => ({
+          ...q,
+          applicant: {
+            id: applicantId,
+          },
+        })),
       }),
       items: await this.projectExperienceRepository.find({
-        where: query.map((q) => ({ ...q, applicantId })),
+        where: query.map((q) => ({
+          ...q,
+          applicant: {
+            id: applicantId,
+          },
+        })),
         skip: page * size,
         take: size,
         order: sort,
@@ -46,7 +58,12 @@ export class ProjectExperienceService {
 
   async findOne(applicantId: string, id: string) {
     const projectExperience = await this.projectExperienceRepository.findOne({
-      where: { applicantId, id },
+      where: {
+        applicant: {
+          id: applicantId,
+        },
+        id,
+      },
     });
     if (!projectExperience) throw new NotFoundException();
     return projectExperience;
@@ -59,7 +76,9 @@ export class ProjectExperienceService {
   ) {
     const projectExperience = {
       ...updateProjectExperienceDto,
-      applicantId,
+      applicant: {
+        id: applicantId,
+      },
       id,
     };
     const { affected } = await this.projectExperienceRepository.update(

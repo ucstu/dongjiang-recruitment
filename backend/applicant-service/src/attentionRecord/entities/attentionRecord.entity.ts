@@ -1,11 +1,14 @@
 import {
-  Column,
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  JoinColumn,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "@dongjiang-recruitment/nest-common/dist/typeorm";
+import { Applicant } from "src/applicant/entities/applicant.entity";
+import { Company } from "src/external.entity";
 
 /**
  * AttentionRecord
@@ -33,17 +36,19 @@ export class AttentionRecord {
   @DeleteDateColumn()
   deletedAt: Date;
   /**
-   * 求职者ID
+   * 求职者
    */
-  @Column({
-    nullable: true,
+  @OneToOne(() => Applicant, (applicant) => applicant.id, {
+    eager: true,
   })
-  applicantId: string;
+  @JoinColumn()
+  applicant: Applicant;
   /**
-   * 公司ID
+   * 公司
    */
-  @Column({
-    nullable: true,
+  @OneToOne(() => Company, (company) => company.id, {
+    eager: true,
   })
-  companyId: string;
+  @JoinColumn()
+  company: Company;
 }

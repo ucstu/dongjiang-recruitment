@@ -2,6 +2,9 @@
 /* tslint:disable */
 /* eslint-disable */
 
+import type { Applicant } from "./Applicant";
+import type { Personnel } from "./Personnel";
+
 /**
  * 人事查看记录
  */
@@ -23,11 +26,11 @@ export type PersonnelInspectionRecord = {
    */
   deletedAt: string | null;
   /**
-   * 人事ID
+   * 人事
    */
-  personnelId: string;
+  personnel: Personnel;
   /**
-   * 求职者ID
+   * 求职者
    */
-  applicantId: string;
+  applicant: Applicant;
 };

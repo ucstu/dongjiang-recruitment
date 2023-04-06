@@ -13,7 +13,7 @@
       ref="table"
       class="flex-1"
       :columns="columns"
-      :data="authorities"
+      :data="authorityGroups"
       :loading="loading"
       :pagination="pagination"
       :row-key="(row) => row.id"
@@ -39,10 +39,25 @@
           :label-width="80"
           :loading="addLoading"
         >
-          <n-form-item label="权限名称" name="name">
+          <n-form-item label="权限组名称" path="name">
             <n-input
               v-model:value="current.name"
               :readonly="modalType === 'view'"
+              placeholder="请输入权限组名称"
+            />
+          </n-form-item>
+          <n-form-item label="权限" path="authorities">
+            <n-select
+              v-model:value="current.authorities as any"
+              multiple
+              filterable
+              placeholder="请选择权限"
+              :options="authoritiesOptions"
+              :loading="authoritiesLoading"
+              clearable
+              remote
+              :clear-filter-after-select="false"
+              @search="handleSearchAuthorities"
             />
           </n-form-item>
         </n-form>
@@ -70,6 +85,7 @@ FilterState,
 SortState,
 TableBaseColumn,
 } from "naive-ui/es/data-table/src/interface";
+import type { SelectMixedOption } from "naive-ui/es/select/src/interface";
 
 const div = ref<HTMLDivElement>();
 const { height } = useElementSize(div);
@@ -95,6 +111,18 @@ const rules: FormRules = {
       message: "请输入权限名称",
     },
   ],
+  authorities: [
+    {
+      required: true,
+      message: "请选择权限",
+      validator: (rule, value) => {
+        if (!value || value.length === 0) {
+          return Promise.reject(rule.message);
+        }
+        return Promise.resolve();
+      },
+    },
+  ],
 };
 
 const form = ref<InstanceType<typeof NForm>>();
@@ -117,6 +145,38 @@ const submit = async () => {
     _update();
   }
 };
+
+// 权限
+const authoritiesSearch = ref("");
+const {
+  data: authorities,
+  loading: authoritiesLoading,
+  refreshAsync: refreshAuthorities,
+} = authenticationAuthorityService.useQueryAuthority(() => ({
+  size: 9999999,
+  query: {
+    name: ["$like", `%${authoritiesSearch.value}%`],
+  },
+}));
+const authoritiesOptions = computed<SelectMixedOption[]>(() => {
+  return (
+    authorities.value?.items.map((item) => ({
+      label: item.name,
+      value: item.id,
+    })) ?? []
+  );
+});
+const handleSearchAuthorities = useDebounceFn((value: string) => {
+  authoritiesSearch.value = value;
+  refreshAuthorities();
+});
+
+watch(showModal, (value) => {
+  if (value) {
+    authoritiesSearch.value = "";
+    refreshAuthorities();
+  }
+});
 
 // 增
 const current = ref<AuthorityGroup>({} as AuthorityGroup);
@@ -174,7 +234,12 @@ const { refreshAsync: _update, loading: updateLoading } =
   authenticationAuthorityGroupService.useUpdateAuthorityGroup(
     () => ({
       id: current.value.id,
-      requestBody: current.value,
+      requestBody: {
+        ...current.value,
+        authorities: current.value.authorities.map((item) => ({
+          id: item,
+        })),
+      } as any,
     }),
     {
       manual: true,
@@ -187,7 +252,11 @@ const { refreshAsync: _update, loading: updateLoading } =
   );
 const update = (authority: AuthorityGroup) => {
   modalType.value = "edit";
-  current.value = _.cloneDeep(authority);
+  const clone = _.cloneDeep(authority);
+  current.value = {
+    ...clone,
+    authorities: clone.authorities.map((item) => item.id) as any,
+  };
   showModal.value = true;
 };
 
@@ -255,7 +324,7 @@ const columns = computed<DataTableColumns<AuthorityGroup>>(() => [
   },
 ]);
 const {
-  data: _authorities,
+  data: _authorityGroups,
   loading,
   refreshAsync: refresh,
 } = authenticationAuthorityGroupService.useQueryAuthorityGroup(
@@ -277,7 +346,7 @@ const {
     },
   }
 );
-const authorities = computed(() => _authorities.value?.items ?? []);
+const authorityGroups = computed(() => _authorityGroups.value?.items ?? []);
 
 const changeSorter = (sortState: SortState & SortState[]) => {
   const _sortStates = Array.isArray(sortState) ? sortState : [sortState];
@@ -323,7 +392,11 @@ const { refreshAsync: _get, loading: getLoading } =
   );
 const get = (authority: AuthorityGroup) => {
   modalType.value = "view";
-  current.value = _.cloneDeep(authority);
+  const clone = _.cloneDeep(authority);
+  current.value = {
+    ...clone,
+    authorities: clone.authorities.map((item) => item.id) as any,
+  };
   showModal.value = true;
 };
 </script>

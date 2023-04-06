@@ -3,9 +3,12 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  JoinColumn,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "@dongjiang-recruitment/nest-common/dist/typeorm";
+import { Company } from "src/external.entity";
 
 /**
  * Personnel
@@ -47,12 +50,13 @@ export class Personnel {
   })
   avatarUrl: string;
   /**
-   * 公司ID
+   * 公司
    */
-  @Column({
-    nullable: true,
+  @OneToOne(() => Company, (company) => company.id, {
+    eager: true,
   })
-  companyId: string;
+  @JoinColumn()
+  company: Company;
   /**
    * 人事姓名
    */

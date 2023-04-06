@@ -5,6 +5,7 @@ import type { Query, Sort } from "../../interfaces";
 import type { Account } from "../models/Account";
 import type { Authority } from "../models/Authority";
 import type { AuthorityGroup } from "../models/AuthorityGroup";
+import type { Company } from "../models/Company";
 
 import type { CancelablePromise } from "../core/CancelablePromise";
 import type { BaseHttpRequest } from "../core/BaseHttpRequest";
@@ -115,9 +116,9 @@ export class AuthenticationAccountService {
           }
         | {
             /**
-             * 公司ID
+             * 公司
              */
-            companyId: string;
+            company: Company;
             /**
              * 头像地址
              */

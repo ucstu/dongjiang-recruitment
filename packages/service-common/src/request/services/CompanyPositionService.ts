@@ -2,6 +2,8 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { Query, Sort } from "../../interfaces";
+import type { Company } from "../models/Company";
+import type { Personnel } from "../models/Personnel";
 import type { Position } from "../models/Position";
 
 import type { CancelablePromise } from "../core/CancelablePromise";
@@ -65,13 +67,13 @@ export class CompanyPositionService {
        */
       workAreaName: string;
       /**
-       * 公司ID
+       * 公司
        */
-      companyId: string;
+      company: Company;
       /**
-       * 人事ID
+       * 人事
        */
-      personnelId: string;
+      personnel: Personnel;
       /**
        * 职位类型，eg；{1:FullTime,2:PartTime,3:Practice}
        */

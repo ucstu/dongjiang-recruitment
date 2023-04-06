@@ -2,7 +2,10 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { Query, Sort } from "../../interfaces";
+import type { Applicant } from "../models/Applicant";
+import type { Company } from "../models/Company";
 import type { DeliveryRecord } from "../models/DeliveryRecord";
+import type { Position } from "../models/Position";
 
 import type { CancelablePromise } from "../core/CancelablePromise";
 import type { BaseHttpRequest } from "../core/BaseHttpRequest";
@@ -25,9 +28,9 @@ export class ApplicantDeliveryRecordService {
     applicantId: string;
     requestBody?: {
       /**
-       * 求职者ID
+       * 求职者
        */
-      applicantId: string;
+      applicant: Applicant;
       /**
        * 投递状态，eg；{1:UnViewed,2:Viewed,3:PassFilter,4:Interview,5:Inappropriate}
        */
@@ -37,13 +40,13 @@ export class ApplicantDeliveryRecordService {
        */
       interviewTime: string;
       /**
-       * 公司ID
+       * 公司
        */
-      companyId: string;
+      company: Company;
       /**
-       * 职位ID
+       * 职位
        */
-      positionId: string;
+      position: Position;
     };
   }): CancelablePromise<DeliveryRecord> {
     return this.httpRequest.request({

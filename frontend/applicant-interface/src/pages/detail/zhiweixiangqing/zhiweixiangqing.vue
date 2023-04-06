@@ -106,7 +106,7 @@
     </view>
     <button
       class="justify-center items-center btn-common"
-      @click="communication(jobInformation.personnelId)"
+      @click="communication(jobInformation.personnel.id)"
     >
       立即沟通
     </button>
@@ -150,6 +150,7 @@ import wybPopup from "@/components/wyb-popup/wyb-popup.vue";
 import { until } from "@/hooks";
 import { useMainStore } from "@/stores";
 import type {
+Applicant,
 Company,
 DeliveryRecord,
 Position,
@@ -230,9 +231,15 @@ onLoad((e) => {
         applicantInspectionRecordService.addUserInspectionRecord({
           applicantId: mainStore.applicant!.id,
           requestBody: {
-            positionId: positionId.value,
-            applicantId: mainStore.applicant!.id,
-            companyId: companyId.value,
+            position: {
+              id: positionId.value
+            } as Position,
+            applicant: {
+              id: mainStore.applicant!.id
+            } as Applicant,
+            company: {
+              id: companyId.value
+            } as Company,
           },
         });
       }
@@ -260,7 +267,7 @@ onMounted(() => {
         .queryGarnerRecord({
           applicantId: mainStore.applicant!.id,
           query: {
-            positionId: ["$eq", positionId.value],
+            "position.id": ["$eq", positionId.value],
           },
         })
         .then((res) => {
@@ -282,9 +289,15 @@ const collection = () => {
       .addGarnerRecord({
         applicantId: mainStore.applicant!.id,
         requestBody: {
-          positionId: positionId.value,
-          companyId: companyId.value,
-          applicantId: mainStore.applicant!.id,
+          position: {
+            id: positionId.value,
+          } as Position,
+          company: {
+            id: companyId.value
+          } as Company,
+          applicant: {
+            id: mainStore.applicant!.id
+          } as Applicant,
         },
       })
       .then((res) => {
@@ -315,7 +328,7 @@ const collection = () => {
 const communication = (i: string) => {
   let messageKey = "";
   for (const key in mainStore.messages[mainStore.applicant!.id]) {
-    if (key === jobInformation.value.personnelId) {
+    if (key === jobInformation.value.personnel.id) {
       messageKey = key;
     } else {
       messageKey = i;
@@ -339,9 +352,15 @@ const send = () => {
       applicantId: mainStore.applicant!.id,
       requestBody: {
         status: 1,
-        positionId: positionId.value,
-        applicantId: mainStore.applicant!.id,
-        companyId: companyId.value,
+        position: {
+          id: positionId.value
+        } as Position,
+        applicant: {
+          id: mainStore.applicant!.id
+        } as Applicant,
+        company: {
+          id: companyId.value
+        } as Company,
       } as DeliveryRecord,
     })
     .then(() => {

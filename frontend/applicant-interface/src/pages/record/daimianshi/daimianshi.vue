@@ -23,8 +23,8 @@ import NavigationBar from "@/components/NavigationBar/NavigationBar.vue";
 import { until } from "@/hooks";
 import { useMainStore } from "@/stores";
 import type {
-  DeliveryRecord,
-  Position,
+DeliveryRecord,
+Position,
 } from "@dongjiang-recruitment/service-common";
 
 const mainStore = useMainStore();
@@ -50,8 +50,8 @@ until(
         for (const interview of interviewed.value) {
           companyPositionService
             .getPosition({
-              companyId: interview.companyId,
-              id: interview.positionId,
+              companyId: interview.company.id,
+              id: interview.position.id,
             })
             .then((res) => {
               interviewedJobs.value.push(res);
@@ -75,7 +75,7 @@ onShow(() => {
 /* 放弃面试 */
 const stateClick = (index: string) => {
   for (const delivery of interviewed.value) {
-    if (delivery.positionId === index) {
+    if (delivery.position.id === index) {
       applicantDeliveryRecordService
         .removeDeliveryRecord({
           applicantId: mainStore.applicant!.id,
@@ -86,7 +86,7 @@ const stateClick = (index: string) => {
             (item) => item.id !== delivery.id
           );
           interviewedJobs.value = interviewedJobs.value.filter(
-            (item) => item.id !== delivery.companyId
+            (item) => item.id !== delivery.company.id
           );
         });
     }

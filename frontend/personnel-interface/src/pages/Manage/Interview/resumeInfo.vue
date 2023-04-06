@@ -14,33 +14,33 @@
         <img
           :src="
             VITE_CDN_URL +
-            userInformations.get(deliveryRecordsChecked.applicantId)?.avatarUrl
+            userInformations.get(deliveryRecordsChecked.applicant.id)?.avatarUrl
           "
           alt=""
         />
         <div class="header-person">
           <div>
             <span>{{
-              userInformations.get(deliveryRecordsChecked.applicantId)
+              userInformations.get(deliveryRecordsChecked.applicant.id)
                 ?.firstName +
               "" +
-              userInformations.get(deliveryRecordsChecked.applicantId)?.lastName
+              userInformations.get(deliveryRecordsChecked.applicant.id)?.lastName
             }}</span>
             <span
               >·{{
-                userInformations.get(deliveryRecordsChecked.applicantId)?.sex
+                userInformations.get(deliveryRecordsChecked.applicant.id)?.sex
               }}·<span>{{
-                userInformations.get(deliveryRecordsChecked.applicantId)?.age
+                userInformations.get(deliveryRecordsChecked.applicant.id)?.age
               }}</span
               >岁·<span>{{
                 educations[
-                  userInformations.get(deliveryRecordsChecked.applicantId)
+                  userInformations.get(deliveryRecordsChecked.applicant.id)
                     ?.education as 1 | 2 | 3 | 4
                 ]
               }}</span
               >·{{
                 slution[
-                  userInformations.get(deliveryRecordsChecked.applicantId)
+                  userInformations.get(deliveryRecordsChecked.applicant.id)
                     ?.jobStatus as 1 | 2 | 3
                 ]
               }}</span
@@ -49,18 +49,18 @@
           <div>
             <span
               >想找：{{
-                userInformations.get(deliveryRecordsChecked.applicantId)
+                userInformations.get(deliveryRecordsChecked.applicant.id)
                   ?.cityName
               }}</span
             >|<span
               >{{
-                jobInformations.get(deliveryRecordsChecked.positionId)
+                jobInformations.get(deliveryRecordsChecked.position.id)
                   ?.positionName
               }}|{{
-                jobInformations.get(deliveryRecordsChecked.positionId)
+                jobInformations.get(deliveryRecordsChecked.position.id)
                   ?.startingSalary +
                 "K-" +
-                jobInformations.get(deliveryRecordsChecked.positionId)
+                jobInformations.get(deliveryRecordsChecked.position.id)
                   ?.ceilingSalary +
                 "K"
               }}</span
@@ -84,9 +84,9 @@
 <script setup lang="ts">
 import router from "@/router";
 import type {
-  Applicant,
-  DeliveryRecord,
-  Position,
+Applicant,
+DeliveryRecord,
+Position,
 } from "@dongjiang-recruitment/service-common";
 import type { PropType } from "vue";
 
@@ -132,7 +132,7 @@ const inspectionResume = (delivery: DeliveryRecordChecked) => {
     delivery.status = 2;
     applicantDeliveryRecordService
       .updateDeliveryRecord({
-        applicantId: delivery.applicantId,
+        applicantId: delivery.applicant.id,
         id: delivery.id,
         requestBody: delivery,
       })
@@ -140,8 +140,8 @@ const inspectionResume = (delivery: DeliveryRecordChecked) => {
         router.push({
           name: "Resume",
           params: {
-            userId: delivery.applicantId,
-            postId: delivery.positionId,
+            userId: delivery.applicant.id,
+            postId: delivery.position.id,
           },
         });
       });
@@ -149,8 +149,8 @@ const inspectionResume = (delivery: DeliveryRecordChecked) => {
     router.push({
       name: "Resume",
       params: {
-        userId: delivery.applicantId,
-        postId: delivery.positionId,
+        userId: delivery.applicant.id,
+        postId: delivery.position.id,
       },
     });
   }

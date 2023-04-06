@@ -62,5 +62,10 @@ export const $Advertise = {
       description: `结束时间`,
       isRequired: true,
     },
+    advertiser: {
+      type: "Advertiser",
+      description: `广告商`,
+      isRequired: true,
+    },
   },
 } as const;

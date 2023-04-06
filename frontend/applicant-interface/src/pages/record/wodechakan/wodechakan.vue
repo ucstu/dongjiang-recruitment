@@ -6,7 +6,7 @@
         v-for="(myView, i) in myViews"
         :key="i"
         :position="myView"
-        @job-click="view_2OnClick(myView.companyId, myView.id)"
+        @job-click="view_2OnClick(myView.company.id, myView.id)"
       />
     </view>
   </view>
@@ -35,8 +35,8 @@ until(
         for (const item of res.items) {
           companyPositionService
             .getPosition({
-              companyId: item.companyId,
-              id: item.positionId,
+              companyId: item.company.id,
+              id: item.position.id,
             })
             .then((res) => {
               const p = myViews.value.map((item) => item.id);

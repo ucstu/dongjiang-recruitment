@@ -11,7 +11,5 @@ export const hasPermission = (permission: string | undefined): boolean => {
     )
   )
     return true;
-  console.log(mainStore.account?.authorityGroups);
-
   return false;
 };

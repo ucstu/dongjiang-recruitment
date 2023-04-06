@@ -3,12 +3,12 @@
 </template>
 <script setup lang="ts">
 import {
-  axios,
-  AxiosError,
-  Company,
-  request,
-  type Account,
-  type Personnel,
+AxiosError,
+Company,
+axios,
+request,
+type Account,
+type Personnel,
 } from "@dongjiang-recruitment/service-common";
 import { ElMessage } from "element-plus";
 import router from "./router";
@@ -17,6 +17,10 @@ import { useMainStore, useMessageStore } from "./stores/main";
 const mainStore = useMainStore();
 const messageStore = useMessageStore();
 request.config.BASE = import.meta.env.VITE_BASE_URL;
+
+commonService.getPositionTypes().then((res) => {
+  mainStore.positionTypes = res;
+});
 
 axios.interceptors.response.use(
   (response) => {

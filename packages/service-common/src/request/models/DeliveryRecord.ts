@@ -2,6 +2,10 @@
 /* tslint:disable */
 /* eslint-disable */
 
+import type { Applicant } from "./Applicant";
+import type { Company } from "./Company";
+import type { Position } from "./Position";
+
 /**
  * 投递记录
  */
@@ -23,9 +27,9 @@ export type DeliveryRecord = {
    */
   deletedAt: string | null;
   /**
-   * 求职者ID
+   * 求职者
    */
-  applicantId: string;
+  applicant: Applicant;
   /**
    * 投递状态，eg；{1:UnViewed,2:Viewed,3:PassFilter,4:Interview,5:Inappropriate}
    */
@@ -35,13 +39,13 @@ export type DeliveryRecord = {
    */
   interviewTime: string;
   /**
-   * 公司ID
+   * 公司
    */
-  companyId: string;
+  company: Company;
   /**
-   * 职位ID
+   * 职位
    */
-  positionId: string;
+  position: Position;
 };
 
 export namespace DeliveryRecord {

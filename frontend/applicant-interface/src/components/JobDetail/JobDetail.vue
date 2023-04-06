@@ -54,7 +54,7 @@ const props = defineProps<{
 const emits = defineEmits(["jobClick"]);
 
 const { data: companyInfo } = companyService.useGetCompany(() => ({
-  id: props.position.companyId,
+  id: props.position.company.id,
 }));
 
 // 融资阶段

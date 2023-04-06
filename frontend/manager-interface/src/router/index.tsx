@@ -56,7 +56,7 @@ export const routes: Array<RouteRecordRaw> = [
       {
         path: "account",
         name: "Account",
-        component: () => import("@/pages/account-manage/account-manage.vue"),
+        component: () => import("@/pages/authentication-manage/account-manage.vue"),
         meta: {
           icon: render(ICONS.PersonOutline),
           pms: "/advertisers/:id,PUT",
@@ -67,7 +67,7 @@ export const routes: Array<RouteRecordRaw> = [
         path: "authority-group",
         name: "AuthorityGroup",
         component: () =>
-          import("@/pages/account-manage/authority-group-manage.vue"),
+          import("@/pages/authentication-manage/authority-group-manage.vue"),
         meta: {
           icon: render(ICONS.ShieldCheckmarkOutline),
           title: "权限组管理",
@@ -76,7 +76,7 @@ export const routes: Array<RouteRecordRaw> = [
       {
         path: "authority",
         name: "Authority",
-        component: () => import("@/pages/account-manage/authority-manage.vue"),
+        component: () => import("@/pages/authentication-manage/authority-manage.vue"),
         meta: {
           icon: render(ICONS.ShieldOutline),
           title: "权限管理",

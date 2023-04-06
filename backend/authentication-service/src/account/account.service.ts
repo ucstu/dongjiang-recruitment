@@ -43,7 +43,7 @@ export class AccountService {
     // 获取账号类型对应的字段名
     const accountTypeStr = AccountType[
       accountType
-    ].toLowerCase() as keyof typeof STATIC_FULL_ID;
+    ]?.toLowerCase() as keyof typeof STATIC_FULL_ID;
 
     // 检查账号是否已存在
     const { items: accounts } = await this.findAll(

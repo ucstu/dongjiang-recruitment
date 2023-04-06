@@ -22,7 +22,9 @@ export class AttentionRecordService {
   ) {
     return await this.attentionRecordRepository.save({
       ...createAttentionRecordDto,
-      applicantId,
+      applicant: {
+        id: applicantId,
+      },
     });
   }
 
@@ -33,10 +35,20 @@ export class AttentionRecordService {
   ) {
     return {
       total: await this.attentionRecordRepository.count({
-        where: query.map((q) => ({ ...q, applicantId })),
+        where: query.map((q) => ({
+          ...q,
+          applicant: {
+            id: applicantId,
+          },
+        })),
       }),
       items: await this.attentionRecordRepository.find({
-        where: query.map((q) => ({ ...q, applicantId })),
+        where: query.map((q) => ({
+          ...q,
+          applicant: {
+            id: applicantId,
+          },
+        })),
         skip: page * size,
         take: size,
         order: sort,
@@ -46,7 +58,12 @@ export class AttentionRecordService {
 
   async findOne(applicantId: string, id: string) {
     const attentionRecord = await this.attentionRecordRepository.findOne({
-      where: { applicantId, id },
+      where: {
+        applicant: {
+          id: applicantId,
+        },
+        id,
+      },
     });
     if (!attentionRecord) throw new NotFoundException();
     return attentionRecord;
@@ -57,7 +74,13 @@ export class AttentionRecordService {
     id: string,
     updateAttentionRecordDto: UpdateAttentionRecordDto
   ) {
-    const attentionRecord = { ...updateAttentionRecordDto, applicantId, id };
+    const attentionRecord = {
+      ...updateAttentionRecordDto,
+      applicant: {
+        id: applicantId,
+      },
+      id,
+    };
     const { affected } = await this.attentionRecordRepository.update(
       id,
       attentionRecord
