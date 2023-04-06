@@ -136,6 +136,14 @@ export class AuthenticationAccountService {
              */
             acceptEmail: string;
           };
+      /**
+       * 权限
+       */
+      authorities: Array<Authority>;
+      /**
+       * 权限组
+       */
+      authorityGroups: Array<AuthorityGroup>;
     };
   }): CancelablePromise<Account> {
     return this.httpRequest.request({

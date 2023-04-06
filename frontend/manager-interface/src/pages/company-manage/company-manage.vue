@@ -2,21 +2,13 @@
   <div class="p-2 w-full h-full" ref="div">
     <n-space justify="space-between" align="center">
       <n-button
-        v-if="hasPermission('/authentication/accounts,POST')"
-        type="primary"
-        size="small"
-        @click="add"
-        class="mb-2"
-      >
+      v-if="hasPermission('/companies,POST')"
+      type="primary" size="small" @click="add" class="mb-2">
         新增
       </n-button>
       <n-button
-        v-if="hasPermission('/authentication/accounts,GET')"
-        text
-        size="small"
-        @click="refresh"
-        class="mb-2"
-      >
+      v-if="hasPermission('/companies,GET')"
+      text size="small" @click="refresh" class="mb-2">
         刷新
       </n-button>
     </n-space>
@@ -25,7 +17,7 @@
       ref="table"
       class="flex-1"
       :columns="columns"
-      :data="accounts"
+      :data="authorities"
       :loading="loading"
       :pagination="pagination"
       :row-key="(row) => row.id"
@@ -51,46 +43,25 @@
           :label-width="80"
           :loading="addLoading"
         >
-          <n-form-item label="用户名" path="userName">
+          <n-form-item label="公司名称" path="companyName">
             <n-input
-              v-model:value="current.userName"
+              v-model:value="current.companyName"
               :readonly="modalType === 'view'"
-              placeholder="请输入用户名"
+              placeholder="请输入公司名称"
             />
           </n-form-item>
-          <n-form-item label="密码" path="password">
+          <n-form-item label="公司全称" path="fullName">
             <n-input
-              v-model:value="current.password"
+              v-model:value="current.fullName"
               :readonly="modalType === 'view'"
-              placeholder="请输入密码"
+              placeholder="请输入公司全称"
             />
           </n-form-item>
-          <n-form-item label="权限组" path="authorityGroups">
-            <n-select
-              v-model:value="current.authorityGroups as any"
-              multiple
-              filterable
-              placeholder="请选择权限组"
-              :options="authorityGroupsOptions"
-              :loading="authorityGroupsLoading"
-              clearable
-              remote
-              :clear-filter-after-select="false"
-              @search="handleSearchAuthorityGroups"
-            />
-          </n-form-item>
-          <n-form-item label="权限" path="authorities">
-            <n-select
-              v-model:value="current.authorities as any"
-              multiple
-              filterable
-              placeholder="请选择权限"
-              :options="authoritiesOptions"
-              :loading="authoritiesLoading"
-              clearable
-              remote
-              :clear-filter-after-select="false"
-              @search="handleSearchAuthorities"
+          <n-form-item label="公司权益" path="benefits">
+            <n-dynamic-tags
+              v-model:value="current.benefits"
+              :readonly="modalType === 'view'"
+              placeholder="请输入公司权益"
             />
           </n-form-item>
         </n-form>
@@ -111,7 +82,8 @@
 
 <script setup lang="tsx">
 import { hasPermission } from "@/hooks";
-import type { Account as _Account } from "@dongjiang-recruitment/service-common";
+import router from "@/router";
+import type { Company } from "@dongjiang-recruitment/service-common";
 import dayjs from "dayjs";
 import * as _ from "lodash";
 import type {
@@ -126,11 +98,6 @@ FilterState,
 SortState,
 TableBaseColumn,
 } from "naive-ui/es/data-table/src/interface";
-import type { SelectMixedOption } from "naive-ui/es/select/src/interface";
-
-interface Account extends _Account {
-  password: string;
-}
 
 const div = ref<HTMLDivElement>();
 const { height } = useElementSize(div);
@@ -140,7 +107,7 @@ const showModal = ref(false);
 const modalType = ref<"add" | "edit" | "view">("add");
 const modalTitle = computed(() => {
   return modalType.value !== "add"
-    ? `${modalTypeMap[modalType.value]}：${current.value.userName}`
+    ? `${modalTypeMap[modalType.value]}：${current.value.fullName}`
     : modalTypeMap[modalType.value];
 });
 const modalTypeMap = {
@@ -149,23 +116,23 @@ const modalTypeMap = {
   view: "查看",
 };
 
-const rules = computed<FormRules>(() => ({
-  userName: [
+const rules: FormRules = {
+  companyName: [
     {
       required: true,
-      message: "请输入用户名",
+      message: "请输入公司名称",
     },
   ],
-  password: [
-    {
-      required: modalType.value === "add",
-      message: "请输入密码",
-    },
-  ],
-  authorityGroups: [
+  fullName: [
     {
       required: true,
-      message: "请选择权限组",
+      message: "请输入公司全称",
+    },
+  ],
+  benefits: [
+    {
+      required: true,
+      message: "请输入公司权益",
       validator: (rule, value) => {
         if (!value || value.length === 0) {
           return Promise.reject(rule.message);
@@ -174,11 +141,17 @@ const rules = computed<FormRules>(() => ({
       },
     },
   ],
-}));
+  comprehensionName: [
+    {
+      required: true,
+      message: "请选择领域名称",
+    },
+  ],
+};
 
 const form = ref<InstanceType<typeof NForm>>();
-const validate = () => {
-  return new Promise<boolean>((resolve, reject) => {
+const validate = async () => {
+  return await new Promise<boolean>((resolve, reject) => {
     form.value?.validate((errors) => {
       if (!errors) {
         resolve(true);
@@ -197,83 +170,12 @@ const submit = async () => {
   }
 };
 
-// 权限组
-const authorityGroupsSearch = ref("");
-const {
-  data: authorityGroups,
-  loading: authorityGroupsLoading,
-  refreshAsync: refreshAuthorityGroups,
-} = authenticationAuthorityGroupService.useQueryAuthorityGroup(() => ({
-  size: 9999999,
-  query: {
-    name: ["$like", `%${authorityGroupsSearch.value}%`],
-  },
-}));
-const authorityGroupsOptions = computed<SelectMixedOption[]>(() => {
-  return (
-    authorityGroups.value?.items.map((item) => ({
-      label: item.name,
-      value: item.id,
-    })) ?? []
-  );
-});
-const handleSearchAuthorityGroups = useDebounceFn((value: string) => {
-  authorityGroupsSearch.value = value;
-  refreshAuthorityGroups();
-});
-
-// 权限
-const authoritiesSearch = ref("");
-const {
-  data: authorities,
-  loading: authoritiesLoading,
-  refreshAsync: refreshAuthorities,
-} = authenticationAuthorityService.useQueryAuthority(() => ({
-  size: 9999999,
-  query: {
-    name: ["$like", `%${authoritiesSearch.value}%`],
-  },
-}));
-const authoritiesOptions = computed<SelectMixedOption[]>(() => {
-  return (
-    authorities.value?.items.map((item) => ({
-      label: item.name,
-      value: item.id,
-    })) ?? []
-  );
-});
-const handleSearchAuthorities = useDebounceFn((value: string) => {
-  authoritiesSearch.value = value;
-  refreshAuthorities();
-});
-
-watch(
-  () => showModal.value,
-  (value) => {
-    if (value) {
-      authoritiesSearch.value = "";
-      refreshAuthorityGroups();
-      refreshAuthorities();
-    }
-  }
-);
-
 // 增
-const current = ref<Account>({} as Account);
+const current = ref<Company>({} as Company);
 const { refreshAsync: _add, loading: addLoading } =
-  authenticationAccountService.useAddAccount(
+  companyService.useAddCompany(
     () => ({
-      requestBody: {
-        accountType: -1 as 0 | 1 | 2 | 3,
-        userName: current.value.userName,
-        password: current.value.password,
-        authorities: current.value.authorities?.map((item) => ({
-          id: item,
-        })) as any,
-        authorityGroups: current.value.authorityGroups?.map((item) => ({
-          id: item,
-        })) as any,
-      },
+      requestBody: current.value,
     }),
     {
       manual: true,
@@ -286,13 +188,13 @@ const { refreshAsync: _add, loading: addLoading } =
   );
 const add = () => {
   modalType.value = "add";
-  current.value = {} as Account;
+  current.value = {} as Company;
   showModal.value = true;
 };
 
 // 删
 const { refreshAsync: _remove, loading: removeLoading } =
-  authenticationAccountService.useRemoveAccount(
+  companyService.useRemoveCompany(
     () => ({
       id: current.value.id,
     }),
@@ -304,8 +206,8 @@ const { refreshAsync: _remove, loading: removeLoading } =
       },
     }
   );
-const remove = (authority: Account) => {
-  current.value = _.cloneDeep(authority);
+const remove = (company: Company) => {
+  current.value = _.cloneDeep(company);
   const dialog = $dialog.confirm({
     title: "删除",
     content: "确定删除吗？",
@@ -320,18 +222,10 @@ const remove = (authority: Account) => {
 
 // 改
 const { refreshAsync: _update, loading: updateLoading } =
-  authenticationAccountService.useUpdateAccount(
+  companyService.useUpdateCompany(
     () => ({
       id: current.value.id,
-      requestBody: {
-        ...current.value,
-        authorityGroups: current.value.authorityGroups.map((item) => ({
-          id: item,
-        })),
-        authorities: current.value.authorities.map((item) => ({
-          id: item,
-        })),
-      } as any,
+      requestBody: current.value,
     }),
     {
       manual: true,
@@ -342,14 +236,9 @@ const { refreshAsync: _update, loading: updateLoading } =
       },
     }
   );
-const update = (authority: Account) => {
+const update = (company: Company) => {
   modalType.value = "edit";
-  const clone = _.cloneDeep(authority);
-  current.value = {
-    ...clone,
-    authorityGroups: clone.authorityGroups.map((item) => item.id) as any,
-    authorities: clone.authorities.map((item) => item.id) as any,
-  };
+  current.value = _.cloneDeep(company);
   showModal.value = true;
 };
 
@@ -365,7 +254,7 @@ const pagination = ref<PaginationProps>({
     return `总计：${itemCount}`;
   },
 });
-const columns = computed<DataTableColumns<Account>>(() => [
+const columns = computed<DataTableColumns<Company>>(() => [
   {
     title: "创建时间",
     key: "createdAt",
@@ -389,11 +278,11 @@ const columns = computed<DataTableColumns<Account>>(() => [
     },
   },
   {
-    title: "用户名",
-    key: "userName",
+    title: "公司名称",
+    key: "fullName",
     sorter: true,
     sortOrder:
-      sortStates.value.find((item) => item.columnKey === "userName")?.order ||
+      sortStates.value.find((item) => item.columnKey === "fullName")?.order ||
       false,
   },
   {
@@ -402,17 +291,22 @@ const columns = computed<DataTableColumns<Account>>(() => [
     render: (row) => {
       return (
         <n-space>
-          {hasPermission("/authentication/accounts/:id,GET") && (
+          {hasPermission("/companies/:id,GET") && (
             <n-button size="small" type="primary" onClick={() => get(row)}>
               查看
             </n-button>
           )}
-          {hasPermission("/authentication/accounts/:id,PUT") && (
+          {hasPermission("/companies/:companyId/positions,GET") && (
+            <n-button size="small" type="primary" onClick={() => getPosition(row)}>
+              查看职位
+            </n-button>
+          )}
+          {hasPermission("/companies/:id,PUT") && (
             <n-button size="small" type="primary" onClick={() => update(row)}>
               编辑
             </n-button>
           )}
-          {hasPermission("/authentication/accounts/:id,DELETE") && (
+          {hasPermission("/companies/:id,DELETE") && (
             <n-button size="small" type="error" onClick={() => remove(row)}>
               删除
             </n-button>
@@ -423,10 +317,10 @@ const columns = computed<DataTableColumns<Account>>(() => [
   },
 ]);
 const {
-  data: _accounts,
+  data: _authorities,
   loading,
   refreshAsync: refresh,
-} = authenticationAccountService.useQueryAccounts(
+} = companyService.useQueryCompany(
   () => ({
     page: pagination.value.page,
     size: pagination.value.pageSize,
@@ -445,7 +339,7 @@ const {
     },
   }
 );
-const accounts = computed(() => _accounts.value?.items ?? []);
+const authorities = computed(() => _authorities.value?.items ?? []);
 
 const changeSorter = (sortState: SortState & SortState[]) => {
   const _sortStates = Array.isArray(sortState) ? sortState : [sortState];
@@ -478,25 +372,29 @@ const changePageSize = (pageSize: number) => {
 
 // 查单个
 const { refreshAsync: _get, loading: getLoading } =
-  authenticationAccountService.useGetAccount(
+  companyService.useGetCompany(
     () => ({
       id: current.value.id,
     }),
     {
       manual: true,
       onSuccess: (data) => {
-        current.value = { ...data, password: "" };
+        current.value = data;
       },
     }
   );
-const get = (authority: Account) => {
+const get = (company: Company) => {
   modalType.value = "view";
-  const clone = _.cloneDeep(authority);
-  current.value = {
-    ...clone,
-    authorityGroups: clone.authorityGroups.map((item) => item.id) as any,
-    authorities: clone.authorities.map((item) => item.id) as any,
-  };
+  current.value = _.cloneDeep(company);
   showModal.value = true;
 };
+
+const getPosition = (company: Company) => {
+  router.push({
+    name: "Position",
+    query: {
+      companyId: company.id,
+    },
+  });
+}
 </script>

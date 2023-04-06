@@ -2,6 +2,7 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { Query, Sort } from "../../interfaces";
+import type { Advertise } from "../models/Advertise";
 import type { Advertiser } from "../models/Advertiser";
 
 import type { CancelablePromise } from "../core/CancelablePromise";
@@ -157,6 +158,55 @@ export class AdvertiserService {
       url: "/advertisers",
       body: requestBody,
       mediaType: "application/json",
+    });
+  }
+
+  /**
+   * 查询所有广告
+   * @returns any 成功
+   * @throws ApiError
+   */
+  public queryAllAdvertise({
+    query,
+    page,
+    size,
+    sort,
+  }: {
+    /**
+     * 查询条件
+     */
+    query?: Query<Advertise>;
+    /**
+     * 当前页数
+     */
+    page?: number;
+    /**
+     * 页面大小
+     */
+    size?: number;
+    /**
+     * 排序方式
+     */
+    sort?: Sort<Advertise>;
+  }): CancelablePromise<{
+    /**
+     * 广告总数
+     */
+    total: number;
+    /**
+     * 当页广告
+     */
+    items: Array<Advertise>;
+  }> {
+    return this.httpRequest.request({
+      method: "GET",
+      url: "/advertisers/advertise",
+      query: {
+        query: query,
+        page: page,
+        size: size,
+        sort: sort,
+      },
     });
   }
 }

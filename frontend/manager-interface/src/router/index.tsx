@@ -49,17 +49,27 @@ export const routes: Array<RouteRecordRaw> = [
   },
   {
     path: "/",
-    name: "Manage",
     redirect: "/home",
+    meta: {
+      showHeader: false,
+      showMenu: false,
+      showNav: false,
+      onMenu: false,
+    },
+  },
+  {
+    path: "/account",
+    redirect: "/account/account",
     component: ViewLayout,
     children: [
       {
         path: "account",
         name: "Account",
-        component: () => import("@/pages/authentication-manage/account-manage.vue"),
+        component: () =>
+          import("@/pages/authentication-manage/account-manage.vue"),
         meta: {
           icon: render(ICONS.PersonOutline),
-          pms: "/advertisers/:id,PUT",
+          pms: "/authentication/accounts,GET",
           title: "账户管理",
         },
       },
@@ -70,15 +80,18 @@ export const routes: Array<RouteRecordRaw> = [
           import("@/pages/authentication-manage/authority-group-manage.vue"),
         meta: {
           icon: render(ICONS.ShieldCheckmarkOutline),
+          pms: "/authentication/authorityGroups/:id,GET",
           title: "权限组管理",
         },
       },
       {
         path: "authority",
         name: "Authority",
-        component: () => import("@/pages/authentication-manage/authority-manage.vue"),
+        component: () =>
+          import("@/pages/authentication-manage/authority-manage.vue"),
         meta: {
           icon: render(ICONS.ShieldOutline),
+          pms: "/authentication/authorities,GET",
           title: "权限管理",
         },
       },
@@ -86,6 +99,77 @@ export const routes: Array<RouteRecordRaw> = [
     meta: {
       icon: render(ICONS.ShieldHalfOutline),
       title: "授权管理",
+      pms: [
+        "/authentication/accounts,GET",
+        "/authentication/authorityGroups/:id,GET",
+        "/authentication/authorities,GET",
+      ],
+    },
+  },
+  {
+    path: "/advertiser",
+    redirect: "/advertiser/advertiser",
+    component: ViewLayout,
+    children: [
+      {
+        path: "advertiser",
+        name: "Advertiser",
+        component: () =>
+          import("@/pages/advertiser-manage/advertiser-manage.vue"),
+        meta: {
+          icon: render(ICONS.BonfireOutline),
+          title: "广告商管理",
+          pms: "/advertisers,GET",
+        },
+      },
+      {
+        path: "advertise",
+        name: "Advertise",
+        component: () =>
+          import("@/pages/advertiser-manage/advertise-manage.vue"),
+        meta: {
+          icon: render(ICONS.BowlingBallOutline),
+          title: "广告管理",
+          pms: "/advertisers/advertise,GET",
+        },
+      },
+    ],
+    meta: {
+      icon: render(ICONS.BonfireOutline),
+      title: "广告商管理",
+      pms: ["/advertisers,GET", "/advertisers/advertise,GET"],
+    },
+  },
+  {
+    path: "/company",
+    redirect: "/company/company",
+    component: ViewLayout,
+    children: [
+      {
+        path: "company",
+        name: "Company",
+        component: () => import("@/pages/company-manage/company-manage.vue"),
+        meta: {
+          icon: render(ICONS.BoatOutline),
+          title: "公司管理",
+          pms: "/companies,GET",
+        },
+      },
+      {
+        path: "position",
+        name: "Position",
+        component: () => import("@/pages/company-manage/position-manage.vue"),
+        meta: {
+          icon: render(ICONS.BarChartOutline),
+          title: "职位管理",
+          pms: "/companies/positions,GET",
+        },
+      },
+    ],
+    meta: {
+      icon: render(ICONS.BoatOutline),
+      title: "公司管理",
+      pms: ["/companies,GET", "/companies/positions,GET"],
     },
   },
 ];

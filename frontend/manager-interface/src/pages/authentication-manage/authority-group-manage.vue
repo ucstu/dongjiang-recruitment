@@ -1,10 +1,22 @@
 <template>
   <div class="p-2 w-full h-full" ref="div">
     <n-space justify="space-between" align="center">
-      <n-button type="primary" size="small" @click="add" class="mb-2">
+      <n-button
+        v-if="hasPermission('/authentication/authorityGroups,POST')"
+        type="primary"
+        size="small"
+        @click="add"
+        class="mb-2"
+      >
         新增
       </n-button>
-      <n-button text size="small" @click="refresh" class="mb-2">
+      <n-button
+        v-if="hasPermission('/authentication/authorityGroups,GET')"
+        text
+        size="small"
+        @click="refresh"
+        class="mb-2"
+      >
         刷新
       </n-button>
     </n-space>
@@ -61,7 +73,14 @@
             />
           </n-form-item>
         </n-form>
-        <n-button type="primary" size="small" class="mt-2" @click="submit">
+        <n-button
+          v-if="modalType !== 'view'"
+          :loading="addLoading || updateLoading"
+          type="primary"
+          size="small"
+          class="mt-2"
+          @click="submit"
+        >
           提交
         </n-button>
       </n-card>
@@ -70,6 +89,7 @@
 </template>
 
 <script setup lang="tsx">
+import { hasPermission } from "@/hooks";
 import type { AuthorityGroup } from "@dongjiang-recruitment/service-common";
 import dayjs from "dayjs";
 import * as _ from "lodash";
@@ -217,8 +237,8 @@ const { refreshAsync: _remove, loading: removeLoading } =
 const remove = (authority: AuthorityGroup) => {
   current.value = _.cloneDeep(authority);
   const dialog = $dialog.confirm({
-    title: "删除权限",
-    content: "确定删除该权限吗？",
+    title: "删除",
+    content: "确定删除吗？",
     loading: removeLoading.value,
     confirm() {
       _remove();
@@ -309,15 +329,21 @@ const columns = computed<DataTableColumns<AuthorityGroup>>(() => [
     render: (row) => {
       return (
         <n-space>
-          <n-button size="small" type="primary" onClick={() => get(row)}>
-            查看
-          </n-button>
-          <n-button size="small" type="primary" onClick={() => update(row)}>
-            编辑
-          </n-button>
-          <n-button size="small" type="error" onClick={() => remove(row)}>
-            删除
-          </n-button>
+          {hasPermission("/authentication/authorityGroups/:id,GET") && (
+            <n-button size="small" type="primary" onClick={() => get(row)}>
+              查看
+            </n-button>
+          )}
+          {hasPermission("/authentication/authorityGroups/:id,PUT") && (
+            <n-button size="small" type="primary" onClick={() => update(row)}>
+              编辑
+            </n-button>
+          )}
+          {hasPermission("/authentication/authorityGroups/:id,DELETE") && (
+            <n-button size="small" type="error" onClick={() => remove(row)}>
+              删除
+            </n-button>
+          )}
         </n-space>
       );
     },

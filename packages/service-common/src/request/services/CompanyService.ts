@@ -201,6 +201,28 @@ export class CompanyService {
   }
 
   /**
+   * 删除公司
+   * @returns any 成功
+   * @throws ApiError
+   */
+  public removeCompany({
+    id,
+  }: {
+    /**
+     * 公司ID
+     */
+    id: string;
+  }): CancelablePromise<string> {
+    return this.httpRequest.request({
+      method: "DELETE",
+      url: "/companies/{id}",
+      path: {
+        id: id,
+      },
+    });
+  }
+
+  /**
    * 查询所有职位
    * @returns any 成功
    * @throws ApiError

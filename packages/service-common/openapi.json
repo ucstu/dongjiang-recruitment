@@ -2479,6 +2479,94 @@
           }
         },
         "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-66759572-run"
+      },
+      "delete": {
+        "summary": "删除公司",
+        "x-apifox-folder": "Company",
+        "x-apifox-status": "developing",
+        "deprecated": false,
+        "description": "",
+        "operationId": "RemoveCompany",
+        "tags": ["Company"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "公司ID",
+            "required": true,
+            "example": "40F7dC4F-d6EA-8113-7ec7-F888B2D1926b",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "x-apifox-refs": {
+                    "01GV53C8VAVWCQSZBYQVHARS62": {
+                      "$ref": "#/components/schemas/BaseResponse",
+                      "x-apifox-overrides": {
+                        "body": {
+                          "$ref": "#/components/schemas/Advertiser",
+                          "title": "广告商",
+                          "description": "广告商"
+                        }
+                      },
+                      "required": ["body"]
+                    }
+                  },
+                  "x-apifox-orders": ["01GV53C8VAVWCQSZBYQVHARS62"],
+                  "properties": {
+                    "timestamp": {
+                      "type": "string",
+                      "title": "响应时间",
+                      "description": "响应时间"
+                    },
+                    "message": {
+                      "type": "string",
+                      "title": "响应",
+                      "description": "响应"
+                    },
+                    "status": {
+                      "type": "integer",
+                      "title": "响应编码",
+                      "description": "响应编码"
+                    },
+                    "body": {
+                      "type": "string",
+                      "title": "公司ID",
+                      "description": "公司ID"
+                    }
+                  },
+                  "required": ["timestamp", "message", "status", "body"],
+                  "x-apifox-ignore-properties": [
+                    "timestamp",
+                    "message",
+                    "status",
+                    "body"
+                  ]
+                },
+                "examples": {
+                  "1": {
+                    "summary": "成功示例",
+                    "value": {
+                      "timestamp": "1982-02-20 02:48:23",
+                      "message": "Kdfodakvc Wjsuppeim Minsswpuz Mgh Xcriybcms",
+                      "status": 439,
+                      "body": "E01F8386-ed5a-B546-8b93-eC8a8D7Ba3CC"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-73397849-run"
       }
     },
     "/companies/positions": {
@@ -3569,7 +3657,7 @@
         "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-66759581-run"
       }
     },
-    "/advertisers/{advertiserid}/advertise": {
+    "/advertisers/{advertiserId}/advertise": {
       "post": {
         "summary": "添加广告",
         "x-apifox-folder": "Advertiser/Advertise",
@@ -3580,11 +3668,11 @@
         "tags": ["Advertiser/Advertise"],
         "parameters": [
           {
-            "name": "advertiserid",
+            "name": "advertiserId",
             "in": "path",
             "description": "广告商ID",
             "required": true,
-            "example": "BC810A11-0D52-81A0-bFEA-782148fb1e2F",
+            "example": "aB843F97-dCfb-1bB7-48FB-98C7d6CBeF1e",
             "schema": {
               "type": "string"
             }
@@ -3785,7 +3873,7 @@
         "tags": ["Advertiser/Advertise"],
         "parameters": [
           {
-            "name": "advertiserid",
+            "name": "advertiserId",
             "in": "path",
             "description": "广告商ID",
             "required": true,
@@ -3997,7 +4085,7 @@
         "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-66759585-run"
       }
     },
-    "/advertisers/{advertiserid}/advertise/{id}": {
+    "/advertisers/{advertiserId}/advertise/{id}": {
       "delete": {
         "summary": "移除广告",
         "x-apifox-folder": "Advertiser/Advertise",
@@ -4008,7 +4096,7 @@
         "tags": ["Advertiser/Advertise"],
         "parameters": [
           {
-            "name": "advertiserid",
+            "name": "advertiserId",
             "in": "path",
             "description": "广告商ID",
             "required": true,
@@ -4106,7 +4194,7 @@
         "tags": ["Advertiser/Advertise"],
         "parameters": [
           {
-            "name": "advertiserid",
+            "name": "advertiserId",
             "in": "path",
             "description": "广告商ID",
             "required": true,
@@ -4226,7 +4314,7 @@
         "tags": ["Advertiser/Advertise"],
         "parameters": [
           {
-            "name": "advertiserid",
+            "name": "advertiserId",
             "in": "path",
             "description": "广告商ID",
             "required": true,
@@ -14318,6 +14406,22 @@
                     ],
                     "title": "详细信息",
                     "description": "详细信息"
+                  },
+                  "authorities": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Authority"
+                    },
+                    "title": "权限",
+                    "description": "权限"
+                  },
+                  "authorityGroups": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/AuthorityGroup"
+                    },
+                    "title": "权限组",
+                    "description": "权限组"
                   }
                 },
                 "x-apifox-refs": {},
@@ -14325,9 +14429,17 @@
                   "accountType",
                   "userName",
                   "password",
-                  "detail"
+                  "detail",
+                  "authorities",
+                  "authorityGroups"
                 ],
-                "required": ["userName", "accountType", "password"],
+                "required": [
+                  "userName",
+                  "accountType",
+                  "password",
+                  "authorities",
+                  "authorityGroups"
+                ],
                 "x-apifox-ignore-properties": []
               },
               "example": {
@@ -16345,6 +16457,292 @@
           }
         },
         "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-67501997-run"
+      }
+    },
+    "/advertisers/advertise": {
+      "get": {
+        "summary": "查询所有广告",
+        "x-apifox-folder": "Advertiser",
+        "x-apifox-status": "developing",
+        "deprecated": false,
+        "description": "",
+        "operationId": "QueryAllAdvertise",
+        "tags": ["Advertiser"],
+        "parameters": [
+          {
+            "name": "query",
+            "in": "query",
+            "description": "查询条件",
+            "required": false,
+            "example": "{createdAt: \"$eq(1678200961000)\"}",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "当前页数",
+            "required": false,
+            "example": "0",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "description": "页面大小",
+            "required": false,
+            "example": "5",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "description": "排序方式",
+            "required": false,
+            "example": ["createdAt,desc"],
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "x-apifox-overrides": {},
+                  "type": "object",
+                  "x-apifox-refs": {
+                    "01GTY9B10275V人事B68CH6WAM4Z": {
+                      "$ref": "#/components/schemas/PageResponse",
+                      "x-apifox-overrides": {
+                        "body": {
+                          "type": "object",
+                          "properties": {
+                            "total": {
+                              "type": "integer",
+                              "title": "广告商总数",
+                              "description": "广告商总数"
+                            },
+                            "items": {
+                              "type": "array",
+                              "items": {
+                                "$ref": "#/components/schemas/Advertiser",
+                                "title": "广告商",
+                                "description": "广告商"
+                              },
+                              "title": "当页广告商",
+                              "description": "当页广告商"
+                            }
+                          },
+                          "title": "分页结果",
+                          "x-apifox-orders": ["total", "items"],
+                          "required": ["total", "items"],
+                          "description": "分页结果"
+                        }
+                      },
+                      "required": ["body"]
+                    }
+                  },
+                  "x-apifox-orders": ["01GTY9B10275V人事B68CH6WAM4Z"],
+                  "properties": {
+                    "timestamp": {
+                      "type": "string",
+                      "title": "响应时间",
+                      "description": "响应时间"
+                    },
+                    "message": {
+                      "type": "string",
+                      "title": "响应",
+                      "description": "响应"
+                    },
+                    "status": {
+                      "type": "integer",
+                      "title": "响应编码",
+                      "description": "响应编码"
+                    },
+                    "body": {
+                      "type": "object",
+                      "properties": {
+                        "total": {
+                          "type": "integer",
+                          "title": "广告总数",
+                          "description": "广告总数"
+                        },
+                        "items": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/Advertise",
+                            "x-apifox-overrides": {
+                              "id": null,
+                              "createdAt": null,
+                              "updatedAt": null,
+                              "deletedAt": null
+                            }
+                          },
+                          "title": "当页广告",
+                          "description": "当页广告"
+                        }
+                      },
+                      "title": "分页结果",
+                      "x-apifox-orders": ["total", "items"],
+                      "required": ["total", "items"],
+                      "x-apifox-ignore-properties": [],
+                      "description": "分页结果"
+                    }
+                  },
+                  "required": ["timestamp", "message", "status", "body"],
+                  "x-apifox-ignore-properties": [
+                    "timestamp",
+                    "message",
+                    "status",
+                    "body"
+                  ]
+                },
+                "examples": {
+                  "1": {
+                    "summary": "成功示例",
+                    "value": {
+                      "timestamp": "1989-11-07 23:57:05",
+                      "message": "Ydbsbwscj Mipl Rzuvixxs Hnpdqwaj Wmmlj Esknlqqbk",
+                      "status": 405,
+                      "body": {
+                        "total": 74,
+                        "items": [
+                          {
+                            "id": "44f4F610-2e8d-301d-7d1A-5030E528097c",
+                            "name": "直实已",
+                            "pageUrl": "http://top.pw/setd",
+                            "banner": "http://dummyimage.com/160x600",
+                            "position": 1,
+                            "status": 2,
+                            "payed": 1674163214892708.8,
+                            "startTime": "2002-11-30 00:06:08",
+                            "endTime": "1980-08-02 23:44:08",
+                            "createdAt": "2002-12-07 09:29:44",
+                            "updatedAt": "2009-11-16 19:18:43",
+                            "deletedAt": "2010-09-14 02:29:33",
+                            "advertiser": {
+                              "id": "7b6db14C-Cad1-F6Ad-2bf7-6E369f67f4Df",
+                              "name": "该调斯样理",
+                              "pageUrl": "http://gbzudsvwty.asia/qjrpuk",
+                              "logoUrl": "http://dummyimage.com/160x600",
+                              "createdAt": "2022-04-14 20:17:39",
+                              "updatedAt": "2001-03-25 17:51:45",
+                              "deletedAt": "1987-07-17 05:44:34"
+                            }
+                          },
+                          {
+                            "id": "CDD5D98c-cDb1-AeeD-e3d7-5aC37dACFcc1",
+                            "name": "及般及八装",
+                            "pageUrl": "http://hoh.tk/cuttngee",
+                            "banner": "http://dummyimage.com/120x600",
+                            "position": 1,
+                            "status": 2,
+                            "payed": 3248953440717804.5,
+                            "startTime": "1982-09-19 12:31:03",
+                            "endTime": "1972-03-26 14:06:51",
+                            "createdAt": "2002-08-21 13:54:46",
+                            "updatedAt": "1975-06-06 09:58:26",
+                            "deletedAt": "1979-10-09 09:48:16",
+                            "advertiser": {
+                              "id": "57f0c4dc-ebbc-676e-343E-c6c6784f6426",
+                              "name": "电设识委更",
+                              "pageUrl": "http://yrgkyxw.bb/kmipyd",
+                              "logoUrl": "http://dummyimage.com/160x600",
+                              "createdAt": "2008-05-19 20:35:13",
+                              "updatedAt": "1994-12-14 10:42:33",
+                              "deletedAt": "1985-04-09 22:39:53"
+                            }
+                          },
+                          {
+                            "id": "EE68Fe1e-D737-c9A3-B46c-bB86Df20Cefb",
+                            "name": "火员京近立共",
+                            "pageUrl": "http://xtppd.al/rcbezjl",
+                            "banner": "http://dummyimage.com/234x60",
+                            "position": 1,
+                            "status": 2,
+                            "payed": 1095892103027662.5,
+                            "startTime": "1976-08-07 07:02:33",
+                            "endTime": "1995-08-02 09:58:25",
+                            "createdAt": "1990-05-27 14:59:58",
+                            "updatedAt": "1994-01-12 14:47:53",
+                            "deletedAt": "1984-11-27 02:47:42",
+                            "advertiser": {
+                              "id": "32CCB488-FbCe-AD1a-Df1E-52DeAe5B4eA4",
+                              "name": "人这千往众等",
+                              "pageUrl": "http://qbyfvgoch.nf/nbdrcrqlo",
+                              "logoUrl": "http://dummyimage.com/120x90",
+                              "createdAt": "1978-06-26 04:24:47",
+                              "updatedAt": "1977-10-23 12:10:34",
+                              "deletedAt": "2022-08-11 04:44:07"
+                            }
+                          },
+                          {
+                            "id": "fa3dc61A-b25e-f18a-5391-dAe54EBdaeEb",
+                            "name": "已亲因太物",
+                            "pageUrl": "http://hcnzpw.bb/nqqya",
+                            "banner": "http://dummyimage.com/125x125",
+                            "position": 1,
+                            "status": 2,
+                            "payed": 1356777208717776.5,
+                            "startTime": "1987-11-23 05:38:28",
+                            "endTime": "1996-10-23 02:14:58",
+                            "createdAt": "1977-05-17 05:23:39",
+                            "updatedAt": "1998-12-13 23:19:04",
+                            "deletedAt": "2018-01-30 00:46:47",
+                            "advertiser": {
+                              "id": "439DB6db-172b-0e83-eBcA-e6fe6D1DdA81",
+                              "name": "北八种济",
+                              "pageUrl": "http://uylodepq.cc/jvnu",
+                              "logoUrl": "http://dummyimage.com/300x250",
+                              "createdAt": "2009-01-18 07:18:42",
+                              "updatedAt": "1994-04-10 16:13:49",
+                              "deletedAt": "2015-03-24 06:23:31"
+                            }
+                          },
+                          {
+                            "id": "78c72b0D-DD13-6a4D-35fE-1b43AEa2d93C",
+                            "name": "样立时往连",
+                            "pageUrl": "http://bqwhkuo.uy/tukkh",
+                            "banner": "http://dummyimage.com/120x600",
+                            "position": 1,
+                            "status": 1,
+                            "payed": 7033119674880552,
+                            "startTime": "2006-11-14 17:07:15",
+                            "endTime": "1970-08-20 12:06:46",
+                            "createdAt": "1970-08-05 17:17:23",
+                            "updatedAt": "1987-11-23 03:10:16",
+                            "deletedAt": "2007-10-17 14:35:13",
+                            "advertiser": {
+                              "id": "E13E4DA0-e485-451C-2935-CC3CD047bBaC",
+                              "name": "红几么复老马",
+                              "pageUrl": "http://dolmdvbdm.ua/dgg",
+                              "logoUrl": "http://dummyimage.com/250x250",
+                              "createdAt": "1998-01-22 03:18:13",
+                              "updatedAt": "2015-06-13 20:45:14",
+                              "deletedAt": "1976-07-22 22:31:06"
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-73407080-run"
       }
     }
   },

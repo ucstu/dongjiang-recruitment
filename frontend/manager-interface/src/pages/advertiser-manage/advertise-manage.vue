@@ -2,7 +2,7 @@
   <div class="p-2 w-full h-full" ref="div">
     <n-space justify="space-between" align="center">
       <n-button
-        v-if="hasPermission('/authentication/accounts,POST')"
+        v-if="hasPermission('/advertisers/:id/advertises,POST')"
         type="primary"
         size="small"
         @click="add"
@@ -11,7 +11,7 @@
         新增
       </n-button>
       <n-button
-        v-if="hasPermission('/authentication/accounts,GET')"
+        v-if="hasPermission('/advertisers/:id/advertises,GET')"
         text
         size="small"
         @click="refresh"
@@ -25,7 +25,7 @@
       ref="table"
       class="flex-1"
       :columns="columns"
-      :data="accounts"
+      :data="authorities"
       :loading="loading"
       :pagination="pagination"
       :row-key="(row) => row.id"
@@ -51,46 +51,11 @@
           :label-width="80"
           :loading="addLoading"
         >
-          <n-form-item label="用户名" path="userName">
+          <n-form-item label="广告名称" path="name">
             <n-input
-              v-model:value="current.userName"
+              v-model:value="current.name"
               :readonly="modalType === 'view'"
-              placeholder="请输入用户名"
-            />
-          </n-form-item>
-          <n-form-item label="密码" path="password">
-            <n-input
-              v-model:value="current.password"
-              :readonly="modalType === 'view'"
-              placeholder="请输入密码"
-            />
-          </n-form-item>
-          <n-form-item label="权限组" path="authorityGroups">
-            <n-select
-              v-model:value="current.authorityGroups as any"
-              multiple
-              filterable
-              placeholder="请选择权限组"
-              :options="authorityGroupsOptions"
-              :loading="authorityGroupsLoading"
-              clearable
-              remote
-              :clear-filter-after-select="false"
-              @search="handleSearchAuthorityGroups"
-            />
-          </n-form-item>
-          <n-form-item label="权限" path="authorities">
-            <n-select
-              v-model:value="current.authorities as any"
-              multiple
-              filterable
-              placeholder="请选择权限"
-              :options="authoritiesOptions"
-              :loading="authoritiesLoading"
-              clearable
-              remote
-              :clear-filter-after-select="false"
-              @search="handleSearchAuthorities"
+              placeholder="请输入广告名称"
             />
           </n-form-item>
         </n-form>
@@ -111,7 +76,7 @@
 
 <script setup lang="tsx">
 import { hasPermission } from "@/hooks";
-import type { Account as _Account } from "@dongjiang-recruitment/service-common";
+import type { Advertise } from "@dongjiang-recruitment/service-common";
 import dayjs from "dayjs";
 import * as _ from "lodash";
 import type {
@@ -126,21 +91,19 @@ FilterState,
 SortState,
 TableBaseColumn,
 } from "naive-ui/es/data-table/src/interface";
-import type { SelectMixedOption } from "naive-ui/es/select/src/interface";
-
-interface Account extends _Account {
-  password: string;
-}
 
 const div = ref<HTMLDivElement>();
 const { height } = useElementSize(div);
 const maxHeight = computed(() => height.value - 90);
 
+const route = useRoute();
+const advertiserId = computed(() => route.query.advertiserId);
+
 const showModal = ref(false);
 const modalType = ref<"add" | "edit" | "view">("add");
 const modalTitle = computed(() => {
   return modalType.value !== "add"
-    ? `${modalTypeMap[modalType.value]}：${current.value.userName}`
+    ? `${modalTypeMap[modalType.value]}：${current.value.name}`
     : modalTypeMap[modalType.value];
 });
 const modalTypeMap = {
@@ -149,36 +112,18 @@ const modalTypeMap = {
   view: "查看",
 };
 
-const rules = computed<FormRules>(() => ({
-  userName: [
+const rules: FormRules = {
+  name: [
     {
       required: true,
-      message: "请输入用户名",
+      message: "请输入广告名称",
     },
   ],
-  password: [
-    {
-      required: modalType.value === "add",
-      message: "请输入密码",
-    },
-  ],
-  authorityGroups: [
-    {
-      required: true,
-      message: "请选择权限组",
-      validator: (rule, value) => {
-        if (!value || value.length === 0) {
-          return Promise.reject(rule.message);
-        }
-        return Promise.resolve();
-      },
-    },
-  ],
-}));
+};
 
 const form = ref<InstanceType<typeof NForm>>();
-const validate = () => {
-  return new Promise<boolean>((resolve, reject) => {
+const validate = async () => {
+  return await new Promise<boolean>((resolve, reject) => {
     form.value?.validate((errors) => {
       if (!errors) {
         resolve(true);
@@ -197,83 +142,13 @@ const submit = async () => {
   }
 };
 
-// 权限组
-const authorityGroupsSearch = ref("");
-const {
-  data: authorityGroups,
-  loading: authorityGroupsLoading,
-  refreshAsync: refreshAuthorityGroups,
-} = authenticationAuthorityGroupService.useQueryAuthorityGroup(() => ({
-  size: 9999999,
-  query: {
-    name: ["$like", `%${authorityGroupsSearch.value}%`],
-  },
-}));
-const authorityGroupsOptions = computed<SelectMixedOption[]>(() => {
-  return (
-    authorityGroups.value?.items.map((item) => ({
-      label: item.name,
-      value: item.id,
-    })) ?? []
-  );
-});
-const handleSearchAuthorityGroups = useDebounceFn((value: string) => {
-  authorityGroupsSearch.value = value;
-  refreshAuthorityGroups();
-});
-
-// 权限
-const authoritiesSearch = ref("");
-const {
-  data: authorities,
-  loading: authoritiesLoading,
-  refreshAsync: refreshAuthorities,
-} = authenticationAuthorityService.useQueryAuthority(() => ({
-  size: 9999999,
-  query: {
-    name: ["$like", `%${authoritiesSearch.value}%`],
-  },
-}));
-const authoritiesOptions = computed<SelectMixedOption[]>(() => {
-  return (
-    authorities.value?.items.map((item) => ({
-      label: item.name,
-      value: item.id,
-    })) ?? []
-  );
-});
-const handleSearchAuthorities = useDebounceFn((value: string) => {
-  authoritiesSearch.value = value;
-  refreshAuthorities();
-});
-
-watch(
-  () => showModal.value,
-  (value) => {
-    if (value) {
-      authoritiesSearch.value = "";
-      refreshAuthorityGroups();
-      refreshAuthorities();
-    }
-  }
-);
-
 // 增
-const current = ref<Account>({} as Account);
+const current = ref<Advertise>({} as Advertise);
 const { refreshAsync: _add, loading: addLoading } =
-  authenticationAccountService.useAddAccount(
+  advertiserAdvertiseService.useAddAdvertise(
     () => ({
-      requestBody: {
-        accountType: -1 as 0 | 1 | 2 | 3,
-        userName: current.value.userName,
-        password: current.value.password,
-        authorities: current.value.authorities?.map((item) => ({
-          id: item,
-        })) as any,
-        authorityGroups: current.value.authorityGroups?.map((item) => ({
-          id: item,
-        })) as any,
-      },
+      advertiserId: current.value.advertiser.id,
+      requestBody: current.value,
     }),
     {
       manual: true,
@@ -286,14 +161,15 @@ const { refreshAsync: _add, loading: addLoading } =
   );
 const add = () => {
   modalType.value = "add";
-  current.value = {} as Account;
+  current.value = {} as Advertise;
   showModal.value = true;
 };
 
 // 删
 const { refreshAsync: _remove, loading: removeLoading } =
-  authenticationAccountService.useRemoveAccount(
+  advertiserAdvertiseService.useRemoveAdvertise(
     () => ({
+      advertiserId: current.value.advertiser.id,
       id: current.value.id,
     }),
     {
@@ -304,8 +180,8 @@ const { refreshAsync: _remove, loading: removeLoading } =
       },
     }
   );
-const remove = (authority: Account) => {
-  current.value = _.cloneDeep(authority);
+const remove = (advertise: Advertise) => {
+  current.value = _.cloneDeep(advertise);
   const dialog = $dialog.confirm({
     title: "删除",
     content: "确定删除吗？",
@@ -320,18 +196,11 @@ const remove = (authority: Account) => {
 
 // 改
 const { refreshAsync: _update, loading: updateLoading } =
-  authenticationAccountService.useUpdateAccount(
+  advertiserAdvertiseService.useUpdateAdvertise(
     () => ({
+      advertiserId: current.value.advertiser.id,
       id: current.value.id,
-      requestBody: {
-        ...current.value,
-        authorityGroups: current.value.authorityGroups.map((item) => ({
-          id: item,
-        })),
-        authorities: current.value.authorities.map((item) => ({
-          id: item,
-        })),
-      } as any,
+      requestBody: current.value,
     }),
     {
       manual: true,
@@ -342,14 +211,9 @@ const { refreshAsync: _update, loading: updateLoading } =
       },
     }
   );
-const update = (authority: Account) => {
+const update = (advertise: Advertise) => {
   modalType.value = "edit";
-  const clone = _.cloneDeep(authority);
-  current.value = {
-    ...clone,
-    authorityGroups: clone.authorityGroups.map((item) => item.id) as any,
-    authorities: clone.authorities.map((item) => item.id) as any,
-  };
+  current.value = _.cloneDeep(advertise);
   showModal.value = true;
 };
 
@@ -365,7 +229,7 @@ const pagination = ref<PaginationProps>({
     return `总计：${itemCount}`;
   },
 });
-const columns = computed<DataTableColumns<Account>>(() => [
+const columns = computed<DataTableColumns<Advertise>>(() => [
   {
     title: "创建时间",
     key: "createdAt",
@@ -389,11 +253,11 @@ const columns = computed<DataTableColumns<Account>>(() => [
     },
   },
   {
-    title: "用户名",
-    key: "userName",
+    title: "广告名称",
+    key: "name",
     sorter: true,
     sortOrder:
-      sortStates.value.find((item) => item.columnKey === "userName")?.order ||
+      sortStates.value.find((item) => item.columnKey === "name")?.order ||
       false,
   },
   {
@@ -402,17 +266,17 @@ const columns = computed<DataTableColumns<Account>>(() => [
     render: (row) => {
       return (
         <n-space>
-          {hasPermission("/authentication/accounts/:id,GET") && (
+          {hasPermission("/advertiser/:advertiserId/advertise/:id,GET") && (
             <n-button size="small" type="primary" onClick={() => get(row)}>
               查看
             </n-button>
           )}
-          {hasPermission("/authentication/accounts/:id,PUT") && (
+          {hasPermission("/advertiser/:advertiserId/advertise:id,PUT") && (
             <n-button size="small" type="primary" onClick={() => update(row)}>
               编辑
             </n-button>
           )}
-          {hasPermission("/authentication/accounts/:id,DELETE") && (
+          {hasPermission("/advertiser/:advertiserId/advertise:id,DELETE") && (
             <n-button size="small" type="error" onClick={() => remove(row)}>
               删除
             </n-button>
@@ -423,11 +287,16 @@ const columns = computed<DataTableColumns<Account>>(() => [
   },
 ]);
 const {
-  data: _accounts,
+  data: _authorities,
   loading,
   refreshAsync: refresh,
-} = authenticationAccountService.useQueryAccounts(
+} = advertiserService.useQueryAllAdvertise(
   () => ({
+    query: advertiserId.value
+      ? {
+          "advertiser.id": ["$eq", advertiserId.value],
+        }
+      : undefined,
     page: pagination.value.page,
     size: pagination.value.pageSize,
     sort: sortStates.value.map(
@@ -445,7 +314,7 @@ const {
     },
   }
 );
-const accounts = computed(() => _accounts.value?.items ?? []);
+const authorities = computed(() => _authorities.value?.items ?? []);
 
 const changeSorter = (sortState: SortState & SortState[]) => {
   const _sortStates = Array.isArray(sortState) ? sortState : [sortState];
@@ -478,25 +347,21 @@ const changePageSize = (pageSize: number) => {
 
 // 查单个
 const { refreshAsync: _get, loading: getLoading } =
-  authenticationAccountService.useGetAccount(
+  advertiserAdvertiseService.useGetAdvertise(
     () => ({
+      advertiserId: current.value.advertiser.id,
       id: current.value.id,
     }),
     {
       manual: true,
       onSuccess: (data) => {
-        current.value = { ...data, password: "" };
+        current.value = data;
       },
     }
   );
-const get = (authority: Account) => {
+const get = (advertise: Advertise) => {
   modalType.value = "view";
-  const clone = _.cloneDeep(authority);
-  current.value = {
-    ...clone,
-    authorityGroups: clone.authorityGroups.map((item) => item.id) as any,
-    authorities: clone.authorities.map((item) => item.id) as any,
-  };
+  current.value = _.cloneDeep(advertise);
   showModal.value = true;
 };
 </script>

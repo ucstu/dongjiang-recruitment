@@ -45,7 +45,7 @@ const completeRoutePath = (
   } else {
     return {
       ...route,
-      path: prefix + route.path,
+      path: route.path.startsWith("/") ? route.path : `${prefix}/${route.path}`,
     };
   }
 };

@@ -12,7 +12,7 @@ declare module "vue-router" {
     onMenu?: boolean;
     icon?: () => VNodeChild;
     title?: string;
-    pms?: string;
+    pms?: string | string[];
   }
 }
 

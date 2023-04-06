@@ -33,10 +33,6 @@ export const useMainStore = defineStore(
         refreshDeps: [accountId],
         onSuccess(res) {
           checked.value = true;
-          if (res && !res.detailId?.manager) {
-            $message.error("当前账户不是管理员账户");
-            token.value = "";
-          }
         },
         onError(err) {
           if (err?.message === "Not Found") {

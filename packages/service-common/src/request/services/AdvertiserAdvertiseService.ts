@@ -17,13 +17,13 @@ export class AdvertiserAdvertiseService {
    * @throws ApiError
    */
   public addAdvertise({
-    advertiserid,
+    advertiserId,
     requestBody,
   }: {
     /**
      * 广告商ID
      */
-    advertiserid: string;
+    advertiserId: string;
     requestBody?: {
       /**
        * 名称
@@ -65,9 +65,9 @@ export class AdvertiserAdvertiseService {
   }): CancelablePromise<Advertise> {
     return this.httpRequest.request({
       method: "POST",
-      url: "/advertisers/{advertiserid}/advertise",
+      url: "/advertisers/{advertiserId}/advertise",
       path: {
-        advertiserid: advertiserid,
+        advertiserId: advertiserId,
       },
       body: requestBody,
       mediaType: "application/json",
@@ -80,7 +80,7 @@ export class AdvertiserAdvertiseService {
    * @throws ApiError
    */
   public queryAdvertise({
-    advertiserid,
+    advertiserId,
     query,
     page,
     size,
@@ -89,7 +89,7 @@ export class AdvertiserAdvertiseService {
     /**
      * 广告商ID
      */
-    advertiserid: string;
+    advertiserId: string;
     /**
      * 查询条件
      */
@@ -118,9 +118,9 @@ export class AdvertiserAdvertiseService {
   }> {
     return this.httpRequest.request({
       method: "GET",
-      url: "/advertisers/{advertiserid}/advertise",
+      url: "/advertisers/{advertiserId}/advertise",
       path: {
-        advertiserid: advertiserid,
+        advertiserId: advertiserId,
       },
       query: {
         query: query,
@@ -137,13 +137,13 @@ export class AdvertiserAdvertiseService {
    * @throws ApiError
    */
   public removeAdvertise({
-    advertiserid,
+    advertiserId,
     id,
   }: {
     /**
      * 广告商ID
      */
-    advertiserid: string;
+    advertiserId: string;
     /**
      * 广告ID
      */
@@ -151,9 +151,9 @@ export class AdvertiserAdvertiseService {
   }): CancelablePromise<string> {
     return this.httpRequest.request({
       method: "DELETE",
-      url: "/advertisers/{advertiserid}/advertise/{id}",
+      url: "/advertisers/{advertiserId}/advertise/{id}",
       path: {
-        advertiserid: advertiserid,
+        advertiserId: advertiserId,
         id: id,
       },
     });
@@ -165,14 +165,14 @@ export class AdvertiserAdvertiseService {
    * @throws ApiError
    */
   public updateAdvertise({
-    advertiserid,
+    advertiserId,
     id,
     requestBody,
   }: {
     /**
      * 广告商ID
      */
-    advertiserid: string;
+    advertiserId: string;
     /**
      * 广告ID
      */
@@ -181,9 +181,9 @@ export class AdvertiserAdvertiseService {
   }): CancelablePromise<Advertise> {
     return this.httpRequest.request({
       method: "PUT",
-      url: "/advertisers/{advertiserid}/advertise/{id}",
+      url: "/advertisers/{advertiserId}/advertise/{id}",
       path: {
-        advertiserid: advertiserid,
+        advertiserId: advertiserId,
         id: id,
       },
       body: requestBody,
@@ -197,13 +197,13 @@ export class AdvertiserAdvertiseService {
    * @throws ApiError
    */
   public getAdvertise({
-    advertiserid,
+    advertiserId,
     id,
   }: {
     /**
      * 广告商ID
      */
-    advertiserid: string;
+    advertiserId: string;
     /**
      * 广告ID
      */
@@ -211,9 +211,9 @@ export class AdvertiserAdvertiseService {
   }): CancelablePromise<Advertise> {
     return this.httpRequest.request({
       method: "GET",
-      url: "/advertisers/{advertiserid}/advertise/{id}",
+      url: "/advertisers/{advertiserId}/advertise/{id}",
       path: {
-        advertiserid: advertiserid,
+        advertiserId: advertiserId,
         id: id,
       },
     });
