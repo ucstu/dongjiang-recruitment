@@ -58,6 +58,24 @@
               placeholder="请输入广告商名称"
             />
           </n-form-item>
+          <n-form-item label="首页地址" path="pageUrl">
+            <n-input
+              v-model:value="current.pageUrl"
+              :readonly="modalType === 'view'"
+              placeholder="请输入首页地址"
+            />
+          </n-form-item>
+          <n-form-item label="logo" path="logoUrl">
+            <n-upload
+              :custom-request="customRequest"
+              :default-file-list="avatarList"
+              :disabled="modalType === 'view'"
+              list-type="image-card"
+              :max="1"
+            >
+              点击上传
+            </n-upload>
+          </n-form-item>
         </n-form>
         <n-button
           v-if="modalType !== 'view'"
@@ -75,25 +93,28 @@
 </template>
 
 <script setup lang="tsx">
-import { hasPermission } from "@/hooks";
+import { hasPermission, useResFullPath } from "@/hooks";
 import router from "@/router";
 import type { Advertiser } from "@dongjiang-recruitment/service-common";
 import dayjs from "dayjs";
 import * as _ from "lodash";
 import {
 NButton,
+NImage,
 NSpace,
 type DataTableColumns,
 type FormRules,
 type NDataTable,
 type NForm,
 type PaginationProps,
+type UploadCustomRequestOptions,
 } from "naive-ui";
 import type {
 FilterState,
 SortState,
 TableBaseColumn,
 } from "naive-ui/es/data-table/src/interface";
+import type { FileInfo } from "naive-ui/es/upload/src/interface";
 
 const div = ref<HTMLDivElement>();
 const { height } = useElementSize(div);
@@ -140,6 +161,38 @@ const submit = async () => {
   } else if (modalType.value === "edit") {
     _update();
   }
+};
+
+const avatarList = computed<FileInfo[]>(() =>
+  current.value?.logoUrl
+    ? [
+        {
+          id: current.value?.id,
+          status: "finished",
+          name: current.value?.name,
+          url: useResFullPath(current.value?.logoUrl),
+        },
+      ]
+    : []
+);
+const customRequest = (options: UploadCustomRequestOptions) => {
+  if (!options.file.file) {
+    return;
+  }
+  options.onProgress({
+    percent: 80,
+  });
+  commonService
+    .uploadAvatar({
+      avatar: options.file.file,
+    })
+    .then((res) => {
+      current.value!.logoUrl = res;
+      options.onFinish();
+    })
+    .catch((err) => {
+      options.onError();
+    });
 };
 
 // 增
@@ -258,12 +311,26 @@ const columns = computed<DataTableColumns<Advertiser>>(() => [
       false,
   },
   {
+    title: "广告商LOGO",
+    key: "logoUrl",
+    render(row) {
+      return (
+        <NImage
+          src={useResFullPath(row.logoUrl)}
+          width={100}
+          fit="contain"
+          alt="广告商LOGO"
+        />
+      );
+    },
+  },
+  {
     title: "操作",
     key: "action",
     render: (row) => {
       return (
         <NSpace>
-          {hasPermission("/advertiser/:id,GET") && (
+          {hasPermission("/advertisers/:id,GET") && (
             <NButton size="small" type="primary" onClick={() => get(row)}>
               查看
             </NButton>
@@ -277,12 +344,12 @@ const columns = computed<DataTableColumns<Advertiser>>(() => [
               查看广告
             </NButton>
           )}
-          {hasPermission("/advertiser/:id,PUT") && (
+          {hasPermission("/advertisers/:id,PUT") && (
             <NButton size="small" type="primary" onClick={() => update(row)}>
               编辑
             </NButton>
           )}
-          {hasPermission("/advertiser/:id,DELETE") && (
+          {hasPermission("/advertisers/:id,DELETE") && (
             <NButton size="small" type="error" onClick={() => remove(row)}>
               删除
             </NButton>

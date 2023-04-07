@@ -38,9 +38,9 @@ export class AdvertiserAdvertiseService {
        */
       banner: string;
       /**
-       * 投放位置，eg；{1:Master}
+       * 投放位置，eg；{1:Master,2:Popularize}
        */
-      position: 1;
+      position: 1 | 2;
       /**
        * 投放状态，eg；{1:Active,2:Inactive}
        */

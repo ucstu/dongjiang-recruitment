@@ -62,6 +62,7 @@
             <n-upload
               :custom-request="customRequest"
               :default-file-list="imageList"
+              :disabled="modalType === 'view'"
               list-type="image-card"
               :max="1"
             >
@@ -71,7 +72,7 @@
           <n-form-item label="广告链接" path="pageUrl">
             <n-input
               v-model:value="current.pageUrl"
-              :disabled="modalType === 'view'"
+              :readonly="modalType === 'view'"
               placeholder="请输入广告链接"
             />
           </n-form-item>
@@ -127,6 +128,7 @@
 
 <script setup lang="tsx">
 import { hasPermission, useResFullPath } from "@/hooks";
+import { useMainStore } from "@/stores";
 import { Advertise } from "@dongjiang-recruitment/service-common";
 import dayjs from "dayjs";
 import * as _ from "lodash";
@@ -152,8 +154,8 @@ const div = ref<HTMLDivElement>();
 const { height } = useElementSize(div);
 const maxHeight = computed(() => height.value - 90);
 
-const route = useRoute();
-const advertiserId = computed(() => route.query.advertiserId);
+const mainStore = useMainStore();
+const advertiserId = computed(() => mainStore.advertiser?.id);
 
 const showModal = ref(false);
 const modalType = ref<"add" | "edit" | "view">("add");

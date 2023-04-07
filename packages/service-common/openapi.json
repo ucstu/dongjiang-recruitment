@@ -3714,15 +3714,16 @@
                   },
                   "position": {
                     "type": "integer",
-                    "enum": [1],
+                    "enum": [1, 2],
                     "x-apifox": {
                       "enumDescriptions": {
-                        "1": "Master"
+                        "1": "Master",
+                        "2": "Popularize"
                       }
                     },
                     "title": "投放位置",
-                    "description": "投放位置，eg；{1:Master}",
-                    "x-enum-varnames": ["Master"]
+                    "description": "投放位置，eg；{1:Master,2:Popularize}",
+                    "x-enum-varnames": ["Master", "Popularize"]
                   },
                   "status": {
                     "type": "integer",
@@ -14052,9 +14053,9 @@
                       "description": "响应编码"
                     },
                     "body": {
-                      "type": "string",
-                      "title": "注册状态",
-                      "description": "注册状态"
+                      "$ref": "#/components/schemas/Account",
+                      "title": "账号",
+                      "description": "账号"
                     }
                   },
                   "required": ["timestamp", "message", "status", "body"],
@@ -14069,10 +14070,70 @@
                   "1": {
                     "summary": "成功示例",
                     "value": {
-                      "timestamp": "1981-10-23 23:47:42",
-                      "message": "Xxvfkq Jwwqe Xtsjwy Vipspd",
-                      "status": 327,
-                      "body": "OK"
+                      "timestamp": "1980-05-06 17:52:50",
+                      "message": "Rjushazjz Kmu Hbqvobfrs Fnowqz Uzeivsmjni Zhcobkpp Jef",
+                      "status": 492,
+                      "body": {
+                        "id": "3EBC929F-dbB2-2C43-bd5b-8fCCC33e46Cd",
+                        "userName": "d.jpu@skie.pm",
+                        "createdAt": "1977-08-18 18:03:58",
+                        "updatedAt": "1986-04-18 23:01:17",
+                        "detailId": {
+                          "manager": "e6d5BbE1-36Fd-CBB9-fDE4-a742D63C86F7",
+                          "applicant": "A83DeCd9-86B6-F1dF-f787-Ef4bA3b7fBae",
+                          "personnel": "f5B9Ce1d-209D-5Cf7-56b6-bddcbeF1B7Af",
+                          "advertiser": "A5FC418d-3D55-Fcf8-AEfB-81e2c2aF32A5"
+                        },
+                        "deletedAt": "1978-02-05 10:28:44",
+                        "authorities": [
+                          {
+                            "id": "72d013a2-E3de-4d2f-Fbad-fe8fB82bAEC5",
+                            "createdAt": "1983-06-18 21:09:57",
+                            "updatedAt": "1988-12-07 12:20:30",
+                            "name": "过整分",
+                            "deletedAt": "1988-06-26 16:24:50"
+                          }
+                        ],
+                        "authorityGroups": [
+                          {
+                            "id": "EB1f84BD-ECCf-4Af9-7CAF-94CE8d1DBDEA",
+                            "createdAt": "2011-12-27 05:18:58",
+                            "updatedAt": "2003-06-24 00:28:43",
+                            "name": "查点两马毛",
+                            "deletedAt": "1990-08-07 14:20:50",
+                            "authorities": [
+                              {
+                                "id": "B5A6dfD8-7C2f-fAb8-34d7-A8E12ab5ED4C",
+                                "createdAt": "1988-11-28 05:58:38",
+                                "updatedAt": "2013-10-17 13:02:53",
+                                "name": "儿单维",
+                                "deletedAt": "1971-09-04 00:33:46"
+                              },
+                              {
+                                "id": "a1f6523f-b592-e95f-d53E-b8CDa0CEffdd",
+                                "createdAt": "1999-04-20 07:13:19",
+                                "updatedAt": "1982-09-10 18:45:30",
+                                "name": "可二也省制机",
+                                "deletedAt": "1995-11-24 13:18:04"
+                              },
+                              {
+                                "id": "87Fd5ACF-2cF1-d6bc-5Beb-E1c8Edf1AAD4",
+                                "createdAt": "2008-08-02 23:24:39",
+                                "updatedAt": "1970-09-23 12:58:29",
+                                "name": "查革原时更造",
+                                "deletedAt": "1970-07-05 23:01:47"
+                              },
+                              {
+                                "id": "9A8Adbe8-8124-41eE-5CFF-ca3BE5bf7e71",
+                                "createdAt": "2001-11-28 13:39:13",
+                                "updatedAt": "2000-05-11 18:36:31",
+                                "name": "边系收率说",
+                                "deletedAt": "1981-12-24 03:43:17"
+                              }
+                            ]
+                          }
+                        ]
+                      }
                     }
                   }
                 }
@@ -18898,15 +18959,16 @@
           },
           "position": {
             "type": "integer",
-            "enum": [1],
+            "enum": [1, 2],
             "x-apifox": {
               "enumDescriptions": {
-                "1": "Master"
+                "1": "Master",
+                "2": "Popularize"
               }
             },
             "title": "投放位置",
-            "description": "投放位置，eg；{1:Master}",
-            "x-enum-varnames": ["Master"]
+            "description": "投放位置，eg；{1:Master,2:Popularize}",
+            "x-enum-varnames": ["Master", "Popularize"]
           },
           "status": {
             "type": "integer",

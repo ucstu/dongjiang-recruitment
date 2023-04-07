@@ -37,7 +37,7 @@ export type Advertise = {
    */
   banner: string;
   /**
-   * 投放位置，eg；{1:Master}
+   * 投放位置，eg；{1:Master,2:Popularize}
    */
   position: Advertise.position;
   /**
@@ -64,10 +64,11 @@ export type Advertise = {
 
 export namespace Advertise {
   /**
-   * 投放位置，eg；{1:Master}
+   * 投放位置，eg；{1:Master,2:Popularize}
    */
   export enum position {
     Master = 1,
+    Popularize = 2,
   }
 
   /**

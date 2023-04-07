@@ -639,6 +639,67 @@ importers:
         specifier: ^4.9.5
         version: 4.9.5
 
+  frontend/advertiser-interface:
+    dependencies:
+      '@dongjiang-recruitment/service-common':
+        specifier: workspace:^
+        version: link:../../packages/service-common
+      '@vicons/ionicons5':
+        specifier: ^0.12.0
+        version: 0.12.0
+      '@vueuse/core':
+        specifier: ^9.12.0
+        version: 9.13.0(vue@3.2.47)
+      dayjs:
+        specifier: ^1.11.7
+        version: 1.11.7
+      jwt-decode:
+        specifier: ^3.1.2
+        version: 3.1.2
+      lodash:
+        specifier: ^4.17.21
+        version: 4.17.21
+      naive-ui:
+        specifier: ^2.34.3
+        version: 2.34.3(vue@3.2.47)
+      normalize.css:
+        specifier: ^8.0.1
+        version: 8.0.1
+      pinia:
+        specifier: ^2.0.30
+        version: 2.0.32(typescript@4.9.5)(vue@3.2.47)
+      pinia-plugin-persist:
+        specifier: ^1.0.0
+        version: 1.0.0(pinia@2.0.32)(vue@3.2.47)
+      vue:
+        specifier: ^3.2.47
+        version: 3.2.47
+      vue-router:
+        specifier: ^4.1.6
+        version: 4.1.6(vue@3.2.47)
+    devDependencies:
+      '@dongjiang-recruitment/eslint-config':
+        specifier: workspace:^1.0.0
+        version: link:../../packages/eslint-config
+      '@dongjiang-recruitment/stylelint-config':
+        specifier: workspace:^1.0.0
+        version: link:../../packages/stylelint-config
+      '@dongjiang-recruitment/typescript-config':
+        specifier: workspace:^1.0.0
+        version: link:../../packages/typescript-config
+      '@dongjiang-recruitment/vite-config':
+        specifier: workspace:^1.0.0
+        version: link:../../packages/vite-config
+      '@types/lodash':
+        specifier: ^4.14.192
+        version: 4.14.192
+      '@types/node':
+        specifier: ^18.13.0
+        version: 18.13.0
+      vite:
+        specifier: ^4.1.1
+        version: 4.1.4(@types/node@18.13.0)(sass@1.58.3)(terser@5.16.5)
+
   frontend/applicant-interface:
     dependencies:
       '@dcloudio/uni-app':

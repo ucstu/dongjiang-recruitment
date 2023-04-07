@@ -180,12 +180,13 @@ const router = createRouter({
 });
 
 const whiteList = ["Login", "Forget", "Register"];
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
   const mainStore = useMainStore();
+  await until(() => mainStore.account).toMatch(Boolean);
   if (!mainStore.token && !whiteList.includes(to.name as string)) {
     next({ name: "Login" });
   } else if (!hasPermission(to.meta.pms)) {
-    $message.error("您没有权限访问该页面");
+    $message.error("您没有权限访问该页面，正在前往首页");
     next({ name: "Home" });
   } else {
     next();

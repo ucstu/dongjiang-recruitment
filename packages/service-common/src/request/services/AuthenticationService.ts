@@ -270,7 +270,7 @@ export class AuthenticationService {
             acceptEmail: string;
           };
     };
-  }): CancelablePromise<string> {
+  }): CancelablePromise<Account> {
     return this.httpRequest.request({
       method: "POST",
       url: "/authentication/actions/register",

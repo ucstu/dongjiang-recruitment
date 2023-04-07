@@ -20,6 +20,8 @@ import {
   Injectable,
   InternalServerErrorException,
 } from "@nestjs/common";
+import { randomUUID } from "node:crypto";
+import { extname } from "node:path";
 
 @Injectable()
 export class CommonService {
@@ -622,7 +624,7 @@ export class CommonService {
   }
 
   async uploadFile(file: Express.Multer.File) {
-    const fileNme = `${Date.now()}-${file.originalname}`;
+    const fileNme = `${randomUUID()}${extname(file.originalname)}`;
     await this.minio.client.putObject(
       `${this.minioConfig.bucket}-files`,
       fileNme,
@@ -633,7 +635,7 @@ export class CommonService {
   }
 
   async uploadAvatar(avatar: Express.Multer.File) {
-    const avatarNme = `${Date.now()}-${avatar.originalname}`;
+    const avatarNme = `${randomUUID()}${extname(avatar.originalname)}`;
     await this.minio.client.putObject(
       `${this.minioConfig.bucket}-avatars`,
       avatarNme,
