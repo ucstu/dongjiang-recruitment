@@ -31,7 +31,7 @@
           <input
             v-model="password"
             style="width: 100%; padding-left: 20rpx"
-            type="safe-password"
+            :type="'password' as any"
             placeholder="请输入密码(6-20位)"
           />
         </view>
@@ -138,9 +138,6 @@ const getVerifiable = async () => {
       title: "验证码已发送",
       icon: "none",
       duration: 1500,
-    });
-    uni.navigateTo({
-      url: "/pages/init/wanchengjianli/wanchengjianli",
     });
   }
 };

@@ -6,7 +6,7 @@
       <text class="phone-num">{{ phoneNumber }}</text>
     </view>
     <view class="flex-col items-center button-box">
-      <button class="button" @click="showDelete">注销账号</button>
+      <button class="justify-center items-center button" @click="showDelete">注销账号</button>
     </view>
     <wybModal
       ref="modal"
@@ -56,7 +56,7 @@
           style="width: 100%; height: auto; margin-top: 20rpx"
         >
           <button class="cancel-button" @click="cancelDelete">取消</button>
-          <button class="confirm-button" @click="confirmDelete">确认</button>
+          <button class="confirm-button" @click="con">确认</button>
         </view>
       </view>
     </wybPopup>
@@ -89,6 +89,10 @@ until(
     );
   }
 );
+const con = () => {
+
+console.log(1)
+}
 
 const codeNum = () => {
   focus.value = true;
@@ -111,8 +115,8 @@ const { refreshAsync: destroyAccount } =
     }
   );
 // 注销账号
-const deleteAccount = async () => {
-  await sendVerificationCode({ email: phoneNumber.value });
+const deleteAccount =  () => {
+  // await sendVerificationCode({ email: phoneNumber.value });
   uni.showToast({
     title: "验证码已发送",
     icon: "none",
@@ -135,13 +139,13 @@ const cancelDelete = () => {
 };
 
 // 注销账号并退出登录
-const confirmDelete = async () => {
-  await destroyAccount();
-  mainStore.token = "";
-  uni.navigateTo({
-    url: "/pages/account/denglu_zhuce/denglu",
-  });
-  popup.value?.hide();
+const confirmDelete =  () => {
+  // await destroyAccount();
+  // mainStore.token = "";
+  // uni.navigateTo({
+  //   url: "/pages/account/denglu_zhuce/denglu",
+  // });
+  // popup.value?.hide();
 };
 </script>
 
@@ -176,6 +180,7 @@ const confirmDelete = async () => {
 
     .button {
       width: 600rpx;
+      height: 100%;
       font-size: 30rpx;
       color: #fff;
       background-color: rgb(35 193 158);

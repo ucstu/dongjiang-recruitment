@@ -50,7 +50,8 @@ const view_10OnClick = () => {
   .group-4 {
     font-size: 25rpx;
     line-height: 23rpx;
-    color: rgb(163 154 154);
+    color: rgb(255, 255, 255);
+    background-color: rgb(35 193 158);
     letter-spacing: 2.5rpx;
     white-space: nowrap;
 

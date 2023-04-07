@@ -186,14 +186,15 @@ const nextClick = () => {
     });
   } else {
     userInfo.value.cityName = city.value;
-    mainStore.applicant!.workingYears = 1;
+    userInfo.value.workingYears = 1 ;
     applicantService
       .updateApplicant({
-        id: mainStore.applicant!.id,
+        id: userInfo.value.id,
         requestBody: userInfo.value,
       })
       .then((res) => {
         mainStore.applicant = res;
+        console.log(res)
         uni.navigateTo({
           url: "/pages/init/wanshanjiaoyujingli/wanshanjiaoyujingli",
         });

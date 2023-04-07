@@ -13,7 +13,7 @@
           {{ financingStages[companyDetail!.financingStage] }} |
           {{ scales[companyDetail!.scale] }}
         </text>
-        <view class="flex-row group-3">
+        <!-- <view class="flex-row group-3">
           <view
             v-for="(benefit, i) in companyDetail!.benefits"
             :key="i"
@@ -21,7 +21,7 @@
           >
             <text>{{ benefit }}</text>
           </view>
-        </view>
+        </view> -->
       </view>
     </view>
   </view>

@@ -1,5 +1,5 @@
 <template>
-  <NavigationBar right="跳过" @right-click="skip" />
+  <NavigationBar />
   <view class="flex-col page">
     <text class="text">填写你的求职目标</text>
     <view class="section-1 flex-col view">
@@ -54,10 +54,6 @@ const view_7OnClick = () => {
 };
 
 const nextStep = () => {
-  uni.switchTab({ url: "/pages/main/shouyeyemian/shouyeyemian" });
-};
-
-const skip = () => {
   uni.switchTab({ url: "/pages/main/shouyeyemian/shouyeyemian" });
 };
 </script>

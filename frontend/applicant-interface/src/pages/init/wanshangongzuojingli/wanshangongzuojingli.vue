@@ -63,7 +63,7 @@
               style="width: 50%; height: 60rpx"
               @click="start = !start"
               ><text>离职时间</text>
-              <text style="font-size: 25rpx" :class="start ? 'active' : ''">{{
+              <text style="font-size: 25rpx" :class="!start ? 'active' : ''">{{
                 endTime
               }}</text>
             </view>

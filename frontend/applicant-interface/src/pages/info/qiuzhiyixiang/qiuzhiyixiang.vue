@@ -86,9 +86,15 @@ if (mainStore.applicant?.jobStatus) {
 
 /* 查看、修改、删除求职期望 */
 const jobExpectationClick = (id: string) => {
-  uni.navigateTo({
+  if (mainStore.jobExpectations?.items.length === 1) {
+    uni.navigateTo({
+    url: "/pages/info/qiuzhiqiwang/qiuzhiqiwang?id=" + id + "&type=" + 0,
+  });
+  } else {
+    uni.navigateTo({
     url: "/pages/info/qiuzhiqiwang/qiuzhiqiwang?id=" + id + "&type=" + 1,
   });
+  }
 };
 
 /* 添加求职期望 */

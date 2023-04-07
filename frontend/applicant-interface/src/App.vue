@@ -4,14 +4,14 @@ import { axios, AxiosError } from "@dongjiang-recruitment/service-common";
 
 const mainStore = useMainStore();
 
-let timer: NodeJS.Timeout;
+// let timer: NodeJS.Timeout;
 axios.interceptors.request.use(
   (config) => {
-    timer = setTimeout(() => {
-      uni.showLoading({
-        title: "加载中...",
-      });
-    }, 2000);
+    // timer = setTimeout(() => {
+    //   uni.showLoading({
+    //     title: "加载中...",
+    //   });
+    // }, 2000);
     return {
       ...config,
       headers: {
@@ -27,8 +27,8 @@ axios.interceptors.request.use(
 // 添加响应拦截器，当返回401时，跳转到登录页面
 axios.interceptors.response.use(
   (response) => {
-    clearTimeout(timer);
-    uni.hideLoading();
+    // clearTimeout(timer);
+    // uni.hideLoading();
     return response;
   },
   (error) => {
@@ -79,8 +79,8 @@ axios.interceptors.response.use(
         icon: "none",
       });
     }
-    clearTimeout(timer);
-    uni.hideLoading();
+    // clearTimeout(timer);
+    // uni.hideLoading();
     return Promise.reject(error);
   }
 );

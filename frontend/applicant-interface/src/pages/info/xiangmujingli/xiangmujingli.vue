@@ -162,7 +162,6 @@ import type { ProjectExperience } from "@dongjiang-recruitment/service-common";
 const mainStore = useMainStore();
 
 const projectExperience = ref<ProjectExperience>({
-  id: "",
   projectName: "", //项目名称
   projectDescription: "", //项目描述
   achievement: "", //你的成就
@@ -361,6 +360,7 @@ const deleteProjectExperience = () => {
 
     .button-box {
       width: 600rpx;
+      height: 100%;
       font-size: 30rpx;
       color: #fff;
       background-color: rgb(35 193 158);

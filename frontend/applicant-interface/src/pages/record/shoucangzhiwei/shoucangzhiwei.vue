@@ -8,6 +8,7 @@
         class="list-item"
         :collection-position="collectionPosition"
         :send-type="cancelCollection"
+        @state-click="stateClick(collectionPosition.id)"
       />
     </view>
   </view>
@@ -66,6 +67,20 @@ onShow(() => {
     emptyShow.value = true;
   }
 });
+
+const stateClick = (id: string) => {
+  const favoriteId = favorites.value.find((item) => {
+    return item.position.id === id
+  });
+  applicantGarnerRecordService.removeGarnerRecord({
+    applicantId: favoriteId!.applicant.id,
+      id: favoriteId!.id,
+  }).then((res) => {
+    favoritesPosition.value = favoritesPosition.value.filter((item) => {
+      return item.id != id
+    })
+  })
+}
 
 /* 清空收藏记录 */
 const emptyFavorites = () => {

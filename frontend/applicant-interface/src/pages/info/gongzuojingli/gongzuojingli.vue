@@ -281,7 +281,7 @@ for (let i = 1; i <= 12; i++) {
 for (let i = 1; i <= 31; i++) {
   days.value.push(i);
 }
-const defaultStart = ref([year, month, day]); /* 默认入职时间 */
+const defaultStart = ref([year, month-1, day-1]); /* 默认入职时间 */
 const defaultEnd = ref([year, month, day]); /* 默认离职时间 */
 // 选择器
 const bindChange = (e: any) => {

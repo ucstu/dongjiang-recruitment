@@ -82,16 +82,18 @@
     <view class="flex-col section-2" style="padding: 0 10rpx 20rpx">
       <view style="width: 92%; height: auto; margin-left: 4%">
         <view class="justify-between items-center">
-          <scroll-view :scroll-x="true" class="flex-row list">
-            <text
+          <scroll-view :scroll-x="true" class="list">
+            <view class="flex-row">
+              <text
               v-for="jobExpectation in mainStore.jobExpectations?.items || []"
               :key="jobExpectation.id"
               class="list-item"
-              :class="activeJobExpectation === jobExpectation ? 'active' : ''"
+              :class="activeJobExpectation.id === jobExpectation.id ? 'active' : ''"
               @click="activeJobExpectation = jobExpectation"
             >
               {{ jobExpectation.positionName }}
             </text>
+            </view>
           </scroll-view>
           <view class="flex-row">
             <image
@@ -254,7 +256,7 @@ const image_5OnClick = () => {
  */
 const image_6OnClick = () => {
   uni.navigateTo({
-    url: `/pages/most/sousuoyemian/sousuoyemian?city=${jobFilter.value}`,
+    url: `/pages/most/sousuoyemian/sousuoyemian?city=${workCityName.value}`,
   });
 };
 /* 位置选择 */
@@ -364,7 +366,7 @@ const jobDescription = ({ company: { id: companyId }, id }: Position) => {
       }
 
       .list-item {
-        margin-right: 12rpx;
+        margin-right: 12rpx !important;
         font-size: 28rpx;
         line-height: 32rpx;
         color: rgb(209 205 205);

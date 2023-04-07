@@ -344,8 +344,9 @@ const saveScreen = () => {
 
   .button {
     position: fixed;
-    bottom: 20rpx;
+    bottom: 10rpx;
     width: 100%;
+    height: 80rpx;
     background-color: rgb(255 255 255);
 
     .reset {

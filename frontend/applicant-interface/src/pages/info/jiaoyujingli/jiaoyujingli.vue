@@ -216,7 +216,7 @@ const bindChange = (e: any) => {
     overTime.value = `${year}-${month}-${day}`;
     value2.value = [val[0], val[1], val[2]];
   } else {
-    education.value = (val[0] + 1) as 1 | 2 | 3 | 4;
+    education.value = val[0] as 1 | 2 | 3 | 4;
     defaultEducation.value = [val[0]];
   }
 };
