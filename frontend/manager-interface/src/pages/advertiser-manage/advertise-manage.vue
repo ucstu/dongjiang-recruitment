@@ -279,6 +279,10 @@ const positionOptions = [
     label: "首页",
     value: Advertise.position.Master,
   },
+  {
+    label: "推广页",
+    value: Advertise.position.Popularize,
+  },
 ];
 const statusOptions = [
   {
