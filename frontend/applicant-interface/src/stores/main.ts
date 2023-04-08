@@ -87,7 +87,7 @@ export const useMainStore = defineStore(
       refresh: refreshApplicant,
     } = applicantService.useGetApplicant(() => ({ id: applicantId.value! }), {
       ready: computed(() => !!applicantId.value && checked.value),
-      refreshDeps: [applicantId],
+      refreshDeps: [applicantId, checked],
       onSuccess(res) {
         if (res && !res.email) {
           uni.showToast({
@@ -129,7 +129,7 @@ export const useMainStore = defineStore(
       }),
       {
         ready: computed(() => !!applicantId.value && checked.value),
-        refreshDeps: [applicantId],
+        refreshDeps: [applicantId, checked],
         onSuccess(res) {
           if (res && !res.items.length) {
             uni.showToast({

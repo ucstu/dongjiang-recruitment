@@ -27,15 +27,15 @@
             :scroll-x="true"
             :style="'width: ' + expectationWidth + 'px'"
           >
-            <!-- <text
+            <text
               v-for="jobExpectation in mainStore.jobExpectations?.items || []"
               :key="jobExpectation.id"
-              class="list-item"
+              class="list-item1"
               :class="activeJobExpectation === jobExpectation ? 'active' : ''"
               @click="activeJobExpectation = jobExpectation"
             >
               {{ jobExpectation.positionName }}
-            </text> -->
+            </text>
           </scroll-view>
           <view class="flex-row">
             <image
@@ -63,7 +63,7 @@
           </view>
           <view class="flex-row group-4">
             <view class="flex-row">
-              <text @click="text_22OnClick">{{ workCityName }}</text>
+              <text @click="text_22OnClick">{{ workCityName || "不限" }}</text>
               <image
                 src="https://codefun-proj-user-res-1256085488.cos.ap-guangzhou.myqcloud.com/623287845a7e3f0310c3a3f7/623446dc62a7d90011023514/16475959311313713900.png"
                 class="image-3 image-4"
@@ -100,20 +100,20 @@
           <view class="justify-between items-center">
             <scroll-view :scroll-x="true" class="list">
               <view class="flex-row">
-                <!-- <text
+                <text
                   v-for="jobExpectation in mainStore.jobExpectations?.items ||
                   []"
                   :key="jobExpectation.id"
-                  class="list-item"
+                  class="list-item1"
                   :class="
-                    activeJobExpectation.id === jobExpectation.id
+                    activeJobExpectation?.id === jobExpectation.id
                       ? 'active'
                       : ''
                   "
                   @click="activeJobExpectation = jobExpectation"
                 >
                   {{ jobExpectation.positionName }}
-                </text> -->
+                </text>
               </view>
             </scroll-view>
             <view class="flex-row">
@@ -143,7 +143,7 @@
             </view>
             <view class="flex-row group-4">
               <view class="flex-row">
-                <text @click="text_22OnClick">{{ workCityName }}</text>
+                <text @click="text_22OnClick">{{ workCityName || "不限" }}</text>
                 <image
                   src="https://codefun-proj-user-res-1256085488.cos.ap-guangzhou.myqcloud.com/623287845a7e3f0310c3a3f7/623446dc62a7d90011023514/16475959311313713900.png"
                   class="image-3 image-4"
@@ -189,7 +189,9 @@ import { useResFullPath } from "@/hooks";
 import { useMainStore } from "@/stores";
 import {
 Advertise,
-type Position
+JobExpectation,
+type Position,
+type Query,
 } from "@dongjiang-recruitment/service-common";
 import dayjs from "dayjs";
 const mainStore = useMainStore();
@@ -212,10 +214,36 @@ const jobFilter = ref({
   financingStages: <number[]>[], // 融资阶段
   comprehensions: <string[]>[], // 行业领域
 });
+const activeJobExpectation = ref<JobExpectation | undefined>(
+  mainStore.jobExpectations?.items[0]
+);
 watch(
-  () => mainStore.jobExpectations?.items[0]?.cityName,
+  () => mainStore.jobExpectations?.items,
+  () => {
+    activeJobExpectation.value = mainStore.jobExpectations?.items[0]!;
+  },
+  {
+    immediate: true,
+  }
+);
+watch(
+  () => activeJobExpectation.value?.cityName,
   (cityName) => {
-    workCityName.value = cityName!;
+    workCityName.value = cityName || "";
+  },
+  {
+    immediate: true,
+  }
+);
+watch(
+  () => mainStore.jobExpectations?.items[0],
+  (newValue) => {
+    if (newValue) {
+      activeJobExpectation.value = newValue;
+    }
+  },
+  {
+    immediate: true,
   }
 );
 
@@ -254,16 +282,18 @@ uni.$on("filterValue", (filter) => {
 });
 
 const positions = ref<Array<Position>>([]);
-
 const methods = ref<Array<"热门" | "附近" | "最新">>(["热门", "附近", "最新"]);
 const activeMethod = ref<"热门" | "附近" | "最新">(methods.value[0]);
-const paging = ref<{ complete: (param: Array<any> | boolean) => void }>();
+const paging = ref<{
+  complete: (param: Array<any> | boolean) => void;
+  reload: () => void;
+}>();
 const queryList = async (pageNo: number, pageSize: number) => {
   const salaries = jobFilter.value.salary.split("-");
-  const query = {
+  const basicQuery: Query<Position> = {
     workCityName: workCityName.value ? ["$eq", workCityName.value] : undefined,
     startingSalary: salaries[0] ? ["$gte", parseInt(salaries[0])] : undefined,
-    ceilingSalary: salaries[1] ? ["$lte", parseInt(salaries[1])] : undefined,
+    ceilingSalary: salaries[1] ? ["$gte", parseInt(salaries[1])] : undefined,
     workingYears: jobFilter.value.workingYears.length
       ? ["$in", ...jobFilter.value.workingYears]
       : undefined,
@@ -276,15 +306,38 @@ const queryList = async (pageNo: number, pageSize: number) => {
     workAreaName: workAreaName.value.length
       ? ["$in", ...workAreaName.value]
       : undefined,
-  } as any;
+    positionType: activeJobExpectation.value?.positionName
+      ? ["$eq", activeJobExpectation.value.positionName]
+      : undefined,
+    "company.comprehensionName": jobFilter.value.comprehensions.length
+      ? ["$in", ...jobFilter.value.comprehensions]
+      : undefined,
+  };
+  let queries = [];
+  if (activeJobExpectation.value?.directionTags.length) {
+    queries.push(
+      ...(activeJobExpectation.value.directionTags.map(
+        (item): Query<Position> => ({
+          directionTags: ["$like", `%${item}%`],
+          ...(basicQuery as any),
+        })
+      ) as any)
+    );
+  }
+  queries = queries.length ? queries : [basicQuery];
+  queries = queries
+    .map((query) => {
+      return Object.values(query).every((item) => !item)
+        ? undefined
+        : Object.fromEntries(
+            Object.entries(query).filter(([, value]) => value)
+          );
+    })
+    .filter(Boolean) as any;
   paging.value?.complete(
     (
       await companyService.queryAllPosition({
-        query: Object.values(query).every((item) => !item)
-          ? undefined
-          : Object.fromEntries(
-              Object.entries(query).filter(([, value]) => value)
-            ),
+        query: queries.length ? queries : undefined,
         page: pageNo,
         size: pageSize,
         sort: activeMethod.value === "最新" ? ["createdAt,desc"] : undefined,
@@ -292,6 +345,13 @@ const queryList = async (pageNo: number, pageSize: number) => {
     ).items
   );
 };
+
+watch(
+  () => [workCityName.value, workAreaName.value, jobFilter.value, activeMethod.value, activeJobExpectation.value],
+  () => {
+    paging.value?.reload();
+  }
+);
 
 /** 添加求职期望 */
 const image_5OnClick = () => {

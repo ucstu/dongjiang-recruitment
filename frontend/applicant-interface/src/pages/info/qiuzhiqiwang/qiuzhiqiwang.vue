@@ -318,15 +318,24 @@ const saveJobExcept = () => {
           })
           .then((res) => {
             if (saveBtn.value === saveOver.value) {
-              uni.switchTab({ url: "/pages/main/shouyeyemian/shouyeyemian" });
+              const newExpectations = [
+                ...(mainStore.jobExpectations?.items || []),
+                res,
+              ];
               mainStore.setJobExpectations({
-                total: mainStore.jobExpectations?.total || 0,
-                items: [
-                  ...(mainStore.jobExpectations?.items || []),
-                  jobExpectation.value,
-                ],
+                total: newExpectations.length,
+                items: newExpectations,
               });
+              uni.switchTab({ url: "/pages/main/shouyeyemian/shouyeyemian" });
             } else {
+              const newExpectations = [
+                ...(mainStore.jobExpectations?.items || []),
+                res,
+              ];
+              mainStore.setJobExpectations({
+                total: newExpectations.length,
+                items: newExpectations,
+              });
               uni.navigateBack({
                 delta: 1,
               });
@@ -349,11 +358,11 @@ const deleteExpectation = () => {
         icon: "none",
         duration: 1500,
       });
+      const newExpectations =
+        mainStore.jobExpectations?.items.filter((item) => item.id !== id) || [];
       mainStore.setJobExpectations({
-        total: mainStore.jobExpectations?.total || 0,
-        items:
-          mainStore.jobExpectations?.items.filter((item) => item.id !== id) ||
-          [],
+        total: newExpectations.length,
+        items: newExpectations,
       });
       uni.navigateBack({
         delta: 1,

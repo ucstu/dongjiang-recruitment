@@ -22,7 +22,7 @@
         <text
           class="absolute bottom-[14px] px-2 left-2 bg-white border-2 border-green-300 rounded-tr-xl rounded-bl-xl"
         >
-          {{ _advertise.name }}
+          {{ _advertise.advertiser.name }}：{{ _advertise.name }}
         </text>
       </view>
     </z-paging>

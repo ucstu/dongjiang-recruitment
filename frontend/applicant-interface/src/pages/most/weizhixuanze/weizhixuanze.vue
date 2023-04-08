@@ -58,10 +58,7 @@
 
 <script lang="ts" setup>
 import NavigationBar from "@/components/NavigationBar/NavigationBar.vue";
-import { useMainStore } from "@/stores";
 import type { Areas } from "@dongjiang-recruitment/service-common";
-
-const mainStore = useMainStore();
 
 const countries = ref<Areas>([
   {
@@ -88,7 +85,7 @@ onLoad((e) => {
         countries.value.splice(1, countries.value.length - 1);
         countries.value.push(...res);
         if (e!.areas) {
-          filterValue.value = JSON.parse(e!.areas);
+          // filterValue.value = JSON.parse(e!.areas);
           if (filterValue.value.length) {
             const count = countries.value.map((item) => item.countyName);
             countriesIndex.value = count.indexOf(c.value);
@@ -130,11 +127,15 @@ const countriesIndexOf = (index: number) => {
 
 // 选择范围
 const areasIndexOf = (index: number) => {
-  if (filterValue.value.includes(areas.value[index])) {
-    filterValue.value.splice(filterValue.value.indexOf(areas.value[index]), 1);
-  } else {
-    filterValue.value.push(areas.value[index]);
-  }
+  // if (filterValue.value.includes(areas.value[index])) {
+  //   filterValue.value.splice(filterValue.value.indexOf(areas.value[index]), 1);
+  // } else {
+  //   filterValue.value.push(areas.value[index]);
+  // }
+  uni.showToast({
+    title: "暂未开放",
+    icon: "none",
+  });
 };
 /* 重置筛选 */
 const replacement = () => {
@@ -143,8 +144,8 @@ const replacement = () => {
 };
 // 存储选择的地区
 const savePlace = () => {
-  uni.$emit("city", country.value);
-  uni.$emit("place", filterValue.value);
+  uni.$emit("city", country.value === "不限" ? "" : country.value);
+  // uni.$emit("place", filterValue.value);
   uni.navigateBack({ delta: 1 });
 };
 
