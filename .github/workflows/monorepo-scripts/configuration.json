@@ -18,6 +18,7 @@
       "type": "backend",
       "name": "advertiser-service",
       "workspace": "backend/advertiser-service",
+      "files": ["backend/Dockerfile.node"],
       "scripts": {
         "lint": {
           "name": "lint",
@@ -49,6 +50,7 @@
       "type": "backend",
       "name": "applicant-service",
       "workspace": "backend/applicant-service",
+      "files": ["backend/Dockerfile.node"],
       "scripts": {
         "lint": {
           "name": "lint",
@@ -80,6 +82,7 @@
       "type": "backend",
       "name": "authentication-service",
       "workspace": "backend/authentication-service",
+      "files": ["backend/Dockerfile.node"],
       "scripts": {
         "lint": {
           "name": "lint",
@@ -111,6 +114,7 @@
       "type": "backend",
       "name": "common-service",
       "workspace": "backend/common-service",
+      "files": ["backend/Dockerfile.node"],
       "scripts": {
         "lint": {
           "name": "lint",
@@ -142,6 +146,7 @@
       "type": "backend",
       "name": "company-service",
       "workspace": "backend/company-service",
+      "files": ["backend/Dockerfile.node"],
       "scripts": {
         "lint": {
           "name": "lint",
@@ -173,6 +178,7 @@
       "type": "backend",
       "name": "personnel-service",
       "workspace": "backend/personnel-service",
+      "files": ["backend/Dockerfile.node"],
       "scripts": {
         "lint": {
           "name": "lint",
@@ -204,6 +210,7 @@
       "type": "frontend",
       "name": "applicant-interface",
       "workspace": "frontend/applicant-interface",
+      "files": ["frontend/Dockerfile.web"],
       "scripts": {
         "lint": {
           "name": "lint",
@@ -234,6 +241,7 @@
       "type": "frontend",
       "name": "manager-interface",
       "workspace": "frontend/manager-interface",
+      "files": ["frontend/Dockerfile.web"],
       "scripts": {
         "lint": {
           "name": "lint",
@@ -264,6 +272,7 @@
       "type": "frontend",
       "name": "personnel-interface",
       "workspace": "frontend/personnel-interface",
+      "files": ["frontend/Dockerfile.web"],
       "scripts": {
         "lint": {
           "name": "lint",
@@ -294,6 +303,7 @@
       "type": "frontend",
       "name": "advertiser-interface",
       "workspace": "frontend/advertiser-interface",
+      "files": ["frontend/Dockerfile.web"],
       "scripts": {
         "lint": {
           "name": "lint",
