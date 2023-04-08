@@ -2,7 +2,6 @@
   <NavigationBar
     title="求职期望"
     :right="deleteEx"
-    v-if="show"
     @right-click="deleteExpectation"
   />
   <view class="flex-row page">
@@ -164,17 +163,9 @@ const salaryExpectation = () => {
   popup.value.hide();
 };
 const d = ref(1);
-const show = ref(false)
 onLoad((e) => {
   if (e!.id !== undefined) {
     jobId.value = e!.id;
-  }
-  if (parseInt(e!.type)) {
-    deleteEx.value = "删除"
-    show.value = true
-  } else {
-    deleteEx.value = ""
-    show.value = false
   }
   if (e!.data) {
     d.value = parseInt(e!.data);
@@ -191,10 +182,10 @@ onLoad((e) => {
       if (jobId.value) {
         if (e!.type) {
           if (parseInt(e!.type) === 1) {
-            deleteEx.value = "";
+            deleteEx.value = "删除";
           }
         } else {
-          deleteEx.value = "删除";
+          deleteEx.value = "";
         }
         // 获取工作期望信息的函数。
         applicantJobExpectationService

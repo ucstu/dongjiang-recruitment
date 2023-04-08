@@ -7,19 +7,21 @@
       :default-page-size="5"
       @query="queryList"
     >
-      <job-detail
-        v-for="position in positions"
-        :key="position.id"
-        :position="position"
-        @job-click="jobDescription(position)"
-      />
+      <view
+        v-for="advertisement in positions"
+        :key="advertisement.id"
+        :advertisement="advertisement"
+      >
+        <image style="width: 100%" :src="useResFullPath(advertisement.banner)" />
+      </view>
     </z-paging>
   </view>
 </template>
 
 <script lang="ts" setup>
-import type { Advertise } from '@dongjiang-recruitment/service-common';
-
+import { useResFullPath } from "@/hooks";
+import type { Advertise } from "@dongjiang-recruitment/service-common";
+import dayjs from "dayjs";
 
 const positions = ref<Array<Advertise>>([]);
 const paging = ref<{ complete: (param: Array<any> | boolean) => void }>();
@@ -28,7 +30,9 @@ const queryList = async (pageNo: number, pageSize: number) => {
     (
       await advertiserService.queryAllAdvertise({
         query: {
-          position: ["$eq", 2]
+          position: ["$eq", 1],
+          startTime: ["$lte", dayjs().format("YYYY-MM-DD HH:mm:ss")],
+          endTime: ["$gte", dayjs().format("YYYY-MM-DD HH:mm:ss")],
         },
         page: pageNo,
         size: pageSize,

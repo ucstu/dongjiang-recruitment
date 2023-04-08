@@ -148,6 +148,7 @@
       <z-paging
         ref="paging"
         v-model="positions"
+        refresher-threshold="80rpx"
         use-page-scroll
         :default-page-size="5"
         @query="queryList"
@@ -206,6 +207,7 @@ uni.$on("filterValue", (filter) => {
 });
 
 const positions = ref<Array<Position>>([]);
+
 const methods = ref<Array<"热门" | "附近" | "最新">>(["热门", "附近", "最新"]);
 const activeMethod = ref<"热门" | "附近" | "最新">(methods.value[0]);
 const activeJobExpectation = ref<JobExpectation>(
