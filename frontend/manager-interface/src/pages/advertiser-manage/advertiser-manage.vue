@@ -379,6 +379,9 @@ const {
     ],
     onSuccess: (data) => {
       pagination.value.itemCount = data.total;
+      if (Math.ceil(data.total / pagination.value.pageSize!) < pagination.value.page!) {
+        pagination.value.page = 1;
+      }
     },
   }
 );
@@ -414,23 +417,30 @@ const changePageSize = (pageSize: number) => {
 };
 
 // 查单个
-const { refreshAsync: _get, loading: getLoading } =
-  advertiserService.useGetAdvertiser(
-    () => ({
-      id: current.value.id,
-    }),
-    {
-      manual: true,
-      onSuccess: (data) => {
-        current.value = data;
-      },
-    }
-  );
+const {
+  refreshAsync: _get,
+  loading: getLoading,
+} = advertiserService.useGetAdvertiser(
+  () => ({
+    id: current.value.id,
+  }),
+  {
+    manual: true,
+    onSuccess: (data) => {
+      current.value = data;
+    },
+  }
+);
 const get = (advertiser: Advertiser) => {
   modalType.value = "view";
   current.value = _.cloneDeep(advertiser);
   showModal.value = true;
 };
+const showAdvertiser = useEventBus<string>("showAdvertiser");
+showAdvertiser.on(async (advertiserId: string) => {
+  current.value.id = advertiserId;
+  get(await _get());
+});
 
 const getAdvertise = (advertiser: Advertiser) => {
   router.push({

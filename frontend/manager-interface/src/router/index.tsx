@@ -6,6 +6,7 @@ import HomePage from "@/pages/home-page.vue";
 import { useMainStore } from "@/stores";
 import { render } from "@/utils";
 import * as ICONS from "@vicons/ionicons5";
+import _ from "lodash";
 import {
   createRouter,
   createWebHistory,
@@ -202,7 +203,7 @@ router.afterEach((to, from, failure) => {
     mainStore.history.every((route) => route.path !== to.path) &&
     !whiteList.includes(to.name as string)
   ) {
-    mainStore.history.push(to);
+    mainStore.history.push(_.cloneDeep(to));
   }
 });
 

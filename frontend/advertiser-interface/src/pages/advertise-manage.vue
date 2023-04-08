@@ -603,10 +603,14 @@ const {
       computed(() => pagination.value.page),
       computed(() => pagination.value.pageSize),
       computed(() => sortStates.value),
+      computed(() => advertiserId.value),
     ],
     ready: computed(() => !!advertiserId.value),
     onSuccess: (data) => {
       pagination.value.itemCount = data.total;
+      if (Math.ceil(data.total / pagination.value.pageSize!) < pagination.value.page!) {
+        pagination.value.page = 1;
+      }
     },
   }
 );

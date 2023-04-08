@@ -153,6 +153,7 @@ const { height } = useElementSize(div);
 const maxHeight = computed(() => height.value - 90);
 
 const route = useRoute();
+const router = useRouter();
 const advertiserId = computed(() => route.query.advertiserId);
 
 const showModal = ref(false);
@@ -475,6 +476,14 @@ const columns = computed<DataTableColumns<Advertise>>(() => [
     },
   },
   {
+    title: "所属广告商",
+    key: "advertiser.name",
+    sorter: true,
+    sortOrder:
+      sortStates.value.find((item) => item.columnKey === "advertiser.name")?.order ||
+      false,
+  },
+  {
     title: "操作",
     key: "action",
     render: (row) => {
@@ -483,6 +492,15 @@ const columns = computed<DataTableColumns<Advertise>>(() => [
           {hasPermission("/advertisers/:advertiserId/advertise/:id,GET") && (
             <NButton size="small" type="primary" onClick={() => get(row)}>
               查看
+            </NButton>
+          )}
+          {hasPermission("/advertisers/:id,GET") && (
+            <NButton
+              size="small"
+              type="primary"
+              onClick={() => getAdvertiser(row)}
+            >
+              查看广告商
             </NButton>
           )}
           {hasPermission("/advertisers/:advertiserId/advertise/:id,PUT") && (
@@ -522,10 +540,13 @@ const {
       computed(() => pagination.value.page),
       computed(() => pagination.value.pageSize),
       computed(() => sortStates.value),
+      computed(() => advertiserId.value),
     ],
-    ready: computed(() => !!advertiserId.value),
     onSuccess: (data) => {
       pagination.value.itemCount = data.total;
+      if (Math.ceil(data.total / pagination.value.pageSize!) < pagination.value.page!) {
+        pagination.value.page = 1;
+      }
     },
   }
 );
@@ -583,5 +604,11 @@ const get = (advertise: Advertise) => {
     endTime: dayjs(clone.endTime).valueOf() as any,
   };
   showModal.value = true;
+};
+
+const showAdvertiser = useEventBus<string>("showAdvertiser");
+const getAdvertiser = async (advertise: Advertise) => {
+  await router.push({ name: "Advertiser" });
+  showAdvertiser.emit(advertise.advertiser.id);
 };
 </script>

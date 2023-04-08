@@ -255,6 +255,14 @@ const columns = computed<DataTableColumns<Position>>(() => [
       false,
   },
   {
+    title: "所属公司",
+    key: "company.fullName",
+    sorter: true,
+    sortOrder:
+      sortStates.value.find((item) => item.columnKey === "company.fullName")
+        ?.order || false,
+  },
+  {
     title: "操作",
     key: "action",
     render: (row) => {
@@ -302,9 +310,13 @@ const {
       computed(() => pagination.value.page),
       computed(() => pagination.value.pageSize),
       computed(() => sortStates.value),
+      computed(() => companyId.value),
     ],
     onSuccess: (data) => {
       pagination.value.itemCount = data.total;
+      if (Math.ceil(data.total / pagination.value.pageSize!) < pagination.value.page!) {
+        pagination.value.page = 1;
+      }
     },
   }
 );

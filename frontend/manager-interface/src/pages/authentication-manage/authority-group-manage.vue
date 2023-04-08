@@ -371,6 +371,9 @@ const {
     ],
     onSuccess: (data) => {
       pagination.value.itemCount = data.total;
+      if (Math.ceil(data.total / pagination.value.pageSize!) < pagination.value.page!) {
+        pagination.value.page = 1;
+      }
     },
   }
 );
