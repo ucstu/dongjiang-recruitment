@@ -175,7 +175,7 @@ const {
   loading: authoritiesLoading,
   refreshAsync: refreshAuthorities,
 } = authenticationAuthorityService.useQueryAuthority(() => ({
-  size: 9999999,
+  size: 99999999999,
   query: {
     name: ["$like", `%${authoritiesSearch.value}%`],
   },

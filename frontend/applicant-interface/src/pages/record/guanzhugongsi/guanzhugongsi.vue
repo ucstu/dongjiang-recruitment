@@ -5,7 +5,7 @@
       <CompanyPanel
         v-for="(attentionCompany, i) in attentionCompanies"
         :key="i"
-        class="list-item"
+        class="list-item1"
         :attention-company="attentionCompany"
         :send-type="unfocus"
         @unfocus="unsubscribe(attentionCompany.id)"
@@ -93,7 +93,7 @@ const unsubscribe = (id: string) => {
     width: 690rpx;
     margin-left: 30rpx;
 
-    .list-item {
+    .list-item1 {
       &:last-of-type {
         margin-top: 18rpx;
       }

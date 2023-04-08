@@ -17,7 +17,7 @@
         <view
           v-for="(popularPosition, i) in popularPositions"
           :key="i"
-          class="list-item"
+          class="list-item1"
           @click="positionClick(i)"
         >
           <text class="text-5">{{ popularPosition }}</text>
@@ -30,7 +30,7 @@
         <view
           v-for="(popularCompany, i) in popularCompanies"
           :key="i"
-          class="list-item"
+          class="list-item1"
           @click="companyClick(i)"
         >
           <text class="text-5">{{ popularCompany }}</text>
@@ -166,7 +166,7 @@ const companyClick = (index: number) => {
       width: 710rpx;
       margin-top: 20rpx;
 
-      .list-item {
+      .list-item1 {
         flex: none;
         height: 60rpx;
         margin-bottom: 15rpx;
@@ -190,7 +190,7 @@ const companyClick = (index: number) => {
       width: 710rpx;
       margin-top: 20rpx;
 
-      .list-item {
+      .list-item1 {
         flex: none;
         height: 60rpx;
         margin-bottom: 15rpx;

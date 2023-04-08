@@ -5,7 +5,7 @@
       <JobPanel
         v-for="(collectionPosition, i) in favoritesPosition"
         :key="i"
-        class="list-item"
+        class="list-item1"
         :collection-position="collectionPosition"
         :send-type="cancelCollection"
         @state-click="stateClick(collectionPosition.id)"
@@ -107,7 +107,7 @@ const emptyFavorites = () => {
     width: 690rpx;
     margin-left: 30rpx;
 
-    .list-item {
+    .list-item1 {
       &:last-of-type {
         margin-top: 18rpx;
       }

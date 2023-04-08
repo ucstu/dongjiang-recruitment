@@ -207,7 +207,7 @@ const {
   loading: authorityGroupsLoading,
   refreshAsync: refreshAuthorityGroups,
 } = authenticationAuthorityGroupService.useQueryAuthorityGroup(() => ({
-  size: 9999999,
+  size: 99999999999,
   query: {
     name: ["$like", `%${authorityGroupsSearch.value}%`],
   },
@@ -232,7 +232,7 @@ const {
   loading: authoritiesLoading,
   refreshAsync: refreshAuthorities,
 } = authenticationAuthorityService.useQueryAuthority(() => ({
-  size: 9999999,
+  size: 99999999999,
   query: {
     name: ["$like", `%${authoritiesSearch.value}%`],
   },

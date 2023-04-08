@@ -1,7 +1,7 @@
 <template>
   <view class="company-info">
     <view class="flex-row items-center component" @click="emit('comClick')">
-      <image class="image" :src="companyDetail!.logo" />
+      <image class="image" :src="useResFullPath(companyDetail?.logoUrl)" />
       <view class="flex-col group-1">
         <text class="text">{{ companyDetail!.companyName }}</text>
         <view class="flex-row group-2">
@@ -28,9 +28,13 @@
 </template>
 
 <script lang="ts" setup>
+import { useResFullPath } from '@/hooks';
+import type { Company } from '@dongjiang-recruitment/service-common';
+import type { PropType } from 'vue';
+
 const props = defineProps({
   companyDetail: {
-    type: Object,
+    type: Object as PropType<Company>,
   },
 });
 

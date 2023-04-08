@@ -5,7 +5,7 @@
       <CompanyDetail
         v-for="(lookForMe, i) in companyInfo"
         :key="i"
-        class="list-item"
+        class="list-item1"
         :company-detail="lookForMe"
         @com-click="view_2OnClick(lookForMe.id)"
       />
@@ -42,24 +42,7 @@ until(
         if (res.total === 0) {
           emptyShow.value = true;
         } else {
-          for (const item of res.items) {
-            personnelService
-              .getPersonnel({
-                id: item.personnel.id,
-              })
-              .then((res) => {
-                companyService
-                  .getCompany({
-                    id: res.company.id,
-                  })
-                  .then((res) => {
-                    const p = companyInfo.value.map((item) => item.id);
-                    if (!p.includes(res.id)) {
-                      companyInfo.value.push(res);
-                    }
-                  });
-              });
-          }
+          companyInfo.value = res.items.map((item) => item.personnel.company);
           emptyShow.value = false;
         }
       });
@@ -84,7 +67,7 @@ const view_2OnClick = (c: string) => {
     right: 40rpx;
     left: 40rpx;
 
-    .list-item {
+    .list-item1 {
       &:not(:first-of-type) {
         margin-top: 24rpx;
       }

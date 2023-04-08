@@ -81,6 +81,9 @@ const props = defineProps({
     default: "",
   },
 });
+
+const pages = getCurrentPages();
+
 // 自定义事件
 const emit = defineEmits(["rightClick"]);
 
@@ -91,6 +94,12 @@ const leftUrl = computed(() => {
 });
 
 const imageOnClick = () => {
+  if (pages.length <= 1) {
+    uni.switchTab({
+      url: "/pages/main/shouyeyemian/shouyeyemian",
+    });
+    return;
+  }
   uni.navigateBack({
     delta: 1,
   });

@@ -30,7 +30,7 @@
       <JobDetail
         v-for="(JobDetailer, i) in jobDetails"
         :key="i"
-        class="list-item"
+        class="list-item1"
         :position="JobDetailer"
         @job-click="toPositions(JobDetailer.id, JobDetailer.company.id)"
       />

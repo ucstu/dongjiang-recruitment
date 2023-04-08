@@ -5,7 +5,7 @@
       <CompanyDetail
         v-for="(attentionCompany, i) in attentionCompanies"
         :key="i"
-        class="list-item"
+        class="list-item1"
         :company-detail="attentionCompany"
         @click="toCompanyInfo"
       />
@@ -65,7 +65,7 @@ const toCompanyInfo = () => {
   .list {
     margin-top: 30rpx;
 
-    .list-item {
+    .list-item1 {
       &:not(:first-of-type) {
         margin-top: 24rpx;
       }

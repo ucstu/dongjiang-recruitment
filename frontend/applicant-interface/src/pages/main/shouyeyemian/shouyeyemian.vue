@@ -1,99 +1,41 @@
 <template>
   <view class="flex-col page">
-    <!--  #ifdef MP-WEIXIN || MP-ALIPAY || MP-BAIDU || MP-TOUTIAO || MP-QQ -->
-    <view
-      class="section-1"
-      :style="'height: ' + navigationBarTop + 'px'"
-    ></view>
-    <view class="flex-col section-2" style="padding: 0 20rpx 20rpx">
+    <z-paging
+      ref="paging"
+      v-model="positions"
+      :inside-more="true"
+      :default-page-size="5"
+      @query="queryList"
+    >
+      <!--  #ifdef MP-WEIXIN || MP-ALIPAY || MP-BAIDU || MP-TOUTIAO || MP-QQ -->
       <view
-        class="justify-between items-center"
-        :style="
-          'height: ' +
-          navigationBarHeight +
-          'px; width: ' +
-          navigationBarWidth +
-          'px'
-        "
-      >
-        <scroll-view
-          :scroll-x="true"
-          :style="'width: ' + expectationWidth + 'px'"
+        class="section-1"
+        :style="'height: ' + navigationBarTop + 'px'"
+      ></view>
+      <view class="flex-col section-2" style="padding: 0 20rpx 20rpx">
+        <view
+          class="justify-between items-center"
+          :style="
+            'height: ' +
+            navigationBarHeight +
+            'px; width: ' +
+            navigationBarWidth +
+            'px'
+          "
         >
-          <text
-            v-for="jobExpectation in mainStore.jobExpectations?.items || []"
-            :key="jobExpectation.id"
-            class="list-item"
-            :class="activeJobExpectation === jobExpectation ? 'active' : ''"
-            @click="activeJobExpectation = jobExpectation"
+          <scroll-view
+            :scroll-x="true"
+            :style="'width: ' + expectationWidth + 'px'"
           >
-            {{ jobExpectation.positionName }}
-          </text>
-        </scroll-view>
-        <view class="flex-row">
-          <image
-            src="https://codefun-proj-user-res-1256085488.cos.ap-guangzhou.myqcloud.com/623287845a7e3f0310c3a3f7/623446dc62a7d90011023514/16475932254586402738.png"
-            class="image"
-            @click="image_5OnClick"
-          />
-          <image
-            src="https://codefun-proj-user-res-1256085488.cos.ap-guangzhou.myqcloud.com/623287845a7e3f0310c3a3f7/623446dc62a7d90011023514/16475932254587111646.png"
-            class="image image-2"
-            @click="image_6OnClick"
-          />
-        </view>
-      </view>
-      <view class="justify-between group-2">
-        <view class="flex-row group-3">
-          <text
-            v-for="(method, index) in methods"
-            :key="index"
-            style="margin-right: 20rpx"
-            :class="activeMethod === method ? 'is-active' : ''"
-            @click="activeMethod = method"
-            >{{ method }}</text
-          >
-        </view>
-        <view class="flex-row group-4">
-          <view class="flex-row">
-            <text @click="text_22OnClick">{{ workCityName }}</text>
-            <image
-              src="https://codefun-proj-user-res-1256085488.cos.ap-guangzhou.myqcloud.com/623287845a7e3f0310c3a3f7/623446dc62a7d90011023514/16475959311313713900.png"
-              class="image-3 image-4"
-            />
-          </view>
-          <view class="flex-row group-6">
-            <text @click="text_23OnClick">筛选</text>
-            <image
-              src="https://codefun-proj-user-res-1256085488.cos.ap-guangzhou.myqcloud.com/623287845a7e3f0310c3a3f7/623446dc62a7d90011023514/16475959311313713900.png"
-              class="image-3 image-5"
-            />
-          </view>
-        </view>
-      </view>
-      <image
-        src="https://codefun-proj-user-res-1256085488.cos.ap-guangzhou.myqcloud.com/623287845a7e3f0310c3a3f7/623446dc62a7d90011023514/16475932254587777410.png"
-        class="image-6"
-      />
-    </view>
-    <!--  #endif -->
-    <!--  #ifndef MP-WEIXIN || MP-ALIPAY || MP-BAIDU || MP-TOUTIAO || MP-QQ -->
-    <view class="section-1"></view>
-    <view class="flex-col section-2" style="padding: 0 10rpx 20rpx">
-      <view style="width: 92%; height: auto; margin-left: 4%">
-        <view class="justify-between items-center">
-          <scroll-view :scroll-x="true" class="list">
-            <view class="flex-row">
-              <text
+            <!-- <text
               v-for="jobExpectation in mainStore.jobExpectations?.items || []"
               :key="jobExpectation.id"
               class="list-item"
-              :class="activeJobExpectation.id === jobExpectation.id ? 'active' : ''"
+              :class="activeJobExpectation === jobExpectation ? 'active' : ''"
               @click="activeJobExpectation = jobExpectation"
             >
               {{ jobExpectation.positionName }}
-            </text>
-            </view>
+            </text> -->
           </scroll-view>
           <view class="flex-row">
             <image
@@ -116,9 +58,8 @@
               style="margin-right: 20rpx"
               :class="activeMethod === method ? 'is-active' : ''"
               @click="activeMethod = method"
+              >{{ method }}</text
             >
-              {{ method }}
-            </text>
           </view>
           <view class="flex-row group-4">
             <view class="flex-row">
@@ -137,40 +78,120 @@
             </view>
           </view>
         </view>
-        <image
-          src="https://codefun-proj-user-res-1256085488.cos.ap-guangzhou.myqcloud.com/623287845a7e3f0310c3a3f7/623446dc62a7d90011023514/16475932254587777410.png"
-          class="image-6"
-        />
+        <swiper class="image-6">
+          <swiper-item
+            v-for="_advertise in advertise?.items || []"
+            :key="_advertise.id"
+          >
+            <image
+              class="w-full h-full"
+              style="border-radius: 25rpx"
+              :src="useResFullPath(_advertise.banner)"
+              @click="gotoAdvertise(_advertise)"
+            />
+          </swiper-item>
+        </swiper>
       </view>
-    </view>
-    <!--  #endif -->
-    <view class="flex-col">
-      <z-paging
-        ref="paging"
-        v-model="positions"
-        refresher-threshold="80rpx"
-        use-page-scroll
-        :default-page-size="5"
-        @query="queryList"
-      >
-        <job-detail
-          v-for="position in positions"
-          :key="position.id"
-          :position="position"
-          @job-click="jobDescription(position)"
-        />
-      </z-paging>
-    </view>
+      <!--  #endif -->
+      <!--  #ifndef MP-WEIXIN || MP-ALIPAY || MP-BAIDU || MP-TOUTIAO || MP-QQ -->
+      <view class="section-1"></view>
+      <view class="flex-col section-2" style="padding: 0 10rpx 20rpx">
+        <view style="width: 92%; height: auto; margin-left: 4%">
+          <view class="justify-between items-center">
+            <scroll-view :scroll-x="true" class="list">
+              <view class="flex-row">
+                <!-- <text
+                  v-for="jobExpectation in mainStore.jobExpectations?.items ||
+                  []"
+                  :key="jobExpectation.id"
+                  class="list-item"
+                  :class="
+                    activeJobExpectation.id === jobExpectation.id
+                      ? 'active'
+                      : ''
+                  "
+                  @click="activeJobExpectation = jobExpectation"
+                >
+                  {{ jobExpectation.positionName }}
+                </text> -->
+              </view>
+            </scroll-view>
+            <view class="flex-row">
+              <image
+                src="https://codefun-proj-user-res-1256085488.cos.ap-guangzhou.myqcloud.com/623287845a7e3f0310c3a3f7/623446dc62a7d90011023514/16475932254586402738.png"
+                class="image"
+                @click="image_5OnClick"
+              />
+              <image
+                src="https://codefun-proj-user-res-1256085488.cos.ap-guangzhou.myqcloud.com/623287845a7e3f0310c3a3f7/623446dc62a7d90011023514/16475932254587111646.png"
+                class="image image-2"
+                @click="image_6OnClick"
+              />
+            </view>
+          </view>
+          <view class="justify-between group-2">
+            <view class="flex-row group-3">
+              <text
+                v-for="(method, index) in methods"
+                :key="index"
+                style="margin-right: 20rpx"
+                :class="activeMethod === method ? 'is-active' : ''"
+                @click="activeMethod = method"
+              >
+                {{ method }}
+              </text>
+            </view>
+            <view class="flex-row group-4">
+              <view class="flex-row">
+                <text @click="text_22OnClick">{{ workCityName }}</text>
+                <image
+                  src="https://codefun-proj-user-res-1256085488.cos.ap-guangzhou.myqcloud.com/623287845a7e3f0310c3a3f7/623446dc62a7d90011023514/16475959311313713900.png"
+                  class="image-3 image-4"
+                />
+              </view>
+              <view class="flex-row group-6">
+                <text @click="text_23OnClick">筛选</text>
+                <image
+                  src="https://codefun-proj-user-res-1256085488.cos.ap-guangzhou.myqcloud.com/623287845a7e3f0310c3a3f7/623446dc62a7d90011023514/16475959311313713900.png"
+                  class="image-3 image-5"
+                />
+              </view>
+            </view>
+          </view>
+          <swiper class="image-6">
+            <swiper-item
+              v-for="_advertise in advertise?.items || []"
+              :key="_advertise.id"
+            >
+              <image
+                class="w-full h-full"
+                style="border-radius: 25rpx"
+                :src="useResFullPath(_advertise.banner)"
+                @click="gotoAdvertise(_advertise)"
+              />
+            </swiper-item>
+          </swiper>
+        </view>
+      </view>
+      <!--  #endif -->
+      <job-detail
+        v-for="position in positions"
+        :key="position.id"
+        :position="position"
+        @job-click="jobDescription(position)"
+      />
+    </z-paging>
   </view>
 </template>
 
 <script lang="ts" setup>
+import { useResFullPath } from "@/hooks";
 import { useMainStore } from "@/stores";
-import type {
-JobExpectation,
-Position,
+import {
+Advertise,
+type Position
 } from "@dongjiang-recruitment/service-common";
-
+import dayjs from "dayjs";
 const mainStore = useMainStore();
 
 /* #ifdef MP-WEIXIN || MP-ALIPAY || MP-BAIDU || MP-TOUTIAO || MP-QQ */
@@ -198,6 +219,32 @@ watch(
   }
 );
 
+const { data: advertise } = advertiserService.useQueryAllAdvertise(
+  () => ({
+    query: {
+      position: ["$eq", Advertise.position.Master],
+      startTime: ["$lte", dayjs().format("YYYY-MM-DD HH:mm:ss")],
+      endTime: ["$gte", dayjs().format("YYYY-MM-DD HH:mm:ss")],
+      status: ["$eq", Advertise.status.Active],
+    },
+    page: 0,
+    size: 99999999999,
+  }),
+  {
+    initialData: {
+      items: [],
+      total: 0,
+    },
+    pollingInterval: 1000 * 60 * 60,
+  }
+);
+
+const gotoAdvertise = (advertise: Advertise) => {
+  uni.navigateTo({
+    url: `/pages/most/webview/webview?url=${advertise.pageUrl}&title=${advertise.name}`,
+  });
+};
+
 uni.$on("city", (city: string) => (workCityName.value = city));
 uni.$on("place", (place: string[]) => (workAreaName.value = place));
 uni.$on("filterValue", (filter) => {
@@ -210,9 +257,6 @@ const positions = ref<Array<Position>>([]);
 
 const methods = ref<Array<"热门" | "附近" | "最新">>(["热门", "附近", "最新"]);
 const activeMethod = ref<"热门" | "附近" | "最新">(methods.value[0]);
-const activeJobExpectation = ref<JobExpectation>(
-  mainStore.jobExpectations?.items[0]!
-);
 const paging = ref<{ complete: (param: Array<any> | boolean) => void }>();
 const queryList = async (pageNo: number, pageSize: number) => {
   const salaries = jobFilter.value.salary.split("-");
@@ -355,6 +399,7 @@ const jobDescription = ({ company: { id: companyId }, id }: Position) => {
       height: 200rpx;
       margin-top: 26rpx;
       border-radius: 25rpx;
+      overflow: hidden;
     }
 
     .list {
@@ -367,7 +412,7 @@ const jobDescription = ({ company: { id: companyId }, id }: Position) => {
         color: rgb(255 255 255) !important;
       }
 
-      .list-item {
+      .list-item1 {
         margin-right: 12rpx !important;
         font-size: 28rpx;
         line-height: 32rpx;

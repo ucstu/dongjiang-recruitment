@@ -5,7 +5,7 @@
       <JobPanel
         v-for="(interviewedJob, i) in interviewedJobs"
         :key="i"
-        class="list-item"
+        class="list-item1"
         :collection-position="interviewedJob"
         :send-type="sendType"
         @state-click="stateClick(interviewedJob.id)"
@@ -103,7 +103,7 @@ const stateClick = (index: string) => {
     width: 690rpx;
     margin-left: 30rpx;
 
-    .list-item {
+    .list-item1 {
       &:last-of-type {
         margin-top: 18rpx;
       }

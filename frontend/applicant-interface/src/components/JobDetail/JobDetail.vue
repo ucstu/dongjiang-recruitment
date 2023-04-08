@@ -53,9 +53,10 @@ const props = defineProps<{
 }>();
 const emits = defineEmits(["jobClick"]);
 
-const { data: companyInfo } = companyService.useGetCompany(() => ({
-  id: props.position.company.id,
-}));
+const companyInfo = computed(() => props.position.company);
+// const { data: companyInfo } = companyService.useGetCompany(() => ({
+//   id: props.position.company.id,
+// }));
 
 // 融资阶段
 const financingStage = ref([
@@ -142,7 +143,7 @@ const education = ref(["不要求", "大专", "本科", "硕士", "博士"]);
         }
 
         .name-info {
-          width: 400rpx;
+          // width: 400rpx;
           overflow: hidden;
           font-size: 26rpx;
           text-overflow: ellipsis;

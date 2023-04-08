@@ -50,7 +50,24 @@
           :model="current"
           :label-width="80"
           :loading="addLoading"
-        >
+          ><n-form-item
+            label="广告商家"
+            path="advertiser.id"
+            v-if="modalType === 'add'"
+          >
+            <n-select
+              v-model:value="current.advertiser.id"
+              multiple
+              filterable
+              placeholder="请选择广告商家"
+              :options="advertisersOptions"
+              :loading="advertisersLoading"
+              clearable
+              remote
+              :clear-filter-after-select="false"
+              @search="handleSearchAdvertisers"
+            />
+          </n-form-item>
           <n-form-item label="广告名称" path="name">
             <n-input
               v-model:value="current.name"
@@ -146,6 +163,7 @@ FilterState,
 SortState,
 TableBaseColumn,
 } from "naive-ui/es/data-table/src/interface";
+import type { SelectMixedOption } from "naive-ui/es/select/src/interface";
 import type { FileInfo } from "naive-ui/es/upload/src/interface";
 
 const div = ref<HTMLDivElement>();
@@ -170,6 +188,12 @@ const modalTypeMap = {
 };
 
 const rules: FormRules = {
+  "advertiser.id": [
+    {
+      required: true,
+      message: "请选择广告商",
+    },
+  ],
   name: [
     {
       required: true,
@@ -327,6 +351,31 @@ const add = () => {
   showModal.value = true;
 };
 
+// 公司
+const advertisersSearch = ref("");
+const {
+  data: advertisers,
+  loading: advertisersLoading,
+  refreshAsync: refreshAuthorityGroups,
+} = advertiserService.useQueryAdvertiser(() => ({
+  size: 99999999999,
+  query: {
+    name: ["$like", `%${advertisersSearch.value}%`],
+  },
+}));
+const advertisersOptions = computed<SelectMixedOption[]>(() => {
+  return (
+    advertisers.value?.items.map((item) => ({
+      label: item.name,
+      value: item.id,
+    })) ?? []
+  );
+});
+const handleSearchAdvertisers = useDebounceFn((value: string) => {
+  advertisersSearch.value = value;
+  refreshAuthorityGroups();
+});
+
 // 删
 const { refreshAsync: _remove, loading: removeLoading } =
   advertiserAdvertiseService.useRemoveAdvertise(
@@ -480,8 +529,8 @@ const columns = computed<DataTableColumns<Advertise>>(() => [
     key: "advertiser.name",
     sorter: true,
     sortOrder:
-      sortStates.value.find((item) => item.columnKey === "advertiser.name")?.order ||
-      false,
+      sortStates.value.find((item) => item.columnKey === "advertiser.name")
+        ?.order || false,
   },
   {
     title: "操作",
@@ -544,7 +593,10 @@ const {
     ],
     onSuccess: (data) => {
       pagination.value.itemCount = data.total;
-      if (Math.ceil(data.total / pagination.value.pageSize!) < pagination.value.page!) {
+      if (
+        Math.ceil(data.total / pagination.value.pageSize!) <
+        pagination.value.page!
+      ) {
         pagination.value.page = 1;
       }
     },

@@ -22,7 +22,7 @@
     <CompanyDetail
       v-for="(attentionCompany, i) in companyInfos"
       :key="i"
-      class="list-item"
+      class="list-item1"
       :company-detail="attentionCompany"
       @com-click="toCompanyInfo(attentionCompany.id)"
     />

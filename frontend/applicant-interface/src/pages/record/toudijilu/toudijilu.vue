@@ -15,7 +15,7 @@
       <JobPanel
         v-for="(deliveryRecord, i) in deliveryRecords"
         :key="i"
-        class="list-item"
+        class="list-item1"
         :collection-position="deliveryRecord"
         :send-type="sendType[sendId]"
       />
@@ -152,7 +152,7 @@ const clearRecord = () => {
     height: auto;
     margin-left: 30rpx;
 
-    .list-item {
+    .list-item1 {
       &:last-of-type {
         margin-top: 18rpx;
       }

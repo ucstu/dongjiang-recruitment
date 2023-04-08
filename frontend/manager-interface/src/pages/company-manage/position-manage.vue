@@ -2,13 +2,21 @@
   <div class="p-2 w-full h-full" ref="div">
     <n-space justify="space-between" align="center">
       <n-button
-      v-if="hasPermission('/companies/:companyId/positions,POST')"
-      type="primary" size="small" @click="add" class="mb-2">
+        v-if="hasPermission('/companies/:companyId/positions,POST')"
+        type="primary"
+        size="small"
+        @click="add"
+        class="mb-2"
+      >
         新增
       </n-button>
       <n-button
-      v-if="hasPermission('/companies/:companyId/positions,GET')"
-      text size="small" @click="refresh" class="mb-2">
+        v-if="hasPermission('/companies/:companyId/positions,GET')"
+        text
+        size="small"
+        @click="refresh"
+        class="mb-2"
+      >
         刷新
       </n-button>
     </n-space>
@@ -43,6 +51,24 @@
           :label-width="80"
           :loading="addLoading"
         >
+          <n-form-item
+            label="公司"
+            path="company.id"
+            v-if="modalType === 'add'"
+          >
+            <n-select
+              v-model:value="current.company.id"
+              multiple
+              filterable
+              placeholder="请选择公司"
+              :options="companiesOptions"
+              :loading="companiesLoading"
+              clearable
+              remote
+              :clear-filter-after-select="false"
+              @search="handleSearchAuthorityGroups"
+            />
+          </n-form-item>
           <n-form-item label="职位名称" path="positionName">
             <n-input
               v-model:value="current.positionName"
@@ -85,6 +111,7 @@ FilterState,
 SortState,
 TableBaseColumn,
 } from "naive-ui/es/data-table/src/interface";
+import type { SelectMixedOption } from "naive-ui/es/select/src/interface";
 
 const div = ref<HTMLDivElement>();
 const { height } = useElementSize(div);
@@ -107,6 +134,12 @@ const modalTypeMap = {
 };
 
 const rules: FormRules = {
+  "company.id": [
+    {
+      required: true,
+      message: "请选择公司",
+    },
+  ],
   positionName: [
     {
       required: true,
@@ -153,11 +186,45 @@ const { refreshAsync: _add, loading: addLoading } =
       },
     }
   );
-const add = () => {
+const add = async () => {
   modalType.value = "add";
-  current.value = {} as Position;
+  current.value = {
+    company: {
+      id: companyId.value as string,
+    },
+  } as Position;
   showModal.value = true;
 };
+
+// 公司
+const companiesSearch = ref("");
+const {
+  data: companies,
+  loading: companiesLoading,
+  refreshAsync: refreshAuthorityGroups,
+} = companyService.useQueryCompany(() => ({
+  size: 99999999999,
+  query: [
+    {
+      fullName: ["$like", `%${companiesSearch.value}%`],
+    },
+    {
+      companyName: ["$like", `%${companiesSearch.value}%`],
+    },
+  ],
+}));
+const companiesOptions = computed<SelectMixedOption[]>(() => {
+  return (
+    companies.value?.items.map((item) => ({
+      label: item.fullName,
+      value: item.id,
+    })) ?? []
+  );
+});
+const handleSearchAuthorityGroups = useDebounceFn((value: string) => {
+  companiesSearch.value = value;
+  refreshAuthorityGroups();
+});
 
 // 删
 const { refreshAsync: _remove, loading: removeLoading } =
@@ -251,8 +318,8 @@ const columns = computed<DataTableColumns<Position>>(() => [
     key: "positionName",
     sorter: true,
     sortOrder:
-      sortStates.value.find((item) => item.columnKey === "positionName")?.order ||
-      false,
+      sortStates.value.find((item) => item.columnKey === "positionName")
+        ?.order || false,
   },
   {
     title: "所属公司",
@@ -314,7 +381,10 @@ const {
     ],
     onSuccess: (data) => {
       pagination.value.itemCount = data.total;
-      if (Math.ceil(data.total / pagination.value.pageSize!) < pagination.value.page!) {
+      if (
+        Math.ceil(data.total / pagination.value.pageSize!) <
+        pagination.value.page!
+      ) {
         pagination.value.page = 1;
       }
     },
