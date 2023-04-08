@@ -289,6 +289,36 @@
           "domain": "personnel.djzhaopin.ucstu.com"
         }
       }
+    },
+    "advertiser-interface": {
+      "type": "frontend",
+      "name": "advertiser-interface",
+      "workspace": "frontend/advertiser-interface",
+      "scripts": {
+        "lint": {
+          "name": "lint",
+          "command": "pnpm -w lint-fix ./frontend/advertiser-interface"
+        },
+        "build": {
+          "name": "build",
+          "command": "pnpm run build",
+          "artifact": "dist"
+        },
+        "publish": {
+          "name": "publish",
+          "sub-type": "docker",
+          "artifact": "dist",
+          "context": "dist",
+          "docker-file": "../Dockerfile.web"
+        },
+        "deploy": {
+          "name": "deploy",
+          "sub-type": "kubernetes",
+          "port": 80,
+          "path": "/",
+          "domain": "advertiser.djzhaopin.ucstu.com"
+        }
+      }
     }
   }
 }
