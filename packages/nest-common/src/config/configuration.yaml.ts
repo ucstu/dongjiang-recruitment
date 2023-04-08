@@ -54,6 +54,13 @@ export interface MinioConfig {
   bucket: string;
 }
 
+export interface AlipayConfig {
+  appId: string;
+  gateway: string;
+  privateKey: string;
+  alipayPublicKey: string;
+}
+
 export interface YamlConfiguration {
   database: DatabaseConfig;
   authorization: AuthorizationConfig;
@@ -61,4 +68,5 @@ export interface YamlConfiguration {
   redis: RedisConfig;
   service: ServiceConfig;
   minio: MinioConfig;
+  alipay: AlipayConfig;
 }

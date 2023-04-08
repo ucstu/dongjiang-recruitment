@@ -7,6 +7,7 @@ import type {
   PositionTypes,
 } from "@dongjiang-recruitment/nest-common/dist/http";
 import {
+  Body,
   Controller,
   Get,
   Post,
@@ -67,5 +68,15 @@ export class CommonController {
   @UseInterceptors(FileInterceptor("avatar"))
   uploadAvatar(@UploadedFile() avatar: Express.Multer.File) {
     return this.commonService.uploadAvatar(avatar);
+  }
+
+  @Post("payment")
+  payment(@Body() { name, total }: { name: string; total: number }) {
+    return this.commonService.payment(name, total);
+  }
+
+  @Get("payment")
+  getPaymentStatus(@Query("outTradeNo") outTradeNo: string) {
+    return this.commonService.getPaymentStatus(outTradeNo);
   }
 }

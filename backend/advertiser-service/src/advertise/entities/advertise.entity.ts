@@ -15,6 +15,10 @@ export enum AdvertisePosition {
    * 主页
    */
   Master = 1,
+  /**
+   * 推广页
+   */
+  Popularize = 2,
 }
 export enum AdvertiseStatus {
   /**

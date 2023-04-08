@@ -182,7 +182,9 @@ const router = createRouter({
 const whiteList = ["Login", "Forget", "Register"];
 router.beforeEach(async (to, from, next) => {
   const mainStore = useMainStore();
-  await until(() => mainStore.account).toMatch(Boolean);
+  if (mainStore.token) {
+    await until(() => mainStore.account).toMatch(Boolean);
+  }
   if (!mainStore.token && !whiteList.includes(to.name as string)) {
     next({ name: "Login" });
   } else if (!hasPermission(to.meta.pms)) {

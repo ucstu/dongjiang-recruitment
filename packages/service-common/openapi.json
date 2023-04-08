@@ -16805,6 +16805,305 @@
         },
         "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-73407080-run"
       }
+    },
+    "/common/payment": {
+      "get": {
+        "summary": "查询订单状态",
+        "x-apifox-folder": "Common",
+        "x-apifox-status": "developing",
+        "deprecated": false,
+        "description": "",
+        "operationId": "GetPaymentStatus",
+        "tags": ["Common"],
+        "parameters": [
+          {
+            "name": "outTradeNo",
+            "in": "query",
+            "description": "订单账号",
+            "required": true,
+            "example": "4a6acd15-06eb-4b3b-925e-8e0c859b98b3",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "timestamp": {
+                      "type": "string",
+                      "title": "响应时间",
+                      "description": "响应时间"
+                    },
+                    "message": {
+                      "type": "string",
+                      "title": "响应",
+                      "description": "响应"
+                    },
+                    "status": {
+                      "type": "integer",
+                      "title": "响应编码",
+                      "description": "响应编码"
+                    },
+                    "body": {
+                      "type": "object",
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "msg": {
+                          "type": "string"
+                        },
+                        "buyerLogonId": {
+                          "type": "string"
+                        },
+                        "buyerPayAmount": {
+                          "type": "string"
+                        },
+                        "buyerUserId": {
+                          "type": "string"
+                        },
+                        "buyerUserType": {
+                          "type": "string"
+                        },
+                        "invoiceAmount": {
+                          "type": "string"
+                        },
+                        "outTradeNo": {
+                          "type": "string"
+                        },
+                        "pointAmount": {
+                          "type": "string"
+                        },
+                        "receiptAmount": {
+                          "type": "string"
+                        },
+                        "totalAmount": {
+                          "type": "string"
+                        },
+                        "tradeNo": {
+                          "type": "string"
+                        },
+                        "tradeStatus": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "code",
+                        "msg",
+                        "buyerLogonId",
+                        "buyerPayAmount",
+                        "buyerUserId",
+                        "buyerUserType",
+                        "invoiceAmount",
+                        "outTradeNo",
+                        "pointAmount",
+                        "receiptAmount",
+                        "totalAmount",
+                        "tradeNo",
+                        "tradeStatus"
+                      ],
+                      "x-apifox-orders": [
+                        "code",
+                        "msg",
+                        "buyerLogonId",
+                        "buyerPayAmount",
+                        "buyerUserId",
+                        "buyerUserType",
+                        "invoiceAmount",
+                        "outTradeNo",
+                        "pointAmount",
+                        "receiptAmount",
+                        "totalAmount",
+                        "tradeNo",
+                        "tradeStatus"
+                      ],
+                      "title": "响应体",
+                      "x-apifox-ignore-properties": [],
+                      "description": "响应体"
+                    }
+                  },
+                  "x-apifox-orders": ["01GXFHZJM06TM1B8WT8CSFKNVW"],
+                  "x-apifox-refs": {
+                    "01GXFHZJM06TM1B8WT8CSFKNVW": {
+                      "$ref": "#/components/schemas/BaseResponse",
+                      "x-apifox-overrides": {
+                        "body": {
+                          "$ref": "#/components/schemas/Advertiser",
+                          "title": "广告商",
+                          "description": "广告商"
+                        }
+                      },
+                      "required": ["body"]
+                    }
+                  },
+                  "required": ["timestamp", "message", "status", "body"],
+                  "x-apifox-ignore-properties": [
+                    "timestamp",
+                    "message",
+                    "status",
+                    "body"
+                  ]
+                },
+                "examples": {
+                  "1": {
+                    "summary": "成功示例",
+                    "value": {
+                      "timestamp": "2023-04-08T02:38:26.309Z",
+                      "status": 200,
+                      "message": "OK",
+                      "body": {
+                        "code": "10000",
+                        "msg": "Success",
+                        "buyerLogonId": "pda***@sandbox.com",
+                        "buyerPayAmount": "0.00",
+                        "buyerUserId": "2088722011250424",
+                        "buyerUserType": "PRIVATE",
+                        "invoiceAmount": "0.00",
+                        "outTradeNo": "4a6acd15-06eb-4b3b-925e-8e0c859b98b3",
+                        "pointAmount": "0.00",
+                        "receiptAmount": "0.00",
+                        "totalAmount": "200.00",
+                        "tradeNo": "2023040822001450421000602011",
+                        "tradeStatus": "WAIT_BUYER_PAY"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-73741492-run"
+      },
+      "post": {
+        "summary": "创建订单",
+        "x-apifox-folder": "Common",
+        "x-apifox-status": "developing",
+        "deprecated": false,
+        "description": "",
+        "operationId": "AddPayment",
+        "tags": ["Common"],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "title": "付款内容",
+                    "description": "付款内容"
+                  },
+                  "total": {
+                    "type": "integer",
+                    "title": "付款金额",
+                    "description": "付款金额"
+                  }
+                },
+                "required": ["name", "total"],
+                "x-apifox-orders": ["name", "total"],
+                "x-apifox-ignore-properties": []
+              },
+              "example": {
+                "name": "测试",
+                "total": 200
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "x-apifox-refs": {
+                    "01GXFJDZDJPW71CX1DJZ8WB37J": {
+                      "$ref": "#/components/schemas/BaseResponse",
+                      "x-apifox-overrides": {
+                        "body": {
+                          "$ref": "#/components/schemas/Advertiser",
+                          "title": "广告商",
+                          "description": "广告商"
+                        }
+                      },
+                      "required": ["body"]
+                    }
+                  },
+                  "x-apifox-orders": ["01GXFJDZDJPW71CX1DJZ8WB37J"],
+                  "properties": {
+                    "timestamp": {
+                      "type": "string",
+                      "title": "响应时间",
+                      "description": "响应时间"
+                    },
+                    "message": {
+                      "type": "string",
+                      "title": "响应",
+                      "description": "响应"
+                    },
+                    "status": {
+                      "type": "integer",
+                      "title": "响应编码",
+                      "description": "响应编码"
+                    },
+                    "body": {
+                      "type": "object",
+                      "properties": {
+                        "outTradeNo": {
+                          "type": "string",
+                          "title": "订单号",
+                          "description": "订单号"
+                        },
+                        "payUrl": {
+                          "type": "string",
+                          "title": "支付地址",
+                          "description": "支付地址"
+                        }
+                      },
+                      "required": ["outTradeNo", "payUrl"],
+                      "x-apifox-orders": ["outTradeNo", "payUrl"],
+                      "title": "响应体",
+                      "x-apifox-ignore-properties": [],
+                      "description": "响应体"
+                    }
+                  },
+                  "required": ["timestamp", "message", "status", "body"],
+                  "x-apifox-ignore-properties": [
+                    "timestamp",
+                    "message",
+                    "status",
+                    "body"
+                  ]
+                },
+                "examples": {
+                  "1": {
+                    "summary": "成功示例",
+                    "value": {
+                      "timestamp": "2023-04-08T02:37:50.613Z",
+                      "status": 201,
+                      "message": "CREATED",
+                      "body": {
+                        "outTradeNo": "4a6acd15-06eb-4b3b-925e-8e0c859b98b3",
+                        "payForm": "https://openapi.alipaydev.com/gateway.do?method=alipay.trade.page.pay&app_id=2021000122674330&charset=utf-8&version=1.0&sign_type=RSA2&timestamp=2023-04-08%2010%3A37%3A50&sign=O0tb95pkcUA7SEYaNSfqSNvaa%2B1EGtGq3mInJHOFcUEbzvL0UDbstNumv5xPqpwEFo7c5bG%2Bcaoer4cVAJfyUsekiXv%2F9OuXDJ0VSuNRp2Y8xlGf66v0YPDdq9b8Gom8VMz2r%2B%2BuUEJtTfWPvKLrvlcHGpQYyaQiFZLIGY8bPxLgMBJBQf71Q%2B8DPAicr6%2FemuPG5NSWsQG%2BBwDkziz%2Btmul3ghnBfJx0tLhkJi0nDeODiI3K78ePD%2BpC0n0MyRDvuwww8sDVuagBVUDW6SERUVVNo7Y8HKs%2Fiz8Anesk1MvGeY6O8fKwhFXDyubvlNczPG9an7c49B6J6GWD4j9aA%3D%3D&alipay_sdk=alipay-sdk-nodejs-3.3.0&biz_content=%7B%22out_trade_no%22%3A%224a6acd15-06eb-4b3b-925e-8e0c859b98b3%22%2C%22product_code%22%3A%22FAST_INSTANT_TRADE_PAY%22%2C%22total_amount%22%3A200%2C%22subject%22%3A%22%E6%B5%8B%E8%AF%95%22%7D"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "x-run-in-apifox'": "https://www.apifox.cn/web/project/2404362/apis/api-73741739-run"
+      }
     }
   },
   "components": {

@@ -1,5 +1,6 @@
 import {
   ConfigType,
+  alipayConfig as _alipayConfig,
   minioConfig as _minioConfig,
 } from "@dongjiang-recruitment/nest-common/dist/config";
 import type {
@@ -20,21 +21,26 @@ import {
   Injectable,
   InternalServerErrorException,
 } from "@nestjs/common";
+import Alipay from "alipay-sdk";
 import { randomUUID } from "node:crypto";
 import { extname } from "node:path";
 
 @Injectable()
 export class CommonService {
   private readonly redis: Redis;
+  private readonly alipay: Alipay;
 
   constructor(
     private readonly minio: MinioService,
     @Inject(_minioConfig.KEY)
     private readonly minioConfig: ConfigType<typeof _minioConfig>,
     private readonly mailerService: MailerService,
-    private readonly redisService: RedisService
+    private readonly redisService: RedisService,
+    @Inject(_alipayConfig.KEY)
+    alipayConfig: ConfigType<typeof _alipayConfig>
   ) {
     this.redis = this.redisService.getClient();
+    this.alipay = new Alipay(alipayConfig);
   }
 
   getAreas(cityName: string): Areas {
@@ -643,5 +649,30 @@ export class CommonService {
       avatar.size
     );
     return `/${this.minioConfig.bucket}-avatars/${avatarNme}`;
+  }
+
+  async payment(name: string, total: number) {
+    const outTradeNo = randomUUID();
+    return {
+      outTradeNo,
+      payUrl: this.alipay.pageExec("alipay.trade.page.pay", {
+        method: "GET",
+        bizContent: {
+          outTradeNo: outTradeNo,
+          productCode: "FAST_INSTANT_TRADE_PAY",
+          totalAmount: total,
+          subject: name,
+        },
+      }),
+    };
+  }
+
+  async getPaymentStatus(outTradeNo: string) {
+    const result = this.alipay.exec("alipay.trade.query", {
+      bizContent: {
+        outTradeNo,
+      },
+    });
+    return result;
   }
 }

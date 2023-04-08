@@ -88,14 +88,14 @@
             <n-select
               v-model:value="current.status"
               :options="statusOptions"
-              :disabled="modalType === 'view'"
+              :disabled="modalType === 'view' || (modalType === 'edit' && current.status === 1)"
               placeholder="请选择广告状态"
             />
           </n-form-item>
           <n-form-item label="开始时间" path="startTime">
             <n-date-picker
               v-model:value="current.startTime as any"
-              :disabled="modalType === 'view'"
+              :disabled="modalType === 'view' || modalType === 'edit'"
               type="date"
               format="yyyy-MM-dd"
               placeholder="请选择开始时间"
@@ -218,7 +218,15 @@ const rules: FormRules = {
   endTime: [
     {
       required: true,
-      message: "请选择结束时间",
+      validator: (rule, value) => {
+        if (!value) {
+          return Promise.reject("请选择结束时间");
+        }
+        if (!dayjs(value).isAfter(current.value.startTime)) {
+          return Promise.reject("结束时间不能早于或等于开始时间");
+        }
+        return Promise.resolve();
+      },
     },
   ],
 };
@@ -238,10 +246,81 @@ const validate = async () => {
 const submit = async () => {
   if (!(await validate())) return;
   if (modalType.value === "add") {
+    const payed = await payment();
+    if (!payed) return;
+    current.value.payed = needPay.value;
     _add();
   } else if (modalType.value === "edit") {
+    const payed = await payment();
+    if (!payed) return;
+    current.value.payed += needPay.value;
     _update();
   }
+};
+
+const needPay = computed(() => {
+  const total =
+    current.value.position *
+    10 *
+    dayjs(current.value.endTime).diff(dayjs(current.value.startTime), "day");
+  console.log(total, current.value.payed);
+  const payed = current.value.payed || 0;
+  if (total - payed > 0) {
+    return total - payed;
+  } else if (total - payed < 0) {
+    $message.error("您的广告费用付多了，请联系客服");
+  }
+  return 0;
+});
+const payment = () => {
+  return new Promise((resolve) => {
+    if (needPay.value === 0) {
+      return resolve(true);
+    }
+    $dialog.confirm({
+      title: "提示",
+      content: `本次操作需要支付${needPay.value}元，是否继续？`,
+      confirm: async () => {
+        const { outTradeNo, payUrl } = await commonService.addPayment({
+          requestBody: {
+            name: "广告费用",
+            total: needPay.value,
+          },
+        });
+        $message.info("正在跳转到支付页面");
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        window.open(payUrl, "_blank", "width=1024,height=500,top=100,left=100");
+        $dialog.confirm({
+          title: "提示",
+          content: `您支付成功了吗？`,
+          confirm() {
+            commonService
+              .getPaymentStatus({
+                outTradeNo,
+              })
+              .then((res) => {
+                if (
+                  res.code === "10000" &&
+                  res.tradeStatus === "TRADE_SUCCESS"
+                ) {
+                  $message.success("支付成功");
+                  resolve(true);
+                } else {
+                  $message.error("你没有付款哦!");
+                  resolve(false);
+                }
+              });
+          },
+          cancel() {
+            resolve(false);
+          },
+        });
+      },
+      cancel() {
+        resolve(false);
+      },
+    });
+  });
 };
 
 const customRequest = (options: UploadCustomRequestOptions) => {

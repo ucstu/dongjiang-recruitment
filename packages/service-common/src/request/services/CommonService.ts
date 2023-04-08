@@ -144,7 +144,7 @@ export class CommonService {
             method: "POST",
             url: "/common/files",
             formData: {
-              file: new Blob([file], { type: file.type }),
+              file,
             },
             mediaType: "multipart/form-data",
           }
@@ -168,10 +168,82 @@ export class CommonService {
             method: "POST",
             url: "/common/avatars",
             formData: {
-              avatar: new Blob([avatar], { type: avatar.type }),
+              avatar,
             },
             mediaType: "multipart/form-data",
           }
     );
+  }
+
+  /**
+   * 查询订单状态
+   * @returns any 成功
+   * @throws ApiError
+   */
+  public getPaymentStatus({
+    outTradeNo,
+  }: {
+    /**
+     * 订单账号
+     */
+    outTradeNo: string;
+  }): CancelablePromise<{
+    code: string;
+    msg: string;
+    buyerLogonId: string;
+    buyerPayAmount: string;
+    buyerUserId: string;
+    buyerUserType: string;
+    invoiceAmount: string;
+    outTradeNo: string;
+    pointAmount: string;
+    receiptAmount: string;
+    totalAmount: string;
+    tradeNo: string;
+    tradeStatus: string;
+  }> {
+    return this.httpRequest.request({
+      method: "GET",
+      url: "/common/payment",
+      query: {
+        outTradeNo: outTradeNo,
+      },
+    });
+  }
+
+  /**
+   * 创建订单
+   * @returns any 成功
+   * @throws ApiError
+   */
+  public addPayment({
+    requestBody,
+  }: {
+    requestBody?: {
+      /**
+       * 付款内容
+       */
+      name: string;
+      /**
+       * 付款金额
+       */
+      total: number;
+    };
+  }): CancelablePromise<{
+    /**
+     * 订单号
+     */
+    outTradeNo: string;
+    /**
+     * 支付地址
+     */
+    payUrl: string;
+  }> {
+    return this.httpRequest.request({
+      method: "POST",
+      url: "/common/payment",
+      body: requestBody,
+      mediaType: "application/json",
+    });
   }
 }
