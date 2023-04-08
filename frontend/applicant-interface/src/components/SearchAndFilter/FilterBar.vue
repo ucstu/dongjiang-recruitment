@@ -77,7 +77,8 @@ const sortval = ref(sortValue[0]);
 companyService
   .queryAllPosition({
     query: {
-      positionType: ["$like", `%${props.searchContent}}%`],
+      positionType: ["$like", `%${props.searchContent}%`],
+
     },
   })
   .then((res) => {

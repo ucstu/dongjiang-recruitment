@@ -85,7 +85,6 @@ const education = ref(["不要求", "大专", "本科", "硕士", "博士"]);
 
 <style lang="scss" scoped>
 .group-all {
-  padding: 5px 0;
   margin-bottom: 20rpx;
   background-color: #fff;
 
