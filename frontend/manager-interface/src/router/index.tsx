@@ -172,6 +172,10 @@ export const routes: Array<RouteRecordRaw> = [
       pms: ["/companies,GET", "/companies/positions,GET"],
     },
   },
+  {
+    path: "/:pathMatch(.*)*",
+    redirect: "/home",
+  }
 ];
 
 const router = createRouter({

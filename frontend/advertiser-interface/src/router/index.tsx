@@ -89,6 +89,10 @@ export const routes: Array<RouteRecordRaw> = [
       pms: "/advertisers/:advertiserId/advertise,GET",
     },
   },
+  {
+    path: "/:pathMatch(.*)*",
+    redirect: "/home",
+  }
 ];
 
 const router = createRouter({
