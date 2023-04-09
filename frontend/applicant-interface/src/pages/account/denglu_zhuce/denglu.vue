@@ -17,7 +17,7 @@
             v-model="password"
             class="text-input"
             style="padding-left: 20rpx"
-            type="safe-password"
+            :type="'password' as any"
             placeholder="请输入密码"
           />
         </view>

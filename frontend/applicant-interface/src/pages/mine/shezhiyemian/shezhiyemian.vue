@@ -75,6 +75,9 @@ const toVersion = () => {
 const exitAccount = () => {
   // 清除存储中的数据。
   mainStore.token = "";
+  mainStore.account = {} as any;
+  mainStore.applicant = {} as any;
+  mainStore.jobExpectations!.total = 0;
   uni.navigateTo({ url: "/pages/account/denglu_zhuce/denglu" });
 };
 </script>

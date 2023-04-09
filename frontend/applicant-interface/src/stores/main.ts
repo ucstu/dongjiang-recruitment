@@ -92,7 +92,7 @@ export const useMainStore = defineStore(
             title: "请先完善个人信息",
           });
           uni.reLaunch({
-            url: "/pages/info/gerenxinxi/gerenxinxi",
+            url: "/pages/init/wanshangerenxinxi/wanshangerenxinxi",
           });
         } else {
           applicantEducationExperienceService
@@ -133,7 +133,7 @@ export const useMainStore = defineStore(
               title: "请先完善求职意向",
             });
             uni.reLaunch({
-              url: "/pages/info/qiuzhiyixiang/qiuzhiyixiang",
+              url: "/pages/init/tianjaiqiuzhiqiwang/tianjiaqiuzhiqiwang",
             });
           }
         },

@@ -6,11 +6,12 @@
       <text class="phone-num">{{ phoneNumber }}</text>
     </view>
     <view class="flex-col items-center button-box">
-      <button class="justify-center items-center button" @click="showDelete">注销账号</button>
+      <button class="justify-center items-center button" @click="showDelete">
+        注销账号
+      </button>
     </view>
     <wybPopup
       ref="popup"
-
       :mask-click-close="false"
       :show-close-icon="false"
       :width="wybWidth"
@@ -21,15 +22,27 @@
       mode="size-auto"
       type="center"
     >
-    <view
-      v-if="isShow" style="width: 100%; height: 100%;">
-      <view class="justify-center items-center" style="width: 100%; height: 20%;">注销账号</view>
-    <view class="justify-center items-center" style="width: 100%; height: 60%; font-size: small;">您确定注销账号吗？</view>
-    <view class="justify-center items-center" style="width: 100%; height: 20%;">
-      <button style="width: 50%;" @click="cancel">取消</button>
-      <button style="width: 50%; color: blue;" @click="deleteAccount">确认</button>
-    </view>
-    </view>
+      <view v-if="isShow" style="width: 100%; height: 100%">
+        <view
+          class="justify-center items-center"
+          style="width: 100%; height: 20%"
+          >注销账号</view
+        >
+        <view
+          class="justify-center items-center"
+          style="width: 100%; height: 60%; font-size: small"
+          >您确定注销账号吗？</view
+        >
+        <view
+          class="justify-center items-center"
+          style="width: 100%; height: 20%"
+        >
+          <button style="width: 50%" @click="cancel">取消</button>
+          <button style="width: 50%; color: blue" @click="deleteAccount">
+            确认
+          </button>
+        </view>
+      </view>
       <view v-if="!isShow" class="flex-col justify-center code-box">
         <text style="font-size: 40rpx; font-weight: bold; text-align: center"
           >请输入验证码</text
@@ -42,27 +55,37 @@
             :auto-blur="true"
             :focus="focus"
             type="number"
-            :maxlength="4"
+            :maxlength="6"
             @blur="focus = false"
           />
           <view class="flex-row justify-between code-input" @click="codeNum">
             <view
-              v-for="(item, i) in 4"
+              v-for="(item, i) in 6"
               :key="i"
               class="justify-center items-center input"
               >{{ code[i] }}</view
             >
           </view>
-          <text style="margin-top: 10rpx" @click="sendVerification"
-            >{{ send }}</text
-          >
+          <text style="margin-top: 10rpx" @click="sendVerification">{{
+            send
+          }}</text>
         </view>
         <view
           class="justify-between items-center"
           style="width: 100%; height: auto; margin-top: 20rpx"
         >
-          <button class="items-center justify-center cancel-button" @click="cancelDelete">取消</button>
-          <button class="items-center justify-center confirm-button" @click="confirmDelete">确认</button>
+          <button
+            class="items-center justify-center cancel-button"
+            @click="cancelDelete"
+          >
+            取消
+          </button>
+          <button
+            class="items-center justify-center confirm-button"
+            @click="confirmDelete"
+          >
+            确认
+          </button>
         </view>
       </view>
     </wybPopup>
@@ -77,23 +100,23 @@ import { useMainStore } from "@/stores";
 
 const mainStore = useMainStore();
 
-const { runAsync: sendVerificationCode } =
-  commonService.useSendVerificationCode(undefined, {
-    manual: true,
-  });
+// const { runAsync: sendVerificationCode } =
+//   commonService.useSendVerificationCode(undefined, {
+//     manual: true,
+//   });
 // 隐藏账号
 const phoneNumber = ref<string>("");
 const code = ref<string>("");
-const send = ref<string>("重新发送")
+const send = ref<string>("重新发送");
 const wybWidth = ref<string>("600");
-const wybHeight = ref<string>("380")
+const wybHeight = ref<string>("380");
 const focus = ref<boolean>(false);
-const isShow = ref<boolean>(true)
+const isShow = ref<boolean>(true);
 
 until(
   computed(() => !!mainStore.account),
   () => {
-    phoneNumber.value = mainStore.applicant!.email
+    phoneNumber.value = mainStore.applicant!.email;
   }
 );
 
@@ -118,62 +141,65 @@ const showDelete = () => {
 //   );
 
 const cancel = () => {
-  popup.value?.hide()
-}
+  popup.value?.hide();
+};
 
 // 注销账号
-const deleteAccount =  () => {
-  // await sendVerificationCode({ email: phoneNumber.value });
+const deleteAccount = async () => {
+  await commonService.sendVerificationCode({ email: phoneNumber.value });
   uni.showToast({
     title: "验证码已发送",
     icon: "none",
     duration: 1500,
   });
-  isShow.value = !isShow.value
-  wybWidth.value = "700"
-  wybHeight.value = "400"
+  isShow.value = !isShow.value;
+  wybWidth.value = "700";
+  wybHeight.value = "400";
 };
 // 重新获取验证码
 const sendVerification = async () => {
-  // await sendVerificationCode({ email: phoneNumber.value });
+  await commonService.sendVerificationCode({ email: phoneNumber.value });
   uni.showToast({
     title: "验证码已发送",
     icon: "none",
     duration: 1500,
   });
-  const timer = setInterval(function() {
-  count.value--;
-  if (count.value < 0) {
-    clearInterval(timer);
-  }
-}, 1000);
-  send.value = "已发送" + "(" +count.value +")"
-  setTimeout(() => {
-    send.value = "重新发送"
-  },count.value*100 );
+  const timer = setInterval(function () {
+    send.value = "已发送" + "(" + count.value + ")";
+    count.value--;
+    if (count.value < 0) {
+      clearInterval(timer);
+      send.value = "重新发送";
+    }
+  }, 1000);
 };
 
 const cancelDelete = () => {
-  isShow.value = !isShow.value
+  isShow.value = !isShow.value;
   popup.value?.hide();
-  wybWidth.value = "600"
-  wybHeight.value = "380"
+  wybWidth.value = "600";
+  wybHeight.value = "380";
 };
 
 const count = ref<number>(59);
 
-
 // 注销账号并退出登录
-const confirmDelete =  () => {
-  // await destroyAccount();
-  // mainStore.token = "";
-  // uni.navigateTo({
-  //   url: "/pages/account/denglu_zhuce/denglu",
-  // });
-  isShow.value = !isShow.value
+const confirmDelete = async () => {
+  await authenticationService.useDestroyAccount({
+    id: mainStore.account!.id,
+    verificationCode: code.value,
+  });
+  mainStore.token = "";
+  mainStore.account = {} as any;
+  mainStore.applicant = {} as any;
+  mainStore.jobExpectations!.total = 0;
+  uni.navigateTo({
+    url: "/pages/account/denglu_zhuce/denglu",
+  });
+  isShow.value = !isShow.value;
   popup.value?.hide();
-  wybWidth.value = "600"
-  wybHeight.value = "380"
+  wybWidth.value = "600";
+  wybHeight.value = "380";
 };
 </script>
 
@@ -236,7 +262,7 @@ const confirmDelete =  () => {
       font-size: 40rpx;
 
       .input {
-        width: 20%;
+        width: 17%;
         height: 110rpx;
         border: 5rpx solid rgb(230 230 230);
         border-radius: 10rpx;
