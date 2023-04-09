@@ -20,61 +20,30 @@
 <script lang="ts" setup>
 import JobPanel from "@/components/JobPanel/JobPanel.vue";
 import NavigationBar from "@/components/NavigationBar/NavigationBar.vue";
-import { until } from "@/hooks";
 import { useMainStore } from "@/stores";
-import type {
-DeliveryRecord,
-Position,
-} from "@dongjiang-recruitment/service-common";
 
 const mainStore = useMainStore();
-
-const interviewedJobs = ref<Position[]>([]);
-const interviewed = ref<DeliveryRecord[]>([]);
 const sendType = ref("放弃面试");
-const emptyShow = ref(true);
 
-until(
-  computed(() => !!mainStore.applicant?.id),
-  () => {
-    // 查询待面试信息
-    applicantDeliveryRecordService
-      .queryDeliveryRecord({
-        applicantId: mainStore.applicant!.id,
-        query: {
-          status: ["$eq", 4],
-        },
-      })
-      .then((res) => {
-        interviewed.value = res.items;
-        for (const interview of interviewed.value) {
-          companyPositionService
-            .getPosition({
-              companyId: interview.company.id,
-              id: interview.position.id,
-            })
-            .then((res) => {
-              interviewedJobs.value.push(res);
-              if (interviewedJobs.value.length) {
-                emptyShow.value = false;
-              }
-            });
-        }
-      });
-  }
-);
-
-onShow(() => {
-  if (!interviewed.value.length) {
-    emptyShow.value = true;
-  } else {
-    return interviewedJobs.value;
-  }
+const {data: interviewed, loading, mutate} = applicantDeliveryRecordService.useQueryDeliveryRecord({
+  applicantId: mainStore.applicant!.id,
+  query: {
+    status: ["$eq", 4],
+  },
+  size: 999999999,
+}, {
+  initialData: {
+    total: 0,
+    items: [],
+  },
+  ready: computed(() => !!mainStore.applicant?.id),
 });
+const interviewedJobs = computed(() => interviewed.value!.items.map((item) => item.position));
+const emptyShow = computed(() => interviewedJobs.value.length === 0 && !loading.value);
 
 /* 放弃面试 */
 const stateClick = (index: string) => {
-  for (const delivery of interviewed.value) {
+  for (const delivery of interviewed.value!.items) {
     if (delivery.position.id === index) {
       applicantDeliveryRecordService
         .removeDeliveryRecord({
@@ -82,12 +51,13 @@ const stateClick = (index: string) => {
           id: delivery.id,
         })
         .then(() => {
-          interviewed.value = interviewed.value.filter(
+          const newInterviewed = interviewed.value!.items.filter(
             (item) => item.id !== delivery.id
           );
-          interviewedJobs.value = interviewedJobs.value.filter(
-            (item) => item.id !== delivery.company.id
-          );
+          mutate({
+            total: newInterviewed.length,
+            items: newInterviewed,
+          });
         });
     }
   }

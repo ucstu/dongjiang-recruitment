@@ -3,52 +3,52 @@
     <div class="main">
       <div class="center">
         <div class="total">
-          <!-- <div class="top">
+          <div class="top">
             <div class="first-line">
               <h1>面试时间：</h1>
               <el-date-picker
-                v-model="workTimeing"
+                v-model="workTimeBetween"
                 type="daterange"
                 range-separator="到"
                 start-placeholder="开始时间"
                 end-placeholder="结束时间"
-                @change="handleWorkTimeChange(workTimeing)"
               />
             </div>
-          </div> -->
+          </div>
           <div class="resume">
             <el-scrollbar height="400px">
               <ResumeInfo
                 :user-informations="userInformations"
                 :job-informations="jobInformations"
                 :delivery-records-checkeds="deliveryRecordsCheckeds"
-                :checked="checked1"
+                :checked="allChecked"
               />
             </el-scrollbar>
           </div>
           <div class="footer">
             <div>
-              <el-checkbox v-model="totalSelect" label="全选" size="large" />
+              <el-checkbox v-model="allChecked" label="全选" size="large" />
               <!-- <el-button
                 type="primary"
                 @click="changeState(3 as 1 | 2 | 3 | 4 | 5 )"
                 >发出offer</el-button
               > -->
-              <el-popconfirm title="确定删除该简历?">
+              <el-popconfirm
+                title="确定删除该简历?"
+                @confirm="changeState(5 as 1 | 2 | 3 | 4 | 5)"
+              >
                 <template #reference>
-                  <el-button
-                    type="primary"
-                    plain
-                    @click="changeState(5 as 1 | 2 | 3 | 4 | 5)"
-                    >删除简历</el-button
-                  >
+                  <el-button type="primary" plain>删除简历</el-button>
                 </template>
               </el-popconfirm>
             </div>
             <el-pagination
+              v-model:current-page="page"
+              v-model:page-size="pageSize"
               background
-              layout="prev, pager, next"
-              :total="total"
+              :page-sizes="[3, 5, 10, 30]"
+              layout="total, sizes, prev, pager, next, jumper"
+              :total="deliveryRecords!.total"
             />
           </div>
         </div>
@@ -58,80 +58,80 @@
 </template>
 
 <script setup lang="ts">
-import useDate from "@/hooks/useDate";
-import useGetDayAll from "@/hooks/useGetdata";
 import { useMainStore } from "@/stores/main";
-import type {
-Applicant,
-DeliveryRecord,
-Position,
-} from "@dongjiang-recruitment/service-common";
-import { ElMessage } from "element-plus";
+import type { DeliveryRecord } from "@dongjiang-recruitment/service-common";
+import { ElMessage, dayjs } from "element-plus";
 import ResumeInfo from "./resumeInfo.vue";
-const store = useMainStore();
-const deliveryRecords = ref<DeliveryRecord[]>([]);
-const checked1 = ref(false);
 
 interface DeliveryRecordChecked extends DeliveryRecord {
   checked: boolean;
 }
 
-const deliveryRecordsCheckeds = ref<DeliveryRecordChecked[]>([]);
-const userInformations = ref<Map<string, Applicant>>(new Map());
-const jobInformations = ref<Map<string, Position>>(new Map());
-const deliveryDates = ref<Array<string>>(["2022-05-01", "2022-06-01"]);
-const workTimeing = ref([]);
-const handleWorkTimeChange = (val: Array<string>) => {
-  if (val !== null) {
-    deliveryDates.value = useGetDayAll(useDate(val[0]), useDate(val[1]));
-  } else {
-    deliveryDates.value = [];
+const page = ref(1);
+const pageSize = ref(5);
+const store = useMainStore();
+const allChecked = ref(false);
+const workTimeBetween = ref([]);
+const { data: deliveryRecords } = applicantService.useQueryAllDeliveryRecord(
+  () => ({
+    query: {
+      "company.id": ["$eq", store.companyInformation.id],
+      status: ["$eq", 4],
+      interviewTime: workTimeBetween.value.length
+        ? [
+            "$between",
+            ...workTimeBetween.value.map((time) =>
+              dayjs(time).format("YYYY-MM-DD HH:mm:ss")
+            ),
+          ]
+        : undefined,
+    },
+    size: pageSize.value,
+    page: page.value,
+  }),
+  {
+    initialData: {
+      total: 0,
+      items: [],
+    },
+    refreshDeps: [workTimeBetween, page, pageSize],
+    ready: computed(() => !!store.companyInformation.id),
   }
-  applicantService
-    .queryAllDeliveryRecord({
-      query: {
-        "company.id": ["$eq", store.companyInformation.id],
-        status: ["$eq", 4],
-        interviewTime: ["$in", ...deliveryDates.value],
-      },
+);
+const deliveryRecordsCheckeds = ref<DeliveryRecordChecked[]>([]);
+syncRef(deliveryRecords, deliveryRecordsCheckeds, {
+  direction: "ltr",
+  transform: {
+    ltr: (deliveryRecords) =>
+      deliveryRecords!.items.map((deliveryRecord) => ({
+        ...deliveryRecord,
+        checked: false,
+      })),
+  }
+});
+const userInformations = computed(() => {
+  return new Map(
+    deliveryRecordsCheckeds.value.map((deliveryRecord) => {
+      return [deliveryRecord.applicant.id, deliveryRecord.applicant];
     })
-    .then((res) => {
-      totalCount.value = res.total;
-      deliveryRecordsCheckeds.value = [];
-      deliveryRecords.value = res.items;
-      deliveryRecords.value.forEach((item) => {
-        deliveryRecordsCheckeds.value.push(
-          Object.assign(item, { checked: false })
-        );
-        applicantService
-          .getApplicant({
-            id: item.applicant.id,
-          })
-          .then((response) => {
-            userInformations.value.set(item.applicant.id, response);
-          });
-        companyPositionService
-          .getPosition({
-            companyId: store.companyInformation.id,
-            id: item.position.id,
-          })
-          .then((response) => {
-            jobInformations.value.set(item.position.id, response);
-          });
-      });
-    });
-};
+  );
+});
+const jobInformations = computed(() => {
+  return new Map(
+    deliveryRecordsCheckeds.value.map((deliveryRecord) => {
+      return [deliveryRecord.position.id, deliveryRecord.position];
+    })
+  );
+});
 // 更改所选简历信息状态的功能。
 const changeState = (val: 1 | 2 | 3 | 4 | 5) => {
   if (deliveryRecordsCheckeds.value) {
     //变更状态函数，将选中的简历信息的状态进行变更
     const newDeliver = deliveryRecordsCheckeds.value.filter(
-      (deliveryRecordsChecked: DeliveryRecordChecked) => {
-        return deliveryRecordsChecked.checked === true;
-      }
+      (deliveryRecordsChecked) => deliveryRecordsChecked.checked
     );
     // 更改所选简历信息的状态。
-    newDeliver.map((delivery: DeliveryRecordChecked) => {
+    newDeliver.forEach((delivery: DeliveryRecordChecked) => {
       delivery.status = val;
       applicantDeliveryRecordService
         .updateDeliveryRecord({
@@ -152,64 +152,6 @@ const submitChecked = (data: any) => {
     }
   );
 };
-// 计算属性。
-const totalli = computed(() => {
-  return deliveryRecordsCheckeds.value.length;
-});
-// 一个计算函数，返回检查项目的数量。
-const totalDone = computed(() => {
-  return deliveryRecordsCheckeds.value.reduce(
-    (per, cur) => per + (cur.checked ? 1 : 0),
-    0
-  );
-});
-
-// 计算属性。
-const totalSelect = computed({
-  get() {
-    return totalDone.value === totalli.value && totalli.value > 0;
-  },
-  set(value) {
-    submitChecked(value);
-  },
-});
-const totalCount = ref(0);
-const total = computed(() => {
-  let num: number = (totalCount.value / 7) * 10;
-  return Math.ceil(num);
-});
-
-applicantService
-  .queryAllDeliveryRecord({
-    query: {
-      "company.id": ["$eq", store.companyInformation.id],
-      status: ["$eq", 4],
-    },
-  })
-  .then((res) => {
-    totalCount.value = res.total;
-    deliveryRecords.value = res.items;
-    deliveryRecords.value.forEach((item) => {
-      deliveryRecordsCheckeds.value.push(
-        Object.assign(item, { checked: false })
-      );
-      applicantService
-        .getApplicant({
-          id: item.applicant.id,
-        })
-        .then((response) => {
-          userInformations.value.set(item.applicant.id, response);
-        });
-      companyPositionService
-        .getPosition({
-          companyId: store.companyInformation.id,
-          id: item.position.id,
-        })
-        .then((response) => {
-          jobInformations.value.set(item.position.id, response);
-        });
-    });
-  });
 </script>
 
 <style scoped lang="scss">

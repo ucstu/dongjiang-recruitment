@@ -485,7 +485,7 @@ const interviewList = computed(() => {
 });
 const cityChange = (val: Array<string>) => {
   jobTypeList.value.workProvinceName = val[0];
-  jobTypeList.value.workCityName = val[1];
+  jobTypeList.value.workCityName = `${val[0]},${val[1]}`;
 };
 const aboutAddress = ref<any>([]);
 

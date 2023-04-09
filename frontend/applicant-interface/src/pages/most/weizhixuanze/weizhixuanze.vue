@@ -119,10 +119,14 @@ onUnload(() => {
 
 // 选择地区
 const countriesIndexOf = (index: number) => {
-  countriesIndex.value = index;
-  country.value = countries.value[index].countyName;
-  areas.value = countries.value[index].areas;
-  filterValue.value = [];
+  // countriesIndex.value = index;
+  // country.value = countries.value[index].countyName;
+  // areas.value = countries.value[index].areas;
+  // filterValue.value = [];
+  uni.showToast({
+    title: "暂未开放,请点击切换城市",
+    icon: "none",
+  });
 };
 
 // 选择范围
@@ -133,7 +137,7 @@ const areasIndexOf = (index: number) => {
   //   filterValue.value.push(areas.value[index]);
   // }
   uni.showToast({
-    title: "暂未开放",
+    title: "暂未开放,请点击切换城市",
     icon: "none",
   });
 };

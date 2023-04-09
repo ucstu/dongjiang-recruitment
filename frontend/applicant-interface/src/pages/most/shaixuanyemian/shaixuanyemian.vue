@@ -249,6 +249,7 @@ onLoad((e) => {
     // 检查过滤器值是否为空。如果不为空，则会将值映射到
     // filterValue.value.workingYears、filterValue.value.educations、filterValue.value.workTypes、filterValue.value.scales、filterValue.value.financingStages。
     if (Object.keys(p).length) {
+      filterValue.value.salary = p.salary;
       filterValue.value.workingYears = p.workingYears.map(
         (item: number) => item - 1
       );
@@ -292,9 +293,16 @@ const saveScreen = () => {
   filterValue.value.financingStages = filterValue.value.financingStages.map(
     (item) => item + 1
   );
-  uni.$emit("filterValue", filterValue.value); //首页筛选值
-  uni.$emit("filter", filterValue.value); //搜索页筛选值
-  uni.navigateBack({ delta: 1 });
+  const pages = getCurrentPages();
+  if (pages.length > 1) {
+    const beforePage = pages[pages.length - 2];
+    if (beforePage.route === "pages/main/shouyeyemian/shouyeyemian") {
+      uni.$emit("filterValue", filterValue.value); //首页筛选值
+    } else {
+      uni.$emit("filter", filterValue.value); //搜索页筛选值
+    }
+    uni.navigateBack({ delta: 1 });
+  }
 };
 </script>
 

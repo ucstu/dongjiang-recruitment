@@ -6,6 +6,7 @@ import PiniaPluginPersist from "pinia-plugin-persist";
 import VueECharts from "vue-echarts";
 import App from "./App.vue";
 import router from "./router";
+// import "./styles/style.scss";
 
 const pinia = createPinia();
 pinia.use(PiniaPluginPersist);

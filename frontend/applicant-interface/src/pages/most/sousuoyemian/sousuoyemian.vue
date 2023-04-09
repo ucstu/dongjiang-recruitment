@@ -71,6 +71,7 @@ const popularCompanies = reactive([
 ]);
 
 const cityName = ref("");
+const positionType = ref("");
 
 onLoad((e) => {
   if (e!.city) {
@@ -98,8 +99,10 @@ const positionClick = (index: number) => {
     url:
       "/pages/detail/xiangguanzhiwei/xiangguanzhiwei?data=" +
       1 +
-      "&name=" +
+      "&search=" +
       popularPositions[index] +
+      "&type=" +
+      positionType.value +
       "&city=" +
       cityName.value,
   });
@@ -110,7 +113,7 @@ const companyClick = (index: number) => {
     url:
       "/pages/detail/xiangguanzhiwei/xiangguanzhiwei?data=" +
       2 +
-      "&name=" +
+      "&search=" +
       popularCompanies[index] +
       "&city=" +
       cityName.value,

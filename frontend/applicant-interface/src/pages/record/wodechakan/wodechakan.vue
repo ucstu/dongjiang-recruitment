@@ -9,45 +9,41 @@
         @job-click="view_2OnClick(myView.company.id, myView.id)"
       />
     </view>
+    <view v-if="emptyShow" class="justify-center image">
+      <image src="@/static/icons/nodata.svg" />
+    </view>
   </view>
 </template>
 
 <script lang="ts" setup>
 import JobDetail from "@/components/JobDetail/JobDetail.vue";
 import NavigationBar from "@/components/NavigationBar/NavigationBar.vue";
-import { until } from "@/hooks";
 import { useMainStore } from "@/stores";
 import type { Position } from "@dongjiang-recruitment/service-common";
 
 const mainStore = useMainStore();
-
-const myViews = ref<Position[]>([]);
-
-until(
-  computed(() => !!mainStore.applicant?.id),
-  () => {
-    /* 查询所有查看记录 */
-    applicantInspectionRecordService
-      .queryUserInspectionRecord({
-        applicantId: mainStore.applicant!.id,
-      })
-      .then((res) => {
-        for (const item of res.items) {
-          companyPositionService
-            .getPosition({
-              companyId: item.company.id,
-              id: item.position.id,
-            })
-            .then((res) => {
-              const p = myViews.value.map((item) => item.id);
-              if (!p.includes(res.id)) {
-                myViews.value.push(res);
-              }
-            });
-        }
-      });
+const { data: inspectionRecords, loading } =
+  applicantInspectionRecordService.useQueryUserInspectionRecord(
+    {
+      applicantId: mainStore.applicant!.id,
+      size: 999999999,
+    },
+    {
+      initialData: {
+        total: 0,
+        items: [],
+      },
+      ready: computed(() => !!mainStore.applicant?.id),
+    }
+  );
+const myViews = computed(() => {
+  const positions: Position[] = [];
+  for (const item of inspectionRecords.value!.items) {
+    positions.push(item.position);
   }
-);
+  return positions;
+});
+const emptyShow = computed(() => myViews.value.length === 0 && !loading.value);
 
 const view_2OnClick = (c: string, p: string) => {
   uni.navigateTo({

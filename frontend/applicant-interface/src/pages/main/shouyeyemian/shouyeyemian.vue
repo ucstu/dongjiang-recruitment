@@ -143,7 +143,9 @@
             </view>
             <view class="flex-row group-4">
               <view class="flex-row">
-                <text @click="text_22OnClick">{{ workCityName || "不限" }}</text>
+                <text @click="text_22OnClick">{{
+                  workCityName || "不限"
+                }}</text>
                 <image
                   src="https://codefun-proj-user-res-1256085488.cos.ap-guangzhou.myqcloud.com/623287845a7e3f0310c3a3f7/623446dc62a7d90011023514/16475959311313713900.png"
                   class="image-3 image-4"
@@ -276,9 +278,7 @@ const gotoAdvertise = (advertise: Advertise) => {
 uni.$on("city", (city: string) => (workCityName.value = city));
 uni.$on("place", (place: string[]) => (workAreaName.value = place));
 uni.$on("filterValue", (filter) => {
-  console.log("filter", filter);
   jobFilter.value = filter;
-  paging.value?.complete(true);
 });
 
 const positions = ref<Array<Position>>([]);
@@ -289,11 +289,28 @@ const paging = ref<{
   reload: () => void;
 }>();
 const queryList = async (pageNo: number, pageSize: number) => {
-  const salaries = jobFilter.value.salary.split("-");
+  await new Promise<void>((resolve) =>
+    watch(
+      activeJobExpectation,
+      () => {
+        if (activeJobExpectation.value) {
+          resolve();
+        }
+      },
+      { immediate: true }
+    )
+  );
+  const salaries = jobFilter.value.salary.endsWith("以下")
+    ? ["0", jobFilter.value.salary.replace("以下", "")]
+    : jobFilter.value.salary.split("-");
   const basicQuery: Query<Position> = {
     workCityName: workCityName.value ? ["$eq", workCityName.value] : undefined,
-    startingSalary: salaries[0] ? ["$gte", parseInt(salaries[0])] : undefined,
-    ceilingSalary: salaries[1] ? ["$gte", parseInt(salaries[1])] : undefined,
+    startingSalary: salaries[0]
+      ? ["$gte", parseInt(salaries[0]) / 1000]
+      : undefined,
+    ceilingSalary: salaries[1]
+      ? ["$gte", parseInt(salaries[1]) / 1000]
+      : undefined,
     workingYears: jobFilter.value.workingYears.length
       ? ["$in", ...jobFilter.value.workingYears]
       : undefined,
@@ -311,6 +328,12 @@ const queryList = async (pageNo: number, pageSize: number) => {
       : undefined,
     "company.comprehensionName": jobFilter.value.comprehensions.length
       ? ["$in", ...jobFilter.value.comprehensions]
+      : undefined,
+    "company.scale": jobFilter.value.scales.length
+      ? ["$in", ...jobFilter.value.scales]
+      : undefined,
+    "company.financingStage": jobFilter.value.financingStages.length
+      ? ["$in", ...jobFilter.value.financingStages]
       : undefined,
   };
   let queries = [];
@@ -347,7 +370,13 @@ const queryList = async (pageNo: number, pageSize: number) => {
 };
 
 watch(
-  () => [workCityName.value, workAreaName.value, jobFilter.value, activeMethod.value, activeJobExpectation.value],
+  () => [
+    workCityName.value,
+    workAreaName.value,
+    jobFilter.value,
+    activeMethod.value,
+    activeJobExpectation.value,
+  ],
   () => {
     paging.value?.reload();
   }
@@ -377,8 +406,9 @@ const text_22OnClick = () => {
 };
 const text_23OnClick = () => {
   uni.navigateTo({
-    url: "/pages/most/shaixuanyemian/shaixuanyemian?filter=",
-    // JSON.stringify(filters.value),
+    url:
+      "/pages/most/shaixuanyemian/shaixuanyemian?filter=" +
+      JSON.stringify(jobFilter.value),
   });
 };
 /* 查看职位详情 */

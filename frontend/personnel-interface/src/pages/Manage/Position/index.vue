@@ -7,7 +7,7 @@
             <div class="info-left">
               <div class="left-item">
                 <span>招聘中</span>
-                <div class="circle">{{ jobTypeList?.length || "0" }}</div>
+                <div class="circle">{{ jobTypeList?.total || "0" }}</div>
               </div>
             </div>
             <div class="info-right">
@@ -24,7 +24,7 @@
         <div class="state">
           <div class="state-left">
             <span>展示状态</span>
-            <span>全部({{ jobTypeList?.length || "0" }})</span>
+            <span>全部({{ jobTypeList?.total || "0" }})</span>
           </div>
           <div>
             <el-input
@@ -39,7 +39,10 @@
 
         <div ref="positionRef" class="position">
           <el-scrollbar>
-            <template v-for="position in jobTypeList" :key="position.companyId">
+            <template
+              v-for="position in jobTypeList?.items || []"
+              :key="position.companyId"
+            >
               <div ref="postRef" class="position-list">
                 <div class="position-item">
                   <div class="item">
@@ -85,6 +88,16 @@
             </template>
           </el-scrollbar>
         </div>
+        <div style="display: flex; justify-content: flex-end; margin-top: 4px">
+          <el-pagination
+            v-model:current-page="page"
+            v-model:page-size="pageSize"
+            background
+            :page-sizes="[3, 5, 10, 30]"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="jobTypeList!.total"
+          />
+        </div>
         <div class="alert">
           <h3>温馨提示</h3>
           <div class="sentence">
@@ -107,11 +120,12 @@
 <script setup lang="ts">
 import router from "@/router";
 import { useMainStore } from "@/stores/main";
-import type { Position } from "@dongjiang-recruitment/service-common";
 import { CirclePlus, Search } from "@element-plus/icons-vue";
 import { ElMessage } from "element-plus";
+
 const store = useMainStore();
-const jobTypeList = ref<Position[]>();
+const page = ref(1);
+const pageSize = ref(5);
 const input2 = ref("");
 const educationMap = reactive(["不限", "大专", "本科", "硕士", "博士"]);
 const workingYears = reactive([
@@ -124,101 +138,28 @@ const workingYears = reactive([
   "10年以上",
 ]);
 
-interface GetCompanyInfosP0PositionInfosQueryParams {
-  /**
-   *
-   * 领域名数组，eg：[电商平台,游戏]
-   */
-  comprehensions?: Array<string>;
-  /**
-   *
-   * 细分标签名数组，eg：[Vue,React]
-   */
-  directionTags?: Array<string>;
-  /**
-   *
-   * 学历要求枚举数组，{1:不要求,2:大专,3:本科,4:硕士,5:博士}
-   */
-  educations?: Array<1 | 2 | 3 | 4 | 5>;
-  /**
-   *
-   * 融资阶段枚举数组，{1:未融资,2:天使轮,3:A轮,4:B轮,5:C轮,6:D轮及以上,7:上市公司,8:不需要融资}
-   */
-  financingStages?: Array<1 | 2 | 3 | 4 | 5 | 6 | 7 | 8>;
-  /**
-   *
-   * 当前页，eg：0
-   */
-  page?: number;
-  /**
-   *
-   * 职位名称，eg：前端开发
-   */
-  positionName?: string;
-  /**
-   *
-   * 职位类型，eg：前端工程师
-   */
-  positionType?: string;
-  /**
-   *
-   * 薪资范围，(start,end) ，单位K，eg：1,4
-   */
-  salary?: `${number},${number}`;
-  /**
-   *
-   * 公司规模枚举数组，{1:少于15人,2:15-50人,3:50-150人,4:150-500人,5:500-2000人,6:2000以上}
-   */
-  scales?: Array<1 | 2 | 3 | 4 | 5 | 6>;
-  /**
-   *
-   * 页大小，eg：5
-   */
-  size?: number;
-  /**
-   *
-   * 排序方式，eg：[createdAt,desc]
-   */
-  sort?: Array<`${keyof Position},${"asc" | "desc"}`>;
-  /**
-   *
-   * 工作区县名数组，eg：[合川区,永川区]
-   */
-  workAreaNames?: Array<string>;
-  /**
-   *
-   * 工作城市，eg：成都市
-   */
-  workCityName?: string;
-  /**
-   *
-   * 工作省份，eg：四川省
-   */
-  workProvinceName?: string;
-  /**
-   *
-   * 职位类型枚举数组，{1:全职,2:兼职,3:实习}
-   */
-  workTypes?: Array<1 | 2 | 3>;
-  /**
-   *
-   * 经纬度坐标，eg：99.748,74.391846196586
-   */
-  workingPlace?: `${number},${number}`;
-  /**
-   *
-   * 工作年限枚举数组，{1:经验不限,2:在校/应届,3:3年及以下,4:3-5年,5:5-10年,6:10年以上}
-   */
-  workingYears?: Array<1 | 2 | 3 | 4 | 5 | 6>;
-}
-
-companyPositionService
-  .queryPosition({
+const {
+  data: jobTypeList,
+  refreshAsync: search,
+  mutate,
+} = companyPositionService.useQueryPosition(
+  () => ({
     companyId: store.companyInformation.id,
-  })
-  .then((res) => {
-    jobTypeList.value = res.items;
-  });
+    query: {
+      positionName: ["$like", `%${input2.value}%`],
+    },
+    page: page.value,
+    size: pageSize.value,
+  }),
+  {
+    ready: computed(() => store.companyInformation.id !== ""),
+    initialData: {
+      items: [],
+      total: 0,
+    },
+    refreshDeps: [page, pageSize],
+  }
+);
 
 const slution = { 1: "全职", 2: "兼职", 3: "实习" };
 const toPublish = () => {
@@ -231,18 +172,6 @@ const updatePosition = (id: string) => {
   });
 };
 
-const search = () => {
-  companyPositionService
-    .queryPosition({
-      companyId: store.companyInformation.id,
-      query: {
-        positionName: ["$like", `%${input2.value}%`],
-      },
-    })
-    .then((res) => {
-      jobTypeList.value = res.items;
-    });
-};
 const deletePosition = (id: string) => {
   companyPositionService
     .removePosition({
@@ -250,7 +179,11 @@ const deletePosition = (id: string) => {
       id: id,
     })
     .then((res) => {
-      jobTypeList.value = jobTypeList.value?.filter((item) => item.id !== res);
+      const newList = jobTypeList.value!.items.filter((item) => item.id !== id);
+      mutate({
+        total: newList.length,
+        items: newList,
+      });
       ElMessage.success("删除成功");
     });
 };

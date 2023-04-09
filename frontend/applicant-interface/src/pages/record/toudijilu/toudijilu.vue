@@ -11,9 +11,9 @@
         >{{ send }}</text
       >
     </view>
-    <view class="flex-col list">
+    <view v-if="!loading" class="flex-col list">
       <JobPanel
-        v-for="(deliveryRecord, i) in deliveryRecords"
+        v-for="(deliveryRecord, i) in deliveryRecordPositions"
         :key="i"
         class="list-item1"
         :collection-position="deliveryRecord"
@@ -29,100 +29,62 @@
 <script lang="ts" setup>
 import JobPanel from "@/components/JobPanel/JobPanel.vue";
 import NavigationBar from "@/components/NavigationBar/NavigationBar.vue";
-import { until } from "@/hooks";
 import { useMainStore } from "@/stores";
 import type {
-DeliveryRecord,
-Position,
+DeliveryRecord
 } from "@dongjiang-recruitment/service-common";
 
 const mainStore = useMainStore();
 
-const deliveryRecords = ref<Position[]>([]);
-const deliveryLength = ref<DeliveryRecord[]>([]);
 const sendType = ["", "待查看", "已查看", "通过初筛", "约面试", "不合格"];
 const sendId = ref<DeliveryRecord["status"]>(1);
-const emptyShow = ref(true);
 
-until(
-  computed(() => !!mainStore.applicant?.id),
-  () => {
-    /* 默认查看记录 */
-    applicantDeliveryRecordService
-      .queryDeliveryRecord({
-        applicantId: mainStore.applicant!.id,
-        query: {
-          status: ["$eq", 1],
-        },
-        size: 10,
-      })
-      .then((res) => {
-        deliveryLength.value = res.items;
-        for (const delivery of deliveryLength.value) {
-          companyPositionService
-            .getPosition({
-              companyId: delivery.company.id,
-              id: delivery.position.id,
-            })
-            .then((res) => {
-              res.company.id = delivery.company.id;
-              deliveryRecords.value.push(res);
-              if (deliveryRecords.value.length) {
-                emptyShow.value = false;
-              }
-            });
-        }
-      });
-  }
-);
-
-onShow(() => {
-  if (deliveryLength.value === null) {
-    deliveryRecords.value = [];
-  }
-});
-
-/* 查看不同状态记录 */
-const sendTypeId = (index: number) => {
-  sendId.value = index as DeliveryRecord["status"];
-  applicantDeliveryRecordService
-    .queryDeliveryRecord({
+const { data: deliveryRecords, loading, mutate } =
+  applicantDeliveryRecordService.useQueryDeliveryRecord(
+    () => ({
       applicantId: mainStore.applicant!.id,
       query: {
-        status: ["$eq", index],
+        status: ["$eq", sendId.value],
       },
-    })
-    .then((res) => {
-      deliveryRecords.value.length = 0;
-      if (res.total === 0) {
-        emptyShow.value = true;
-      } else {
-        for (const delivery of res.items) {
-          companyPositionService
-            .getPosition({
-              companyId: delivery.company.id,
-              id: delivery.position.id,
-            })
-            .then((res) => {
-              res.company.id = delivery.company.id;
-              deliveryRecords.value.push(res);
-            });
-        }
-        emptyShow.value = false;
-      }
-    });
+      size: 999999999,
+    }),
+    {
+      initialData: {
+        total: 0,
+        items: [],
+      },
+      refreshDeps: [sendId],
+      ready: computed(() => !!mainStore.applicant?.id),
+    }
+  );
+const deliveryRecordPositions = computed(() =>
+  deliveryRecords.value!.items.map((item) => item.position)
+);
+const emptyShow = computed(
+  () => deliveryRecordPositions.value.length === 0 && !loading.value
+);
+
+/* 查看不同状态记录 */
+const sendTypeId = (index: DeliveryRecord["status"]) => {
+  sendId.value = index;
 };
+
 /* 清空记录 */
 const clearRecord = () => {
-  for (const delivery of deliveryLength.value) {
+  for (const delivery of deliveryRecords.value!.items) {
     applicantDeliveryRecordService
       .removeDeliveryRecord({
         applicantId: mainStore.applicant!.id,
         id: delivery.id,
       })
       .then((res) => {
-        deliveryLength.value = [];
-        deliveryRecords.value.length = 0;
+        const newDeliveryRecords = deliveryRecords.value!.items.filter(
+          (item) => item.id !== delivery.id
+        );
+        mutate({
+          total: newDeliveryRecords.length,
+          items: newDeliveryRecords,
+        })
       });
   }
 };

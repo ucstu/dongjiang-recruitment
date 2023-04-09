@@ -1,5 +1,9 @@
 <template>
-  <SearchBar :city="cityName" :search-content="searchContent"></SearchBar>
+  <SearchBar
+    :city="workCityName"
+    :search-content="searchContent"
+    :data="position ? 1 : 2"
+  ></SearchBar>
   <view class="justify-between about">
     <text
       class="justify-center text-title"
@@ -15,11 +19,14 @@
     >
   </view>
   <FilterBar
-    v-if="position && searchContent"
+    v-if="position && (searchContent || positionType)"
+    :position-type="positionType"
+    :work-city-name="workCityName"
     :search-content="searchContent"
   ></FilterBar>
   <SearchAndFilter
     v-if="company && searchContent"
+    :work-city-name="workCityName"
     :search-content="searchContent"
   ></SearchAndFilter>
 </template>
@@ -31,16 +38,31 @@ import SearchBar from "@/components/SearchAndFilter/SearchBar.vue";
 
 const position = ref(true);
 const company = ref(false);
-const cityName = ref("");
+const positionType = ref("");
+const workCityName = ref("");
 const searchContent = ref("");
+
+onLoad((e) => {
+  uni.$on("liveCity", (city: string) => {
+    workCityName.value = city;
+  });
+});
 
 // 加载页面时调用的函数。
 onLoad((e) => {
-  if (e!.city) {
-    cityName.value = e!.city;
+  if (e!.data === "1") {
+    checkPosition();
+  } else if (e!.data === "2") {
+    checkCompany();
   }
-  if (e!.searchContent) {
-    searchContent.value = e!.searchContent;
+  if (e!.city) {
+    workCityName.value = e!.city;
+  }
+  if (e!.type) {
+    positionType.value = e!.type;
+  }
+  if (e!.search) {
+    searchContent.value = e!.search;
   }
 });
 

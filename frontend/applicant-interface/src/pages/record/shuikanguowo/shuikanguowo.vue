@@ -19,35 +19,32 @@
 <script lang="ts" setup>
 import CompanyDetail from "@/components/CompanyDetail/CompanyDetail.vue";
 import NavigationBar from "@/components/NavigationBar/NavigationBar.vue";
-import { until } from "@/hooks";
 import { useMainStore } from "@/stores";
 import type { Company } from "@dongjiang-recruitment/service-common";
 
 const mainStore = useMainStore();
-
-const companyInfo = ref<Company[]>([]);
-const emptyShow = ref(false);
-
-until(
-  computed(() => !!mainStore.applicant?.id),
-  () => {
-    // 查询查看记录
-    personnelService
-      .queryAllPersonnelInspectionRecord({
-        query: {
-          "applicant.id": ["$eq", mainStore.applicant!.id]
-        },
-      })
-      .then((res) => {
-        if (res.total === 0) {
-          emptyShow.value = true;
-        } else {
-          companyInfo.value = res.items.map((item) => item.personnel.company);
-          emptyShow.value = false;
-        }
-      });
+const { data: inspectionRecords, loading } =
+  applicantInspectionRecordService.useQueryUserInspectionRecord(
+    {
+      applicantId: mainStore.applicant!.id,
+      size: 999999999,
+    },
+    {
+      initialData: {
+        total: 0,
+        items: [],
+      },
+      ready: computed(() => !!mainStore.applicant?.id),
+    }
+  );
+const companyInfo = computed(() => {
+  const companies: Company[] = [];
+  for (const item of inspectionRecords.value!.items) {
+    companies.push(item.company);
   }
-);
+  return companies;
+});
+const emptyShow = computed(() => companyInfo.value.length === 0 && !loading.value);
 
 const view_2OnClick = (c: string) => {
   uni.navigateTo({

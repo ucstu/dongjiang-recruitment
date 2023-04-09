@@ -27,4 +27,8 @@ const themeOverrides: GlobalThemeOverrides = {
     textColorError: "#de576d",
   },
 };
+
+onMounted(() => {
+  document.getElementById("loading")?.remove();
+});
 </script>

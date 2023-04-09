@@ -22,9 +22,9 @@ export type NestedPaths<T extends GenericObject> = {
 }[keyof T];
 
 export type OneQuery<T extends GenericObject> = {
-  [k in NestedPaths<T>]?:
-    | [Method, ...Array<T[k]>]
-    | ["$not", Method, ...Array<T[k]>];
+  [k in NestedPaths<T>]?: T[k] extends GenericObject
+    ? OneQuery<T[k]>
+    : [Method, ...Array<T[k]>] | ["$not", Method, ...Array<T[k]>];
 };
 
 export type Query<T extends GenericObject> = Array<OneQuery<T>> | OneQuery<T>;

@@ -20,79 +20,68 @@
 <script lang="ts" setup>
 import JobPanel from "@/components/JobPanel/JobPanel.vue";
 import NavigationBar from "@/components/NavigationBar/NavigationBar.vue";
-import { until } from "@/hooks";
 import { useMainStore } from "@/stores";
-import type {
-GarnerRecord,
-Position,
-} from "@dongjiang-recruitment/service-common";
 
 const mainStore = useMainStore();
-
-const favorites = ref<GarnerRecord[]>([]);
-const favoritesPosition = ref<Position[]>([]);
 const cancelCollection = ref("取消收藏");
-const emptyShow = ref(true);
 
-until(
-  computed(() => !!mainStore.applicant?.id),
-  () => {
-    // 查询收藏记录
-    applicantGarnerRecordService
-      .queryGarnerRecord({
-        applicantId: mainStore.applicant!.id,
-      })
-      .then((res) => {
-        favorites.value = res.items;
-        for (const favorite of favorites.value) {
-          companyPositionService
-            .getPosition({
-              companyId: favorite.company.id,
-              id: favorite.position.id,
-            })
-            .then((res) => {
-              favoritesPosition.value.push(res);
-              if (favoritesPosition.value.length) {
-                emptyShow.value = false;
-              }
-            });
-        }
-      });
+const {
+  data: favorites,
+  loading,
+  mutate,
+} = applicantGarnerRecordService.useQueryGarnerRecord(
+  {
+    applicantId: mainStore.applicant!.id,
+    size: 999999999,
+  },
+  {
+    initialData: {
+      total: 0,
+      items: [],
+    },
+    ready: computed(() => !!mainStore.applicant?.id),
   }
 );
-
-onShow(() => {
-  if (!favoritesPosition.value.length) {
-    favoritesPosition.value = [];
-    emptyShow.value = true;
-  }
-});
+const favoritesPosition = computed(() =>
+  favorites.value!.items.map((item) => item.position)
+);
+const emptyShow = computed(
+  () => favoritesPosition.value.length === 0 && !loading.value
+);
 
 const stateClick = (id: string) => {
-  const favoriteId = favorites.value.find((item) => {
-    return item.position.id === id
+  const favoriteId = favorites.value?.items.find((item) => {
+    return item.position.id === id;
   });
-  applicantGarnerRecordService.removeGarnerRecord({
-    applicantId: favoriteId!.applicant.id,
+  applicantGarnerRecordService
+    .removeGarnerRecord({
+      applicantId: favoriteId!.applicant.id,
       id: favoriteId!.id,
-  }).then((res) => {
-    favoritesPosition.value = favoritesPosition.value.filter((item) => {
-      return item.id != id
     })
-  })
-}
+    .then((res) => {
+      const newFavorites = favorites.value!.items.filter((item) => {
+        return item.position.id !== id;
+      });
+      mutate({
+        total: newFavorites!.length,
+        items: newFavorites,
+      });
+    });
+};
 
 /* 清空收藏记录 */
 const emptyFavorites = () => {
-  for (const favorite of favorites.value) {
+  for (const favorite of favorites.value!.items) {
     applicantGarnerRecordService
       .removeGarnerRecord({
         applicantId: favorite.applicant.id,
         id: favorite.id,
       })
       .then(() => {
-        favorites.value = [];
-        favoritesPosition.value.length = 0;
+        mutate({
+          total: 0,
+          items: [],
+        });
       });
   }
 };

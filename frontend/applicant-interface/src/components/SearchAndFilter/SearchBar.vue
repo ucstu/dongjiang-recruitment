@@ -53,6 +53,7 @@
             v-model="_searchContent"
             type="text"
             class="search-text"
+            @confirm="searchOnClick"
             placeholder="请输入关键字"
           />
         </view>
@@ -86,6 +87,10 @@ const props = defineProps({
     type: String,
     default: "",
   },
+  data: {
+    type: Number,
+    default: 1,
+  },
 });
 
 const _searchContent = ref(props.searchContent);
@@ -97,7 +102,9 @@ const searchOnClick = () => {
   if (_searchContent.value !== "") {
     uni.navigateTo({
       url:
-        "/pages/detail/xiangguanzhiwei/xiangguanzhiwei?searchContent=" +
+        "/pages/detail/xiangguanzhiwei/xiangguanzhiwei?data=" +
+        props.data +
+        "&search=" +
         _searchContent.value +
         "&city=" +
         props.city,

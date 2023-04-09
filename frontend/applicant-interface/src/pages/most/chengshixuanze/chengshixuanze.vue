@@ -43,9 +43,11 @@ const cities = computed(() => provinces[provinceIndexOf.value].cities);
 
 // 单击城市时调用的函数。它将导航回上一页并发出一个名为 liveCity 的事件。
 const cityIndex = (index: number) => {
-  const city = cities.value[index];
-  uni.navigateBack({ delta: 1 });
+  const city = `${provinces[provinceIndexOf.value].provinceName},${
+    cities.value[index]
+  }`;
   uni.$emit("liveCity", city);
+  uni.navigateBack({ delta: 1 });
 };
 </script>
 

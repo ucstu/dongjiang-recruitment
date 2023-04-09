@@ -20,55 +20,34 @@
 <script lang="ts" setup>
 import CompanyPanel from "@/components/CompanyPanel/CompanyPanel.vue";
 import NavigationBar from "@/components/NavigationBar/NavigationBar.vue";
-import { until } from "@/hooks";
 import { useMainStore } from "@/stores";
-import type {
-AttentionRecord,
-Company,
-} from "@dongjiang-recruitment/service-common";
 
 const mainStore = useMainStore();
-
-const attentionCompanies = ref<Company[]>([]);
-const focusCompany = ref<AttentionRecord[]>([]);
 const unfocus = ref("取消关注");
-const emptyShow = ref(true);
 
-until(
-  computed(() => !!mainStore.applicant?.id),
-  () => {
-    // 查询关注公司记录
-    applicantAttentionRecordService
-      .queryAttentionRecord({
-        applicantId: mainStore.applicant!.id,
-      })
-      .then((res) => {
-        focusCompany.value = res.items;
-        for (const focus of focusCompany.value) {
-          companyService
-            .getCompany({
-              id: focus.company.id,
-            })
-            .then((res) => {
-              attentionCompanies.value.push(res);
-              if (attentionCompanies.value.length) {
-                emptyShow.value = false;
-              }
-            });
-        }
-      });
+const { data: focus, loading, mutate} = applicantAttentionRecordService.useQueryAttentionRecord(
+  {
+    applicantId: mainStore.applicant!.id,
+    size: 999999999,
+  },
+  {
+    initialData: {
+      total: 0,
+      items: [],
+    },
+    ready: computed(() => !!mainStore.applicant?.id),
   }
 );
+const attentionCompanies = computed(() =>
+  focus.value!.items.map((item) => item.company)
+);
+const emptyShow = computed(
+  () => attentionCompanies.value.length === 0 && !loading.value
+);
 
-onShow(() => {
-  if (!attentionCompanies.value.length) {
-    attentionCompanies.value = [];
-    emptyShow.value = true;
-  }
-});
 // 删除关注记录
 const unsubscribe = (id: string) => {
-  const attentionRecordId = focusCompany.value.find((item) => {
+  const attentionRecordId = focus.value!.items.find((item) => {
     return item.company.id === id;
   });
   applicantAttentionRecordService
@@ -77,9 +56,13 @@ const unsubscribe = (id: string) => {
       id: attentionRecordId!.id,
     })
     .then((res) => {
-      attentionCompanies.value = attentionCompanies.value.filter((item) => {
-        return item.id !== id;
+      const newFocus = focus.value!.items.filter((item) => {
+        return item.company.id !== id;
       });
+      mutate({
+        total: newFocus.length,
+        items: newFocus,
+      })
     });
 };
 </script>
