@@ -1,3 +1,4 @@
+import { until, useApiFullPath } from "@/hooks";
 import type { Message } from "@/interfaces";
 import type {
   Account,
@@ -7,6 +8,7 @@ import type {
 import io from "@hyoga/uni-socket.io";
 import dayjs from "dayjs";
 import jwtDecode from "jwt-decode";
+import { nanoid } from "nanoid";
 import { defineStore } from "pinia";
 
 const parseJwt = (
@@ -20,16 +22,12 @@ const parseJwt = (
   }
 };
 
-// const socket = io(`${import.meta.env.VITE_BASE_URL}`, {
-const socket = io(`http://127.0.0.1:3004`, {
+const socket = io(useApiFullPath(""), {
+// const socket = io("http://127.0.0.1:3004", {
   path: "/common/socket.io",
   transports: ["websocket", "polling"],
   timeout: 5000,
 });
-
-export const sendMessage = (message: MessageRecord) => {
-  socket.emit("message", message);
-};
 
 export const useMainStore = defineStore(
   "main",
@@ -97,7 +95,6 @@ export const useMainStore = defineStore(
             url: "/pages/info/gerenxinxi/gerenxinxi",
           });
         } else {
-          messages.value[applicantId.value!] = {};
           applicantEducationExperienceService
             .queryEducationExperience({
               applicantId: applicantId.value!,
@@ -152,43 +149,68 @@ export const useMainStore = defineStore(
       initialData: [],
     });
     const messages = ref<{
-      [key: string]: { [key: string]: Message[] };
+      [key: string]: Message[];
     }>({});
     socket.on("connect", () => {
-      socket.on(socket.id, (message: MessageRecord) => {
-        const { initiateId, serviceId } = message;
-        if (!messages.value[initiateId]) messages.value[initiateId] = {};
-        if (!messages.value[initiateId][serviceId])
-          messages.value[initiateId][serviceId] = [];
-        messages.value[initiateId][serviceId].push({
-          ...message,
-          haveRead: false,
-        });
+      until(
+        computed(() => !!applicantId.value),
+        () => {
+          const sendPingToServer = () => {
+            socket.emit("ping", {
+              accountId: applicantId.value,
+              accountType: 1,
+            });
+          };
+          sendPingToServer();
+          setInterval(sendPingToServer, 40000);
+          socket.on(socket.id, (message: MessageRecord) => {
+            const { initiateId } = message;
+            if (!messages.value[initiateId]) {
+              messages.value[initiateId] = [];
+            }
+            messages.value[initiateId].push({
+              ...message,
+              haveRead: false,
+            });
+          });
+        }
+      );
+    });
+
+    socket.on("error", (err: { reason: string; message: Message }) => {
+      uni.showToast({
+        title: err.reason,
+      });
+      messages.value[err.message.serviceId]?.forEach((message) => {
+        if (message.id === err.message.id) {
+          message.failed = true;
+        }
       });
     });
 
-    return {
-      system,
-      menu,
-      token,
-      account,
-      setAccount,
-      refreshAccount,
-      loadingAccount,
-      applicant,
-      setApplicant,
-      refreshApplicant,
-      loadingApplicant,
-      jobExpectations,
-      setJobExpectations,
-      refreshJobExpectations,
-      loadingJobExpectations,
-      cities,
-      setCities,
-      refreshCities,
-      loadingCities,
-      messages,
-    };
+        return {
+          system,
+          menu,
+          token,
+          accountId,
+          account,
+          setAccount,
+          refreshAccount,
+          loadingAccount,
+          applicant,
+          setApplicant,
+          refreshApplicant,
+          loadingApplicant,
+          jobExpectations,
+          setJobExpectations,
+          refreshJobExpectations,
+          loadingJobExpectations,
+          cities,
+          setCities,
+          refreshCities,
+          loadingCities,
+          messages,
+        };
   },
   {
     persist: {
@@ -203,3 +225,26 @@ export const useMainStore = defineStore(
     },
   }
 );
+
+export type SendMessageOptions = Omit<
+  MessageRecord,
+  "id" | "createdAt" | "updatedAt" | "initiateId" | "initiateType"
+>;
+export const sendMessage = (message: SendMessageOptions) => {
+  const store = useMainStore();
+  const _message = {
+    id: nanoid(),
+    createdAt: dayjs().format(),
+    initiateId: store.accountId,
+    initiateType: 1,
+    ...message,
+  };
+  socket.emit("message", _message);
+  if (!store.messages[message.serviceId]) {
+    store.messages[message.serviceId] = [];
+  }
+  store.messages[message.serviceId].push({
+    ..._message,
+    haveRead: true,
+  } as any);
+};

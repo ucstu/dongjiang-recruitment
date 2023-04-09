@@ -50,7 +50,7 @@ const formatNumber = (_n: string | number) => {
   const n = _n.toString();
   return n[1] ? n : "0" + n;
 };
-const usetimeChange = (_timeValue: string) => {
+const useTimeChange = (_timeValue: string) => {
   const timeValue = new Date(_timeValue).getTime();
   const timeNew = new Date().getTime();
   const timeDiffer = timeNew - timeValue;
@@ -88,4 +88,4 @@ const usetimeChange = (_timeValue: string) => {
   }
   return returnTime;
 };
-export default usetimeChange;
+export { useTimeChange };

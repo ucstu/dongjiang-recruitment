@@ -210,6 +210,7 @@ const changeInterviewTime = (time: string) => {
           id: deliveryRecord.id,
           requestBody: {
             ...deliveryRecord,
+            status: DeliveryRecord.status.Interview,
             interviewTime: time,
           },
         })

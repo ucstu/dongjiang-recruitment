@@ -1,51 +1,41 @@
 <template>
   <view class="flex-row items-center info-box" @click="toChatPage">
-    <image
-      class="image-heard"
-      :src="
-        VITE_CDN_URL +
-        (hrInfo.avatarUrl ? hrInfo.avatarUrl : '/image/heard2.jpg')
-      "
-    />
+    <image class="image-heard" :src="useResFullPath(personnel.avatarUrl)" />
     <view class="infos">
       <view class="flex-row justify-between name-time">
-        <text>{{ hrInfo!.hrName }}</text>
+        <text>{{ personnel!.hrName }}</text>
         <text style="font-size: 25rpx">{{ time }}</text>
       </view>
       <view class="justify-between items-center flex-row">
         <view class="message">
-          <text v-if="initiateType === 1" style="white-space: nowrap">{{
-            mes
-          }}</text>
-          <text v-else-if="initiateType === 2" style="white-space: nowrap"
-            >图片</text
-          >
+          <text v-if="messageType === 1" style="white-space: nowrap">{{ message }}</text>
+          <text v-else-if="messageType === 2" style="white-space: nowrap">[图片]</text>
         </view>
-        <view v-if="!isRead" class="is-read"></view>
+        <view v-if="!haveRead" class="is-read"></view>
       </view>
     </view>
   </view>
 </template>
 
 <script lang="ts" setup>
-import { useMainStore } from "@/stores";
+import { useResFullPath } from "@/hooks";
 import type { Personnel } from "@dongjiang-recruitment/service-common";
 import type { PropType } from "vue";
 
-const VITE_CDN_URL = import.meta.env.VITE_CDN_URL;
-
-const mainStore = useMainStore();
-
 const props = defineProps({
-  hrInfo: {
+  personnel: {
     type: Object as PropType<Personnel>,
     default: () => ({}),
   },
-  mes: {
+  message: {
     type: String,
     default: "",
   },
-  isRead: {
+  messageType: {
+    type: Number,
+    default: 1,
+  },
+  haveRead: {
     type: Boolean,
     default: true,
   },
@@ -53,32 +43,17 @@ const props = defineProps({
     type: String,
     default: "",
   },
-  messageKey: {
-    type: String,
-    default: "",
-  },
-  initiateType: {
-    type: Number,
-    default: 0,
-  },
 });
 
 onShow(() => {
-  return props.isRead;
+  return props.haveRead;
 });
 
 // 当用户单击消息时调用的函数。它会将消息更改为已阅读，然后导航到聊天页面。
 const toChatPage = () => {
-  mainStore.messages[mainStore.applicant!.id][props.hrInfo.id][
-    mainStore.messages[mainStore.applicant!.id][props.hrInfo.id].length - 1
-  ].haveRead = true;
-  const i = props.hrInfo.id;
+  const i = props.personnel.id;
   uni.navigateTo({
-    url:
-      "/pages/mine/liaotianyemian/liaotianyemian?Id=" +
-      i +
-      "&key=" +
-      props.messageKey,
+    url: "/pages/mine/liaotianyemian/liaotianyemian?Id=" + i,
   });
 };
 </script>

@@ -4,7 +4,11 @@ import {
   InjectRepository,
   Repository,
 } from "@dongjiang-recruitment/nest-common/dist/typeorm";
-import { Injectable, NotFoundException } from "@nestjs/common";
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from "@nestjs/common";
 import { CreateInspectionRecordDto } from "./dto/create-inspectionRecord.dto";
 import { UpdateInspectionRecordDto } from "./dto/update-inspectionRecord.dto";
 import { InspectionRecord } from "./entities/inspectionRecord.entity";
@@ -30,7 +34,7 @@ export class InspectionRecordService {
       },
     });
     if (inspectionRecord && inspectionRecord.deletedAt === null) {
-      throw new NotFoundException("已经查看过该公司的该职位");
+      throw new BadRequestException("已经查看过该公司的该职位");
     } else if (inspectionRecord && inspectionRecord.deletedAt !== null) {
       await this.inspectionRecordRepository.restore(inspectionRecord.id);
       return inspectionRecord;

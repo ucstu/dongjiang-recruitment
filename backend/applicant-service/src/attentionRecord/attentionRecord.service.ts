@@ -4,7 +4,11 @@ import {
   InjectRepository,
   Repository,
 } from "@dongjiang-recruitment/nest-common/dist/typeorm";
-import { Injectable, NotFoundException } from "@nestjs/common";
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from "@nestjs/common";
 import { CreateAttentionRecordDto } from "./dto/create-attentionRecord.dto";
 import { UpdateAttentionRecordDto } from "./dto/update-attentionRecord.dto";
 import { AttentionRecord } from "./entities/attentionRecord.entity";
@@ -30,7 +34,7 @@ export class AttentionRecordService {
       },
     });
     if (attentionRecord && attentionRecord.deletedAt === null) {
-      throw new NotFoundException("已经关注过该公司");
+      throw new BadRequestException("已经关注过该公司");
     } else if (attentionRecord && attentionRecord.deletedAt !== null) {
       await this.attentionRecordRepository.restore(attentionRecord.id);
       return attentionRecord;

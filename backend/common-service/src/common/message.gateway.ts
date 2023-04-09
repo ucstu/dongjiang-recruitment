@@ -5,12 +5,13 @@ import {
 } from "@dongjiang-recruitment/nest-common/dist/redis";
 import { OnModuleInit } from "@nestjs/common";
 import {
+  ConnectedSocket,
   MessageBody,
   SubscribeMessage,
   WebSocketGateway,
   WebSocketServer,
 } from "@nestjs/websockets";
-import { Server } from "socket.io";
+import { Server, Socket } from "socket.io";
 
 @WebSocketGateway({
   path: "/common/socket.io",
@@ -28,18 +29,41 @@ export class MessageGateWay implements OnModuleInit {
 
   onModuleInit() {
     this.server.on("connection", (socket) => {
-      socket.on("register", (message: { id: string }) => {
-        this.redis.set(message.id, socket.id);
-        socket.on("disconnect", () => {
-          this.redis.del(message.id);
-        });
-      });
+      socket.on(
+        "ping",
+        ({
+          accountId,
+          accountType,
+        }: {
+          accountId: string;
+          accountType: number;
+        }) => {
+          // 60s内没有心跳，就认为用户下线了
+          this.redis.set(
+            `socket:${accountId}-${accountType}`,
+            socket.id,
+            "EX",
+            60
+          );
+          socket.on("disconnect", () => {
+            this.redis.del(`socket:${accountId}-${accountType}`);
+          });
+        }
+      );
     });
   }
 
   @SubscribeMessage("message")
-  async handleMessage(@MessageBody() body: MessageRecord) {
-    const socketId = [await this.redis.get(body.serviceId)].flat()[0];
+  async handleMessage(
+    @ConnectedSocket() client: Socket,
+    @MessageBody() body: MessageRecord
+  ) {
+    const socketId = await this.redis.get(
+      `socket:${body.serviceId}-${body.serviceType}`
+    );
+    if (!socketId) {
+      return client.emit("error", { reason: "用户不在线", message: body });
+    }
     this.server.to(socketId).emit("message", body);
   }
 }

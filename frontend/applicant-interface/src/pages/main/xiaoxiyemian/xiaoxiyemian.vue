@@ -37,15 +37,14 @@
         <image class="image-down" src="@/static/icons/arrow-down-filling.png" />
       </view>
       <scroll-view class="group-infos" :scroll-y="true">
-        <view v-if="hrInfo.length">
-          <view v-for="(item, i) in hrInfo" :key="i">
+        <view v-if="messages.length">
+          <view v-for="message in messages" :key="message.personnel.id">
             <MailBar
-              :hr-info="item"
-              :mes="mes.get(item.id)"
-              :is-read="isRead.get(item.id)"
-              :time="time.get(item.id)"
-              :message-key="messageKey.get(item.id)"
-              :initiate-type="messageType.get(item.id)"
+              :personnel="message.personnel"
+              :message-type="getLastMessage(message.messages).messageType"
+              :message="getLastMessage(message.messages).content"
+              :have-read="getLastMessage(message.messages).haveRead"
+              :time="useTimeChange(getLastMessage(message.messages).createdAt)"
             />
           </view>
         </view>
@@ -56,77 +55,59 @@
 
 <script lang="ts" setup>
 import MailBar from "@/components/MailBar/MailBar.vue";
+import type { Message } from "@/interfaces";
 import { useMainStore } from "@/stores";
-import usetimeChange from "@/utils/useTimeChange";
+import { useTimeChange } from "@/utils";
 import type {
-  DeliveryRecord,
-  Personnel,
+DeliveryRecord,
+Personnel,
 } from "@dongjiang-recruitment/service-common";
 
-const hrInfo = ref<Personnel[]>([]);
 const mainStore = useMainStore();
-const mes = ref<Map<string, string>>(new Map());
-const time = ref<Map<string, string>>(new Map());
-const isRead = ref<Map<string, boolean>>(new Map());
-const messageType = ref<Map<string, number>>(new Map());
-const messageKey = ref<Map<string, string>>(new Map());
+const personnel = ref<Map<string, Personnel>>(new Map());
+const messages = ref<
+  Array<{
+    messages: Message[];
+    personnel: Personnel;
+  }>
+>([]);
 
-onShow(() => {
-  // 从store获取消息信息。
-  if (mainStore.messages[mainStore.applicant?.id || 0]) {
-    hrInfo.value = [];
-    for (const key in mainStore.messages[mainStore.applicant?.id || 0]) {
-      messageKey.value.set(key, key);
-      personnelService
-        .getPersonnel({
-          id: key,
-        })
-        .then((res) => {
-          // 用于获取最新消息信息。
-          mes.value.set(
-            key,
-            mainStore.messages[mainStore.applicant!.id][key][
-              mainStore.messages[mainStore.applicant!.id][key].length - 1
-            ].content
-          );
-          time.value.set(
-            key,
-            usetimeChange(
-              mainStore.messages[mainStore.applicant!.id][key][
-                mainStore.messages[mainStore.applicant!.id][key].length - 1
-              ].createdAt
-            )
-          );
-          isRead.value.set(
-            key,
-            mainStore.messages[mainStore.applicant!.id][key][
-              mainStore.messages[mainStore.applicant!.id][key].length - 1
-            ].haveRead
-          );
-          messageType.value.set(
-            key,
-            mainStore.messages[mainStore.applicant!.id][key][
-              mainStore.messages[mainStore.applicant!.id][key].length - 1
-            ].messageType
-          );
-          hrInfo.value.push(res);
-        });
+const getLastMessage = (messages: Message[]) => {
+  return messages[messages.length - 1];
+};
+
+watch(
+  () => mainStore.messages,
+  async (newVal) => {
+    const _messages = [] as Array<{
+      messages: Message[];
+      personnel: Personnel;
+    }>;
+    for (const key in newVal) {
+      if (key === "undefined") continue;
+      const _personnel =
+        personnel.value.get(key) ||
+        (await personnelService.getPersonnel({ id: key }));
+      personnel.value.set(key, _personnel);
+      _messages.push({
+        messages: newVal[key],
+        personnel: _personnel,
+      });
     }
+    messages.value = _messages;
+  },
+  {
+    immediate: true,
+    deep: true,
   }
-});
+);
+
 // 一键已读
 const allRead = () => {
-  for (const key in mainStore.messages[mainStore.applicant!.id]) {
-    if (
-      mainStore.messages[mainStore.applicant!.id][key][
-        mainStore.messages[mainStore.applicant!.id][key].length - 1
-      ].initiateType === 2
-    ) {
-      mainStore.messages[mainStore.applicant!.id][key][
-        mainStore.messages[mainStore.applicant!.id][key].length - 1
-      ].haveRead = true;
-      isRead.value.set(key, true);
-    }
+  for (const key in mainStore.messages) {
+    mainStore.messages[key].forEach((item) => {
+      item.haveRead = true;
+    });
   }
 };
 

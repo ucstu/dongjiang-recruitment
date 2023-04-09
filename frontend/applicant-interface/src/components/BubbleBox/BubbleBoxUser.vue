@@ -1,6 +1,7 @@
 <template>
   <view class="flex-row justify-end user-bubble-box">
     <view class="flex-row">
+      <text v-if="fail" style="color: red;">!</text>
       <view v-if="type === 1" class="flex-row">
         <view class="items-center bubble-box">{{ mes }}</view>
         <view class="user-box"></view>
@@ -29,6 +30,10 @@ const props = defineProps({
   type: {
     type: Number,
     default: 0,
+  },
+  fail: {
+    type: Boolean,
+    default: false,
   },
 });
 </script>

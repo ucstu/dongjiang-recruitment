@@ -38,21 +38,20 @@
     <!-- #endif -->
     <scroll-view class="group-info" :scroll-y="true" :scroll-top="scrollTop">
       <view
-        v-for="recode in mainStore.messages[mainStore.applicant?.id || 0][
-          messageKey
-        ]"
+        v-for="recode in mainStore.messages[hrInfo.id] || []"
         :key="recode.id"
       >
         <Left
-          v-if="recode.initiateType === 2"
+          v-if="recode.initiateId === hrInfo.id"
           :mes="recode.content"
           :type="recode.messageType"
           :hr-info="hrInfo"
         ></Left>
         <Right
-          v-if="recode.initiateType === 1"
+          v-else
           :mes="recode.content"
           :type="recode.messageType"
+          :fail="recode.failed === true"
         ></Right
       ></view>
     </scroll-view>
@@ -64,6 +63,7 @@
             class="items-center input"
             :maxlength="100"
             :auto-height="true"
+            @confirm="sendMes"
           />
         </view>
         <text class="items-center text-send" @click="sendMes"> 发送</text>
@@ -86,10 +86,9 @@
 <script lang="ts" setup>
 import Left from "@/components/BubbleBox/BubbleBoxHr.vue";
 import Right from "@/components/BubbleBox/BubbleBoxUser.vue";
+import { useApiFullPath } from "@/hooks";
 import { sendMessage, useMainStore } from "@/stores";
 import type { Personnel } from "@dongjiang-recruitment/service-common";
-
-const VITE_BASE_URL = import.meta.env.VITE_BASE_URL;
 
 const mainStore = useMainStore();
 
@@ -103,31 +102,22 @@ const navigationBarWidth = mainStore.menu.left - uni.upx2px(30);
 
 const hrInfo = ref<Personnel>({} as Personnel);
 const inputValue = ref("");
-const messageKey = ref("");
 const scrollTop = ref(0);
 
-watchEffect(() => {
-  // 用于在页面高度发生变化时滚动到页面底部。
-  if (mainStore.messages[mainStore.applicant?.id || 0][hrInfo.value.id]) {
-    const sTop =
-      mainStore.messages[mainStore.applicant?.id || 0][hrInfo.value.id].length *
-      uni.upx2px(150);
-    nextTick(() => {
-      scrollTop.value = sTop;
-    });
-  }
-
-  // 这是为了检查用户是否已经与 HR 进行过对话。如果没有，它将创建一个新的对话。
-  if (!mainStore.messages[mainStore.applicant?.id || 0]) {
-    mainStore.messages[mainStore.applicant?.id || 0] = {};
-  }
-  for (const key in mainStore.messages[mainStore.applicant?.id || 0]) {
-    if (key === hrInfo.value.id) {
-      messageKey.value = key;
+watch(
+  () => mainStore.messages[hrInfo.value.id],
+  (val) => {
+    if (val) {
+      nextTick(() => {
+        scrollTop.value =
+          mainStore.messages[hrInfo.value.id].length * uni.upx2px(150);
+      });
+    } else {
+      mainStore.messages[hrInfo.value.id] = [];
     }
-  }
-});
-
+  },
+  { immediate: true }
+);
 onLoad((e) => {
   if (e!.Id) {
     personnelService
@@ -137,26 +127,38 @@ onLoad((e) => {
       .then((res) => {
         hrInfo.value = res;
       });
-  }
-  if (e!.key) {
-    messageKey.value = e!.key;
+  } else {
+    uni.showToast({
+      title: "参数错误",
+      icon: "none",
+      duration: 1500,
+    });
+    goBack();
   }
 });
 
 const goBack = () => {
-  uni.navigateBack({
-    delta: 1,
-  });
+  const pages = getCurrentPages();
+  if (pages.length > 1) {
+    uni.navigateBack({
+      delta: 1,
+    });
+  } else {
+    uni.switchTab({
+      url: "/pages/main/shouyeyemian/shouyeyemian",
+    });
+  }
 };
 
 // 发送消息的函数。
 const sendMes = () => {
   if (inputValue.value.length) {
-    // sendMessage(inputValue.value, 1, hrInfo.value.hrInformationId, 2);
     sendMessage({
-      initiateId: mainStore.applicant!.id,
       serviceId: hrInfo.value.id,
-    } as any)
+      serviceType: 2,
+      content: inputValue.value,
+      messageType: 1,
+    });
     inputValue.value = "";
   } else {
     uni.showToast({
@@ -173,7 +175,7 @@ const sendImage = () => {
     success: (res) => {
       const tempFilePath = res.tempFilePaths;
       uni.uploadFile({
-        url: VITE_BASE_URL + "/files",
+        url: useApiFullPath("/common/files"),
         filePath: tempFilePath[0],
         name: "file",
         header: {
@@ -186,8 +188,12 @@ const sendImage = () => {
             status: number;
             timestamp: string;
           };
-          // sendMessage(response.body, 2, hrInfo.value.hrInformationId, 2);
-          console.log("fasongzanbukeyong");
+          sendMessage({
+            serviceId: hrInfo.value.id,
+            serviceType: 2,
+            content: response.body,
+            messageType: 2,
+          });
         },
         fail: (err) => {
           uni.showToast({

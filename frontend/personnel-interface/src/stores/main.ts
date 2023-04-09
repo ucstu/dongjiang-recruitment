@@ -1,3 +1,4 @@
+import { useApiFullPath } from "@/hooks";
 import type {
   Account,
   Company,
@@ -6,6 +7,8 @@ import type {
   Personnel,
   PositionTypes,
 } from "@dongjiang-recruitment/service-common";
+import { ElMessage, dayjs } from "element-plus";
+import { nanoid } from "nanoid";
 import { defineStore } from "pinia";
 import io from "socket.io-client";
 
@@ -46,33 +49,56 @@ export const useCompriseStore = defineStore("comprise", {
   },
 });
 
-const socket = io(`http://127.0.0.1:3004`, {
+const socket = io(useApiFullPath(""), {
+  // const socket = io("http://127.0.0.1:3004", {
   path: "/common/socket.io",
   transports: ["websocket", "polling"],
   timeout: 5000,
 });
 
-export const sendMessage = (message: MessageRecord) => {
-  socket.emit("message", message);
-};
-
+export interface Message extends MessageRecord {
+  haveRead: boolean;
+  failed?: boolean;
+}
 export const useMessageStore = defineStore(
   "message",
   () => {
     const messages = ref<{
-      [key: string]: { [key: string]: withReadStateMessageRecord[] };
+      [key: string]: Message[];
     }>({});
+    const mainStore = useMainStore();
 
     socket.on("connect", () => {
-      socket.on(socket.id, (message: MessageRecord) => {
-        const { initiateId, serviceId } = message;
-        if (!messages.value[initiateId]) messages.value[initiateId] = {};
-        if (!messages.value[initiateId][serviceId])
-          messages.value[initiateId][serviceId] = [];
-        messages.value[initiateId][serviceId].push({
-          ...message,
-          haveRead: false,
+      until(() => !!mainStore.hrInformation?.id)
+        .toMatch(Boolean)
+        .then(() => {
+          const sendPingToServer = () => {
+            socket.emit("ping", {
+              accountId: mainStore.hrInformation.id,
+              accountType: 2,
+            });
+          };
+          sendPingToServer();
+          setInterval(sendPingToServer, 40000);
+          socket.on(socket.id, (message: MessageRecord) => {
+            const { initiateId } = message;
+            if (!messages.value[initiateId]) {
+              messages.value[initiateId] = [];
+            }
+            messages.value[initiateId].push({
+              ...message,
+              haveRead: false,
+            });
+          });
         });
+    });
+
+    socket.on("error", (err: { reason: string; message: Message }) => {
+      ElMessage.error(err.reason);
+      messages.value[err.message.serviceId]?.forEach((message) => {
+        if (message.id === err.message.id) {
+          message.failed = true;
+        }
       });
     });
 
@@ -92,3 +118,27 @@ export const useMessageStore = defineStore(
     },
   }
 );
+
+export type SendMessageOptions = Omit<
+  MessageRecord,
+  "id" | "createdAt" | "updatedAt" | "initiateId" | "initiateType"
+>;
+export const sendMessage = (message: SendMessageOptions) => {
+  const mainStore = useMainStore();
+  const messageStore = useMessageStore();
+  const _message = {
+    id: nanoid(),
+    createdAt: dayjs().format(),
+    initiateId: mainStore.accountInformation.id,
+    initiateType: 2,
+    ...message,
+  };
+  socket.emit("message", _message);
+  if (!messageStore.messages[message.serviceId]) {
+    messageStore.messages[message.serviceId] = [];
+  }
+  messageStore.messages[message.serviceId].push({
+    ..._message,
+    haveRead: true,
+  } as any);
+};

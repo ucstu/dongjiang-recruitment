@@ -4,7 +4,11 @@ import {
   InjectRepository,
   Repository,
 } from "@dongjiang-recruitment/nest-common/dist/typeorm";
-import { Injectable, NotFoundException } from "@nestjs/common";
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from "@nestjs/common";
 import { CreateDeliveryRecordDto } from "./dto/create-deliveryRecord.dto";
 import { UpdateDeliveryRecordDto } from "./dto/update-deliveryRecord.dto";
 import { DeliveryRecord } from "./entities/deliveryRecord.entity";
@@ -30,7 +34,7 @@ export class DeliveryRecordService {
       },
     });
     if (deliveryRecord && deliveryRecord.deletedAt === null) {
-      throw new NotFoundException("已经投递过该职位");
+      throw new BadRequestException("已经投递过该职位");
     } else if (deliveryRecord && deliveryRecord.deletedAt !== null) {
       await this.deliveryRecordRepository.restore(deliveryRecord.id);
       return deliveryRecord;

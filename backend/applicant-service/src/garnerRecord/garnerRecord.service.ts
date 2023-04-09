@@ -4,7 +4,11 @@ import {
   InjectRepository,
   Repository,
 } from "@dongjiang-recruitment/nest-common/dist/typeorm";
-import { Injectable, NotFoundException } from "@nestjs/common";
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from "@nestjs/common";
 import { CreateGarnerRecordDto } from "./dto/create-garnerRecord.dto";
 import { UpdateGarnerRecordDto } from "./dto/update-garnerRecord.dto";
 import { GarnerRecord } from "./entities/garnerRecord.entity";
@@ -30,7 +34,7 @@ export class GarnerRecordService {
       },
     });
     if (garnerRecord && garnerRecord.deletedAt === null) {
-      throw new NotFoundException("已经添加过该收藏记录");
+      throw new BadRequestException("已经添加过该收藏记录");
     } else if (garnerRecord && garnerRecord.deletedAt !== null) {
       await this.garnerRecordRepository.restore(garnerRecord.id);
       return garnerRecord;
