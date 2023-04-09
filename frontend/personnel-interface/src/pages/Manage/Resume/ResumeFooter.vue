@@ -1,7 +1,12 @@
 <template>
   <div class="footer">
     <div class="left">
-      <el-checkbox v-model="totalSelect" label="全选" size="large" />
+      <el-checkbox
+        v-model="allSelected"
+        @change="handleChangeSelectAll"
+        label="全选"
+        size="large"
+      />
       <el-popover
         placement="top-start"
         title="面试时间"
@@ -9,111 +14,112 @@
         trigger="click"
       >
         <el-date-picker
-          v-model="value1"
+          v-model="interviewTime"
+          @change="emit('changeInterviewTime', interviewTime)"
           type="date"
           placeholder="选择面试时间"
           :disabled-date="disabledDate"
-          @change="handleInterviewTime"
         />
         <template #reference>
-          <el-button type="primary" @click="requireInterview"
-            >面试邀请</el-button
-          >
+          <el-button type="primary"> 面试邀请 </el-button>
         </template>
       </el-popover>
-      <el-popconfirm title="确定删除该简历?">
+      <el-popconfirm title="确定删除该简历?" @confirm="changeState(5)">
         <template #reference>
-          <el-button type="primary" plain @click="deleteInterview"
-            >删除简历</el-button
-          >
+          <el-button type="primary" plain>删除简历</el-button>
         </template>
       </el-popconfirm>
     </div>
     <el-pagination
-      v-model="currentPage"
+      v-model:current-page="page"
+      v-model:page-size="pageSize"
       background
-      layout="prev, pager, next"
+      :page-sizes="[3, 5, 10, 30]"
+      layout="total, sizes, prev, pager, next, jumper"
       :total="total"
-      @current-change="handleCurrentChange"
     />
   </div>
 </template>
 <script setup lang="ts">
-import useDate from "@/hooks/useDate";
+import type { DeliveryRecord } from "@dongjiang-recruitment/service-common";
+import { ElMessage } from "element-plus";
 import type { PropType } from "vue";
-import type { DeliveryRecordChecked } from "../Interview/resumeInfo.vue";
 
-const value1 = ref();
-let props = defineProps({
+interface DeliveryRecordChecked extends DeliveryRecord {
+  checked: boolean;
+}
+
+const interviewTime = ref("");
+const props = defineProps({
   total: {
     type: Number,
     default: 0,
   },
-  checked1: {
-    type: Boolean,
-    default: false,
+  page: {
+    type: Number,
+    default: 1,
   },
-  deliveryRecordsCheckeds: {
+  pageSize: {
+    type: Number,
+    default: 5,
+  },
+  deliveryRecords: {
     type: Array as PropType<DeliveryRecordChecked[]>,
     default: () => [],
   },
 });
+
 //禁止选择今天之前的日期
 const disabledDate = (current: Date) => {
   return current && current.valueOf() < Date.now();
 };
+
 const emit = defineEmits([
-  "submit-page",
-  "submit-checked",
-  "change-state",
-  "submit-interview-time",
+  "update:page",
+  "update:pageSize",
+  "update:deliveryRecords",
+  "changeDeliveryRecords",
+  "changeInterviewTime",
 ]);
-const handleChecked = (value: any) => {
-  emit("submit-checked", {
-    checked: value,
-  });
-};
-const requireInterview = () => {
-  emit("change-state", {
-    state: 4,
-  });
-};
-const total = computed(() => {
-  return props.deliveryRecordsCheckeds.length;
+
+const { page, pageSize, deliveryRecords } = useVModels(props, emit);
+
+const allSelected = computed(() => {
+  return deliveryRecords.value.every((item) => item.checked) && deliveryRecords.value.length > 0;
 });
-// 一个计算属性，它返回 deliveryRecordsCheckeds 数组中已检查项目的数量。
-const totalDone = computed(() => {
-  return props.deliveryRecordsCheckeds.reduce(
-    (per, cur) => per + (cur.checked ? 1 : 0),
-    0
-  );
-});
-const handleInterviewTime = () => {
-  emit("submit-interview-time", {
-    time: useDate(value1.value),
+
+const handleChangeSelectAll = (selectAll: boolean) => {
+  deliveryRecords.value.forEach((item) => {
+    item.checked = selectAll;
   });
 };
-// 一个计算属性，它返回 deliveryRecordsCheckeds 数组中已检查项目的数量。
-const totalSelect = computed({
-  get() {
-    return totalDone.value === total.value && total.value > 0;
-  },
-  set(value) {
-    handleChecked(value);
-  },
-});
-const deleteInterview = () => {
-  emit("change-state", {
-    state: 5,
-  });
+
+// 更改所选简历信息状态的功能。
+const changeState = (val: 1 | 2 | 3 | 4 | 5) => {
+  deliveryRecords.value
+    .filter((deliveryRecord) => deliveryRecord.checked)
+    .forEach((deliveryRecord) => {
+      deliveryRecord = { ...deliveryRecord, status: val };
+      // @ts-ignore
+      delete deliveryRecord.checked;
+      applicantDeliveryRecordService
+        .updateDeliveryRecord({
+          applicantId: deliveryRecord.applicant.id,
+          id: deliveryRecord.id,
+          requestBody: deliveryRecord,
+        })
+        .then(() => {
+          const newDeliveryRecords = deliveryRecords.value.filter(
+            (d) => d.id !== deliveryRecord.id
+          );
+          emit("changeDeliveryRecords", {
+            total: newDeliveryRecords.length,
+            items: newDeliveryRecords,
+          });
+          ElMessage.success("操作成功");
+        });
+    });
 };
-const handleCurrentChange = (val: number) => {
-  emit("submit-page", {
-    type: "page",
-    data: val,
-  });
-};
-const currentPage = ref(1);
 </script>
 
 <style scoped lang="scss">

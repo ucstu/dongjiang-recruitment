@@ -41,6 +41,7 @@ export default mergeConfig(
     tailwindcss: path.resolve(__dirname, "./tailwind.config.js"),
   }),
   {
+    base: "./",
     server: {
       proxy: {
         "/api": {

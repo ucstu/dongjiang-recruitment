@@ -8,13 +8,13 @@
         <div class="solution">
           <span
             >{{
-              ho < 9
+              hour < 9
                 ? "早上好"
-                : ho < 12
+                : hour < 12
                 ? "上午好"
-                : ho < 15
+                : hour < 15
                 ? "中午好"
-                : ho < 19
+                : hour < 19
                 ? "下午好"
                 : "晚上好"
             }}，{{ store.hrInformation.hrName }}</span
@@ -35,14 +35,14 @@
             <span> 今日待面试</span>
           </div>
           <div @click="goPosition">
-            <span>{{ recruitmentPosition }}</span>
+            <span>{{ recruitmentPosition!.total }}</span>
             <span>在招职位数</span>
           </div>
         </div>
         <div class="bottom">
           <div class="notice">
             <div class="whole">
-              <span>全部({{ interviewNum.length }})</span>
+              <span>全部({{ num.total }})</span>
               <el-divider direction="vertical" />
               <span>面试({{ num.countInterviewed }})</span>
             </div>
@@ -51,7 +51,7 @@
           <div class="time-line">
             <el-timeline>
               <el-timeline-item
-                v-for="interview in interviewNum"
+                v-for="interview in deliveryRecords!.items"
                 :key="interview.updatedAt"
                 :timestamp="interview.createdAt"
                 placement="top"
@@ -65,18 +65,15 @@
                         <div class="hint">
                           <p>
                             候选人:{{
-                              userInformations.get(interview.applicant.id)
-                                ?.firstName +
+                              interview.applicant.firstName +
                               "" +
-                              userInformations.get(interview.applicant.id)
-                                ?.lastName
+                              interview.applicant.lastName
                             }}
                           </p>
                           <el-divider direction="vertical" />
                           <p>
                             应聘职位：{{
-                              jobInformations.get(interview.position.id)
-                                ?.positionName
+                              interview.position.positionName
                             }}
                           </p>
                         </div>
@@ -105,94 +102,73 @@
 
 <script setup lang="ts">
 import SystemHeader from "@/components/System/SystemHeader.vue";
-import useDate from "@/hooks/useDate";
 import router from "@/router";
 import { useMainStore } from "@/stores/main";
 import type {
-Applicant,
-DeliveryRecord,
-Position,
+DeliveryRecord
 } from "@dongjiang-recruitment/service-common";
-import { dayjs } from "element-plus";
+import { useTimestamp } from "@vueuse/core";
 
 const store = useMainStore();
-const ho = new Date().getHours();
-const day = useDate(new Date());
-const interviewNum = ref<DeliveryRecord[]>([]);
-const num = ref({
-  count: 0,
-  countCommunication: 0,
-  countInterviewed: 0,
+const timestamp = useTimestamp()
+const hour = computed(() => {
+  return new Date(timestamp.value).getHours();
 });
-const userInformations = ref<Map<string, Applicant>>(new Map());
-const jobInformations = ref<Map<string, Position>>(new Map());
-interface Record {
-  status: Array<1 | 2 | 3 | 4 | 5>;
-  ages?: Array<1 | 2 | 3 | 4 | 5>;
-  deliveryDates?: Array<`${number}-${number}-${number}`>;
-  page?: number;
-  positionInfoIds?: Array<string>;
-  search?: string;
-  sexs?: Array<"男" | "女" | "未知">;
-  size?: number;
-  sort?: Array<`${keyof DeliveryRecord},${"desc" | "asc"}`>;
-  workingYears?: Array<1 | 2 | 3 | 4 | 5 | 6>;
-}
-const valueMap = ref<Record>({
-  status: [1, 2, 3, 4],
-});
-const recruitmentPosition = ref(0);
-// 获取位置信息的总数。
-companyPositionService
-  .queryPosition({
+
+const { data: recruitmentPosition } = companyPositionService.useQueryPosition(
+  () => ({
     companyId: store.companyInformation.id,
     size: 0,
-  })
-  .then((res) => {
-    recruitmentPosition.value = res.total;
-  });
+  }),
+  {
+    pollingInterval: 1000 * 60 * 5,
+    initialData: {
+      total: 0,
+      items: [],
+    },
+  }
+);
 
-// 获取面试信息
-applicantService
-  .queryAllDeliveryRecord({
+const { data: deliveryRecords } = applicantService.useQueryAllDeliveryRecord(
+  () => ({
     query: {
       "company.id": ["$eq", store.companyInformation.id],
-      status: ["$in", ...valueMap.value.status],
+      status: ["$in", 1, 2, 3, 4],
     },
-  })
-  .then((res) => {
-    interviewNum.value = res.items;
-    interviewNum.value.forEach((item) => {
-      companyPositionService
-        .getPosition({
-          companyId: item.company.id,
-          id: item.position.id,
-        })
-        .then((response) => {
-          jobInformations.value.set(item.position.id, response);
-        });
-      applicantService
-        .getApplicant({
-          id: item.applicant.id,
-        })
-        .then((responseable) => {
-          userInformations.value.set(item.applicant.id, responseable);
-        });
-
-      if (item.status === 1) {
-        num.value.countCommunication = num.value.countCommunication + 1;
-        if (useDate(dayjs(item.createdAt).add(8, "h").toISOString()) === day) {
-          num.value.count = num.value.count + 1;
-        }
-      } else if (
-        item.status === 4 &&
-        useDate(dayjs(item.interviewTime).subtract(8, "h").toISOString()) ===
-          day
-      ) {
-        num.value.countInterviewed = num.value.countInterviewed + 1;
-      }
-    });
+    size: 9999999
+  }),
+  {
+    pollingInterval: 1000 * 60 * 5,
+    initialData: {
+      total: 0,
+      items: [],
+    },
+  }
+);
+const num = computed(() => {
+  let count = 0;
+  let countCommunication = 0;
+  let countInterviewed = 0;
+  let total = 0;
+  deliveryRecords.value!.items.forEach((item) => {
+    if (item.status === 1) {
+      count++;
+    }
+    if (item.status === 2) {
+      countCommunication++;
+    }
+    if (item.status === 3) {
+      countInterviewed++;
+    }
+    total++;
   });
+  return {
+    count,
+    countCommunication,
+    countInterviewed,
+    total
+  };
+});
 
 const goPosition = () => {
   router.push("/System/Position");

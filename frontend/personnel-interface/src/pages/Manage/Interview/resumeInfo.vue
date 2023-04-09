@@ -1,67 +1,39 @@
 <template>
   <div
-    v-for="deliveryRecordsChecked in props.deliveryRecordsCheckeds"
-    :key="deliveryRecordsChecked.id"
+    v-for="deliveryRecord in deliveryRecords"
+    :key="deliveryRecord.id"
     class="resume-item"
   >
     <div class="resume-item">
       <div class="item-header">
-        <input
-          type="checkbox"
-          :checked="deliveryRecordsChecked.checked"
-          @change="handleChecked(deliveryRecordsChecked.id)"
-        />
-        <img
-          :src="
-            VITE_CDN_URL +
-            userInformations.get(deliveryRecordsChecked.applicant.id)?.avatarUrl
-          "
-          alt=""
-        />
+        <input type="checkbox" v-model="deliveryRecord.checked" />
+        <img :src="useResFullPath(deliveryRecord.applicant.avatarUrl)" alt="" />
         <div class="header-person">
           <div>
             <span>{{
-              userInformations.get(deliveryRecordsChecked.applicant.id)
-                ?.firstName +
+              deliveryRecord.applicant.firstName +
               "" +
-              userInformations.get(deliveryRecordsChecked.applicant.id)?.lastName
+              deliveryRecord.applicant.lastName
             }}</span>
             <span
-              >·{{
-                userInformations.get(deliveryRecordsChecked.applicant.id)?.sex
-              }}·<span>{{
-                userInformations.get(deliveryRecordsChecked.applicant.id)?.age
+              >·{{ deliveryRecord.applicant.sex }}·<span>{{
+                deliveryRecord.applicant.age
               }}</span
               >岁·<span>{{
-                educations[
-                  userInformations.get(deliveryRecordsChecked.applicant.id)
-                    ?.education as 1 | 2 | 3 | 4
-                ]
+                educations[deliveryRecord.applicant.education as 1 | 2 | 3 | 4]
               }}</span
               >·{{
-                slution[
-                  userInformations.get(deliveryRecordsChecked.applicant.id)
-                    ?.jobStatus as 1 | 2 | 3
-                ]
+                solution[deliveryRecord.applicant.jobStatus as 1 | 2 | 3]
               }}</span
             >
           </div>
           <div>
-            <span
-              >想找：{{
-                userInformations.get(deliveryRecordsChecked.applicant.id)
-                  ?.cityName
-              }}</span
+            <span>想找：{{ deliveryRecord.applicant.cityName }}</span
             >|<span
-              >{{
-                jobInformations.get(deliveryRecordsChecked.position.id)
-                  ?.positionName
-              }}|{{
-                jobInformations.get(deliveryRecordsChecked.position.id)
-                  ?.startingSalary +
+              >{{ deliveryRecord.position.positionName }}|{{
+                deliveryRecord.position.startingSalary +
                 "K-" +
-                jobInformations.get(deliveryRecordsChecked.position.id)
-                  ?.ceilingSalary +
+                deliveryRecord.position.ceilingSalary +
                 "K"
               }}</span
             >
@@ -69,12 +41,10 @@
         </div>
       </div>
       <div class="resume-label">
-        {{ " 求高薪 | 求稳定 | 求发展 " }}
+        {{ status[deliveryRecord.status] }}
       </div>
       <div class="right">
-        <el-button
-          type="primary"
-          @click="inspectionResume(deliveryRecordsChecked)"
+        <el-button type="primary" @click="inspectionResume(deliveryRecord)"
           >查看简历</el-button
         >
       </div>
@@ -82,50 +52,37 @@
   </div>
 </template>
 <script setup lang="ts">
-import router from "@/router";
-import type {
-Applicant,
-DeliveryRecord,
-Position,
-} from "@dongjiang-recruitment/service-common";
+import { useResFullPath } from "@/hooks";
+import type { DeliveryRecord } from "@dongjiang-recruitment/service-common";
 import type { PropType } from "vue";
 
-export interface DeliveryRecordChecked extends DeliveryRecord {
+interface DeliveryRecordChecked extends DeliveryRecord {
   checked: boolean;
 }
+
 let props = defineProps({
-  deliveryRecordsCheckeds: {
+  deliveryRecords: {
     type: Array as PropType<DeliveryRecordChecked[]>,
     default: () => [],
   },
-  userInformations: {
-    type: Map as PropType<Map<string, Applicant>>,
-    default: () => new Map(),
-  },
-  jobInformations: {
-    type: Map as PropType<Map<string, Position>>,
-    default: () => new Map(),
-  },
 });
 
-let emit = defineEmits(["sub-checked"]);
+const router = useRouter();
 
-const handleChecked = (deliveryRecordId: string) => {
-  emit("sub-checked", deliveryRecordId);
-};
-// watch(
-//   () => props.deliveryRecordsCheckeds,
-//   (val) => {
-//     delivers.value = val;
-//   },
-//   { deep: true }
-// );
-watchEffect(() => {
-  let delivery = props.deliveryRecordsCheckeds;
-});
-const VITE_CDN_URL = import.meta.env.VITE_CDN_URL as string;
-const slution = { 1: "随时入职", 2: "2周内入职", 3: "1月内入职" };
+const solution = { 1: "随时入职", 2: "2周内入职", 3: "1月内入职" };
 const educations = { 1: "大专", 2: "本科", 3: "硕士", 4: "博士" };
+const status = {
+  1: "待查看",
+  2: "已查看",
+  3: "通过筛选",
+  4: "约面试",
+  5: "不合适",
+};
+
+const emits = defineEmits(["update:deliveryRecords"]);
+
+const { deliveryRecords } = useVModels(props, emits);
+
 const inspectionResume = (delivery: DeliveryRecordChecked) => {
   // 变更状态函数，将选中的简历信息的状态进行变更
   if (delivery.status === 1) {

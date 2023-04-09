@@ -6,102 +6,79 @@
           <div class="top">
             <div class="first-line">
               <el-select
-                v-model="valueMap.status"
+                v-model="status"
                 class="m-2"
                 placeholder="按反馈"
                 clearable
-                @change="handleChange"
               >
                 <el-option
-                  v-for="(item, index) in feedbackMap"
+                  v-for="(item, index) in statusOptions"
                   :key="item"
                   :label="item"
                   :value="index + 1"
                 />
               </el-select>
-              <!-- <el-select
-                v-model="valueMap.workingYears"
+              <el-select
+                v-model="workingYear"
                 class="m-2"
                 placeholder="工作经验"
                 clearable
-                @change="handleChange"
               >
                 <el-option
-                  v-for="(item, index) in workExperience"
+                  v-for="(item, index) in workingYears"
                   :key="item"
                   :label="item"
                   :value="index + 1"
                 />
-              </el-select> -->
+              </el-select>
               <div style="width: 350px">
                 <el-date-picker
-                  v-model="workTimeing"
+                  v-model="updateTime"
                   style="width: 330px"
                   type="daterange"
                   range-separator="到"
                   start-placeholder="开始时间"
                   end-placeholder="结束时间"
-                  @change="handleWorkTimeChange(workTimeing)"
                 />
               </div>
             </div>
-            <!-- <div class="second-line">
-              <el-select
-                v-model="valueMap.sexs"
-                class="m-2"
-                placeholder="性别"
-                clearable
-                @change="handleChange"
-              >
+            <div class="second-line">
+              <el-select v-model="sex" class="m-2" placeholder="性别" clearable>
                 <el-option
-                  v-for="item in gander"
+                  v-for="item in sexs"
                   :key="item"
                   :label="item"
                   :value="item"
                 />
               </el-select>
-              <el-select
-                v-model="Ages"
-                class="m-2"
-                placeholder="年龄"
-                clearable
-                @change="handleAgeChange"
-              >
+              <el-select v-model="age" class="m-2" placeholder="年龄" clearable>
                 <el-option
                   v-for="(item, index) in ages"
                   :key="index"
                   :label="index"
-                  :value="index"
+                  :value="item"
                 />
               </el-select>
               <el-input
-                v-model="valueMap.userName"
+                v-model="userName"
                 input-style="max-width: 350px;"
                 placeholder="输入姓名查找"
-                :prefix-icon="Search"
                 clearable
-                @change="handleChange"
               />
-            </div> -->
+            </div>
           </div>
           <div class="resume">
             <el-scrollbar height="490px">
-              <ResumeInfo
-                :user-informations="userInformations"
-                :job-informations="jobInformations"
-                :delivery-records-checkeds="deliveryRecordsCheckeds"
-                @sub-checked="handleChecked"
-              >
-              </ResumeInfo>
+              <ResumeInfo v-model:delivery-records="deliveryRecordsCheckable" />
             </el-scrollbar>
           </div>
           <ResumeFooter
-            :total="total"
-            :delivery-records-checkeds="deliveryRecordsCheckeds"
-            @change-state="changState"
-            @submit-page="submitPage"
-            @submit-checked="submitChecked"
-            @submit-interview-time="submitInterviewTime"
+            :total="deliveryRecords!.total"
+            @change-delivery-records="mutate"
+            @change-interview-time="changeInterviewTime"
+            v-model:page="page"
+            v-model:pageSize="pageSize"
+            v-model:delivery-records="deliveryRecordsCheckable"
           />
         </div>
       </div>
@@ -110,298 +87,144 @@
 </template>
 
 <script setup lang="ts">
-import useDate from "@/hooks/useDate";
-import useGetDayAll from "@/hooks/useGetdata";
 import { useMainStore } from "@/stores/main";
-import type {
-Applicant,
-DeliveryRecord,
-Position,
-} from "@dongjiang-recruitment/service-common";
+import { DeliveryRecord, type Query } from "@dongjiang-recruitment/service-common";
 import { ElMessage, dayjs } from "element-plus";
-import * as _ from "lodash";
 import ResumeInfo from "../Interview/resumeInfo.vue";
 import ResumeFooter from "./ResumeFooter.vue";
-interface DeliveryRecordChecked extends DeliveryRecord {
+
+export interface DeliveryRecordChecked extends DeliveryRecord {
   checked: boolean;
 }
-const interviewTime = ref("");
-const store = useMainStore();
-const dialogTableVisible = ref(false);
-const deliveryRecords = ref<DeliveryRecord[]>([]);
-const userInformations = ref<Map<string, Applicant>>(new Map());
-const jobInformations = ref<Map<string, Position>>(new Map());
-const workTimeing = ref([]);
-const deliveryDates = ref<Array<`${number}-${number}-${number}`>>([]);
-const submitInterviewTime = (data: { time: string }) => {
-  interviewTime.value = dayjs(data.time).toISOString();
-};
-const totalCount = ref(0);
-const total = computed(() => {
-  let num: number = (totalCount.value / 7) * 10;
-  return Math.ceil(num);
-});
-const deliveryRecordsCheckeds = ref<DeliveryRecordChecked[]>([]);
-// 确定面试时间设置
-const confirmInterviewTime = (delivery: DeliveryRecordChecked) => {
-  dialogTableVisible.value = false;
-  applicantDeliveryRecordService
-    .updateDeliveryRecord({
-      applicantId: delivery.applicant.id,
-      id: delivery.id,
-      requestBody: _.omit(delivery, ["checked"]),
-    })
-    .then(() => {
-      ElMessage.success("操作成功");
-    });
-};
-const Ages = ref<Array<number>>([]);
-// 创建一个将在年龄更改时调用的函数。
-const handleAgeChange = (value: string) => {
-  valueMap.value.ages = ages.value[value];
-  handleChange();
-};
 
-// 选中或取消选中复选框时调用的函数将映射内容返回字符放入选择器显示。
-const submitChecked = (data: { checked: boolean }) => {
-  deliveryRecordsCheckeds.value.map(
-    (deliveryRecordsChecked: DeliveryRecordChecked) => {
-      deliveryRecordsChecked.checked = data.checked;
+const page = ref(1);
+const pageSize = ref(5);
+const status = ref<DeliveryRecord.status>();
+const statusOptions = ref(["待查看", "已查看", "通过筛选", "约面试", "不合适"]);
+const workingYear = ref<DeliveryRecord["applicant"]["workingYears"]>();
+const workingYears = ref([
+  "没有工作经验",
+  "在校/应届",
+  "3年以下",
+  "3-5年",
+  "5-10年",
+  "10年以上",
+]);
+const updateTime = ref<string[]>([]);
+const sex = ref<string>();
+const sexs = ref(["男", "女"]);
+const age = ref<string>();
+const ages = ref({
+  "18岁以下": "0-18",
+  "18-25岁": "18-25",
+  "25-35岁": "25-35",
+  "35-45岁": "35-45",
+  "45岁以上": "45-100",
+});
+const userName = ref<string>();
+
+const mainStore = useMainStore();
+const { data: deliveryRecords, mutate } =
+  applicantService.useQueryAllDeliveryRecord(
+    () => {
+      const basic: Query<DeliveryRecord> = {
+        "company.id": ["$eq", mainStore.companyInformation!.id],
+        status: status.value
+          ? ["$eq", status.value]
+          : ["$not", "$eq", DeliveryRecord.status.Inappropriate],
+        updatedAt: updateTime.value?.length
+          ? [
+              "$between",
+              ...updateTime.value.map((item) =>
+                dayjs(item).format("YYYY-MM-DD HH:mm:ss")
+              ),
+            ]
+          : undefined,
+        "applicant.sex": sex.value ? ["$eq", sex.value] : undefined,
+        "applicant.workingYears": workingYear.value
+          ? ["$eq", workingYear.value]
+          : undefined,
+        "applicant.age": age.value
+          ? ["$between", ...age.value.split("-").map((item) => Number(item))]
+          : undefined,
+      };
+      let query: Query<DeliveryRecord> = [];
+      if (userName.value) {
+        // 将中文名拆分为姓和名
+        const [firstName, ...rest] = userName.value.split("");
+        query.push({
+          "applicant.firstName": ["$like", `%${firstName}%`],
+          "applicant.lastName": ["$like", `%${rest.join("")}%`],
+          ...basic,
+        });
+      }
+      if (query.length === 0) {
+        query = [basic];
+      }
+      return {
+        query,
+        page: page.value,
+        size: pageSize.value,
+      };
+    },
+    {
+      ready: computed(() => !!mainStore.companyInformation?.id),
+      refreshDeps: [
+        page,
+        pageSize,
+        status,
+        updateTime,
+        workingYear,
+        sex,
+        age,
+        userName,
+      ],
+      initialData: {
+        total: 0,
+        items: [],
+      },
     }
   );
-};
-
-interface GetCompanyInfosP0DeliveryRecordsQueryParams {
-  /**
-   *
-   * 投递状态枚举数组，{1:待查看,2:已查看,3:通过筛选,4:约面试,5:不合适}
-   */
-  status: Array<1 | 2 | 3 | 4 | 5>;
-  /**
-   *
-   * 年龄限制枚举数组，{1:18-25,2:25-35,3:35-45,4:45-55,5:55-65}
-   */
-  ages?: Array<number>;
-  /**
-   *
-   * 投递时间，eg：2022-04-02
-   */
-  createdAt?: string;
-  /**
-   *
-   * 投递日期数组，eg：[2007-02-22,2007-02-23]
-   */
-  deliveryDates?: Array<string>;
-  /**
-   *
-   * 面试时间，eg：2022-02-03
-   */
-  interviewTime?: string;
-  /**
-   *
-   * 当前页，eg：0
-   */
-  page?: number;
-  /**
-   *
-   * 职位信息ID数组，eg：[3d32dbEE-bbf8-A1Fc-f9Ad-F96f96dA5e8b]
-   */
-  positionInfoIds?: Array<string>;
-  /**
-   *
-   * 性别数组，eg：[男,女]
-   */
-  sexs?: Array<"男" | "女" | "未知">;
-  /**
-   *
-   * 页大小，eg：5
-   */
-  size?: number;
-  /**
-   *
-   * 排序方式，eg：[createdAt,desc]
-   */
-  sort?: Array<`${keyof DeliveryRecord},${"asc" | "desc"}`>;
-  /**
-   *
-   * 修改时间，eg：2022-04-06
-   */
-  updatedAt?: string;
-  /**
-   *
-   * 用户名，eg：张三
-   */
-  userName?: string;
-  /**
-   *
-   * 工作经验枚举数组，{1:经验不限,2:在校/应届,3:3年及以下,4:3-5年,5:5-10年,6:10年以上}
-   */
-  workingYears?: Array<1 | 2 | 3 | 4 | 5 | 6>;
-}
-
-const valueMap = ref<GetCompanyInfosP0DeliveryRecordsQueryParams>({
-  status: [1, 2, 3, 4],
-  size: 7,
-  deliveryDates: deliveryDates.value,
-  page: 0,
+const deliveryRecordsCheckable = ref<DeliveryRecordChecked[]>([]);
+syncRef(deliveryRecords, deliveryRecordsCheckable, {
+  direction: "ltr",
+  transform: {
+    ltr: (deliveryRecords) =>
+      deliveryRecords!.items.map((item) => ({
+        ...item,
+        checked: false,
+      })),
+  },
 });
-const submitPage = (data: { type: string; data: number }) => {
-  valueMap.value.page = data.data - 1;
-  handleChange();
-};
 
-const changState = (val: { state: 1 | 2 | 3 | 4 | 5 }) => {
-  if (deliveryRecordsCheckeds.value) {
-    //变更状态函数，将选中的简历信息的状态进行变更
-    const newDeliver = deliveryRecordsCheckeds.value.filter(
-      (deliveryRecordsChecked: DeliveryRecordChecked) => {
-        return deliveryRecordsChecked.checked === true;
-      }
-    );
-    if (newDeliver.length > 0) {
-      if (val.state === 4) {
-        //邀请面试打开寻找日期页面
-        if (interviewTime.value) {
-          newDeliver.map((delivery: DeliveryRecordChecked) => {
-            delivery.status = val.state;
-            delivery.interviewTime = interviewTime.value;
-            confirmInterviewTime(delivery);
-          });
-          handleChange();
-          interviewTime.value = "";
-        } else {
-          ElMessage.warning("请选择面试时间");
-        }
-      } else {
-        newDeliver.map((delivery: DeliveryRecordChecked) => {
-          delivery.status = val.state;
-          delivery.interviewTime = interviewTime.value;
-          confirmInterviewTime(delivery);
-        });
-        handleChange();
-      }
-    } else {
-      ElMessage.error("请选择简历");
-    }
-  }
-};
-
-// 用于检查是否勾选的功能。
-const handleChecked = (deliveryRecordId: string) => {
-  if (deliveryRecordsCheckeds.value) {
-    deliveryRecordsCheckeds.value.map((deliver: DeliveryRecordChecked) => {
-      if (deliver.id === deliveryRecordId) {
-        deliver.checked = !deliver.checked;
-      }
-    });
-  }
-};
-
-applicantService
-  .queryAllDeliveryRecord({
-    query: {
-      "company.id": ["$eq", store.companyInformation.id],
-      status: [
-        "$in",
-        ...[
-          // @ts-ignore
-          valueMap.value.status === "" ? [1, 2, 3, 4] : valueMap.value.status,
-        ].flat(),
-      ],
-      createdAt: valueMap.value.deliveryDates?.length
-        ? ["$in", ...valueMap.value.deliveryDates]
-        : undefined,
-    },
-  })
-  .then((res) => {
-    totalCount.value = res.total;
-    deliveryRecords.value = res.items;
-    deliveryRecords.value.forEach((item) => {
-      deliveryRecordsCheckeds.value.push(
-        Object.assign(item, { checked: false })
-      );
-      applicantService
-        .getApplicant({
-          id: item.applicant.id,
+const changeInterviewTime = (time: string) => {
+  deliveryRecordsCheckable.value
+    .filter((deliveryRecord) => deliveryRecord.checked)
+    .forEach((deliveryRecord) => {
+      deliveryRecord = { ...deliveryRecord, interviewTime: time };
+      // @ts-ignore
+      delete deliveryRecord.checked;
+      applicantDeliveryRecordService
+        .updateDeliveryRecord({
+          applicantId: deliveryRecord.applicant.id,
+          id: deliveryRecord.id,
+          requestBody: {
+            ...deliveryRecord,
+            interviewTime: time,
+          },
         })
-        .then((response) => {
-          userInformations.value.set(item.applicant.id, response);
-        });
-      companyPositionService
-        .getPosition({
-          companyId: store.companyInformation.id,
-          id: item.position.id,
-        })
-        .then((respones) => {
-          jobInformations.value.set(item.position.id, respones);
+        .then(() => {
+          const newDeliveryRecords = deliveryRecords.value!.items.filter(
+            (d) => d.id !== deliveryRecord.id
+          );
+          mutate({
+            total: newDeliveryRecords.length,
+            items: newDeliveryRecords,
+          });
+          ElMessage.success("邀请成功");
         });
     });
-  });
-
-const handleChange = () => {
-  applicantService
-    .queryAllDeliveryRecord({
-      query: {
-        "company.id": ["$eq", store.companyInformation.id],
-        status: [
-          "$in",
-          ...[
-            // @ts-ignore
-            valueMap.value.status === "" ? [1, 2, 3, 4] : valueMap.value.status,
-          ].flat(),
-        ],
-        createdAt: valueMap.value.deliveryDates?.length
-          ? ["$in", ...valueMap.value.deliveryDates]
-          : undefined,
-      },
-    })
-    .then((res) => {
-      totalCount.value = res.total;
-      deliveryRecords.value = res.items;
-      deliveryRecordsCheckeds.value = [];
-      deliveryRecords.value.forEach((item) => {
-        deliveryRecordsCheckeds.value.push(
-          Object.assign(item, { checked: false })
-        );
-        applicantService
-          .getApplicant({
-            id: item.applicant.id,
-          })
-          .then((response) => {
-            userInformations.value.set(item.applicant.id, response);
-          });
-        companyPositionService
-          .getPosition({
-            companyId: store.companyInformation.id,
-            id: item.position.id,
-          })
-          .then((respones) => {
-            jobInformations.value.set(item.position.id, respones);
-          });
-      });
-    });
 };
-const handleWorkTimeChange = (val: Array<string>) => {
-  if (val !== null) {
-    valueMap.value.deliveryDates = useGetDayAll(
-      useDate(val[0]),
-      useDate(val[1])
-    );
-  } else {
-    valueMap.value.deliveryDates = [];
-  }
-  handleChange();
-};
-const feedbackMap = ["待查看", "已查看", "通过筛选", "约面试"];
-const gander = ["男", "女"];
-const workExperience = ["经验不限", "在校/应届", "3-5年", "5-10年", "10年以上"];
-const ages = ref<{ [key: string]: Array<number> }>({
-  "18-25岁": [18, 19, 20, 21, 22, 23, 24, 25],
-  "25-35岁": [26, 27, 28, 29, 30, 31, 32, 33, 34, 35],
-  "35-45岁": [36, 37, 38, 39, 40, 41, 42, 43, 44, 45],
-  "45-55岁": [46, 47, 48, 49, 50, 51, 52, 53, 54, 55],
-  "55岁以上": [56, 57, 58, 59, 60, 61, 62, 63, 64, 65],
-});
 </script>
 
 <style scoped lang="scss">

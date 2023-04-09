@@ -17,17 +17,17 @@
           </div>
           <div class="resume">
             <el-scrollbar height="400px">
-              <ResumeInfo
-                :user-informations="userInformations"
-                :job-informations="jobInformations"
-                :delivery-records-checkeds="deliveryRecordsCheckeds"
-                :checked="allChecked"
-              />
+              <ResumeInfo v-model:delivery-records="deliveryRecordsCheckable" />
             </el-scrollbar>
           </div>
           <div class="footer">
             <div>
-              <el-checkbox v-model="allChecked" label="全选" size="large" />
+              <el-checkbox
+                v-model="allSelected"
+                @change="handleSelectAllChange"
+                label="全选"
+                size="large"
+              />
               <!-- <el-button
                 type="primary"
                 @click="changeState(3 as 1 | 2 | 3 | 4 | 5 )"
@@ -70,36 +70,36 @@ interface DeliveryRecordChecked extends DeliveryRecord {
 const page = ref(1);
 const pageSize = ref(5);
 const store = useMainStore();
-const allChecked = ref(false);
 const workTimeBetween = ref([]);
-const { data: deliveryRecords } = applicantService.useQueryAllDeliveryRecord(
-  () => ({
-    query: {
-      "company.id": ["$eq", store.companyInformation.id],
-      status: ["$eq", 4],
-      interviewTime: workTimeBetween.value.length
-        ? [
-            "$between",
-            ...workTimeBetween.value.map((time) =>
-              dayjs(time).format("YYYY-MM-DD HH:mm:ss")
-            ),
-          ]
-        : undefined,
-    },
-    size: pageSize.value,
-    page: page.value,
-  }),
-  {
-    initialData: {
-      total: 0,
-      items: [],
-    },
-    refreshDeps: [workTimeBetween, page, pageSize],
-    ready: computed(() => !!store.companyInformation.id),
-  }
-);
-const deliveryRecordsCheckeds = ref<DeliveryRecordChecked[]>([]);
-syncRef(deliveryRecords, deliveryRecordsCheckeds, {
+const { data: deliveryRecords, mutate } =
+  applicantService.useQueryAllDeliveryRecord(
+    () => ({
+      query: {
+        "company.id": ["$eq", store.companyInformation.id],
+        status: ["$eq", 4],
+        interviewTime: workTimeBetween.value?.length
+          ? [
+              "$between",
+              ...workTimeBetween.value.map((time) =>
+                dayjs(time).format("YYYY-MM-DD HH:mm:ss")
+              ),
+            ]
+          : undefined,
+      },
+      size: pageSize.value,
+      page: page.value,
+    }),
+    {
+      initialData: {
+        total: 0,
+        items: [],
+      },
+      refreshDeps: [workTimeBetween, page, pageSize],
+      ready: computed(() => !!store.companyInformation.id),
+    }
+  );
+const deliveryRecordsCheckable = ref<DeliveryRecordChecked[]>([]);
+syncRef(deliveryRecords, deliveryRecordsCheckable, {
   direction: "ltr",
   transform: {
     ltr: (deliveryRecords) =>
@@ -107,32 +107,26 @@ syncRef(deliveryRecords, deliveryRecordsCheckeds, {
         ...deliveryRecord,
         checked: false,
       })),
-  }
+  },
 });
-const userInformations = computed(() => {
-  return new Map(
-    deliveryRecordsCheckeds.value.map((deliveryRecord) => {
-      return [deliveryRecord.applicant.id, deliveryRecord.applicant];
-    })
-  );
+const allSelected = computed(() => {
+  return deliveryRecordsCheckable.value.every((item) => item.checked) &&
+    deliveryRecordsCheckable.value.length > 0;
 });
-const jobInformations = computed(() => {
-  return new Map(
-    deliveryRecordsCheckeds.value.map((deliveryRecord) => {
-      return [deliveryRecord.position.id, deliveryRecord.position];
-    })
-  );
-});
+const handleSelectAllChange = (selectAll: boolean) => {
+  deliveryRecordsCheckable.value.forEach((item) => {
+    item.checked = selectAll;
+  });
+};
+
 // 更改所选简历信息状态的功能。
 const changeState = (val: 1 | 2 | 3 | 4 | 5) => {
-  if (deliveryRecordsCheckeds.value) {
-    //变更状态函数，将选中的简历信息的状态进行变更
-    const newDeliver = deliveryRecordsCheckeds.value.filter(
-      (deliveryRecordsChecked) => deliveryRecordsChecked.checked
-    );
-    // 更改所选简历信息的状态。
-    newDeliver.forEach((delivery: DeliveryRecordChecked) => {
-      delivery.status = val;
+  deliveryRecordsCheckable.value
+    .filter((deliveryRecordsChecked) => deliveryRecordsChecked.checked)
+    .forEach((delivery: DeliveryRecordChecked) => {
+      delivery = { ...delivery, status: val };
+      // @ts-ignore
+      delete delivery.checked;
       applicantDeliveryRecordService
         .updateDeliveryRecord({
           applicantId: delivery.applicant.id,
@@ -140,17 +134,16 @@ const changeState = (val: 1 | 2 | 3 | 4 | 5) => {
           requestBody: delivery,
         })
         .then(() => {
+          const newDeliveryRecords = deliveryRecordsCheckable.value.filter(
+            (deliveryRecord) => deliveryRecord.id !== delivery.id
+          );
+          mutate({
+            total: newDeliveryRecords.length,
+            items: newDeliveryRecords,
+          });
           ElMessage.success("操作成功");
         });
     });
-  }
-};
-const submitChecked = (data: any) => {
-  deliveryRecordsCheckeds.value.map(
-    (deliveryRecordsChecked: DeliveryRecordChecked) => {
-      deliveryRecordsChecked.checked = data;
-    }
-  );
 };
 </script>
 

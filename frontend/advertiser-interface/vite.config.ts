@@ -53,6 +53,7 @@ export default mergeConfig(
     },
   }),
   {
+    base: "./",
     server: {
       proxy: {
         "/api": {

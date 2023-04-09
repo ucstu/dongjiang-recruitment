@@ -38,6 +38,7 @@ export default mergeConfig(
     },
   }),
   {
+    base: "./",
     css: {
       preprocessorOptions: {
         scss: {

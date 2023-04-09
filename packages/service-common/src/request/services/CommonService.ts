@@ -138,7 +138,7 @@ export class CommonService {
         ? {
             method: "UPLOAD",
             url: "/common/files",
-            formData: file,
+            body: file,
           }
         : {
             method: "POST",
@@ -162,7 +162,7 @@ export class CommonService {
         ? {
             method: "UPLOAD",
             url: "/common/avatars",
-            formData: avatar,
+            body: avatar,
           }
         : {
             method: "POST",

@@ -5,7 +5,7 @@
       <view class="justify-between group-box">
         <text class="portrait">头像</text>
         <image
-          :src="VITE_CDN_URL + userInformation.avatarUrl"
+          :src="useResFullPath(userInformation.avatarUrl)"
           class="photo"
           @click="chooseImage"
         />
@@ -142,12 +142,10 @@
 <script lang="ts" setup>
 import NavigationBar from "@/components/NavigationBar/NavigationBar.vue";
 import wybPopup from "@/components/wyb-popup/wyb-popup.vue";
-import { until } from "@/hooks";
+import { until, useApiFullPath, useResFullPath } from "@/hooks";
 import { useMainStore } from "@/stores";
 import type { Applicant } from "@dongjiang-recruitment/service-common";
 
-const VITE_BASE_URL = import.meta.env.VITE_BASE_URL;
-const VITE_CDN_URL = import.meta.env.VITE_CDN_URL;
 const mainStore = useMainStore();
 
 const userInformation = ref<Applicant>({} as Applicant);
@@ -237,29 +235,13 @@ for (let i = 1; i <= 31; i++) {
 const chooseImage = () => {
   uni.chooseImage({
     success: (res) => {
-      const tempFilePath = res.tempFilePaths;
       uni.uploadFile({
-        url: VITE_BASE_URL + "/avatars",
-        filePath: tempFilePath[0],
+        url: useApiFullPath("/common/avatars"),
+        filePath: res.tempFilePaths[0],
         name: "avatar",
-        header: {
-          Authorization: "Bearer " + mainStore.token,
-        },
-        success: (res) => {
-          const response = JSON.parse(res.data) as {
-            body: string;
-            message: string;
-            status: number;
-            timestamp: string;
-          };
-          userInformation.value.avatarUrl = response.body;
-        },
-        fail: (err) => {
-          uni.showToast({
-            title: "上传失败",
-            icon: "none",
-            duration: 1500,
-          });
+        success: (uploadFileRes) => {
+          const data = JSON.parse(uploadFileRes.data);
+          userInformation.value.avatarUrl = data.body;
         },
       });
     },
