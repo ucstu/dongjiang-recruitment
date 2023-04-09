@@ -196,6 +196,7 @@ type Position,
 type Query,
 } from "@dongjiang-recruitment/service-common";
 import dayjs from "dayjs";
+
 const mainStore = useMainStore();
 
 /* #ifdef MP-WEIXIN || MP-ALIPAY || MP-BAIDU || MP-TOUTIAO || MP-QQ */
