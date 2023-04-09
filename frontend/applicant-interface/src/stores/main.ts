@@ -1,4 +1,5 @@
 import { until, useApiFullPath } from "@/hooks";
+// import { until } from "@/hooks";
 import type { Message } from "@/interfaces";
 import type {
   Account,
@@ -163,7 +164,10 @@ export const useMainStore = defineStore(
           };
           sendPingToServer();
           setInterval(sendPingToServer, 40000);
-          socket.on(socket.id, (message: MessageRecord) => {
+          socket.on("message", (message: MessageRecord) => {
+            uni.showToast({
+              title: "收到新消息",
+            });
             const { initiateId } = message;
             if (!messages.value[initiateId]) {
               messages.value[initiateId] = [];
@@ -188,29 +192,29 @@ export const useMainStore = defineStore(
       });
     });
 
-        return {
-          system,
-          menu,
-          token,
-          accountId,
-          account,
-          setAccount,
-          refreshAccount,
-          loadingAccount,
-          applicant,
-          setApplicant,
-          refreshApplicant,
-          loadingApplicant,
-          jobExpectations,
-          setJobExpectations,
-          refreshJobExpectations,
-          loadingJobExpectations,
-          cities,
-          setCities,
-          refreshCities,
-          loadingCities,
-          messages,
-        };
+    return {
+      system,
+      menu,
+      token,
+      accountId,
+      account,
+      setAccount,
+      refreshAccount,
+      loadingAccount,
+      applicant,
+      setApplicant,
+      refreshApplicant,
+      loadingApplicant,
+      jobExpectations,
+      setJobExpectations,
+      refreshJobExpectations,
+      loadingJobExpectations,
+      cities,
+      setCities,
+      refreshCities,
+      loadingCities,
+      messages,
+    };
   },
   {
     persist: {
@@ -232,19 +236,21 @@ export type SendMessageOptions = Omit<
 >;
 export const sendMessage = (message: SendMessageOptions) => {
   const store = useMainStore();
-  const _message = {
-    id: nanoid(),
-    createdAt: dayjs().format(),
-    initiateId: store.accountId,
-    initiateType: 1,
-    ...message,
-  };
-  socket.emit("message", _message);
-  if (!store.messages[message.serviceId]) {
-    store.messages[message.serviceId] = [];
-  }
-  store.messages[message.serviceId].push({
-    ..._message,
-    haveRead: true,
-  } as any);
+  until(computed(() => !!store.applicant?.id), () => {
+    const _message = {
+      id: nanoid(),
+      createdAt: dayjs().format(),
+      initiateId: store.applicant?.id,
+      initiateType: 1,
+      ...message,
+    };
+    socket.emit("message", _message);
+    if (!store.messages[message.serviceId]) {
+      store.messages[message.serviceId] = [];
+    }
+    store.messages[message.serviceId].push({
+      ..._message,
+      haveRead: true,
+    } as any);
+  });
 };

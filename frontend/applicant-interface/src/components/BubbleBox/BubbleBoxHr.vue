@@ -27,7 +27,7 @@
             <image
               src="@/static/icons/file.svg"
               class="img-file"
-              @click="downFile(mes)"
+              @click="downFile(useResFullPath(mes))"
             />
           </view>
         </view>
@@ -37,6 +37,8 @@
 </template>
 
 <script lang="ts" setup>
+import { useResFullPath } from '@/hooks';
+
 const VITE_CDN_URL = import.meta.env.VITE_CDN_URL;
 
 // 定义组件的 props。接收父组件传值

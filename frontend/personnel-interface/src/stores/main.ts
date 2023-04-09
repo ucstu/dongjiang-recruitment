@@ -80,7 +80,8 @@ export const useMessageStore = defineStore(
           };
           sendPingToServer();
           setInterval(sendPingToServer, 40000);
-          socket.on(socket.id, (message: MessageRecord) => {
+          socket.on("message", (message: MessageRecord) => {
+            ElMessage.success("收到新消息");
             const { initiateId } = message;
             if (!messages.value[initiateId]) {
               messages.value[initiateId] = [];
@@ -126,19 +127,23 @@ export type SendMessageOptions = Omit<
 export const sendMessage = (message: SendMessageOptions) => {
   const mainStore = useMainStore();
   const messageStore = useMessageStore();
-  const _message = {
-    id: nanoid(),
-    createdAt: dayjs().format(),
-    initiateId: mainStore.accountInformation.id,
-    initiateType: 2,
-    ...message,
-  };
-  socket.emit("message", _message);
-  if (!messageStore.messages[message.serviceId]) {
-    messageStore.messages[message.serviceId] = [];
-  }
-  messageStore.messages[message.serviceId].push({
-    ..._message,
-    haveRead: true,
-  } as any);
+  until(() => !!mainStore.hrInformation?.id)
+    .toMatch(Boolean)
+    .then(() => {
+      const _message = {
+        id: nanoid(),
+        createdAt: dayjs().format(),
+        initiateId: mainStore.hrInformation.id,
+        initiateType: 2,
+        ...message,
+      };
+      socket.emit("message", _message);
+      if (!messageStore.messages[message.serviceId]) {
+        messageStore.messages[message.serviceId] = [];
+      }
+      messageStore.messages[message.serviceId].push({
+        ..._message,
+        haveRead: true,
+      } as any);
+    });
 };

@@ -116,15 +116,6 @@ const submitForm = (formEl: FormInstance | undefined) => {
                 id: mainStore.accountInformation.detailId.personnel!,
               })
               .then((res:Personnel) => {
-                if (
-                  !messageStore.messages[
-                    mainStore.accountInformation.detailId.personnel!
-                  ]
-                ) {
-                  messageStore.messages[
-                    mainStore.accountInformation.detailId.personnel!
-                  ] = {};
-                }
                 if (res.hrName !== null) {
                   if (res.company?.id) {
                     companyService

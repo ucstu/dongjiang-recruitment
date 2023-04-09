@@ -89,9 +89,6 @@ const messageStore = useMessageStore();
 
 const dataList = ref(["2022-05-01", "2022-05-01"]);
 watchEffect(() => {
-  if (!messageStore.messages[store.accountInformation.detailId.personnel!]) {
-    messageStore.messages[store.accountInformation.detailId.personnel!] = {};
-  }
   dataList.value = useGetDayAll(Datainfo.value[0], Datainfo.value[1]);
 });
 // 拿到给定日期范围的数据。

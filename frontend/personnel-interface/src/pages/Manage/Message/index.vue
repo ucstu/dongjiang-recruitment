@@ -6,131 +6,67 @@
           <SelfInformationCard />
           <div class="title">
             <span>我的消息</span>
+            <span @click="messages = {}">清空</span>
           </div>
         </div>
         <div style="height: calc(100% - 130px)">
           <ChatUserList
-            :user-informations="userInformations"
-            :messages="messages[mainStore.accountInformation.detailId.personnel!]"
-            :active-user-information-id="activeUserInformationId"
+            :messages="messages"
+            :user-informations="userInformation"
+            :active-user-information-id="activeUserInformation?.id"
             @chat-with-user="chatWithUser"
           />
         </div>
       </div>
       <div class="right">
         <ChatBox
-          v-if="activeUserInformationId !== null"
-          :chat-id="activeUserInformationId"
-          :user-info="userInformations.get(activeUserInformationId)"
-          :chat-list="
-            messages[mainStore.accountInformation.detailId.personnel!][
-              activeUserInformationId
-            ]
-          "
+          v-if="activeUserInformation"
+          :chat-id="activeUserInformation.id"
+          :user-info="activeUserInformation"
+          :chat-list="messages[activeUserInformation.id]"
         />
         <el-empty
           v-else
           image="https://img.51miz.com/Element/00/90/08/25/e1fc0d58_E900825_4a0d0e68.png"
         />
-        <ChatBoxBottom :chat-id="activeUserInformationId" />
+        <ChatBoxBottom :chat-id="activeUserInformation?.id" />
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { useMainStore, useMessageStore } from "@/stores/main";
-import type {
-Applicant,
-DeliveryRecord,
-Position,
-} from "@dongjiang-recruitment/service-common";
-import { storeToRefs } from "pinia";
-import { useRoute } from "vue-router";
+import { useMessageStore } from "@/stores/main";
+import type { Applicant } from "@dongjiang-recruitment/service-common";
 import ChatBox from "./components/ChatBox.vue";
 import ChatBoxBottom from "./components/ChatBoxBottom.vue";
 import ChatUserList from "./components/ChatUserList.vue";
 import SelfInformationCard from "./components/SelfInformationCard.vue";
 
-const route = useRoute();
-const mainStore = useMainStore();
-const messageStore = useMessageStore();
-
-const activeUserInformationId = ref<string>(null as unknown as string);
+const { messages } = storeToRefs(useMessageStore());
+const userInformation = new Map<string, Applicant>();
+const activeUserInformation = ref<Applicant>();
 
 // 当用户点击聊天列表中的用户时调用的函数。
-const chatWithUser = (_activeUserInformationId: string | number) => {
-  if (typeof _activeUserInformationId === "string") {
-    activeUserInformationId.value = _activeUserInformationId.toString();
-    readAllMessage(_activeUserInformationId);
+const chatWithUser = async (_activeUserInformationId: string | number) => {
+  if (userInformation.has(_activeUserInformationId.toString())) {
+    activeUserInformation.value = userInformation.get(
+      _activeUserInformationId.toString()
+    )!;
+  } else {
+    const res = await applicantService.getApplicant({
+      id: _activeUserInformationId.toString(),
+    });
+    userInformation.set(_activeUserInformationId.toString(), res);
+    activeUserInformation.value = res;
   }
 };
 // 当用户单击聊天页面左侧的用户时将调用的函数。它会将来自用户的所有消息设置为已读
-const readAllMessage = (ActiveUserInformationId: string) => {
-  for (const message of messages.value[mainStore.accountInformation.id][
-    ActiveUserInformationId
-  ]) {
+const readAllMessage = (userInformationId: string) => {
+  for (const message of messages.value[userInformationId]) {
     message.haveRead = true;
   }
 };
-
-let loadedInformationCount = 0;
-
-const deliveryRecords = ref<Map<string, DeliveryRecord>>(new Map());
-const userInformations = ref<Map<string, Applicant>>(new Map());
-const positionInformations = ref<Map<string, Position>>(new Map());
-const { messages } = storeToRefs(messageStore);
-
-onBeforeMount(() => {
-  activeUserInformationId.value = route.params.userId.toString();
-});
-
-watchEffect(() => {
-  if (!messages.value[mainStore.accountInformation.id]) {
-    messages.value[mainStore.accountInformation.id] = {};
-  }
-  const messageKeys = Object.keys(
-    messages.value[mainStore.accountInformation.id]
-  );
-  const messageKeysCount = messageKeys.length;
-  if (messageKeysCount > loadedInformationCount) {
-    messageKeys.forEach((messageKey) => {
-      applicantService.getApplicant({ id: messageKey }).then((res) => {
-        userInformations.value.set(messageKey, res);
-        applicantService
-          .queryAllDeliveryRecord({
-            query: {
-              "applicant.id": ["$eq", messageKey],
-              "company.id": ["$eq", mainStore.companyInformation.id],
-              status: ["$in", 1, 2, 3, 4, 5],
-            },
-            size: 1,
-          })
-          .then((res) => {
-            if (res.total > 0) {
-              deliveryRecords.value.set(messageKey, res.items[0]);
-              companyPositionService
-                .getPosition({
-                  companyId: mainStore.companyInformation.id,
-                  id: res.items[0].position.id,
-                })
-                .then((res) => {
-                  positionInformations.value.set(res.id, res);
-                });
-            }
-          });
-      });
-    });
-    loadedInformationCount = messageKeysCount;
-  }
-  if (
-    messages.value[mainStore.accountInformation.id][
-      activeUserInformationId.value
-    ]
-  ) {
-    readAllMessage(activeUserInformationId.value);
-  }
-});
 </script>
 
 <style lang="scss" scoped>

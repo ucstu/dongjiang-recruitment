@@ -56,7 +56,7 @@
 
 <script lang="ts" setup>
 import router from "@/router";
-import { sendMessage, useCompriseStore, useMainStore } from "@/stores/main";
+import { sendMessage, useCompriseStore } from "@/stores/main";
 import {
 ArrowDown,
 FolderOpened,
@@ -64,9 +64,8 @@ PictureFilled,
 Plus,
 } from "@element-plus/icons-vue";
 import { ElMessage } from "element-plus";
-const VITE_CDN_URL = import.meta.env.VITE_CDN_URL as string;
+
 const content = ref("");
-const mainStore = useMainStore();
 const store = useCompriseStore();
 const comprise = store.comprise;
 let props = defineProps({
@@ -90,12 +89,16 @@ const dealimgchange = (e: Event) => {
   const input = e.target as HTMLInputElement;
   let files = input.files;
   if (files) {
-    // postFiles({ file: files[files.length - 1] })
-    //   .then((res) => {
-    //     sendMessage(res.data.body, 2, props.chatId, 1);
-    //   })
-    //   .catch(failResponseHandler);
-    console.log("临时关闭图片");
+    commonService.uploadFile({
+      file: files[0]
+    }).then((res) => {
+      sendMessage({
+        serviceId: props.chatId,
+        serviceType: 1,
+        content: res,
+        messageType: 2,
+      });
+    });
   }
 };
 const uploadfileInput = ref<HTMLElement | null>(null);
@@ -112,24 +115,28 @@ const dealfilechange = (e: Event) => {
   const input = e.target as HTMLInputElement;
   let files = input.files;
   if (files) {
-    // postFiles({ file: files[files.length - 1] })
-    //   .then((res) => {
-    //     sendMessage(VITE_CDN_URL + res.data.body, 4, props.chatId, 1);
-    //   })
-    //   .catch(failResponseHandler);
-    console.log("临时关闭图片");
+    commonService.uploadFile({
+      file: files[0]
+    }).then((res) => {
+      sendMessage({
+        serviceId: props.chatId,
+        serviceType: 1,
+        content: res,
+        messageType: 4,
+      });
+    });
   }
 };
 const sentMessage = (e: KeyboardEvent) => {
   if (e.key === "Enter") {
     if (props.chatId) {
       if (content.value) {
-        // sendMessage(content.value, 1, props.chatId, 1);
         sendMessage({
-          initiateId: mainStore.accountInformation.id,
           serviceId: props.chatId,
+          serviceType: 1,
           content: content.value,
-        } as any)
+          messageType: 1,
+        })
         content.value = "";
       }
     } else {
@@ -144,12 +151,12 @@ const handleCommand = (command: string) => {
 const sentMessage1 = () => {
   if (props.chatId) {
     if (content.value) {
-      // sendMessage(content.value, 1, props.chatId, 1);
       sendMessage({
-        initiateId: mainStore.accountInformation.id,
         serviceId: props.chatId,
+        serviceType: 1,
         content: content.value,
-      } as any)
+        messageType: 1,
+      })
       content.value = "";
     }
   } else {

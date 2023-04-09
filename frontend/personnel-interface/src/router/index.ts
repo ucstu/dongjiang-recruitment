@@ -156,11 +156,11 @@ NProgress.configure({ showSpinner: false });
 router.beforeEach(async (to, _, next) => {
   const store = useMainStore();
   NProgress.start();
-  if (store.jsonWebToken != null && store.accountInformation != null) {
+  if (store.jsonWebToken && store.accountInformation) {
     NProgress.done();
     next();
   } else {
-    if (!to.meta.requiresAuth) {
+    if (to.meta.requiresAuth === false) {
       NProgress.done();
       next();
     } else {

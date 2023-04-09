@@ -1,7 +1,8 @@
 <template>
   <div class="container">
     <el-scrollbar ref="scrollbarRef">
-      <div
+      <div ref="content">
+        <div
         v-for="(chat, index) in props.chatList"
         :key="index"
         class="chat-list"
@@ -77,6 +78,7 @@
           <div v-else></div>
         </div>
       </div>
+      </div>
     </el-scrollbar>
   </div>
 </template>
@@ -91,6 +93,8 @@ const VITE_CDN_URL = import.meta.env.VITE_CDN_URL as string;
 const mainStore = useMainStore();
 const srcList = ref<string[]>([]);
 const { avatarUrl: hravatarUrl, hrName } = mainStore.hrInformation;
+
+const content = ref<HTMLDivElement>();
 const scrollbarRef = ref<InstanceType<typeof ElScrollbar>>();
 let props = defineProps({
   chatId: {
@@ -116,8 +120,7 @@ watchEffect(() => {
     nextTick(() => {
       scrollbarRef.value!.scrollTo(
         0,
-        // scrollbarRef.value!.resize$!.offsetHeight
-        scrollbarRef.value!.resizeRef!.offsetHeight
+        content.value?.offsetHeight
       );
     });
   }
