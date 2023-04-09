@@ -148,7 +148,7 @@
 import NavigationBar from "@/components/NavigationBar/NavigationBar.vue";
 import wybPopup from "@/components/wyb-popup/wyb-popup.vue";
 import { until } from "@/hooks";
-import { useMainStore } from "@/stores";
+import { useMainStore, useMessageStore } from "@/stores";
 import type {
 Applicant,
 Company,
@@ -158,6 +158,7 @@ Position,
 
 const VITE_CDN_URL = import.meta.env.VITE_CDN_URL;
 const mainStore = useMainStore();
+const messageStore = useMessageStore();
 
 const jobInformation = ref<Position>({} as Position); // 职位信息
 
@@ -327,7 +328,7 @@ const collection = () => {
 // 沟通HR
 const communication = (i: string) => {
   let messageKey = "";
-  for (const key in mainStore.messages[mainStore.applicant!.id]) {
+  for (const key in messageStore.messages[mainStore.applicant!.id]) {
     if (key === jobInformation.value.personnel.id) {
       messageKey = key;
     } else {

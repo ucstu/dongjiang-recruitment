@@ -1,5 +1,4 @@
-import { until, useApiFullPath } from "@/hooks";
-// import { until } from "@/hooks";
+import { until } from "@/hooks";
 import type { Message } from "@/interfaces";
 import type {
   Account,
@@ -23,8 +22,8 @@ const parseJwt = (
   }
 };
 
-const socket = io(useApiFullPath(""), {
-// const socket = io("http://127.0.0.1:3004", {
+const socket = io(import.meta.env.VITE_BASE_URL, {
+  // const socket = io("http://127.0.0.1:3004", {
   path: "/common/socket.io",
   transports: ["websocket", "polling"],
   timeout: 5000,
@@ -149,48 +148,6 @@ export const useMainStore = defineStore(
     } = commonService.useGetCities(undefined, {
       initialData: [],
     });
-    const messages = ref<{
-      [key: string]: Message[];
-    }>({});
-    socket.on("connect", () => {
-      until(
-        computed(() => !!applicantId.value),
-        () => {
-          const sendPingToServer = () => {
-            socket.emit("ping", {
-              accountId: applicantId.value,
-              accountType: 1,
-            });
-          };
-          sendPingToServer();
-          setInterval(sendPingToServer, 40000);
-          socket.on("message", (message: MessageRecord) => {
-            uni.showToast({
-              title: "收到新消息",
-            });
-            const { initiateId } = message;
-            if (!messages.value[initiateId]) {
-              messages.value[initiateId] = [];
-            }
-            messages.value[initiateId].push({
-              ...message,
-              haveRead: false,
-            });
-          });
-        }
-      );
-    });
-
-    socket.on("error", (err: { reason: string; message: Message }) => {
-      uni.showToast({
-        title: err.reason,
-      });
-      messages.value[err.message.serviceId]?.forEach((message) => {
-        if (message.id === err.message.id) {
-          message.failed = true;
-        }
-      });
-    });
 
     return {
       system,
@@ -213,7 +170,6 @@ export const useMainStore = defineStore(
       setCities,
       refreshCities,
       loadingCities,
-      messages,
     };
   },
   {
@@ -230,27 +186,91 @@ export const useMainStore = defineStore(
   }
 );
 
+export const useMessageStore = defineStore(
+  "message",
+  () => {
+    const mainStore = useMainStore();
+    const messages = ref<{
+      [key: string]: Message[];
+    }>({});
+    let timer: NodeJS.Timeout;
+    const startReceiveMessage = () => {
+      until(
+        computed(() => !!mainStore.applicant?.id),
+        () => {
+          clearInterval(timer);
+          const sendPingToServer = () => {
+            socket.emit("ping", {
+              accountId: mainStore.applicant!.id,
+              accountType: 1,
+            });
+          };
+          timer = setInterval(sendPingToServer, 40000);
+          sendPingToServer();
+        }
+      );
+    };
+    startReceiveMessage();
+    socket.on("connect", startReceiveMessage);
+    socket.on("message", (message: MessageRecord) => {
+      uni.showToast({
+        title: "收到新消息",
+      });
+      const { initiateId } = message;
+      if (!messages.value[initiateId]) {
+        messages.value[initiateId] = [];
+      }
+      messages.value[initiateId].push({
+        ...message,
+        haveRead: false,
+      });
+    });
+    socket.on("error", (err: { reason: string; message: Message }) => {
+      uni.showToast({
+        title: err.reason,
+      });
+      messages.value[err.message.serviceId]?.forEach((message) => {
+        if (message.id === err.message.id) {
+          message.failed = true;
+        }
+      });
+    });
+
+    return {
+      messages,
+    };
+  },
+  {
+    persist: {
+      enabled: true,
+    },
+  }
+);
 export type SendMessageOptions = Omit<
   MessageRecord,
   "id" | "createdAt" | "updatedAt" | "initiateId" | "initiateType"
 >;
 export const sendMessage = (message: SendMessageOptions) => {
-  const store = useMainStore();
-  until(computed(() => !!store.applicant?.id), () => {
-    const _message = {
-      id: nanoid(),
-      createdAt: dayjs().format(),
-      initiateId: store.applicant?.id,
-      initiateType: 1,
-      ...message,
-    };
-    socket.emit("message", _message);
-    if (!store.messages[message.serviceId]) {
-      store.messages[message.serviceId] = [];
+  const mainStore = useMainStore();
+  const messageStore = useMessageStore();
+  until(
+    computed(() => !!mainStore.applicant?.id),
+    () => {
+      const _message = {
+        id: nanoid(),
+        createdAt: dayjs().format(),
+        initiateId: mainStore.applicant!.id,
+        initiateType: 1,
+        ...message,
+      };
+      socket.emit("message", _message);
+      if (!messageStore.messages[message.serviceId]) {
+        messageStore.messages[message.serviceId] = [];
+      }
+      messageStore.messages[message.serviceId].push({
+        ..._message,
+        haveRead: true,
+      } as any);
     }
-    store.messages[message.serviceId].push({
-      ..._message,
-      haveRead: true,
-    } as any);
-  });
+  );
 };

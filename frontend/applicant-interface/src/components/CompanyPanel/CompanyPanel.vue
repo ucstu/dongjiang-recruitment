@@ -2,7 +2,7 @@
   <view class="flex-col component">
     <CompanyDetail
       :company-detail="attentionCompany"
-      @com-click="toCompanyInfo(attentionCompany?.companyInformationId)"
+      @com-click="toCompanyInfo(attentionCompany!.id)"
     />
     <view class="flex-row group-4">
       <view
@@ -17,9 +17,12 @@
 
 <script lang="ts" setup>
 import CompanyDetail from "@/components/CompanyDetail/CompanyDetail.vue";
+import type { Company } from "@dongjiang-recruitment/service-common";
+import type { PropType } from "vue";
+
 defineProps({
   attentionCompany: {
-    type: Object,
+    type: Object as PropType<Company>,
   },
   sendType: {
     type: String,

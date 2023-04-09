@@ -32,9 +32,15 @@
       </view>
     </view>
     <view class="group-end">
-      <view class="flex-row items-center info">
-        <text>消息沟通</text>
-        <image class="image-down" src="@/static/icons/arrow-down-filling.png" />
+      <view class="flex-row justify-between px-4">
+        <view class="flex-row items-center info">
+          <text>消息沟通</text>
+          <image
+            class="image-down"
+            src="@/static/icons/arrow-down-filling.png"
+          />
+        </view>
+        <text class="items-center info-del" @click="deleteAll">清空消息</text>
       </view>
       <scroll-view class="group-infos" :scroll-y="true">
         <view v-if="messages.length">
@@ -56,7 +62,7 @@
 <script lang="ts" setup>
 import MailBar from "@/components/MailBar/MailBar.vue";
 import type { Message } from "@/interfaces";
-import { useMainStore } from "@/stores";
+import { useMainStore, useMessageStore } from "@/stores";
 import { useTimeChange } from "@/utils";
 import type {
 DeliveryRecord,
@@ -64,6 +70,7 @@ Personnel,
 } from "@dongjiang-recruitment/service-common";
 
 const mainStore = useMainStore();
+const messageStore = useMessageStore();
 const personnel = ref<Map<string, Personnel>>(new Map());
 const messages = ref<
   Array<{
@@ -77,7 +84,7 @@ const getLastMessage = (messages: Message[]) => {
 };
 
 watch(
-  () => mainStore.messages,
+  () => messageStore.messages,
   async (newVal) => {
     const _messages = [] as Array<{
       messages: Message[];
@@ -104,11 +111,15 @@ watch(
 
 // 一键已读
 const allRead = () => {
-  for (const key in mainStore.messages) {
-    mainStore.messages[key].forEach((item) => {
+  for (const key in messageStore.messages) {
+    messageStore.messages[key].forEach((item) => {
       item.haveRead = true;
     });
   }
+};
+
+const deleteAll = () => {
+  messageStore.messages = {};
 };
 
 /* 投递记录 */
@@ -187,7 +198,6 @@ const toFootprint = () => {
     margin-top: 20rpx;
 
     .info {
-      margin-left: 30rpx;
       font-size: 25rpx;
       font-weight: 600;
 

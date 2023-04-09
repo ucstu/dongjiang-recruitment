@@ -72,7 +72,7 @@ const emits = defineEmits<{
 // 计算未读消息数的函数。
 const countNum = (messages: withReadStateMessageRecord[]) => {
   let num = 0;
-  messages.forEach((item) => {
+  messages?.forEach((item) => {
     if (!item.haveRead && item.initiateType === 1) {
       num++;
     }

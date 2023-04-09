@@ -18,11 +18,12 @@
 <script lang="ts" setup>
 import JobDetail from "@/components/JobDetail/JobDetail.vue";
 import { until } from "@/hooks";
-import { useMainStore } from "@/stores";
+import { useMainStore, useMessageStore } from "@/stores";
 import type { Position } from "@dongjiang-recruitment/service-common";
 import type { PropType } from "vue";
 
 const mainStore = useMainStore();
+const messageStore = useMessageStore();
 const messageKey = ref("");
 
 const props = defineProps({
@@ -41,7 +42,7 @@ until(
   computed(() => !!mainStore.applicant?.id),
   () => {
     if (props.collectionPosition) {
-      for (const key in mainStore.messages[mainStore.applicant!.id]) {
+      for (const key in messageStore.messages[mainStore.applicant!.id]) {
         if (key === props.collectionPosition?.personnel.id) {
           messageKey.value = key;
         }

@@ -37,23 +37,25 @@
     </view>
     <!-- #endif -->
     <scroll-view class="group-info" :scroll-y="true" :scroll-top="scrollTop">
-      <view
-        v-for="recode in mainStore.messages[hrInfo.id] || []"
-        :key="recode.id"
-      >
-        <Left
-          v-if="recode.initiateId === hrInfo.id"
-          :mes="recode.content"
-          :type="recode.messageType"
-          :hr-info="hrInfo"
-        ></Left>
-        <Right
-          v-else
-          :mes="recode.content"
-          :type="recode.messageType"
-          :fail="recode.failed === true"
-        ></Right
-      ></view>
+      <view id="messages">
+        <view
+          v-for="recode in messageStore.messages[hrInfo.id] || []"
+          :key="recode.id"
+        >
+          <Left
+            v-if="recode.initiateId === hrInfo.id"
+            :mes="recode.content"
+            :type="recode.messageType"
+            :hr-info="hrInfo"
+          ></Left>
+          <Right
+            v-else
+            :mes="recode.content"
+            :type="recode.messageType"
+            :fail="recode.failed === true"
+          ></Right
+        ></view>
+      </view>
     </scroll-view>
     <view class="flex-col group-end justify-center">
       <view class="flex-row justify-between items-end input-box">
@@ -87,10 +89,11 @@
 import Left from "@/components/BubbleBox/BubbleBoxHr.vue";
 import Right from "@/components/BubbleBox/BubbleBoxUser.vue";
 import { useApiFullPath } from "@/hooks";
-import { sendMessage, useMainStore } from "@/stores";
+import { sendMessage, useMainStore, useMessageStore } from "@/stores";
 import type { Personnel } from "@dongjiang-recruitment/service-common";
 
 const mainStore = useMainStore();
+const messageStore = useMessageStore();
 
 /* #ifdef MP-WEIXIN || MP-ALIPAY || MP-BAIDU || MP-TOUTIAO || MP-QQ */
 
@@ -103,18 +106,19 @@ const navigationBarWidth = mainStore.menu.left - uni.upx2px(30);
 const hrInfo = ref<Personnel>({} as Personnel);
 const inputValue = ref("");
 const scrollTop = ref(0);
+const query = uni.createSelectorQuery();
 
 watch(
-  () => mainStore.messages[hrInfo.value.id],
+  () => messageStore.messages[hrInfo.value.id].length,
   (val) => {
-    if (val) {
-      nextTick(() => {
-        scrollTop.value =
-          mainStore.messages[hrInfo.value.id].length * uni.upx2px(150);
-      });
-    } else {
-      mainStore.messages[hrInfo.value.id] = [];
-    }
+    nextTick(() => {
+      query
+        .select("#messages")
+        .boundingClientRect((data) => {
+          scrollTop.value = [data].flat()[0].height!;
+        })
+        .exec();
+    });
   },
   { immediate: true }
 );

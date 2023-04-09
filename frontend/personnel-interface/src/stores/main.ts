@@ -1,4 +1,3 @@
-import { useApiFullPath } from "@/hooks";
 import type {
   Account,
   Company,
@@ -49,7 +48,7 @@ export const useCompriseStore = defineStore("comprise", {
   },
 });
 
-const socket = io(useApiFullPath(""), {
+const socket = io(import.meta.env.VITE_BASE_URL, {
   // const socket = io("http://127.0.0.1:3004", {
   path: "/common/socket.io",
   transports: ["websocket", "polling"],
@@ -67,33 +66,35 @@ export const useMessageStore = defineStore(
       [key: string]: Message[];
     }>({});
     const mainStore = useMainStore();
-
-    socket.on("connect", () => {
+    let timer: NodeJS.Timeout;
+    const startReceiveMessage = () => {
       until(() => !!mainStore.hrInformation?.id)
         .toMatch(Boolean)
         .then(() => {
+          clearInterval(timer);
           const sendPingToServer = () => {
             socket.emit("ping", {
               accountId: mainStore.hrInformation.id,
               accountType: 2,
             });
           };
+          timer = setInterval(sendPingToServer, 40000);
           sendPingToServer();
-          setInterval(sendPingToServer, 40000);
-          socket.on("message", (message: MessageRecord) => {
-            ElMessage.success("收到新消息");
-            const { initiateId } = message;
-            if (!messages.value[initiateId]) {
-              messages.value[initiateId] = [];
-            }
-            messages.value[initiateId].push({
-              ...message,
-              haveRead: false,
-            });
-          });
         });
+    };
+    startReceiveMessage();
+    socket.on("connect", startReceiveMessage);
+    socket.on("message", (message: MessageRecord) => {
+      ElMessage.success("收到新消息");
+      const { initiateId } = message;
+      if (!messages.value[initiateId]) {
+        messages.value[initiateId] = [];
+      }
+      messages.value[initiateId].push({
+        ...message,
+        haveRead: false,
+      });
     });
-
     socket.on("error", (err: { reason: string; message: Message }) => {
       ElMessage.error(err.reason);
       messages.value[err.message.serviceId]?.forEach((message) => {
@@ -127,6 +128,7 @@ export type SendMessageOptions = Omit<
 export const sendMessage = (message: SendMessageOptions) => {
   const mainStore = useMainStore();
   const messageStore = useMessageStore();
+
   until(() => !!mainStore.hrInformation?.id)
     .toMatch(Boolean)
     .then(() => {

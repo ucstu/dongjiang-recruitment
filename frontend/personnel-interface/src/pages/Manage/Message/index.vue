@@ -44,28 +44,41 @@ import ChatUserList from "./components/ChatUserList.vue";
 import SelfInformationCard from "./components/SelfInformationCard.vue";
 
 const { messages } = storeToRefs(useMessageStore());
-const userInformation = new Map<string, Applicant>();
+const userInformation = ref(new Map<string, Applicant>());
 const activeUserInformation = ref<Applicant>();
+
+watch(
+  () => messages.value,
+  (newMessages) => {
+    Object.keys(newMessages).forEach((key) => {
+      if (!userInformation.value.has(key)) {
+        applicantService.getApplicant({ id: key }).then((res) => {
+          userInformation.value.set(key, res);
+        });
+      }
+    });
+  },
+  {
+    immediate: true,
+  }
+);
 
 // 当用户点击聊天列表中的用户时调用的函数。
 const chatWithUser = async (_activeUserInformationId: string | number) => {
-  if (userInformation.has(_activeUserInformationId.toString())) {
-    activeUserInformation.value = userInformation.get(
+  if (userInformation.value.has(_activeUserInformationId.toString())) {
+    activeUserInformation.value = userInformation.value.get(
       _activeUserInformationId.toString()
     )!;
   } else {
     const res = await applicantService.getApplicant({
       id: _activeUserInformationId.toString(),
     });
-    userInformation.set(_activeUserInformationId.toString(), res);
+    userInformation.value.set(_activeUserInformationId.toString(), res);
     activeUserInformation.value = res;
   }
-};
-// 当用户单击聊天页面左侧的用户时将调用的函数。它会将来自用户的所有消息设置为已读
-const readAllMessage = (userInformationId: string) => {
-  for (const message of messages.value[userInformationId]) {
+  messages.value[_activeUserInformationId.toString()].forEach((message) => {
     message.haveRead = true;
-  }
+  });
 };
 </script>
 

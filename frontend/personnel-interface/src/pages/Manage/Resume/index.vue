@@ -168,13 +168,13 @@ void personnelInspectionRecordService.addHrInspectionRecord({
   personnelId: store.hrInformation.id,
   requestBody: {
     applicant: {
-      id: route.params.userId as string
+      id: route.params.userId as string,
     } as Applicant,
     personnel: {
-      id: store.hrInformation.id
+      id: store.hrInformation.id,
     } as Personnel,
   },
-})
+});
 
 void applicantWorkExperienceService
   .queryWorkExperience({
@@ -232,12 +232,8 @@ const toMessage = (userId: string) => {
   if (userId === undefined) {
     return;
   }
-  if (
-    !messageStore.messages[store.accountInformation.detailId.personnel!][userId]
-  ) {
-    messageStore.messages[store.accountInformation.detailId.personnel!][
-      userId
-    ] = [];
+  if (!messageStore.messages[userId]) {
+    messageStore.messages[userId] = [];
   }
   void router.push({
     name: "Message",
