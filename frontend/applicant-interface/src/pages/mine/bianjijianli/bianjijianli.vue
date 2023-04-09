@@ -167,9 +167,9 @@ import NavigationBar from "@/components/NavigationBar/NavigationBar.vue";
 import { until } from "@/hooks";
 import { useMainStore } from "@/stores";
 import type {
-  EducationExperience,
-  ProjectExperience,
-  WorkExperience,
+EducationExperience,
+ProjectExperience,
+WorkExperience,
 } from "@dongjiang-recruitment/service-common";
 
 const VITE_CDN_URL = import.meta.env.VITE_CDN_URL;
@@ -215,13 +215,10 @@ onShow(() => {
             educationExperiences.value = res.items;
             mainStore.applicant!.education =
               educationExperiences.value[0].education;
-            for (let i = 0; i <= educationExperiences.value.length; i++) {
-              if (
-                mainStore.applicant!.education <
-                educationExperiences.value[i].education
-              ) {
-                mainStore.applicant!.education =
-                  educationExperiences.value[i].education;
+            for (let item of educationExperiences.value) {
+              if (item.education > mainStore.applicant!.education) {
+                mainStore.applicant!.education = item.education;
+                console.log(mainStore.applicant?.education)
               }
             }
           } else {
@@ -239,6 +236,16 @@ onShow(() => {
     }
   );
 });
+
+watch(
+  () => mainStore.applicant?.education,
+  (item) => {
+    console.log(item)
+  },
+  {
+    immediate: true,
+  }
+);
 
 // 修改个人信息
 const changeInfo = () => {

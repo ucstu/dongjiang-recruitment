@@ -384,7 +384,7 @@ watch(
 
 /** 添加求职期望 */
 const image_5OnClick = () => {
-  uni.navigateTo({ url: "/pages/info/qiuzhiqiwang/qiuzhiqiwang?data=2" });
+  uni.navigateTo({ url: "/pages/info/qiuzhiyixiang/qiuzhiyixiang" });
 };
 /**
  * 搜索跳转

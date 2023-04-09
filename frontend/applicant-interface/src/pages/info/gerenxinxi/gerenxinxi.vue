@@ -244,6 +244,30 @@ const chooseImage = () => {
           userInformation.value.avatarUrl = data.body;
         },
       });
+      // uni.uploadFile({
+      //   url: VITE_BASE_URL + "/avatars",
+      //   filePath: tempFilePath[0],
+      //   name: "avatar",
+      //   header: {
+      //     Authorization: "Bearer " + mainStore.token,
+      //   },
+      //   success: (res) => {
+      //     const response = JSON.parse(res.data) as {
+      //       body: string;
+      //       message: string;
+      //       status: number;
+      //       timestamp: string;
+      //     };
+      //     userInformation.value.avatarUrl = response.body;
+      //   },
+      //   fail: (err) => {
+      //     uni.showToast({
+      //       title: "上传失败",
+      //       icon: "none",
+      //       duration: 1500,
+      //     });
+      //   },
+      // });
     },
     fail: () => {
       uni.showToast({
