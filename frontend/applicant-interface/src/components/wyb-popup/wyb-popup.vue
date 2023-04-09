@@ -4,7 +4,7 @@
       class="wyb-popup-box"
       :style="{
         transitionDuration: duration + 'ms',
-        opacity: contentOpacity || (type === 'center' ? 0 : 1),
+        opacity: contentOpacity ,
         transform: contentTransform || autoTransform,
         zIndex: zIndex,
         borderTopRightRadius:

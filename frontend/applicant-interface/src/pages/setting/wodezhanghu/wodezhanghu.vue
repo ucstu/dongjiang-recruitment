@@ -8,23 +8,29 @@
     <view class="flex-col items-center button-box">
       <button class="justify-center items-center button" @click="showDelete">注销账号</button>
     </view>
-    <wybModal
-      ref="modal"
-      title="注销账号"
-      content="您确认注销账号吗？"
-      @confirm="deleteAccount"
-    />
     <wybPopup
       ref="popup"
+
       :mask-click-close="false"
       :show-close-icon="false"
-      :width="700"
-      :height="400"
+      :width="wybWidth"
+      :height="wybHeight"
+      centerAnim="zoom-lessen"
+      :duration="200"
       :radius="10"
       mode="size-auto"
       type="center"
     >
-      <view class="flex-col justify-center code-box">
+    <view
+      v-if="isShow" style="width: 100%; height: 100%;">
+      <view class="justify-center items-center" style="width: 100%; height: 20%;">注销账号</view>
+    <view class="justify-center items-center" style="width: 100%; height: 60%; font-size: small;">您确定注销账号吗？</view>
+    <view class="justify-center items-center" style="width: 100%; height: 20%;">
+      <button style="width: 50%;" @click="cancel">取消</button>
+      <button style="width: 50%; color: blue;" @click="deleteAccount">确认</button>
+    </view>
+    </view>
+      <view v-if="!isShow" class="flex-col justify-center code-box">
         <text style="font-size: 40rpx; font-weight: bold; text-align: center"
           >请输入验证码</text
         >
@@ -48,15 +54,15 @@
             >
           </view>
           <text style="margin-top: 10rpx" @click="sendVerification"
-            >重新发送</text
+            >{{ send }}</text
           >
         </view>
         <view
           class="justify-between items-center"
           style="width: 100%; height: auto; margin-top: 20rpx"
         >
-          <button class="cancel-button" @click="cancelDelete">取消</button>
-          <button class="confirm-button" @click="con">确认</button>
+          <button class="items-center justify-center cancel-button" @click="cancelDelete">取消</button>
+          <button class="items-center justify-center confirm-button" @click="confirmDelete">确认</button>
         </view>
       </view>
     </wybPopup>
@@ -64,7 +70,7 @@
 </template>
 <script lang="ts" setup>
 import NavigationBar from "@/components/NavigationBar/NavigationBar.vue";
-import wybModal from "@/components/wyb-modal/wyb-modal.vue";
+// import wybModal from "@/components/wyb-modal/wyb-modal.vue";
 import wybPopup from "@/components/wyb-popup/wyb-popup.vue";
 import { until } from "@/hooks";
 import { useMainStore } from "@/stores";
@@ -78,42 +84,43 @@ const { runAsync: sendVerificationCode } =
 // 隐藏账号
 const phoneNumber = ref<string>("");
 const code = ref<string>("");
+const send = ref<string>("重新发送")
+const wybWidth = ref<string>("600");
+const wybHeight = ref<string>("380")
 const focus = ref<boolean>(false);
+const isShow = ref<boolean>(true)
 
 until(
   computed(() => !!mainStore.account),
   () => {
-    phoneNumber.value = mainStore.account!.userName.replace(
-      /(\d{3})\d{4}(\d{4})/,
-      "$1****$2"
-    );
+    phoneNumber.value = mainStore.applicant!.email
   }
 );
-const con = () => {
-
-console.log(1)
-}
 
 const codeNum = () => {
   focus.value = true;
 };
 
 // 注销账号消息提示
-const modal = ref<InstanceType<typeof wybModal>>();
 const popup = ref<InstanceType<typeof wybPopup>>();
 const showDelete = () => {
-  modal.value?.showModal();
+  popup.value?.show();
 };
-const { refreshAsync: destroyAccount } =
-  authenticationService.useDestroyAccount(
-    {
-      id: mainStore.account!.id,
-      verificationCode: code.value,
-    },
-    {
-      manual: true,
-    }
-  );
+// const { refreshAsync: destroyAccount } =
+//   authenticationService.useDestroyAccount(
+//     {
+//       id: mainStore.account!.id,
+//       verificationCode: code.value,
+//     },
+//     {
+//       manual: true,
+//     }
+//   );
+
+const cancel = () => {
+  popup.value?.hide()
+}
+
 // 注销账号
 const deleteAccount =  () => {
   // await sendVerificationCode({ email: phoneNumber.value });
@@ -122,21 +129,39 @@ const deleteAccount =  () => {
     icon: "none",
     duration: 1500,
   });
-  popup.value?.show();
+  isShow.value = !isShow.value
+  wybWidth.value = "700"
+  wybHeight.value = "400"
 };
 // 重新获取验证码
 const sendVerification = async () => {
-  await sendVerificationCode({ email: phoneNumber.value });
+  // await sendVerificationCode({ email: phoneNumber.value });
   uni.showToast({
     title: "验证码已发送",
     icon: "none",
     duration: 1500,
   });
+  const timer = setInterval(function() {
+  count.value--;
+  if (count.value < 0) {
+    clearInterval(timer);
+  }
+}, 1000);
+  send.value = "已发送" + "(" +count.value +")"
+  setTimeout(() => {
+    send.value = "重新发送"
+  },count.value*100 );
 };
 
 const cancelDelete = () => {
+  isShow.value = !isShow.value
   popup.value?.hide();
+  wybWidth.value = "600"
+  wybHeight.value = "380"
 };
+
+const count = ref<number>(59);
+
 
 // 注销账号并退出登录
 const confirmDelete =  () => {
@@ -145,7 +170,10 @@ const confirmDelete =  () => {
   // uni.navigateTo({
   //   url: "/pages/account/denglu_zhuce/denglu",
   // });
-  // popup.value?.hide();
+  isShow.value = !isShow.value
+  popup.value?.hide();
+  wybWidth.value = "600"
+  wybHeight.value = "380"
 };
 </script>
 
