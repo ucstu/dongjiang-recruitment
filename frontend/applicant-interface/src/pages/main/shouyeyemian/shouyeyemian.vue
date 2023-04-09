@@ -378,7 +378,9 @@ watch(
     activeJobExpectation.value,
   ],
   () => {
-    paging.value?.reload();
+    if (typeof paging.value?.reload === "function") {
+      paging.value?.reload();
+    }
   }
 );
 
