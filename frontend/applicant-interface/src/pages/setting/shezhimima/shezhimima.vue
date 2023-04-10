@@ -131,9 +131,9 @@ const savePassWord = async () => {
       icon: "none",
       duration: 1500,
     });
-  } else if (vCode.value.length !== 4) {
+  } else if (vCode.value.length !== 6) {
     uni.showToast({
-      title: "请输入4位验证码",
+      title: "请输入6位验证码",
       icon: "none",
       duration: 1500,
     });
