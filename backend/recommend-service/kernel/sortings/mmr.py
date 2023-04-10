@@ -1,6 +1,5 @@
-from kernel.basic import JobSimilarityScore
-from models.job import Job
-from models.user import User
+from kernel.algorithm.similarity import get_job_similarity_score
+from utils.database import db
 
 
 def mmr(jobs: list[tuple[int, int]], rate: float = 0.5, n: int = 10):
@@ -11,7 +10,8 @@ def mmr(jobs: list[tuple[int, int]], rate: float = 0.5, n: int = 10):
             j[0],
             rate * j[1] - (1-rate) * max(
                 map(
-                    lambda y: JobSimilarityScore(Job(j[0]), Job(y[0])),
+                    lambda y: get_job_similarity_score(
+                        db.get_job(j[0]), db.get_job(y[0])),
                     chose_jobs
                 )
             )

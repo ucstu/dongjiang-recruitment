@@ -109,7 +109,7 @@ const scrollTop = ref(0);
 const query = uni.createSelectorQuery();
 
 watch(
-  () => messageStore.messages[hrInfo.value.id].length,
+  () => messageStore.messages[hrInfo.value.id]?.length,
   (val) => {
     nextTick(() => {
       query
