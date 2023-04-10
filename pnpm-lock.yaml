@@ -768,9 +768,6 @@ importers:
       vue-i18n:
         specifier: ^9.2.2
         version: 9.2.2(vue@3.2.47)
-      z-paging:
-        specifier: ^2.5.7
-        version: 2.5.7
     devDependencies:
       '@dcloudio/types':
         specifier: ^3.2.11
@@ -19122,11 +19119,6 @@ packages:
       normalize-path: 1.0.0
       strip-indent: 2.0.0
     dev: true
-
-  /z-paging@2.5.7:
-    resolution: {integrity: sha512-mLjDy2s0ZRYNF8xl/mnZb+aGsveCGtR9G4H3BQUwNnr1hZpK8tQx2zKDnLtUxO0isOX+Y25QWlbk75t7tsOVfw==}
-    engines: {HBuilderX: ^3.0.7}
-    dev: false
 
   /zrender@5.4.3:
     resolution: {integrity: sha512-DRUM4ZLnoaT0PBVvGBDO9oWIDBKFdAVieNWxWwK0niYzJCMwGchRk21/hsE+RKkIveH3XHCyvXcJDkgLVvfizQ==}

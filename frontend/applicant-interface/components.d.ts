@@ -26,5 +26,12 @@ declare module '@vue/runtime-core' {
     WorkExperience: typeof import('./src/components/WorkExperience/WorkExperience.vue')['default']
     WybModal: typeof import('./src/components/wyb-modal/wyb-modal.vue')['default']
     WybPopup: typeof import('./src/components/wyb-popup/wyb-popup.vue')['default']
+    ZPaging: typeof import('./src/components/z-paging/z-paging.vue')['default']
+    ZPagingCell: typeof import('./src/components/z-paging-cell/z-paging-cell.vue')['default']
+    ZPagingEmptyView: typeof import('./src/components/z-paging-empty-view/z-paging-empty-view.vue')['default']
+    ZPagingLoadMore: typeof import('./src/components/z-paging/components/z-paging-load-more.vue')['default']
+    ZPagingRefresh: typeof import('./src/components/z-paging/components/z-paging-refresh.vue')['default']
+    ZPagingSwiper: typeof import('./src/components/z-paging-swiper/z-paging-swiper.vue')['default']
+    ZPagingSwiperItem: typeof import('./src/components/z-paging-swiper-item/z-paging-swiper-item.vue')['default']
   }
 }
