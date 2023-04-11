@@ -283,8 +283,8 @@ uni.$on("filterValue", (filter) => {
 });
 
 const positions = ref<Array<Position>>([]);
-const methods = ref<Array<"热门" | "附近" | "最新">>(["热门", "附近", "最新"]);
-const activeMethod = ref<"热门" | "附近" | "最新">(methods.value[0]);
+const methods = ref<Array<"推荐" | "附近" | "最新">>(["推荐", "附近", "最新"]);
+const activeMethod = ref<"推荐" | "附近" | "最新">(methods.value[0]);
 const paging = ref<{
   complete: (param: Array<any> | boolean) => void;
   reload: () => void;
