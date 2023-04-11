@@ -1,13 +1,14 @@
-import json
 from urllib import request
 from fastapi import FastAPI
-import yaml
+from fastapi.middleware.cors import CORSMiddleware
 from utils.database import db
 from kernel.cronJobs import job, user
 from kernel.passages.itemcf import itemCF
 from kernel.passages.usercf import userCF
 import uvicorn
+import json
 import time
+import yaml
 import os
 
 
@@ -45,6 +46,15 @@ config = yaml.load(
 API_BASE_URL = config["service"]["baseUrl"]
 
 app = FastAPI()
+
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=['*'],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 @app.get("/recommend/recompute_parameters")
