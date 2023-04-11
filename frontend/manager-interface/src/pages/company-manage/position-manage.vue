@@ -1,90 +1,48 @@
 <template>
   <div class="p-2 w-full h-full" ref="div">
     <n-space justify="space-between" align="center">
-      <n-button
-        v-if="hasPermission('/companies/:companyId/positions,POST')"
-        type="primary"
-        size="small"
-        @click="add"
-        class="mb-2"
-      >
-        新增
-      </n-button>
-      <n-button
-        v-if="hasPermission('/companies/:companyId/positions,GET')"
-        text
-        size="small"
-        @click="refresh"
-        class="mb-2"
-      >
-        刷新
-      </n-button>
-    </n-space>
-    <n-data-table
-      remote
-      ref="table"
-      class="flex-1"
-      :columns="columns"
-      :data="authorities"
-      :loading="loading"
-      :pagination="pagination"
-      :row-key="(row) => row.id"
-      :max-height="maxHeight"
-      @update:page="changePage"
-      @update:sorter="changeSorter"
-      @update:filters="changeFilters"
-      @update-page-size="changePageSize"
-    />
-    <n-modal v-model:show="showModal" :width="600" :closable="true">
-      <n-card
-        style="width: 600px"
-        :title="modalTitle"
-        :bordered="false"
-        size="huge"
-        role="dialog"
-        aria-modal="true"
-      >
-        <n-form
-          ref="form"
-          :rules="rules"
-          :model="current"
-          :label-width="80"
-          :loading="addLoading"
-        >
-          <n-form-item
-            label="公司"
-            path="company.id"
-            v-if="modalType === 'add'"
-          >
-            <n-select
-              v-model:value="current.company.id"
-              multiple
-              filterable
-              placeholder="请选择公司"
-              :options="companiesOptions"
-              :loading="companiesLoading"
-              clearable
-              remote
-              :clear-filter-after-select="false"
-              @search="handleSearchAuthorityGroups"
-            />
-          </n-form-item>
-          <n-form-item label="职位名称" path="positionName">
-            <n-input
-              v-model:value="current.positionName"
-              :readonly="modalType === 'view'"
-              placeholder="请输入职位名称"
-            />
-          </n-form-item>
-        </n-form>
-        <n-button
-          v-if="modalType !== 'view'"
-          :loading="addLoading || updateLoading"
-          type="primary"
-          size="small"
-          class="mt-2"
-          @click="submit"
-        >
+          <n-button v-if="hasPermission('/companies/:companyId/positions,POST')" type="primary" size="small" @click="add"
+            class="mb-2">
+            新增
+          </n-button>
+          <n-button v-if="hasPermission('/companies/:companyId/positions,GET')" text size="small" @click="refresh"
+            class="mb-2">
+            刷新
+          </n-button>
+        </n-space>
+        <n-data-table remote ref="table" class="flex-1" :columns="columns" :data="authorities" :loading="loading"
+          :pagination="pagination" :row-key="(row) => row.id" :max-height="maxHeight" @update:page="changePage"
+          @update:sorter="changeSorter" @update:filters="changeFilters" @update-page-size="changePageSize" />
+        <n-modal v-model:show="showModal" :width="600" :closable="true">
+          <n-card style="width: 600px" :title="modalTitle" :bordered="false" size="huge" role="dialog" aria-modal="true">
+            <n-form ref="form" :rules="rules" :model="current" :label-width="80" :loading="addLoading">
+              <n-form-item label="公司" path="company.id" v-if="modalType === 'add'">
+                <n-select v-model:value="current.company.id" multiple filterable placeholder="请选择公司"
+                  :options="companiesOptions" :loading="companiesLoading" clearable remote :clear-filter-after-select="false"
+                  @search="handleSearchAuthorityGroups" />
+              </n-form-item>
+              <n-form-item label="职位名称" path="positionName">
+                <n-input v-model:value="current.positionName" :readonly="modalType === 'view'" placeholder="请输入职位名称" />
+              </n-form-item>
+              <n-form-item label="岗位名称" path="departmentName">
+                <n-input v-model:value="current.departmentName" :readonly="modalType === 'view'" placeholder="请输入职位名称" />
+              </n-form-item>
+              <n-form-item label="岗位底薪" path="startingSalary">
+                <n-input  v-model:value.number="current.startingSalary as any" :readonly="modalType === 'view'" placeholder="请输入职位名称" />
+              </n-form-item>
+              <n-form-item label="职位描述" path="description">
+                <n-input type="textarea" v-model:value="current.description" :readonly="modalType === 'view'"
+                  placeholder="请输入职位名称" />
+              </n-form-item>
+              <n-form-item label="工作地址" path="workAreaName">
+                <n-input v-model:value="current.workAreaName" :readonly="modalType === 'view'" placeholder="请输入职位名称" />
+              </n-form-item>
+              <n-form-item label="职位类型" path="positionType">
+                <n-input v-model:value="current.positionType" :readonly="modalType === 'view'" placeholder="请输入职位名称" />
+              </n-form-item>
+            </n-form>
+            <n-button v-if="modalType !== 'view'" :loading="addLoading || updateLoading" type="primary" size="small"
+              class="mt-2" @click="submit">
           提交
         </n-button>
       </n-card>
@@ -363,8 +321,8 @@ const {
   () => ({
     query: companyId.value
       ? {
-          "company.id": ["$eq", companyId.value],
-        }
+        "company.id": ["$eq", companyId.value],
+      }
       : undefined,
     page: pagination.value.page,
     size: pagination.value.pageSize,
