@@ -1,18 +1,30 @@
+import { User } from "@dongjiang-recruitment/nest-common/dist/auth";
+import {
+  ConfigType,
+  serviceConfig as _serviceConfig,
+} from "@dongjiang-recruitment/nest-common/dist/config";
 import {
   Page,
   Pagination,
   QueryParam,
 } from "@dongjiang-recruitment/nest-common/dist/decorator";
-import { FindOptionsWhere } from "@dongjiang-recruitment/nest-common/dist/typeorm";
+import { HttpService } from "@dongjiang-recruitment/nest-common/dist/http";
+import {
+  FindOptionsWhere,
+  In,
+} from "@dongjiang-recruitment/nest-common/dist/typeorm";
 import {
   Body,
   Controller,
   Delete,
   Get,
+  Inject,
   Param,
   Post,
   Put,
+  Req,
 } from "@nestjs/common";
+import { firstValueFrom } from "rxjs";
 import { Position } from "src/position/entities/position.entity";
 import { CompanyService } from "./company.service";
 import { CreateCompanyDto } from "./dto/create-company.dto";
@@ -21,7 +33,12 @@ import { Company } from "./entities/company.entity";
 
 @Controller("companies")
 export class CompanyController {
-  constructor(private readonly companyService: CompanyService) {}
+  constructor(
+    @Inject(_serviceConfig.KEY)
+    private readonly serviceConfig: ConfigType<typeof _serviceConfig>,
+    private readonly httpService: HttpService,
+    private readonly companyService: CompanyService
+  ) {}
 
   @Post()
   create(@Body() createCompanyDto: CreateCompanyDto) {
@@ -37,10 +54,28 @@ export class CompanyController {
   }
 
   @Get("positions")
-  findAllPositions(
+  async findAllPositions(
     @QueryParam() query: Array<FindOptionsWhere<Position>>,
-    @Page() page: Pagination<Position>
+    @Page() page: Pagination<Position>,
+    @Req() request: Request & { user: User }
   ) {
+    if ("recommend" in page.sort) {
+      const recommend = await firstValueFrom(
+        this.httpService.get(
+          `${this.serviceConfig.baseUrl}/recommend/get_recommend_jobs`,
+          {
+            params: {
+              id: request.user.detailId.applicant,
+            },
+          }
+        )
+      );
+      query.forEach((q) => {
+        if ("id" in q) return;
+        q.id = In(recommend.data.map((rec) => rec[0]));
+      });
+      delete page.sort.recommend;
+    }
     return this.companyService.findAllPositions(query, page);
   }
 

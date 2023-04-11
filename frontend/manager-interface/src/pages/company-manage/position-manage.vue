@@ -1,48 +1,108 @@
 <template>
   <div class="p-2 w-full h-full" ref="div">
     <n-space justify="space-between" align="center">
-          <n-button v-if="hasPermission('/companies/:companyId/positions,POST')" type="primary" size="small" @click="add"
-            class="mb-2">
-            新增
-          </n-button>
-          <n-button v-if="hasPermission('/companies/:companyId/positions,GET')" text size="small" @click="refresh"
-            class="mb-2">
-            刷新
-          </n-button>
-        </n-space>
-        <n-data-table remote ref="table" class="flex-1" :columns="columns" :data="authorities" :loading="loading"
-          :pagination="pagination" :row-key="(row) => row.id" :max-height="maxHeight" @update:page="changePage"
-          @update:sorter="changeSorter" @update:filters="changeFilters" @update-page-size="changePageSize" />
-        <n-modal v-model:show="showModal" :width="600" :closable="true">
-          <n-card style="width: 600px" :title="modalTitle" :bordered="false" size="huge" role="dialog" aria-modal="true">
-            <n-form ref="form" :rules="rules" :model="current" :label-width="80" :loading="addLoading">
-              <n-form-item label="公司" path="company.id" v-if="modalType === 'add'">
-                <n-select v-model:value="current.company.id" multiple filterable placeholder="请选择公司"
-                  :options="companiesOptions" :loading="companiesLoading" clearable remote :clear-filter-after-select="false"
-                  @search="handleSearchAuthorityGroups" />
-              </n-form-item>
-              <n-form-item label="职位名称" path="positionName">
-                <n-input v-model:value="current.positionName" :readonly="modalType === 'view'" placeholder="请输入职位名称" />
-              </n-form-item>
-              <n-form-item label="岗位名称" path="departmentName">
-                <n-input v-model:value="current.departmentName" :readonly="modalType === 'view'" placeholder="请输入职位名称" />
-              </n-form-item>
-              <n-form-item label="岗位底薪" path="startingSalary">
-                <n-input  v-model:value.number="current.startingSalary as any" :readonly="modalType === 'view'" placeholder="请输入职位名称" />
-              </n-form-item>
-              <n-form-item label="职位描述" path="description">
-                <n-input type="textarea" v-model:value="current.description" :readonly="modalType === 'view'"
-                  placeholder="请输入职位名称" />
-              </n-form-item>
-              <n-form-item label="工作地址" path="workAreaName">
-                <n-input v-model:value="current.workAreaName" :readonly="modalType === 'view'" placeholder="请输入职位名称" />
-              </n-form-item>
-              <n-form-item label="职位类型" path="positionType">
-                <n-input v-model:value="current.positionType" :readonly="modalType === 'view'" placeholder="请输入职位名称" />
-              </n-form-item>
-            </n-form>
-            <n-button v-if="modalType !== 'view'" :loading="addLoading || updateLoading" type="primary" size="small"
-              class="mt-2" @click="submit">
+      <n-space>
+        <n-button
+          v-if="hasPermission('/companies/:companyId/positions,POST')"
+          type="primary"
+          size="small"
+          @click="add"
+          class="mb-2"
+        >
+          新增
+        </n-button>
+        <n-button
+          v-if="hasPermission('/recommend/recompute_parameters,GET')"
+          type="primary"
+          size="small"
+          :loading="rebuildIndexLoading"
+          @click="rebuildIndex"
+          >创建索引</n-button
+        >
+        <n-button
+          v-if="hasPermission('/recommend/send_recommend_message,GET')"
+          type="primary"
+          size="small"
+          :loading="sendRecommendLoading"
+          @click="sendRecommend"
+          >发送推荐</n-button
+        >
+      </n-space>
+      <n-button
+        v-if="hasPermission('/companies/:companyId/positions,GET')"
+        text
+        size="small"
+        @click="refresh"
+        class="mb-2"
+      >
+        刷新
+      </n-button>
+    </n-space>
+    <n-data-table
+      remote
+      ref="table"
+      class="flex-1"
+      :columns="columns"
+      :data="authorities"
+      :loading="loading"
+      :pagination="pagination"
+      :row-key="(row) => row.id"
+      :max-height="maxHeight"
+      @update:page="changePage"
+      @update:sorter="changeSorter"
+      @update:filters="changeFilters"
+      @update-page-size="changePageSize"
+    />
+    <n-modal v-model:show="showModal" :width="600" :closable="true">
+      <n-card
+        style="width: 600px"
+        :title="modalTitle"
+        :bordered="false"
+        size="huge"
+        role="dialog"
+        aria-modal="true"
+      >
+        <n-form
+          ref="form"
+          :rules="rules"
+          :model="current"
+          :label-width="80"
+          :loading="addLoading"
+        >
+          <n-form-item
+            label="公司"
+            path="company.id"
+            v-if="modalType === 'add'"
+          >
+            <n-select
+              v-model:value="current.company.id"
+              multiple
+              filterable
+              placeholder="请选择公司"
+              :options="companiesOptions"
+              :loading="companiesLoading"
+              clearable
+              remote
+              :clear-filter-after-select="false"
+              @search="handleSearchAuthorityGroups"
+            />
+          </n-form-item>
+          <n-form-item label="职位名称" path="positionName">
+            <n-input
+              v-model:value="current.positionName"
+              :readonly="modalType === 'view'"
+              placeholder="请输入职位名称"
+            />
+          </n-form-item>
+        </n-form>
+        <n-button
+          v-if="modalType !== 'view'"
+          :loading="addLoading || updateLoading"
+          type="primary"
+          size="small"
+          class="mt-2"
+          @click="submit"
+        >
           提交
         </n-button>
       </n-card>
@@ -51,23 +111,27 @@
 </template>
 
 <script setup lang="tsx">
-import { hasPermission } from "@/hooks";
-import type { Position } from "@dongjiang-recruitment/service-common";
+import { hasPermission, useApiFullPath } from "@/hooks";
+import {
+  axios,
+  useRequest,
+  type Position,
+} from "@dongjiang-recruitment/service-common";
 import dayjs from "dayjs";
 import * as _ from "lodash";
 import {
-NButton,
-NSpace,
-type DataTableColumns,
-type FormRules,
-type NDataTable,
-type NForm,
-type PaginationProps,
+  NButton,
+  NSpace,
+  type DataTableColumns,
+  type FormRules,
+  type NDataTable,
+  type NForm,
+  type PaginationProps,
 } from "naive-ui";
 import type {
-FilterState,
-SortState,
-TableBaseColumn,
+  FilterState,
+  SortState,
+  TableBaseColumn,
 } from "naive-ui/es/data-table/src/interface";
 import type { SelectMixedOption } from "naive-ui/es/select/src/interface";
 
@@ -126,6 +190,27 @@ const submit = async () => {
     _update();
   }
 };
+
+const { loading: rebuildIndexLoading, refreshAsync: rebuildIndex } = useRequest(
+  () => axios.get(useApiFullPath("/recommend/recompute_parameters")),
+  {
+    manual: true,
+    onSuccess() {
+      $message.success("创建索引成功");
+    },
+  }
+);
+
+const { loading: sendRecommendLoading, refreshAsync: sendRecommend } =
+  useRequest(
+    () => axios.get(useApiFullPath("/recommend/send_recommend_message")),
+    {
+      manual: true,
+      onSuccess() {
+        $message.success("发送推荐邮件成功");
+      },
+    }
+  );
 
 // 增
 const current = ref<Position>({} as Position);
@@ -321,8 +406,8 @@ const {
   () => ({
     query: companyId.value
       ? {
-        "company.id": ["$eq", companyId.value],
-      }
+          "company.id": ["$eq", companyId.value],
+        }
       : undefined,
     page: pagination.value.page,
     size: pagination.value.pageSize,

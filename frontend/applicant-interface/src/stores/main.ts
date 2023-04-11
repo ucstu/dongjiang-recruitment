@@ -133,7 +133,7 @@ export const useMainStore = defineStore(
               title: "请先完善求职意向",
             });
             uni.reLaunch({
-              url: "/pages/init/tianjaiqiuzhiqiwang/tianjiaqiuzhiqiwang",
+              url: "/pages/init/tianjiaqiuzhiqiwang/tianjiaqiuzhiqiwang",
             });
           }
         },

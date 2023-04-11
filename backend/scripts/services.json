@@ -94,5 +94,21 @@
       "protocol": "https",
       "port": 443
     }
+  },
+  {
+    "name": "recommend-service",
+    "prefix": "/recommend",
+    "current": "local",
+    "autoStart": false,
+    "local": {
+      "host": "localhost",
+      "protocol": "http",
+      "port": 8000
+    },
+    "remote": {
+      "host": "develop.api.djzhaopin.ucstu.com",
+      "protocol": "https",
+      "port": 443
+    }
   }
 ]

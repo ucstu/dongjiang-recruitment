@@ -3,12 +3,13 @@ import {
   alipayConfig as _alipayConfig,
   minioConfig as _minioConfig,
 } from "@dongjiang-recruitment/nest-common/dist/config";
-import type {
+import {
   Areas,
   Cities,
   DirectionTags,
   FilterCriteria,
   PositionTypes,
+  ServiceClient,
 } from "@dongjiang-recruitment/nest-common/dist/http";
 import { MailerService } from "@dongjiang-recruitment/nest-common/dist/mailer";
 import { MinioService } from "@dongjiang-recruitment/nest-common/dist/minio";
@@ -36,6 +37,7 @@ export class CommonService {
     private readonly minioConfig: ConfigType<typeof _minioConfig>,
     private readonly mailerService: MailerService,
     private readonly redisService: RedisService,
+    private readonly serviceClient: ServiceClient,
     @Inject(_alipayConfig.KEY)
     alipayConfig: ConfigType<typeof _alipayConfig>
   ) {
@@ -603,6 +605,36 @@ export class CommonService {
         ],
       },
     ];
+  }
+
+  async sendRecommend(recommend: { userId: string; positionId: string }) {
+    try {
+      await this.serviceClient.loginAsAdmin();
+      const applicant = await this.serviceClient.applicant.getApplicant({
+        id: recommend.userId,
+      });
+      const position = await this.serviceClient.company.queryAllPosition({
+        query: {
+          id: ["$eq", recommend.positionId],
+        },
+      });
+      if (!position.items.length) return "职位不存在";
+      await this.mailerService.sendMail({
+        to: applicant.email,
+        subject: "东江招聘 - 职位推荐",
+        template: "recommend-job",
+        context: {
+          cid: position.items[0].company.id,
+          pid: position.items[0].id,
+          cname: position.items[0].company.companyName,
+          pname: position.items[0].positionName,
+        },
+      });
+      return "邮件发送成功";
+    } catch (error) {
+      console.error(error);
+      throw new InternalServerErrorException("邮件发送失败");
+    }
   }
 
   async getVerificationCode(email: string) {

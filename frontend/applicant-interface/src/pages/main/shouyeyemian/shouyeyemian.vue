@@ -250,6 +250,7 @@ watch(
   }
 );
 
+
 const { data: advertise } = advertiserService.useQueryAllAdvertise(
   () => ({
     query: {
@@ -364,7 +365,12 @@ const queryList = async (pageNo: number, pageSize: number) => {
         query: queries.length ? queries : undefined,
         page: pageNo,
         size: pageSize,
-        sort: activeMethod.value === "最新" ? ["createdAt,desc"] : undefined,
+        sort:
+          activeMethod.value === "最新"
+            ? ["createdAt,desc"]
+            : activeMethod.value === "推荐"
+            ? ["recommend,desc" as any]
+            : undefined,
       })
     ).items
   );

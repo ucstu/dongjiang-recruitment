@@ -48,6 +48,11 @@ export class CommonController {
     return this.commonService.getDirectionTags();
   }
 
+  @Post("sendRecommend")
+  sendEmail(@Body() recommend: { userId: string; positionId: string }) {
+    return this.commonService.sendRecommend(recommend);
+  }
+
   @Get("verificationCode")
   getVerificationCode(@Query("email") email: string) {
     return this.commonService.getVerificationCode(email);
