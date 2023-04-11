@@ -1,11 +1,10 @@
 class User:
     def __init__(self, id: str | None = None, dict: dict | None = None):
-        self.new = dict is None
         self.id: str = id if dict is None else dict["id"]  # NOQA
         self.embedding: list[float] = [] if dict is None else dict["embedding"]  # NOQA
-        self.job_like_scores: list[tuple[str, int]] = [] if dict is None else dict["job_like_scores"]  # NOQA
+        self.job_like_scores: list[tuple[str, int]] = [] if dict is None else list(map(lambda x: (x[0], x[1]), dict["job_like_scores"]))  # NOQA
         self.job_like_scores_dict: dict[str, int] | None = None
-        self.user_similar_scores: list[tuple[str, int]] = [] if dict is None else dict["user_similar_scores"]  # NOQA
+        self.user_similar_scores: list[tuple[str, int]] = [] if dict is None else list(map(lambda x: (x[0], x[1]), dict["user_similar_scores"]))  # NOQA
         self.user_similar_scores_dict: dict[str, int] | None = None
 
     def get_job_like_score(self, job_id: str, default: int | None = None) -> int | None:

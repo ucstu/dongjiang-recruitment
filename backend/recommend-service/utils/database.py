@@ -48,6 +48,8 @@ class DataBase:
 
     def start_cache(self):
         self.use_cache = True
+        self.user_cache = {}
+        self.job_cache = {}
 
     def stop_cache(self):
         self.use_cache = False
@@ -87,16 +89,11 @@ class DataBase:
             return self.job_cache[job_id]
         job_from_db = self.job_collection.find_one({"id": job_id})  # NOQA
         if job_from_db is None:
-            return None
+            return Job(id=job_id)
         return Job(dict=job_from_db)
 
     def save_job(self, job: Job):
-        if self.use_cache:
-            self.job_cache[job.id] = job
-        if job.new is True:
-            self.job_collection.insert_one(job.to_dict())
-        else:
-            self.job_collection.update_one({"id": job.id}, {"$set": job.to_dict()}, upsert=True)  # NOQA
+        self.job_collection.update_one({"id": job.id}, {"$set": job.to_dict()}, upsert=True)  # NOQA
 
     def get_all_user_ids(self) -> list[str]:
         connect = self.get_postgresql_connection()
@@ -155,16 +152,11 @@ class DataBase:
             return self.user_cache[user_id]
         user_from_db = self.user_collection.find_one({"id": user_id})  # NOQA
         if user_from_db is None:
-            return None
+            return User(id=user_id)
         return User(dict=user_from_db)
 
     def save_user(self, user: User):
-        if self.use_cache:
-            self.user_cache[user.id] = user
-        if user.new is True:
-            self.user_collection.insert_one(user.to_dict())
-        else:
-            self.user_collection.update_one({"id": user.id}, {"$set": user.to_dict()}, upsert=True)  # NOQA
+        self.user_collection.update_one({"id": user.id}, {"$set": user.to_dict()}, upsert=True)  # NOQA
 
 
 db = DataBase()
