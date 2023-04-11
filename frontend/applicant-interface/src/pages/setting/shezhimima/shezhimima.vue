@@ -7,7 +7,7 @@
         <input
           v-model="password"
           class="text-input"
-          :type="seen ? 'text' : 'safe-password'"
+          :type="seen ? 'text' : 'password' as any"
           placeholder="请输入新密码"
         />
         <image
@@ -30,7 +30,7 @@
         <input
           v-model="password2"
           class="text-input"
-          :type="seen2 ? 'text' : 'safe-password'"
+          :type="seen2 ? 'text' : 'password' as any"
           placeholder="请再次输入密码"
         />
         <image
@@ -57,7 +57,7 @@
               class="text-input"
               type="number"
               placeholder="请输入验证码"
-              :maxlength="4"
+              :maxlength="6"
             />
           </view>
         </view>
@@ -88,15 +88,24 @@ const password2 = ref("");
 const vCode = ref("");
 const seen = ref(false);
 const seen2 = ref(false);
-const typeText = ref("text");
-const typePassword = ref("password");
 
-const { runAsync: sendVerificationCode } =
-  commonService.useSendVerificationCode(undefined, {
-    manual: true,
-  });
-const { runAsync: changePassword } = authenticationService.useChangePassword(
-  undefined,
+const { refreshAsync: sendVerificationCode } =
+  commonService.useSendVerificationCode(
+    () => ({
+      email: mainStore.account!.userName,
+    }),
+    {
+      manual: true,
+    }
+  );
+const { refreshAsync: changePassword } = authenticationService.useChangePassword(
+  () => ({
+    id: mainStore.account!.id,
+    requestBody: {
+      password: password.value,
+      verificationCode: vCode.value,
+    },
+  }),
   {
     manual: true,
   }
@@ -104,7 +113,7 @@ const { runAsync: changePassword } = authenticationService.useChangePassword(
 
 // 获取验证码
 const getVerification = async () => {
-  await sendVerificationCode({ email: mainStore.account!.userName });
+  await sendVerificationCode();
   uni.showToast({
     title: "验证码已发送",
     duration: 1500,
@@ -138,13 +147,7 @@ const savePassWord = async () => {
       duration: 1500,
     });
   } else {
-    await changePassword({
-      id: mainStore.account!.id,
-      requestBody: {
-        password: password.value,
-        verificationCode: vCode.value,
-      },
-    });
+    await changePassword();
     uni.showToast({
       title: "修改成功",
       icon: "none",

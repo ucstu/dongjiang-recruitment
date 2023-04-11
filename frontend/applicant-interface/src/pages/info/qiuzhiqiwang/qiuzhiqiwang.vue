@@ -336,6 +336,7 @@ const saveJobExcept = () => {
                 total: newExpectations.length,
                 items: newExpectations,
               });
+              mainStore.isInit = false;
               uni.navigateBack({
                 delta: 1,
               });

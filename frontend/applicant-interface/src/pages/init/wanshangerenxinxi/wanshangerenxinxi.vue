@@ -193,8 +193,7 @@ const nextClick = () => {
         requestBody: userInfo.value,
       })
       .then((res) => {
-        mainStore.applicant = res;
-        console.log(res)
+        mainStore.setApplicant(res);
         uni.navigateTo({
           url: "/pages/init/wanshanjiaoyujingli/wanshanjiaoyujingli",
         });

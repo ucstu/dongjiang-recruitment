@@ -116,26 +116,6 @@ export class AccountService {
         break;
     }
 
-    console.log({
-      ...accounts[0],
-      userName,
-      password: await this.bcryptService.hash(password),
-      authorities: [
-        ...(accounts[0]?.authorities || []),
-        ...(createAccountDto.authorities || []),
-      ].filter(Boolean),
-      authorityGroups: [
-        ...(accounts[0]?.authorityGroups || []),
-        ...(createAccountDto.authorityGroups || []),
-        authorityGroup,
-      ].filter(Boolean),
-      detailId: {
-        ...STATIC_FULL_ID,
-        ...accounts[0]?.detailId,
-        [accountTypeStr]: detailId,
-      },
-    });
-
     // 创建账号
     return await this.accountRepository.save({
       ...accounts[0],

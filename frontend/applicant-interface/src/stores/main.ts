@@ -1,8 +1,9 @@
 import { until } from "@/hooks";
 import type { Message } from "@/interfaces";
-import type {
-  Account,
-  MessageRecord,
+import {
+  request,
+  type Account,
+  type MessageRecord,
 } from "@dongjiang-recruitment/service-common";
 // @ts-ignore
 import io from "@hyoga/uni-socket.io";
@@ -39,7 +40,9 @@ export const useMainStore = defineStore(
     );
     // 授权信息
     const token = ref<string>("");
+    const isInit = ref<boolean>(false);
     const checked = ref<boolean>(false);
+    watch(token, (token) => (request.config.TOKEN = token));
     const accountId = computed(() => parseJwt(token.value).id);
     const {
       data: account,
@@ -87,7 +90,7 @@ export const useMainStore = defineStore(
       ready: computed(() => !!applicantId.value && checked.value),
       refreshDeps: [applicantId, checked],
       onSuccess(res) {
-        if (res && !res.email) {
+        if (res && !res.email && !isInit.value) {
           uni.showToast({
             title: "请先完善个人信息",
           });
@@ -100,7 +103,7 @@ export const useMainStore = defineStore(
               applicantId: applicantId.value!,
             })
             .then((res1) => {
-              setApplicant({
+              const applicant = {
                 ...res,
                 age: dayjs().diff(res.dateOfBirth, "year"),
                 education: res1.items.length
@@ -110,6 +113,11 @@ export const useMainStore = defineStore(
                       res1.items[0].education as any
                     )
                   : null,
+              };
+              setApplicant(applicant);
+              applicantService.updateApplicant({
+                id: applicantId.value!,
+                requestBody: applicant,
               });
             });
         }
@@ -128,7 +136,7 @@ export const useMainStore = defineStore(
         ready: computed(() => !!applicantId.value && checked.value),
         refreshDeps: [applicantId, checked],
         onSuccess(res) {
-          if (res && !res.items.length) {
+          if (res && !res.items.length && !isInit.value) {
             uni.showToast({
               title: "请先完善求职意向",
             });
@@ -153,6 +161,7 @@ export const useMainStore = defineStore(
       system,
       menu,
       token,
+      isInit,
       accountId,
       account,
       setAccount,

@@ -102,11 +102,15 @@ const { refreshAsync: loginAccount } = authenticationService.useLoginAccount(
   {
     manual: true,
     onSuccess(data) {
+      mainStore.isInit = true;
       mainStore.token = data.token;
       uni.showToast({
         title: "注册成功",
         icon: "none",
         duration: 1500,
+      });
+      uni.reLaunch({
+        url: "/pages/init/wanchengjianli/wanchengjianli",
       });
     },
   }
@@ -169,9 +173,6 @@ const registeredAccount = async () => {
     });
   } else {
     await registerAccount();
-    uni.reLaunch({
-      url: "/pages/init/wanchengjianli/wanchengjianli",
-    });
   }
 };
 </script>

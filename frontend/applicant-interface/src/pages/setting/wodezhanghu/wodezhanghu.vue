@@ -45,7 +45,7 @@
       </view>
       <view v-if="!isShow" class="flex-col justify-center code-box">
         <text style="font-size: 40rpx; font-weight: bold; text-align: center"
-          >请输入验证码</text
+          >{{ errorMes || "请输入验证码" }}</text
         >
         <view class="flex-col justify-between" style="margin-top: 20rpx">
           <input
@@ -93,18 +93,12 @@
 </template>
 <script lang="ts" setup>
 import NavigationBar from "@/components/NavigationBar/NavigationBar.vue";
-// import wybModal from "@/components/wyb-modal/wyb-modal.vue";
 import wybPopup from "@/components/wyb-popup/wyb-popup.vue";
 import { until } from "@/hooks";
 import { useMainStore } from "@/stores";
 
 const mainStore = useMainStore();
 
-// const { runAsync: sendVerificationCode } =
-//   commonService.useSendVerificationCode(undefined, {
-//     manual: true,
-//   });
-// 隐藏账号
 const phoneNumber = ref<string>("");
 const code = ref<string>("");
 const send = ref<string>("重新发送");
@@ -129,16 +123,6 @@ const popup = ref<InstanceType<typeof wybPopup>>();
 const showDelete = () => {
   popup.value?.show();
 };
-// const { refreshAsync: destroyAccount } =
-//   authenticationService.useDestroyAccount(
-//     {
-//       id: mainStore.account!.id,
-//       verificationCode: code.value,
-//     },
-//     {
-//       manual: true,
-//     }
-//   );
 
 const cancel = () => {
   popup.value?.hide();
@@ -183,12 +167,29 @@ const cancelDelete = () => {
 
 const count = ref<number>(59);
 
+const { refreshAsync: destroyAccount, error } =
+  authenticationService.useDestroyAccount(
+    () => ({
+      id: mainStore.account!.id,
+      verificationCode: code.value,
+    }),
+    {
+      manual: true,
+    }
+  );
+const errorMes = computed(() => error.value?.body.error);
+
 // 注销账号并退出登录
 const confirmDelete = async () => {
-  await authenticationService.useDestroyAccount({
-    id: mainStore.account!.id,
-    verificationCode: code.value,
-  });
+  if (code.value.length !== 6) {
+    uni.showToast({
+      title: "验证码错误",
+      icon: "none",
+      duration: 1500,
+    });
+    return;
+  }
+  await destroyAccount();
   mainStore.token = "";
   mainStore.account = {} as any;
   mainStore.applicant = {} as any;
