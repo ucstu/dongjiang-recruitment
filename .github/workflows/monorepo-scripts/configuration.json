@@ -206,6 +206,38 @@
         }
       }
     },
+    "recommend-service": {
+      "type": "backend",
+      "name": "recommend-service",
+      "workspace": "backend/recommend-service",
+      "files": ["backend/Dockerfile.python"],
+      "scripts": {
+        "lint": {
+          "name": "lint",
+          "command": "echo 'No lint'"
+        },
+        "build": {
+          "name": "build",
+          "command": "echo 'No build'",
+          "artifact": ""
+        },
+        "publish": {
+          "name": "publish",
+          "sub-type": "docker",
+          "artifact": "bundle",
+          "context": "bundle",
+          "build-args": ["SERVICE_PORT=8000"],
+          "docker-file": "../Dockerfile.python"
+        },
+        "deploy": {
+          "name": "deploy",
+          "sub-type": "kubernetes",
+          "port": 8000,
+          "path": "/recommend",
+          "domain": "api.djzhaopin.ucstu.com"
+        }
+      }
+    },
     "applicant-interface": {
       "type": "frontend",
       "name": "applicant-interface",

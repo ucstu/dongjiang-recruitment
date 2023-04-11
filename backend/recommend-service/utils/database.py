@@ -41,6 +41,7 @@ class DataBase:
         mongo_database = mongo_client[config["mongo"]["database"]]
         self.user_collection = mongo_database[config["mongo"]["user_collection"]]  # NOQA
         self.job_collection = mongo_database[config["mongo"]["job_collection"]]  # NOQA
+        self.cache_collection = mongo_database[config["mongo"]["cache_collection"]]  # NOQA
 
     def get_postgresql_connection(self) -> extensions.connection:
         return self.postgresql_connection_pool.getconn()
@@ -52,6 +53,18 @@ class DataBase:
         self.use_cache = False
         self.user_cache = {}
         self.job_cache = {}
+
+    def get_recommend_cache(self, user_id: str) -> list | None:
+        cache_from_db = self.cache_collection.find_one({"id": user_id})  # NOQA
+        if cache_from_db is None:
+            return None
+        return cache_from_db["cache"]
+
+    def set_recommend_cache(self, user_id: str, cache: list):
+        self.cache_collection.insert_one({"id": user_id, "cache": cache})  # NOQA
+
+    def clear_recommend_cache(self):
+        self.cache_collection.delete_many({})
 
     def get_all_job_ids(self) -> list[str]:
         connect = self.get_postgresql_connection()

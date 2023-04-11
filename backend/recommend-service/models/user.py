@@ -1,9 +1,5 @@
-import time
-
-
 class User:
     def __init__(self, id: str | None = None, dict: dict | None = None):
-        start_time = time.time()
         self.new = dict is None
         self.id: str = id if dict is None else dict["id"]  # NOQA
         self.embedding: list[float] = [] if dict is None else dict["embedding"]  # NOQA
@@ -11,7 +7,6 @@ class User:
         self.job_like_scores_dict: dict[str, int] | None = None
         self.user_similar_scores: list[tuple[str, int]] = [] if dict is None else dict["user_similar_scores"]  # NOQA
         self.user_similar_scores_dict: dict[str, int] | None = None
-        print(f"User init cost: {time.time() - start_time}")
 
     def get_job_like_score(self, job_id: str, default: int | None = None) -> int | None:
         if self.job_like_scores_dict is None:

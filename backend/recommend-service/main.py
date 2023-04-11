@@ -1,6 +1,5 @@
 from fastapi import FastAPI, Depends
 from models.user import User
-from utils.authentication import get_current_active_user
 from utils.database import db
 from kernel.cronJobs import job, user, matrix
 from kernel.passages.itemcf import itemCF
@@ -28,7 +27,10 @@ def _recompute_parameters():
     start_time = time.time()
     job.recompute_job_similar_scores()  # 重新计算职位相似度
     print("recompute job similar scores cost: ", time.time() - start_time)
-    # matrix.recompute_matrix_factorization_model()  # 重新计算 embedding
+    start_time = time.time()
+    matrix.recompute_matrix_factorization_model()  # 重新计算 embedding
+    print("recompute matrix factorization model cost: ", time.time() - start_time)
+    db.clear_recommend_cache()
     db.stop_cache()
 
 
@@ -48,39 +50,41 @@ def recompute_parameters():
 
 
 @app.get("/recommend/positions")
-def get_recommend_jobs(current_user: User = Depends(get_current_active_user)):
+def get_recommend_jobs(id: str):
+    cache = db.get_recommend_cache(id)
+    if cache is not None:
+        return cache
+    user = db.get_user(id)
     # 根据用户的历史行为召回候选职位
-    item_cf_jobs = itemCF(current_user, 40, 5, 10)
-    user_cf_jobs = userCF(current_user, 40, 5, 10)
-    matrix_f_jobs = matrixF(current_user, 200)
+    item_cf_jobs = itemCF(user, 40, 5)
+    user_cf_jobs = userCF(user, 40, 5)
+    # matrix_f_jobs = matrixF(user, 200)
     # 对召回结果进行和并后去重
-    add_job_ids = set()
-    recommend_jobs = []
+    recommend_jobs = dict()
     for job_id, score in item_cf_jobs:
-        if job_id not in add_job_ids:
-            add_job_ids.add(job_id)
-            recommend_jobs.append((job_id, score))
+        if recommend_jobs.get(job_id) is None:
+            recommend_jobs[job_id] = (job_id, score)
         else:
             if score > recommend_jobs[job_id][1]:
                 recommend_jobs[job_id][1] = score
     for job_id, score in user_cf_jobs:
-        if job_id not in add_job_ids:
-            add_job_ids.add(job_id)
-            recommend_jobs.append((job_id, score))
+        if recommend_jobs.get(job_id) is None:
+            recommend_jobs[job_id] = (job_id, score)
         else:
             if score > recommend_jobs[job_id][1]:
                 recommend_jobs[job_id][1] = score
-    for job_id, score in matrix_f_jobs:
-        if job_id not in add_job_ids:
-            add_job_ids.add(job_id)
-            recommend_jobs.append((job_id, score))
-        else:
-            if score > recommend_jobs[job_id][1]:
-                recommend_jobs[job_id][1] = score
+    # for job_id, score in matrix_f_jobs:
+    #     if job_id not in add_job_ids:
+    #         add_job_ids.add(job_id)
+    #         recommend_jobs[job_id] = (job_id, score)
+    #     else:
+    #         if score > recommend_jobs[job_id][1]:
+    #             recommend_jobs[job_id][1] = score
     # 对数据进行多样性重排
-    recommend_jobs = mmr(recommend_jobs, 20)
-    # 返回前 n 个结果
-    return recommend_jobs[:10]
+    # recommend_jobs = mmr(recommend_jobs.items(), 20)
+    recommend_jobs_list = list(recommend_jobs.values())
+    db.set_recommend_cache(id, recommend_jobs_list)
+    return recommend_jobs_list
 
 
 if __name__ == "__main__":

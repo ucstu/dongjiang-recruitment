@@ -5,7 +5,7 @@ if TYPE_CHECKING:
 from utils.database import db
 
 
-def userCF(user: User, n: int = 40, k: int = 5, top: int = 10) -> list[tuple[str, int]]:
+def userCF(user: User, n: int = 40, k: int = 5) -> list[tuple[str, int]]:
     jobs_score = {}
     user_top_n_similar_users = user.user_similar_scores[:n]
     for similar_user_id, user_similar_score in user_top_n_similar_users:
@@ -16,4 +16,4 @@ def userCF(user: User, n: int = 40, k: int = 5, top: int = 10) -> list[tuple[str
                 jobs_score[like_job_id] = may_like_score
             else:
                 jobs_score[like_job_id] += may_like_score
-    return sorted(jobs_score.items(), key=lambda x: x[1], reverse=True)[:top]
+    return sorted(jobs_score.items(), key=lambda x: x[1], reverse=True)  # NOQA
