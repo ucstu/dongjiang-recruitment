@@ -3,81 +3,84 @@
     <el-scrollbar ref="scrollbarRef">
       <div ref="content">
         <div
-        v-for="(chat, index) in props.chatList"
-        :key="index"
-        class="chat-list"
-      >
-        <p class="time">
-          <span>{{ timeNow(chat.createdAt) }}</span>
-        </p>
-        <div v-if="chat.initiateType === 1" class="user-main">
-          <div class="user-info">
-            <img
-              class="user-avatar"
-              :src="
-                VITE_CDN_URL +
-                (userInfo.avatarUrl ? userInfo.avatarUrl : '/image/heard1.jpg')
-              "
-              alt=""
-            />
-            <span class="name">{{
-              userInfo.firstName + userInfo.lastName
-            }}</span>
-          </div>
-          <div v-if="chat.messageType === 1" class="left-farm">
-            <p class="text">{{ chat.content }}</p>
-          </div>
-          <div v-else-if="chat.messageType === 2">
-            <el-image
-              :src="VITE_CDN_URL + chat.content"
-              alt=""
-              :preview-src-list="srcList"
-              :initial-index="index"
-              fit="cover"
-            />
-          </div>
-          <div v-else-if="chat.messageType === 4">
-            <img
-              src="https://cn.bing.com/images/search?view=detailV2&ccid=Mz3FUZRM&id=EB574CC32857D56CF1EDB5CD0D86EBF46B436817&thid=OIP.Mz3FUZRMsAIZ1eH3cHA_cwHaHa&mediaurl=https%3a%2f%2fimg.51miz.com%2fElement%2f00%2f37%2f79%2f59%2f10df0417_E377959_b7bb9dfa.png&exph=840&expw=840&q=%e6%96%87%e4%bb%b6&simid=608014356928596846&FORM=IRPRST&ck=6B9D61BFFB8CFAE93B4A0F00B91369C3&selectedIndex=29"
-              alt=""
-            />
-          </div>
-          <div v-else></div>
-        </div>
-        <div v-else class="hr-main">
-          <div class="hr-info">
-            <img
-              :src="
-                VITE_CDN_URL + (hravatarUrl ? hravatarUrl : '/image/heard2.jpg')
-              "
-              alt=""
-              class="hr-avatar"
-            />
-            <span class="name">{{ hrName }}</span>
-          </div>
-          <div v-if="chat.messageType === 1" class="right-farm">
-            <p class="text">{{ chat.content }}</p>
-          </div>
-          <div v-else-if="chat.messageType === 2">
-            <el-image
-              :src="VITE_CDN_URL + chat.content"
-              alt=""
-              :preview-src-list="srcList"
-              :initial-index="index"
-              fit="cover"
-            />
-          </div>
-          <div v-else-if="chat.messageType === 4">
-            <a :href="chat.content">
-              <el-image
-                src="https://tse4-mm.cn.bing.net/th/id/OIP-C.qMT0AS-__JD0KNeqL6rucgHaHa?w=215&h=216&c=7&r=0&o=5&dpr=2&pid=1.7"
+          v-for="(chat, index) in props.chatList"
+          :key="index"
+          class="chat-list"
+        >
+          <p class="time">
+            <span>{{ timeNow(chat.createdAt) }}</span>
+          </p>
+          <div v-if="chat.initiateType === 1" class="user-main">
+            <div class="user-info">
+              <img
+                class="user-avatar"
+                :src="
+                  VITE_CDN_URL +
+                  (userInfo.avatarUrl
+                    ? userInfo.avatarUrl
+                    : '/image/heard1.jpg')
+                "
                 alt=""
               />
-            </a>
+              <span class="name">{{
+                userInfo.firstName + userInfo.lastName
+              }}</span>
+            </div>
+            <div v-if="chat.messageType === 1" class="left-farm">
+              <p class="text">{{ chat.content }}</p>
+            </div>
+            <div v-else-if="chat.messageType === 2">
+              <el-image
+                :src="VITE_CDN_URL + chat.content"
+                alt=""
+                :preview-src-list="srcList"
+                :initial-index="index"
+                fit="cover"
+              />
+            </div>
+            <div v-else-if="chat.messageType === 4">
+              <img
+                src="https://cn.bing.com/images/search?view=detailV2&ccid=Mz3FUZRM&id=EB574CC32857D56CF1EDB5CD0D86EBF46B436817&thid=OIP.Mz3FUZRMsAIZ1eH3cHA_cwHaHa&mediaurl=https%3a%2f%2fimg.51miz.com%2fElement%2f00%2f37%2f79%2f59%2f10df0417_E377959_b7bb9dfa.png&exph=840&expw=840&q=%e6%96%87%e4%bb%b6&simid=608014356928596846&FORM=IRPRST&ck=6B9D61BFFB8CFAE93B4A0F00B91369C3&selectedIndex=29"
+                alt=""
+              />
+            </div>
+            <div v-else></div>
           </div>
-          <div v-else></div>
+          <div v-else class="hr-main">
+            <div class="hr-info">
+              <img
+                :src="
+                  VITE_CDN_URL +
+                  (hravatarUrl ? hravatarUrl : '/image/heard2.jpg')
+                "
+                alt=""
+                class="hr-avatar"
+              />
+              <span class="name">{{ hrName }}</span>
+            </div>
+            <div v-if="chat.messageType === 1" class="right-farm">
+              <p class="text">{{ chat.content }}</p>
+            </div>
+            <div v-else-if="chat.messageType === 2">
+              <el-image
+                :src="VITE_CDN_URL + chat.content"
+                alt=""
+                :preview-src-list="srcList"
+                :initial-index="index"
+                fit="cover"
+              />
+            </div>
+            <div v-else-if="chat.messageType === 4">
+              <a :href="chat.content">
+                <el-image
+                  src="https://tse4-mm.cn.bing.net/th/id/OIP-C.qMT0AS-__JD0KNeqL6rucgHaHa?w=215&h=216&c=7&r=0&o=5&dpr=2&pid=1.7"
+                  alt=""
+                />
+              </a>
+            </div>
+            <div v-else></div>
+          </div>
         </div>
-      </div>
       </div>
     </el-scrollbar>
   </div>
@@ -118,10 +121,7 @@ watchEffect(() => {
   srcList.value = props.chatList.map((obj) => obj.content);
   if (scrollbarRef.value && props.chatList.length) {
     nextTick(() => {
-      scrollbarRef.value!.scrollTo(
-        0,
-        content.value?.offsetHeight
-      );
+      scrollbarRef.value!.scrollTo(0, content.value?.offsetHeight);
     });
   }
 });

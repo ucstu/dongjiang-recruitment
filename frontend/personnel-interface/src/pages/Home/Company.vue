@@ -164,7 +164,9 @@
           <img
             :src="
               VITE_CDN_URL +
-              (formCompany.logoUrl ? formCompany.logoUrl : '/common-avatars/company.jpg')
+              (formCompany.logoUrl
+                ? formCompany.logoUrl
+                : '/common-avatars/company.jpg')
             "
             alt=""
           />
@@ -338,7 +340,7 @@ const dealfilechange = async (e: Event) => {
     if (useAvatarUpload(files[files.length - 1])) {
       formCompany.value.logoUrl = await commonService.uploadAvatar({
         avatar: files[files.length - 1],
-      })
+      });
     }
   }
 };
@@ -478,7 +480,7 @@ const confirmCompany = (formEl: FormInstance | undefined) => {
       }).then((res) => {
         let hrInformation = store.hrInformation;
         hrInformation.company = {
-          id: res.id
+          id: res.id,
         } as Company;
         personnelService
           .updatePersonnel({

@@ -1,17 +1,27 @@
 <template>
   <div class="p-2 w-full h-full" ref="div">
-    <n-space justify="space-between" align="center">
+    <n-form inline class="mb-2 space-x-2">
       <n-button
-      v-if="hasPermission('/companies,POST')"
-      type="primary" size="small" @click="add" class="mb-2">
+        v-if="hasPermission('/companies,POST')"
+        type="primary"
+        @click="add"
+        class="mb-2"
+      >
         新增
       </n-button>
+      <n-input
+        v-if="hasPermission('/companies,GET')"
+        v-model:value="fullName"
+        placeholder="搜索公司全称"
+      />
       <n-button
-      v-if="hasPermission('/companies,GET')"
-      text size="small" @click="refresh" class="mb-2">
+        v-if="hasPermission('/companies,GET')"
+        @click="refresh"
+        class="mb-2"
+      >
         刷新
       </n-button>
-    </n-space>
+    </n-form>
     <n-data-table
       remote
       ref="table"
@@ -69,7 +79,6 @@
           v-if="modalType !== 'view'"
           :loading="addLoading || updateLoading"
           type="primary"
-          size="small"
           class="mt-2"
           @click="submit"
         >
@@ -294,22 +303,22 @@ const columns = computed<DataTableColumns<Company>>(() => [
       return (
         <NSpace>
           {hasPermission("/companies/:id,GET") && (
-            <NButton size="small" type="primary" onClick={() => get(row)}>
+            <NButton type="primary" onClick={() => get(row)}>
               查看
             </NButton>
           )}
           {hasPermission("/companies/:companyId/positions,GET") && (
-            <NButton size="small" type="primary" onClick={() => getPosition(row)}>
+            <NButton type="primary" onClick={() => getPosition(row)}>
               查看职位
             </NButton>
           )}
           {hasPermission("/companies/:id,PUT") && (
-            <NButton size="small" type="primary" onClick={() => update(row)}>
+            <NButton type="primary" onClick={() => update(row)}>
               编辑
             </NButton>
           )}
           {hasPermission("/companies/:id,DELETE") && (
-            <NButton size="small" type="error" onClick={() => remove(row)}>
+            <NButton type="error" onClick={() => remove(row)}>
               删除
             </NButton>
           )}
@@ -318,12 +327,16 @@ const columns = computed<DataTableColumns<Company>>(() => [
     },
   },
 ]);
+const fullName = ref("");
 const {
   data: _authorities,
   loading,
   refreshAsync: refresh,
 } = companyService.useQueryCompany(
   () => ({
+    query: {
+      fullName: ["$like", `%${fullName.value}%`],
+    },
     page: pagination.value.page,
     size: pagination.value.pageSize,
     sort: sortStates.value.map(
@@ -331,14 +344,19 @@ const {
     ) as any,
   }),
   {
+    debounceInterval: 1000,
     refreshDeps: [
       computed(() => pagination.value.page),
       computed(() => pagination.value.pageSize),
       computed(() => sortStates.value),
+      fullName,
     ],
     onSuccess: (data) => {
       pagination.value.itemCount = data.total;
-      if (Math.ceil(data.total / pagination.value.pageSize!) < pagination.value.page!) {
+      if (
+        Math.ceil(data.total / pagination.value.pageSize!) <
+        pagination.value.page!
+      ) {
         pagination.value.page = 1;
       }
     },
@@ -401,5 +419,5 @@ const getPosition = (company: Company) => {
       companyId: company.id,
     },
   });
-}
+};
 </script>

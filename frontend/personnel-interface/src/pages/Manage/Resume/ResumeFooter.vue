@@ -85,7 +85,10 @@ const emit = defineEmits([
 const { page, pageSize, deliveryRecords } = useVModels(props, emit);
 
 const allSelected = computed(() => {
-  return deliveryRecords.value.every((item) => item.checked) && deliveryRecords.value.length > 0;
+  return (
+    deliveryRecords.value.every((item) => item.checked) &&
+    deliveryRecords.value.length > 0
+  );
 });
 
 const handleChangeSelectAll = (selectAll: boolean) => {

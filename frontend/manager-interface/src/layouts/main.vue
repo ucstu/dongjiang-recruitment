@@ -88,7 +88,7 @@ axios.interceptors.request.use(
       loading = $message.loading("仍在处理中...", {
         duration: 3000,
       });
-    }, 2000);
+    }, 5000);
     return {
       ...config,
       headers: {

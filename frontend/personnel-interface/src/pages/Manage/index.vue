@@ -71,11 +71,7 @@
                             }}
                           </p>
                           <el-divider direction="vertical" />
-                          <p>
-                            应聘职位：{{
-                              interview.position.positionName
-                            }}
-                          </p>
+                          <p>应聘职位：{{ interview.position.positionName }}</p>
                         </div>
                         <p>
                           面试时间：{{ interview.interviewTime || "未邀请" }}
@@ -104,13 +100,11 @@
 import SystemHeader from "@/components/System/SystemHeader.vue";
 import router from "@/router";
 import { useMainStore } from "@/stores/main";
-import type {
-DeliveryRecord
-} from "@dongjiang-recruitment/service-common";
+import type { DeliveryRecord } from "@dongjiang-recruitment/service-common";
 import { useTimestamp } from "@vueuse/core";
 
 const store = useMainStore();
-const timestamp = useTimestamp()
+const timestamp = useTimestamp();
 const hour = computed(() => {
   return new Date(timestamp.value).getHours();
 });
@@ -135,7 +129,7 @@ const { data: deliveryRecords } = applicantService.useQueryAllDeliveryRecord(
       "company.id": ["$eq", store.companyInformation.id],
       status: ["$in", 1, 2, 3, 4],
     },
-    size: 9999999
+    size: 9999999,
   }),
   {
     pollingInterval: 1000 * 60 * 5,
@@ -166,7 +160,7 @@ const num = computed(() => {
     count,
     countCommunication,
     countInterviewed,
-    total
+    total,
   };
 });
 

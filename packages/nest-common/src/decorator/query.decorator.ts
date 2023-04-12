@@ -90,6 +90,8 @@ export const QueryParam = createParamDecorator(
   (data: unknown, ctx: ExecutionContext): Array<FindOptionsWhere<unknown>> => {
     const request = ctx.switchToHttp().getRequest<Request>();
     const queries = [request.query["query"]].filter(Boolean).flat();
-    return queries.map((query) => processQuery(JSON.parse(query.toString())));
+    return queries
+      .map((query) => processQuery(JSON.parse(query.toString())))
+      .filter(Boolean);
   }
 );

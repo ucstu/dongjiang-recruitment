@@ -83,11 +83,15 @@ const queryList = async (pageNo: number, pageSize: number) => {
         query: [
           {
             fullName: ["$like", `%${props.searchContent}%`],
-            cityName: props.workCityName ? ["$eq", props.workCityName] : undefined,
+            cityName: props.workCityName
+              ? ["$eq", props.workCityName]
+              : undefined,
           },
           {
             companyName: ["$like", `%${props.searchContent}%`],
-            cityName: props.workCityName ? ["$eq", props.workCityName] : undefined,
+            cityName: props.workCityName
+              ? ["$eq", props.workCityName]
+              : undefined,
           },
         ],
         page: pageNo,

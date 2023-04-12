@@ -64,11 +64,11 @@
 
 <script setup lang="ts">
 import {
-AlarmClock,
-ChatDotSquare,
-Document,
-House,
-User
+  AlarmClock,
+  ChatDotSquare,
+  Document,
+  House,
+  User,
 } from "@element-plus/icons-vue";
 import SystemHeader from "./SystemHeader.vue";
 </script>

@@ -99,7 +99,7 @@ const dealfilechange = async (e: Event) => {
     if (useAvatarUpload(files[files.length - 1])) {
       formHr.avatarUrl = await commonService.uploadAvatar({
         avatar: files[files.length - 1],
-      })
+      });
     }
   }
 };

@@ -44,7 +44,9 @@ const companyInfo = computed(() => {
   }
   return companies;
 });
-const emptyShow = computed(() => companyInfo.value.length === 0 && !loading.value);
+const emptyShow = computed(
+  () => companyInfo.value.length === 0 && !loading.value
+);
 
 const view_2OnClick = (c: string) => {
   uni.navigateTo({

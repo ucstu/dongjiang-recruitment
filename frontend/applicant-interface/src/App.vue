@@ -62,7 +62,8 @@ axios.interceptors.response.use(
           break;
         case 500:
           uni.showToast({
-            title: "服务器错误" + (error.response.data as { error: string }).error,
+            title:
+              "服务器错误" + (error.response.data as { error: string }).error,
             icon: "none",
           });
           break;

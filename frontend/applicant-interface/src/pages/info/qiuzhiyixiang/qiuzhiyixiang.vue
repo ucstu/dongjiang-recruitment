@@ -88,12 +88,12 @@ if (mainStore.applicant?.jobStatus) {
 const jobExpectationClick = (id: string) => {
   if (mainStore.jobExpectations?.items.length === 1) {
     uni.navigateTo({
-    url: "/pages/info/qiuzhiqiwang/qiuzhiqiwang?id=" + id + "&type=" + 0,
-  });
+      url: "/pages/info/qiuzhiqiwang/qiuzhiqiwang?id=" + id + "&type=" + 0,
+    });
   } else {
     uni.navigateTo({
-    url: "/pages/info/qiuzhiqiwang/qiuzhiqiwang?id=" + id + "&type=" + 1,
-  });
+      url: "/pages/info/qiuzhiqiwang/qiuzhiqiwang?id=" + id + "&type=" + 1,
+    });
   }
 };
 

@@ -280,7 +280,7 @@ const dealfilechange = async (e: Event) => {
     if (useAvatarUpload(files[files.length - 1])) {
       formCompany.logoUrl = await commonService.uploadAvatar({
         avatar: files[files.length - 1],
-      })
+      });
     }
   }
 };

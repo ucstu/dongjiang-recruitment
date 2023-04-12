@@ -108,9 +108,9 @@
 <script lang="ts" setup>
 import LogoImage from "@/assets/images/logo.png";
 import {
-FingerPrintOutline,
-LockClosedOutline,
-PersonOutline,
+  FingerPrintOutline,
+  LockClosedOutline,
+  PersonOutline,
 } from "@vicons/ionicons5";
 import type { FormItemRule, FormRules, NForm } from "naive-ui";
 

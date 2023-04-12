@@ -44,9 +44,9 @@
         </view>
       </view>
       <view v-if="!isShow" class="flex-col justify-center code-box">
-        <text style="font-size: 40rpx; font-weight: bold; text-align: center"
-          >{{ errorMes || "请输入验证码" }}</text
-        >
+        <text style="font-size: 40rpx; font-weight: bold; text-align: center">{{
+          errorMes || "请输入验证码"
+        }}</text>
         <view class="flex-col justify-between" style="margin-top: 20rpx">
           <input
             v-model="code"

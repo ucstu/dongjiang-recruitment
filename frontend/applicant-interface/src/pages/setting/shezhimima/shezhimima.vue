@@ -98,18 +98,19 @@ const { refreshAsync: sendVerificationCode } =
       manual: true,
     }
   );
-const { refreshAsync: changePassword } = authenticationService.useChangePassword(
-  () => ({
-    id: mainStore.account!.id,
-    requestBody: {
-      password: password.value,
-      verificationCode: vCode.value,
-    },
-  }),
-  {
-    manual: true,
-  }
-);
+const { refreshAsync: changePassword } =
+  authenticationService.useChangePassword(
+    () => ({
+      id: mainStore.account!.id,
+      requestBody: {
+        password: password.value,
+        verificationCode: vCode.value,
+      },
+    }),
+    {
+      manual: true,
+    }
+  );
 
 // 获取验证码
 const getVerification = async () => {

@@ -13,7 +13,7 @@
 </template>
 
 <script setup lang="ts">
-import { useMainStore } from '@/stores';
+import { useMainStore } from "@/stores";
 
 const mainStore = useMainStore();
 </script>

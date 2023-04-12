@@ -25,21 +25,32 @@ import { useMainStore } from "@/stores";
 const mainStore = useMainStore();
 const sendType = ref("放弃面试");
 
-const {data: interviewed, loading, mutate} = applicantDeliveryRecordService.useQueryDeliveryRecord({
-  applicantId: mainStore.applicant!.id,
-  query: {
-    status: ["$eq", 4],
+const {
+  data: interviewed,
+  loading,
+  mutate,
+} = applicantDeliveryRecordService.useQueryDeliveryRecord(
+  {
+    applicantId: mainStore.applicant!.id,
+    query: {
+      status: ["$eq", 4],
+    },
+    size: 999999999,
   },
-  size: 999999999,
-}, {
-  initialData: {
-    total: 0,
-    items: [],
-  },
-  ready: computed(() => !!mainStore.applicant?.id),
-});
-const interviewedJobs = computed(() => interviewed.value!.items.map((item) => item.position));
-const emptyShow = computed(() => interviewedJobs.value.length === 0 && !loading.value);
+  {
+    initialData: {
+      total: 0,
+      items: [],
+    },
+    ready: computed(() => !!mainStore.applicant?.id),
+  }
+);
+const interviewedJobs = computed(() =>
+  interviewed.value!.items.map((item) => item.position)
+);
+const emptyShow = computed(
+  () => interviewedJobs.value.length === 0 && !loading.value
+);
 
 /* 放弃面试 */
 const stateClick = (index: string) => {

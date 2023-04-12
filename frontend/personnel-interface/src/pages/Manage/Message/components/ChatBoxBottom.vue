@@ -58,10 +58,10 @@
 import router from "@/router";
 import { sendMessage, useCompriseStore } from "@/stores/main";
 import {
-ArrowDown,
-FolderOpened,
-PictureFilled,
-Plus,
+  ArrowDown,
+  FolderOpened,
+  PictureFilled,
+  Plus,
 } from "@element-plus/icons-vue";
 import { ElMessage } from "element-plus";
 
@@ -89,16 +89,18 @@ const dealimgchange = (e: Event) => {
   const input = e.target as HTMLInputElement;
   let files = input.files;
   if (files) {
-    commonService.uploadFile({
-      file: files[0]
-    }).then((res) => {
-      sendMessage({
-        serviceId: props.chatId,
-        serviceType: 1,
-        content: res,
-        messageType: 2,
+    commonService
+      .uploadFile({
+        file: files[0],
+      })
+      .then((res) => {
+        sendMessage({
+          serviceId: props.chatId,
+          serviceType: 1,
+          content: res,
+          messageType: 2,
+        });
       });
-    });
   }
 };
 const uploadfileInput = ref<HTMLElement | null>(null);
@@ -115,16 +117,18 @@ const dealfilechange = (e: Event) => {
   const input = e.target as HTMLInputElement;
   let files = input.files;
   if (files) {
-    commonService.uploadFile({
-      file: files[0]
-    }).then((res) => {
-      sendMessage({
-        serviceId: props.chatId,
-        serviceType: 1,
-        content: res,
-        messageType: 4,
+    commonService
+      .uploadFile({
+        file: files[0],
+      })
+      .then((res) => {
+        sendMessage({
+          serviceId: props.chatId,
+          serviceType: 1,
+          content: res,
+          messageType: 4,
+        });
       });
-    });
   }
 };
 const sentMessage = (e: KeyboardEvent) => {
@@ -136,7 +140,7 @@ const sentMessage = (e: KeyboardEvent) => {
           serviceType: 1,
           content: content.value,
           messageType: 1,
-        })
+        });
         content.value = "";
       }
     } else {
@@ -156,7 +160,7 @@ const sentMessage1 = () => {
         serviceType: 1,
         content: content.value,
         messageType: 1,
-      })
+      });
       content.value = "";
     }
   } else {

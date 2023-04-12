@@ -29,9 +29,9 @@
 <script setup lang="ts">
 import { useMainStore } from "@/stores";
 import {
-CloseCircleOutline,
-GridOutline,
-MenuOutline,
+  CloseCircleOutline,
+  GridOutline,
+  MenuOutline,
 } from "@vicons/ionicons5";
 
 const props = defineProps<{

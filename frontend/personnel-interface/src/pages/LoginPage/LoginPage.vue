@@ -48,9 +48,9 @@
 import router from "@/router";
 import { useMainStore, useMessageStore } from "@/stores/main";
 import {
-Company,
-request,
-type Personnel
+  Company,
+  request,
+  type Personnel,
 } from "@dongjiang-recruitment/service-common";
 import { ElMessage, type FormInstance } from "element-plus";
 
@@ -115,7 +115,7 @@ const submitForm = (formEl: FormInstance | undefined) => {
               .getPersonnel({
                 id: mainStore.accountInformation.detailId.personnel!,
               })
-              .then((res:Personnel) => {
+              .then((res: Personnel) => {
                 if (res.hrName !== null) {
                   if (res.company?.id) {
                     companyService

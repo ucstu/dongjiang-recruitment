@@ -28,9 +28,9 @@
 </template>
 
 <script lang="ts" setup>
-import { useResFullPath } from '@/hooks';
-import type { Company } from '@dongjiang-recruitment/service-common';
-import type { PropType } from 'vue';
+import { useResFullPath } from "@/hooks";
+import type { Company } from "@dongjiang-recruitment/service-common";
+import type { PropType } from "vue";
 
 const props = defineProps({
   companyDetail: {

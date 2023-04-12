@@ -25,7 +25,11 @@ import { useMainStore } from "@/stores";
 const mainStore = useMainStore();
 const unfocus = ref("取消关注");
 
-const { data: focus, loading, mutate} = applicantAttentionRecordService.useQueryAttentionRecord(
+const {
+  data: focus,
+  loading,
+  mutate,
+} = applicantAttentionRecordService.useQueryAttentionRecord(
   {
     applicantId: mainStore.applicant!.id,
     size: 999999999,
@@ -62,7 +66,7 @@ const unsubscribe = (id: string) => {
       mutate({
         total: newFocus.length,
         items: newFocus,
-      })
+      });
     });
 };
 </script>

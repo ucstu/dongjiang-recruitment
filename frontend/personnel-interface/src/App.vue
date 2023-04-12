@@ -3,12 +3,12 @@
 </template>
 <script setup lang="ts">
 import {
-AxiosError,
-Company,
-axios,
-request,
-type Account,
-type Personnel,
+  AxiosError,
+  Company,
+  axios,
+  request,
+  type Account,
+  type Personnel,
 } from "@dongjiang-recruitment/service-common";
 import { ElMessage } from "element-plus";
 import router from "./router";

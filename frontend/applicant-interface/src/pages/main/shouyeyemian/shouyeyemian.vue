@@ -190,10 +190,10 @@
 import { useResFullPath } from "@/hooks";
 import { useMainStore } from "@/stores";
 import {
-Advertise,
-JobExpectation,
-type Position,
-type Query,
+  Advertise,
+  JobExpectation,
+  type Position,
+  type Query,
 } from "@dongjiang-recruitment/service-common";
 import dayjs from "dayjs";
 
@@ -249,7 +249,6 @@ watch(
     immediate: true,
   }
 );
-
 
 const { data: advertise } = advertiserService.useQueryAllAdvertise(
   () => ({

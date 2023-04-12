@@ -5,7 +5,7 @@ import {
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
-  UpdateDateColumn
+  UpdateDateColumn,
 } from "@dongjiang-recruitment/nest-common/dist/typeorm";
 import { Applicant } from "src/external.entity";
 import { Personnel } from "src/personnel/entities/personnel.entity";

@@ -30,33 +30,34 @@
 import JobPanel from "@/components/JobPanel/JobPanel.vue";
 import NavigationBar from "@/components/NavigationBar/NavigationBar.vue";
 import { useMainStore } from "@/stores";
-import type {
-DeliveryRecord
-} from "@dongjiang-recruitment/service-common";
+import type { DeliveryRecord } from "@dongjiang-recruitment/service-common";
 
 const mainStore = useMainStore();
 
 const sendType = ["", "待查看", "已查看", "通过初筛", "约面试", "不合格"];
 const sendId = ref<DeliveryRecord["status"]>(1);
 
-const { data: deliveryRecords, loading, mutate } =
-  applicantDeliveryRecordService.useQueryDeliveryRecord(
-    () => ({
-      applicantId: mainStore.applicant!.id,
-      query: {
-        status: ["$eq", sendId.value],
-      },
-      size: 999999999,
-    }),
-    {
-      initialData: {
-        total: 0,
-        items: [],
-      },
-      refreshDeps: [sendId],
-      ready: computed(() => !!mainStore.applicant?.id),
-    }
-  );
+const {
+  data: deliveryRecords,
+  loading,
+  mutate,
+} = applicantDeliveryRecordService.useQueryDeliveryRecord(
+  () => ({
+    applicantId: mainStore.applicant!.id,
+    query: {
+      status: ["$eq", sendId.value],
+    },
+    size: 999999999,
+  }),
+  {
+    initialData: {
+      total: 0,
+      items: [],
+    },
+    refreshDeps: [sendId],
+    ready: computed(() => !!mainStore.applicant?.id),
+  }
+);
 const deliveryRecordPositions = computed(() =>
   deliveryRecords.value!.items.map((item) => item.position)
 );
@@ -84,7 +85,7 @@ const clearRecord = () => {
         mutate({
           total: newDeliveryRecords.length,
           items: newDeliveryRecords,
-        })
+        });
       });
   }
 };

@@ -8,8 +8,12 @@
       </view>
       <view class="justify-between items-center flex-row">
         <view class="message">
-          <text v-if="messageType === 1" style="white-space: nowrap">{{ message }}</text>
-          <text v-else-if="messageType === 2" style="white-space: nowrap">[图片]</text>
+          <text v-if="messageType === 1" style="white-space: nowrap">{{
+            message
+          }}</text>
+          <text v-else-if="messageType === 2" style="white-space: nowrap"
+            >[图片]</text
+          >
         </view>
         <view v-if="!haveRead" class="is-read"></view>
       </view>

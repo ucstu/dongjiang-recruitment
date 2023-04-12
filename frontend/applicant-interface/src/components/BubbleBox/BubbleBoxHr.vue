@@ -37,7 +37,7 @@
 </template>
 
 <script lang="ts" setup>
-import { useResFullPath } from '@/hooks';
+import { useResFullPath } from "@/hooks";
 
 const VITE_CDN_URL = import.meta.env.VITE_CDN_URL;
 

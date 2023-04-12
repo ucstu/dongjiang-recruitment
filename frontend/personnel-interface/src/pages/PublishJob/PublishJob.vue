@@ -354,9 +354,9 @@ import useTime from "@/hooks/useTime";
 import router from "@/router";
 import { useMainStore } from "@/stores/main";
 import type {
-Company,
-Personnel,
-Position,
+  Company,
+  Personnel,
+  Position,
 } from "@dongjiang-recruitment/service-common";
 import { ElMessage, type FormInstance } from "element-plus";
 import { storeToRefs } from "pinia";
@@ -683,10 +683,10 @@ const updatePost = (formEl: FormInstance | undefined) => {
   formEl.validate((valid) => {
     if (valid) {
       jobTypeList.value.personnel = {
-        id: store.accountInformation.detailId.personnel!
+        id: store.accountInformation.detailId.personnel!,
       } as Personnel;
       jobTypeList.value.company = {
-        id: store.hrInformation.id
+        id: store.hrInformation.id,
       } as Company;
       companyPositionService
         .updatePosition({

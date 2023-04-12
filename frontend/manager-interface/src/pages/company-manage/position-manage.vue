@@ -1,43 +1,41 @@
 <template>
   <div class="p-2 w-full h-full" ref="div">
-    <n-space justify="space-between" align="center">
-      <n-space>
-        <n-button
-          v-if="hasPermission('/companies/:companyId/positions,POST')"
-          type="primary"
-          size="small"
-          @click="add"
-          class="mb-2"
-        >
-          新增
-        </n-button>
-        <n-button
-          v-if="hasPermission('/recommend/recompute_parameters,GET')"
-          type="primary"
-          size="small"
-          :loading="rebuildIndexLoading"
-          @click="rebuildIndex"
-          >创建索引</n-button
-        >
-        <n-button
-          v-if="hasPermission('/recommend/send_recommend_message,GET')"
-          type="primary"
-          size="small"
-          :loading="sendRecommendLoading"
-          @click="sendRecommend"
-          >发送推荐</n-button
-        >
-      </n-space>
+    <n-form inline class="mb-2 space-x-2">
+      <n-button
+        v-if="hasPermission('/companies/:companyId/positions,POST')"
+        type="primary"
+        @click="add"
+        class="mb-2"
+      >
+        新增
+      </n-button>
+      <n-input
+        v-if="hasPermission('/recommend/recompute_parameters,GET')"
+        v-model:value="positionName"
+        placeholder="搜索职位名称"
+      />
+      <n-button
+        v-if="hasPermission('/recommend/recompute_parameters,GET')"
+        type="primary"
+        :loading="rebuildIndexLoading"
+        @click="rebuildIndex"
+        >创建索引</n-button
+      >
+      <n-button
+        v-if="hasPermission('/recommend/send_recommend_message,GET')"
+        type="primary"
+        :loading="sendRecommendLoading"
+        @click="sendRecommend"
+        >发送推荐</n-button
+      >
       <n-button
         v-if="hasPermission('/companies/:companyId/positions,GET')"
-        text
-        size="small"
+        :loading="loading"
         @click="refresh"
-        class="mb-2"
       >
         刷新
       </n-button>
-    </n-space>
+    </n-form>
     <n-data-table
       remote
       ref="table"
@@ -99,7 +97,6 @@
           v-if="modalType !== 'view'"
           :loading="addLoading || updateLoading"
           type="primary"
-          size="small"
           class="mt-2"
           @click="submit"
         >
@@ -113,25 +110,25 @@
 <script setup lang="tsx">
 import { hasPermission, useApiFullPath } from "@/hooks";
 import {
-  axios,
-  useRequest,
-  type Position,
+axios,
+useRequest,
+type Position,
 } from "@dongjiang-recruitment/service-common";
 import dayjs from "dayjs";
 import * as _ from "lodash";
 import {
-  NButton,
-  NSpace,
-  type DataTableColumns,
-  type FormRules,
-  type NDataTable,
-  type NForm,
-  type PaginationProps,
+NButton,
+NSpace,
+type DataTableColumns,
+type FormRules,
+type NDataTable,
+type NForm,
+type PaginationProps,
 } from "naive-ui";
 import type {
-  FilterState,
-  SortState,
-  TableBaseColumn,
+FilterState,
+SortState,
+TableBaseColumn,
 } from "naive-ui/es/data-table/src/interface";
 import type { SelectMixedOption } from "naive-ui/es/select/src/interface";
 
@@ -379,17 +376,17 @@ const columns = computed<DataTableColumns<Position>>(() => [
       return (
         <NSpace>
           {hasPermission("/companies/:companyId/positions/:id,GET") && (
-            <NButton size="small" type="primary" onClick={() => get(row)}>
+            <NButton type="primary" onClick={() => get(row)}>
               查看
             </NButton>
           )}
           {hasPermission("/companies/:companyId/positions/:id,PUT") && (
-            <NButton size="small" type="primary" onClick={() => update(row)}>
+            <NButton type="primary" onClick={() => update(row)}>
               编辑
             </NButton>
           )}
           {hasPermission("/companies/:companyId/positions/:id,DELETE") && (
-            <NButton size="small" type="error" onClick={() => remove(row)}>
+            <NButton type="error" onClick={() => remove(row)}>
               删除
             </NButton>
           )}
@@ -398,17 +395,17 @@ const columns = computed<DataTableColumns<Position>>(() => [
     },
   },
 ]);
+const positionName = ref("");
 const {
   data: _authorities,
   loading,
   refreshAsync: refresh,
 } = companyService.useQueryAllPosition(
   () => ({
-    query: companyId.value
-      ? {
-          "company.id": ["$eq", companyId.value],
-        }
-      : undefined,
+    query: {
+      "company.id": companyId.value ? ["$eq", companyId.value] : undefined,
+      positionName: ["$like", `%${positionName.value}%`],
+    },
     page: pagination.value.page,
     size: pagination.value.pageSize,
     sort: sortStates.value.map(
@@ -416,11 +413,13 @@ const {
     ) as any,
   }),
   {
+    debounceInterval: 1000,
     refreshDeps: [
       computed(() => pagination.value.page),
       computed(() => pagination.value.pageSize),
       computed(() => sortStates.value),
       computed(() => companyId.value),
+      positionName,
     ],
     onSuccess: (data) => {
       pagination.value.itemCount = data.total;

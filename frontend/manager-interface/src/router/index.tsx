@@ -175,7 +175,7 @@ export const routes: Array<RouteRecordRaw> = [
   {
     path: "/:pathMatch(.*)*",
     redirect: "/home",
-  }
+  },
 ];
 
 const router = createRouter({

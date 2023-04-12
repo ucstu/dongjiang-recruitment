@@ -120,7 +120,11 @@ import NavigationBar from "@/components/NavigationBar/NavigationBar.vue";
 import wybPopup from "@/components/wyb-popup/wyb-popup.vue";
 import { until } from "@/hooks";
 import { useMainStore } from "@/stores";
-import type { Applicant, Company, Position } from "@dongjiang-recruitment/service-common";
+import type {
+  Applicant,
+  Company,
+  Position,
+} from "@dongjiang-recruitment/service-common";
 
 const VITE_CDN_URL = import.meta.env.VITE_CDN_URL;
 const mainStore = useMainStore();
@@ -217,11 +221,11 @@ const focusOn = () => {
         applicantId: mainStore.applicant!.id,
         requestBody: {
           company: {
-            id: companyId.value
+            id: companyId.value,
           } as Company,
           applicant: {
-            id: mainStore.applicant!.id
-          } as Applicant
+            id: mainStore.applicant!.id,
+          } as Applicant,
         },
       })
       .then((res) => {

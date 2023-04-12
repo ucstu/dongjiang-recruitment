@@ -150,10 +150,10 @@ import wybPopup from "@/components/wyb-popup/wyb-popup.vue";
 import { until } from "@/hooks";
 import { useMainStore, useMessageStore } from "@/stores";
 import type {
-Applicant,
-Company,
-DeliveryRecord,
-Position,
+  Applicant,
+  Company,
+  DeliveryRecord,
+  Position,
 } from "@dongjiang-recruitment/service-common";
 
 const VITE_CDN_URL = import.meta.env.VITE_CDN_URL;
@@ -233,13 +233,13 @@ onLoad((e) => {
           applicantId: mainStore.applicant!.id,
           requestBody: {
             position: {
-              id: positionId.value
+              id: positionId.value,
             } as Position,
             applicant: {
-              id: mainStore.applicant!.id
+              id: mainStore.applicant!.id,
             } as Applicant,
             company: {
-              id: companyId.value
+              id: companyId.value,
             } as Company,
           },
         });
@@ -294,10 +294,10 @@ const collection = () => {
             id: positionId.value,
           } as Position,
           company: {
-            id: companyId.value
+            id: companyId.value,
           } as Company,
           applicant: {
-            id: mainStore.applicant!.id
+            id: mainStore.applicant!.id,
           } as Applicant,
         },
       })
@@ -354,13 +354,13 @@ const send = () => {
       requestBody: {
         status: 1,
         position: {
-          id: positionId.value
+          id: positionId.value,
         } as Position,
         applicant: {
-          id: mainStore.applicant!.id
+          id: mainStore.applicant!.id,
         } as Applicant,
         company: {
-          id: companyId.value
+          id: companyId.value,
         } as Company,
       } as DeliveryRecord,
     })

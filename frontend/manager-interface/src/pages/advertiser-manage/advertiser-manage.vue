@@ -1,25 +1,27 @@
 <template>
   <div class="p-2 w-full h-full" ref="div">
-    <n-space justify="space-between" align="center">
+    <n-form inline class="mb-2 space-x-2">
       <n-button
         v-if="hasPermission('/advertisers,POST')"
         type="primary"
-        size="small"
         @click="add"
-        class="mb-2"
       >
         新增
       </n-button>
+      <n-input
+        v-if="hasPermission('/advertisers,GET')"
+        v-model:value="name"
+        placeholder="搜索广告商名称"
+        clearable
+      />
       <n-button
         v-if="hasPermission('/advertisers,GET')"
-        text
-        size="small"
+        :loading="loading"
         @click="refresh"
-        class="mb-2"
       >
         刷新
       </n-button>
-    </n-space>
+    </n-form>
     <n-data-table
       remote
       ref="table"
@@ -81,7 +83,6 @@
           v-if="modalType !== 'view'"
           :loading="addLoading || updateLoading"
           type="primary"
-          size="small"
           class="mt-2"
           @click="submit"
         >
@@ -99,20 +100,20 @@ import type { Advertiser } from "@dongjiang-recruitment/service-common";
 import dayjs from "dayjs";
 import * as _ from "lodash";
 import {
-NButton,
-NImage,
-NSpace,
-type DataTableColumns,
-type FormRules,
-type NDataTable,
-type NForm,
-type PaginationProps,
-type UploadCustomRequestOptions,
+  NButton,
+  NImage,
+  NSpace,
+  type DataTableColumns,
+  type FormRules,
+  type NDataTable,
+  type NForm,
+  type PaginationProps,
+  type UploadCustomRequestOptions,
 } from "naive-ui";
 import type {
-FilterState,
-SortState,
-TableBaseColumn,
+  FilterState,
+  SortState,
+  TableBaseColumn,
 } from "naive-ui/es/data-table/src/interface";
 import type { FileInfo } from "naive-ui/es/upload/src/interface";
 
@@ -268,6 +269,7 @@ const update = (advertiser: Advertiser) => {
 };
 
 // 查所有
+const name = ref("");
 const sortStates = ref<Array<SortState>>([]);
 const pagination = ref<PaginationProps>({
   page: 1,
@@ -331,26 +333,22 @@ const columns = computed<DataTableColumns<Advertiser>>(() => [
       return (
         <NSpace>
           {hasPermission("/advertisers/:id,GET") && (
-            <NButton size="small" type="primary" onClick={() => get(row)}>
+            <NButton type="primary" onClick={() => get(row)}>
               查看
             </NButton>
           )}
           {hasPermission("/advertisers/:advertiserId/advertise,GET") && (
-            <NButton
-              size="small"
-              type="primary"
-              onClick={() => getAdvertise(row)}
-            >
+            <NButton type="primary" onClick={() => getAdvertise(row)}>
               查看广告
             </NButton>
           )}
           {hasPermission("/advertisers/:id,PUT") && (
-            <NButton size="small" type="primary" onClick={() => update(row)}>
+            <NButton type="primary" onClick={() => update(row)}>
               编辑
             </NButton>
           )}
           {hasPermission("/advertisers/:id,DELETE") && (
-            <NButton size="small" type="error" onClick={() => remove(row)}>
+            <NButton type="error" onClick={() => remove(row)}>
               删除
             </NButton>
           )}
@@ -365,6 +363,9 @@ const {
   refreshAsync: refresh,
 } = advertiserService.useQueryAdvertiser(
   () => ({
+    query: {
+      name: ["$like", `%${name.value}%`],
+    },
     page: pagination.value.page,
     size: pagination.value.pageSize,
     sort: sortStates.value.map(
@@ -372,14 +373,19 @@ const {
     ) as any,
   }),
   {
+    throttleInterval: 2000,
     refreshDeps: [
       computed(() => pagination.value.page),
       computed(() => pagination.value.pageSize),
       computed(() => sortStates.value),
+      name,
     ],
     onSuccess: (data) => {
       pagination.value.itemCount = data.total;
-      if (Math.ceil(data.total / pagination.value.pageSize!) < pagination.value.page!) {
+      if (
+        Math.ceil(data.total / pagination.value.pageSize!) <
+        pagination.value.page!
+      ) {
         pagination.value.page = 1;
       }
     },
@@ -417,20 +423,18 @@ const changePageSize = (pageSize: number) => {
 };
 
 // 查单个
-const {
-  refreshAsync: _get,
-  loading: getLoading,
-} = advertiserService.useGetAdvertiser(
-  () => ({
-    id: current.value.id,
-  }),
-  {
-    manual: true,
-    onSuccess: (data) => {
-      current.value = data;
-    },
-  }
-);
+const { refreshAsync: _get, loading: getLoading } =
+  advertiserService.useGetAdvertiser(
+    () => ({
+      id: current.value.id,
+    }),
+    {
+      manual: true,
+      onSuccess: (data) => {
+        current.value = data;
+      },
+    }
+  );
 const get = (advertiser: Advertiser) => {
   modalType.value = "view";
   current.value = _.cloneDeep(advertiser);

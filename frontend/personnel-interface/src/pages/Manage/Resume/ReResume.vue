@@ -88,7 +88,10 @@
 
 <script setup lang="ts">
 import { useMainStore } from "@/stores/main";
-import { DeliveryRecord, type Query } from "@dongjiang-recruitment/service-common";
+import {
+  DeliveryRecord,
+  type Query,
+} from "@dongjiang-recruitment/service-common";
 import { ElMessage, dayjs } from "element-plus";
 import ResumeInfo from "../Interview/resumeInfo.vue";
 import ResumeFooter from "./ResumeFooter.vue";

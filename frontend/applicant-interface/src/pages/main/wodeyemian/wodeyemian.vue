@@ -6,7 +6,9 @@
         <view class="flex-col user-info">
           <text class="name">{{ fullName }}</text>
           <text class="age-educate"
-            >{{ userInfos.age }}岁/{{ education[userInfos.education] || "未知" }}</text
+            >{{ userInfos.age }}岁/{{
+              education[userInfos.education] || "未知"
+            }}</text
           >
         </view>
       </view>
@@ -88,10 +90,10 @@
 import { until } from "@/hooks";
 import { useMainStore } from "@/stores";
 import type {
-Applicant,
-AttentionRecord,
-DeliveryRecord,
-GarnerRecord,
+  Applicant,
+  AttentionRecord,
+  DeliveryRecord,
+  GarnerRecord,
 } from "@dongjiang-recruitment/service-common";
 
 const VITE_CDN_URL = import.meta.env.VITE_CDN_URL;

@@ -186,7 +186,7 @@ const nextClick = () => {
     });
   } else {
     userInfo.value.cityName = city.value;
-    userInfo.value.workingYears = 1 ;
+    userInfo.value.workingYears = 1;
     applicantService
       .updateApplicant({
         id: userInfo.value.id,

@@ -138,11 +138,11 @@
 import router from "@/router";
 import { useMainStore, useMessageStore } from "@/stores/main";
 import type {
-Applicant,
-Personnel,
-Position,
-ProjectExperience,
-WorkExperience,
+  Applicant,
+  Personnel,
+  Position,
+  ProjectExperience,
+  WorkExperience,
 } from "@dongjiang-recruitment/service-common";
 import { useRoute } from "vue-router";
 

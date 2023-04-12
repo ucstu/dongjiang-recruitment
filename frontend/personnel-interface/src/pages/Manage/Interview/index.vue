@@ -110,8 +110,10 @@ syncRef(deliveryRecords, deliveryRecordsCheckable, {
   },
 });
 const allSelected = computed(() => {
-  return deliveryRecordsCheckable.value.every((item) => item.checked) &&
-    deliveryRecordsCheckable.value.length > 0;
+  return (
+    deliveryRecordsCheckable.value.every((item) => item.checked) &&
+    deliveryRecordsCheckable.value.length > 0
+  );
 });
 const handleSelectAllChange = (selectAll: boolean) => {
   deliveryRecordsCheckable.value.forEach((item) => {

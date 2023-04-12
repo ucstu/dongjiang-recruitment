@@ -1,25 +1,42 @@
 <template>
   <div class="p-2 w-full h-full" ref="div">
-    <n-space justify="space-between" align="center">
+    <n-form inline class="mb-2 space-x-2">
       <n-button
         v-if="hasPermission('/advertisers/:advertiserId/advertise,POST')"
         type="primary"
-        size="small"
         @click="add"
-        class="mb-2"
       >
         新增
       </n-button>
+      <n-input
+        v-if="hasPermission('/advertisers/:advertiserId/advertise,GET')"
+        v-model:value="name"
+        placeholder="搜索广告名称"
+        class="w-12"
+        clearable
+      />
+      <n-select
+        v-if="hasPermission('/advertisers/:advertiserId/advertise,GET')"
+        v-model:value="position"
+        :options="positionOptions"
+        placeholder="筛选广告位置"
+        clearable
+      />
+      <n-select
+        v-if="hasPermission('/advertisers/:advertiserId/advertise,GET')"
+        v-model:value="status"
+        :options="statusOptions"
+        placeholder="筛选广告状态"
+        clearable
+      />
       <n-button
         v-if="hasPermission('/advertisers/:advertiserId/advertise,GET')"
-        text
-        size="small"
+        :loading="loading"
         @click="refresh"
-        class="mb-2"
       >
         刷新
       </n-button>
-    </n-space>
+    </n-form>
     <n-data-table
       remote
       ref="table"
@@ -131,7 +148,6 @@
           v-if="modalType !== 'view'"
           :loading="addLoading || updateLoading"
           type="primary"
-          size="small"
           class="mt-2"
           @click="submit"
         >
@@ -148,20 +164,20 @@ import { Advertise } from "@dongjiang-recruitment/service-common";
 import dayjs from "dayjs";
 import * as _ from "lodash";
 import {
-NButton,
-NImage,
-NSpace,
-type DataTableColumns,
-type FormRules,
-type NDataTable,
-type NForm,
-type PaginationProps,
-type UploadCustomRequestOptions,
+  NButton,
+  NImage,
+  NSpace,
+  type DataTableColumns,
+  type FormRules,
+  type NDataTable,
+  type NForm,
+  type PaginationProps,
+  type UploadCustomRequestOptions,
 } from "naive-ui";
 import type {
-FilterState,
-SortState,
-TableBaseColumn,
+  FilterState,
+  SortState,
+  TableBaseColumn,
 } from "naive-ui/es/data-table/src/interface";
 import type { SelectMixedOption } from "naive-ui/es/select/src/interface";
 import type { FileInfo } from "naive-ui/es/upload/src/interface";
@@ -539,26 +555,22 @@ const columns = computed<DataTableColumns<Advertise>>(() => [
       return (
         <NSpace>
           {hasPermission("/advertisers/:advertiserId/advertise/:id,GET") && (
-            <NButton size="small" type="primary" onClick={() => get(row)}>
+            <NButton type="primary" onClick={() => get(row)}>
               查看
             </NButton>
           )}
           {hasPermission("/advertisers/:id,GET") && (
-            <NButton
-              size="small"
-              type="primary"
-              onClick={() => getAdvertiser(row)}
-            >
+            <NButton type="primary" onClick={() => getAdvertiser(row)}>
               查看广告商
             </NButton>
           )}
           {hasPermission("/advertisers/:advertiserId/advertise/:id,PUT") && (
-            <NButton size="small" type="primary" onClick={() => update(row)}>
+            <NButton type="primary" onClick={() => update(row)}>
               编辑
             </NButton>
           )}
           {hasPermission("/advertisers/:advertiserId/advertise/:id,DELETE") && (
-            <NButton size="small" type="error" onClick={() => remove(row)}>
+            <NButton type="error" onClick={() => remove(row)}>
               删除
             </NButton>
           )}
@@ -567,17 +579,23 @@ const columns = computed<DataTableColumns<Advertise>>(() => [
     },
   },
 ]);
+const name = ref("");
+const position = ref<Advertise.position>();
+const status = ref<Advertise.status>();
 const {
   data: _authorities,
   loading,
   refreshAsync: refresh,
 } = advertiserService.useQueryAllAdvertise(
   () => ({
-    query: advertiserId.value
-      ? {
-          "advertiser.id": ["$eq", advertiserId.value],
-        }
-      : undefined,
+    query: {
+      "advertiser.id": advertiserId.value
+        ? ["$eq", advertiserId.value]
+        : undefined,
+      name: ["$like", `%${name.value}%`],
+      position: position.value ? ["$eq", position.value] : undefined,
+      status: status.value ? ["$eq", status.value] : undefined,
+    },
     page: pagination.value.page,
     size: pagination.value.pageSize,
     sort: sortStates.value.map(
@@ -585,11 +603,15 @@ const {
     ) as any,
   }),
   {
+    debounceInterval: 1000,
     refreshDeps: [
       computed(() => pagination.value.page),
       computed(() => pagination.value.pageSize),
       computed(() => sortStates.value),
       computed(() => advertiserId.value),
+      name,
+      position,
+      status,
     ],
     onSuccess: (data) => {
       pagination.value.itemCount = data.total;

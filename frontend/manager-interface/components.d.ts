@@ -7,8 +7,8 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
-    CrudModal: typeof import('./src/components/crud-modal.vue')['default']
-    CrudTable: typeof import('./src/components/crud-table.vue')['default']
+    CrudModal: typeof import("./src/components/crud-modal.vue")["default"]
+    CrudTable: typeof import("./src/components/crud-table.vue")["default"]
     NButton: typeof import('naive-ui')['NButton']
     NCard: typeof import('naive-ui')['NCard']
     NConfigProvider: typeof import('naive-ui')['NConfigProvider']
@@ -27,8 +27,8 @@ declare module '@vue/runtime-core' {
     NModal: typeof import('naive-ui')['NModal']
     NNotificationProvider: typeof import('naive-ui')['NNotificationProvider']
     NSelect: typeof import('naive-ui')['NSelect']
-    NSpace: typeof import('naive-ui')['NSpace']
-    NTag: typeof import('naive-ui')['NTag']
+    NSpace: typeof import("naive-ui")["NSpace"]
+    NTag: typeof import("naive-ui")["NTag"]
     NUpload: typeof import('naive-ui')['NUpload']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']

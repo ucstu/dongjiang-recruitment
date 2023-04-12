@@ -65,8 +65,8 @@ import type { Message } from "@/interfaces";
 import { useMainStore, useMessageStore } from "@/stores";
 import { useTimeChange } from "@/utils";
 import type {
-DeliveryRecord,
-Personnel,
+  DeliveryRecord,
+  Personnel,
 } from "@dongjiang-recruitment/service-common";
 
 const mainStore = useMainStore();
