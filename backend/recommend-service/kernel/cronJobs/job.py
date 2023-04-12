@@ -76,6 +76,10 @@ def recompute_content_similar_scores_thread(jobs: list[Job], all_job: list[Job])
         content_similar_scores = list()
         for other_job in all_job:
             if job.id != other_job.id:
+                cached_score = job.get_content_similar_score(other_job.id)
+                if cached_score is not None:
+                    content_similar_scores.append((other_job.id, cached_score))
+                    continue
                 similarity_score = get_text_similarity_score(db.get_job_content(job.id), db.get_job_content(other_job.id)) # NOQA
                 if similarity_score > 0:
                     content_similar_scores.append((other_job.id, similarity_score))
