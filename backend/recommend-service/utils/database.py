@@ -109,7 +109,7 @@ class DataBase:
                 return ""
             return job_content[0]
 
-    def get_job(self, job_id: str) -> Job | None:
+    def get_job(self, job_id: str) -> Job:
         if self.use_cache:
             if job_id in self.job_cache:
                 return self.job_cache[job_id]
@@ -161,7 +161,7 @@ class DataBase:
             job_ids = list(map(lambda x: x[0], cursor.fetchall()))
             return job_ids
 
-    def get_user(self, user_id: str) -> User | None:
+    def get_user(self, user_id: str) -> User:
         if self.use_cache:
             if user_id in self.user_cache:
                 return self.user_cache[user_id]
