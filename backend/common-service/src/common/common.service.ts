@@ -618,7 +618,7 @@ export class CommonService {
           id: ["$eq", recommend.positionId],
         },
       });
-      if (!position.items.length) return "职位不存在";
+      if (!position.items.length) return "推荐职位不存在";
       await this.mailerService.sendMail({
         to: applicant.email,
         subject: "东江招聘 - 职位推荐",
@@ -630,10 +630,10 @@ export class CommonService {
           pname: position.items[0].positionName,
         },
       });
-      return "邮件发送成功";
+      return "推荐职位发送成功";
     } catch (error) {
       console.error(error);
-      throw new InternalServerErrorException("邮件发送失败");
+      throw new InternalServerErrorException("推荐职位发送失败");
     }
   }
 

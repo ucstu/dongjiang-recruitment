@@ -15,19 +15,10 @@ import os
 # 注意不要改变任意 recompute 的顺序
 def _recompute_parameters():
     db.start_cache()
-    print("start recompute parameters")
-    start_time = time.time()
     user.recompute_job_like_scores()  # 重新计算职位喜欢分数
-    print("recompute job like scores cost: ", time.time() - start_time)
-    start_time = time.time()
     job.recompute_user_like_scores()  # 重新计算用户喜欢分数
-    print("recompute user like scores cost: ", time.time() - start_time)
-    start_time = time.time()
     user.recompute_user_similar_scores()  # 重新计算用户相似度
-    print("recompute user similar scores cost: ", time.time() - start_time)
-    start_time = time.time()
     job.recompute_job_similar_scores()  # 重新计算职位相似度
-    print("recompute job similar scores cost: ", time.time() - start_time)
     db.clear_recommend_cache()
     db.stop_cache()
 
@@ -70,8 +61,6 @@ def _send_recommend_message(body):
         headers={"Content-Type": "application/json"},
         method="POST"
     )
-    print("send recommend message: ", API_BASE_URL +
-          "/common/sendRecommend", body)
     request.urlopen(req)
 
 
