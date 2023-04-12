@@ -80,7 +80,7 @@ const scale = ref([
   "500-2000人",
   "2000人以上",
 ]);
-const education = ref(["不要求", "大专", "本科", "硕士", "博士"]);
+const education = ref(["","不要求", "大专", "本科", "硕士", "博士"]);
 </script>
 
 <style lang="scss" scoped>

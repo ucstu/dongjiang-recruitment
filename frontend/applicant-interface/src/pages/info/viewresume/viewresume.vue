@@ -85,7 +85,7 @@
   </view>
   <view v-if="!change">
     <view class="flex-row connect-box">
-      <image src="@/static/icons/heard.png" class="img" />
+      <image :src="useResFullPath(userInformation.avatarUrl)" class="img" />
       <view class="flex-col" style="margin-left: 15rpx; line-height: 50rpx">
         <text>联系邮箱</text>
         <text>{{ mainStore.account!.userName }}</text>
@@ -96,15 +96,18 @@
 
 <script lang="ts" setup>
 import NavigationBar from "@/components/NavigationBar/NavigationBar.vue";
-import { until } from "@/hooks";
+import { until, useResFullPath } from "@/hooks";
 import { useMainStore } from "@/stores";
 import type {
-  EducationExperience,
-  ProjectExperience,
-  WorkExperience,
+Applicant,
+EducationExperience,
+ProjectExperience,
+WorkExperience,
 } from "@dongjiang-recruitment/service-common";
 
 const mainStore = useMainStore();
+const userInformation = ref<Applicant>({} as Applicant);
+
 const educationInfo = ref<EducationExperience[]>([]);
 const workInfo = ref<WorkExperience[]>([]);
 const positionInfo = ref<ProjectExperience[]>([]);

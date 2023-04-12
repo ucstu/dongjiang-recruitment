@@ -150,10 +150,10 @@ import wybPopup from "@/components/wyb-popup/wyb-popup.vue";
 import { until } from "@/hooks";
 import { useMainStore, useMessageStore } from "@/stores";
 import type {
-  Applicant,
-  Company,
-  DeliveryRecord,
-  Position,
+Applicant,
+Company,
+DeliveryRecord,
+Position,
 } from "@dongjiang-recruitment/service-common";
 
 const VITE_CDN_URL = import.meta.env.VITE_CDN_URL;
@@ -162,8 +162,8 @@ const messageStore = useMessageStore();
 
 const jobInformation = ref<Position>({} as Position); // 职位信息
 
-const educates = ref(["不要求", "大专", "本科", "硕士", "博士"]); //学历要求
-const workYears = ref(["经验不限", "在校/应届", "3年以下", "3-5年", "5-10年"]); //工作经验
+const educates = ref(["", "不要求", "大专", "本科", "硕士", "博士"]); //学历要求
+const workYears = ref(["","经验不限", "在校/应届", "3年以下", "3-5年", "5-10年"]); //工作经验
 const positionType = ref(["", "全职", "兼职", "实习"]); // 工作类型
 /* 融资阶段 */
 const financingStages = [

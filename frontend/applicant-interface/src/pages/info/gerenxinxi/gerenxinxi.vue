@@ -52,7 +52,7 @@
       </view>
       <view class="flex-col group-box" @click="changePopup">
         <text class="caption">参加工作时间</text>
-        <text class="user-value">{{ workTime }}</text>
+        <text class="user-value">{{ workYear[userInformation.workingYears] }}</text>
       </view>
       <view class="flex-col group-box">
         <text class="caption">社交主页(链接)</text>
