@@ -71,33 +71,31 @@ def recompute_job_similar_scores():
         thread.join()
 
 
-def recompute_content_similar_scores_thread(jobs: list[Job], all_job: list[Job]):
+def recompute_content_similar_scores_thread(jobs: list[Job], all_job: list[Job], changed_job_ids: list[str] | None):  # NOQA
     for job in jobs:
         content_similar_scores = list()
         for other_job in all_job:
             if job.id != other_job.id:
                 cached_score = job.get_content_similar_score(other_job.id)
-                if cached_score is not None:
+                if cached_score is not None and changed_job_ids is not None and job.id not in changed_job_ids and other_job.id not in changed_job_ids:  # NOQA
                     content_similar_scores.append((other_job.id, cached_score))
                     continue
                 similarity_score = get_text_similarity_score(db.get_job_content(job.id), db.get_job_content(other_job.id))  # NOQA
                 if similarity_score > 0:
-                    content_similar_scores.append(
-                        (other_job.id, similarity_score))
+                    content_similar_scores.append((other_job.id, similarity_score))  # NOQA
         job.content_similar_scores = sorted(content_similar_scores, key=lambda x: x[1], reverse=True)  # NOQA
         db.save_job(job)
 
 
 def recompute_content_similar_scores():
     all_job = list(map(lambda id: db.get_job(id), db.get_all_job_ids()))
-    for job in all_job:
-        job.content_similar_scores = list()
+    changed_job_ids = db.get_changed_job_ids()
     step = math.ceil(len(all_job) / 30)
     threads: list[threading.Thread] = list()
     for index in range(0, len(all_job), step):
         thread = threading.Thread(
             target=recompute_content_similar_scores_thread,
-            args=(all_job[index: index + step], all_job)
+            args=(all_job[index: index + step], all_job, changed_job_ids)
         )
         threads.append(thread)
         thread.start()

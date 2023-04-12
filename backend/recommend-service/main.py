@@ -21,6 +21,7 @@ def _recompute_parameters():
     user.recompute_user_similar_scores()  # 重新计算用户相似度
     job.recompute_job_similar_scores()  # 重新计算职位相似度
     job.recompute_content_similar_scores()  # 重新计算职位内容相似度
+    db.change_last_update_time()  # 更新最后更新时间
     db.clear_recommend_cache()
     db.stop_cache()
 

@@ -1,5 +1,6 @@
 from __future__ import annotations
 from contextlib import contextmanager
+import time
 from models.job import Job
 from models.user import User
 from psycopg2 import pool, extensions
@@ -44,6 +45,7 @@ class DataBase:
         self.user_collection = mongo_database[config["mongo"]["user_collection"]]  # NOQA
         self.job_collection = mongo_database[config["mongo"]["job_collection"]]  # NOQA
         self.cache_collection = mongo_database[config["mongo"]["cache_collection"]]  # NOQA
+        self.history_collection = mongo_database[config["mongo"]["history_collection"]]  # NOQA
 
     @contextmanager
     def get_cursor(self, key=None):
@@ -77,6 +79,19 @@ class DataBase:
     def clear_recommend_cache(self):
         self.cache_collection.delete_many({})
 
+    def change_last_update_time(self):
+        self.history_collection.update_one(
+            {"id": "last_update_time"},
+            {"$set": {"value": time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())}},  # NOQA
+            upsert=True
+        )
+
+    def get_last_update_time(self) -> str | None:
+        last_update_time = self.history_collection.find_one({"id": "last_update_time"})  # NOQA
+        if last_update_time is None:
+            return None
+        return last_update_time["value"]
+
     def get_all_job_ids(self) -> list[str]:
         with self.get_cursor() as cursor:
             cursor.execute(
@@ -108,6 +123,18 @@ class DataBase:
             if job_content is None:
                 return ""
             return job_content[0]
+
+    def get_changed_job_ids(self) -> list[str] | None:
+        with self.get_cursor() as cursor:
+            last_update_time = self.get_last_update_time()
+            if last_update_time is None:
+                return None
+            cursor.execute(
+                'SELECT "id" FROM position WHERE "updatedAt" > %s AND "deletedAt" IS NULL',
+                (last_update_time,)
+            )
+            job_ids = list(map(lambda x: x[0], cursor.fetchall()))
+            return job_ids
 
     def get_job(self, job_id: str) -> Job:
         if self.use_cache:
