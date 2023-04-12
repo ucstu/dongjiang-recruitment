@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from kernel.sortings.mmr import mmr
 from utils.database import db
 from kernel.cronJobs import job, user
 from kernel.passages.itemcf import itemCF
@@ -124,8 +125,7 @@ def get_recommend_jobs(id: str):
             if score > recommend_jobs[job_id][1]:
                 recommend_jobs[job_id][1] = score
     # 对数据进行多样性重排
-    # recommend_jobs = mmr(recommend_jobs.items(), 20)
-    recommend_jobs_list = list(recommend_jobs.values())
+    recommend_jobs_list = mmr(list(recommend_jobs.values()), 0.75)
     db.set_recommend_cache(id, recommend_jobs_list)
     return recommend_jobs_list
 
