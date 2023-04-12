@@ -70,6 +70,8 @@ def _send_recommend_message(body):
         headers={"Content-Type": "application/json"},
         method="POST"
     )
+    print("send recommend message: ", API_BASE_URL +
+          "/common/sendRecommend", body)
     request.urlopen(req)
 
 
