@@ -1,4 +1,5 @@
 from __future__ import annotations
+from contextlib import contextmanager
 from models.job import Job
 from models.user import User
 from psycopg2 import pool, extensions
@@ -43,8 +44,13 @@ class DataBase:
         self.job_collection = mongo_database[config["mongo"]["job_collection"]]  # NOQA
         self.cache_collection = mongo_database[config["mongo"]["cache_collection"]]  # NOQA
 
-    def get_postgresql_connection(self) -> extensions.connection:
-        return self.postgresql_connection_pool.getconn()
+    @contextmanager
+    def get_cursor(self, key=None):
+        try:
+            with self.postgresql_connection_pool.getconn(key) as conn, conn.cursor() as cur:
+                yield cur
+        finally:
+            self.postgresql_connection_pool.putconn(conn)
 
     def start_cache(self):
         self.use_cache = True
@@ -69,13 +75,11 @@ class DataBase:
         self.cache_collection.delete_many({})
 
     def get_all_job_ids(self) -> list[str]:
-        connect = self.get_postgresql_connection()
-        cursor = connect.cursor()
-        cursor.execute('SELECT "id" FROM position WHERE "deletedAt" IS NULL')
-        job_ids = list(map(lambda x: x[0], cursor.fetchall()))
-        cursor.close()
-        connect.close()
-        return job_ids
+        with self.get_cursor() as cursor:
+            cursor.execute(
+                'SELECT "id" FROM position WHERE "deletedAt" IS NULL')
+            job_ids = list(map(lambda x: x[0], cursor.fetchall()))
+            return job_ids
 
     def get_job(self, job_id: str) -> Job | None:
         if self.use_cache:
@@ -96,49 +100,38 @@ class DataBase:
         self.job_collection.update_one({"id": job.id}, {"$set": job.to_dict()}, upsert=True)  # NOQA
 
     def get_all_user_ids(self) -> list[str]:
-        connect = self.get_postgresql_connection()
-        cursor = connect.cursor()
-        cursor.execute('SELECT "id" FROM applicant WHERE "deletedAt" IS NULL')
-        user_ids = list(map(lambda x: x[0], cursor.fetchall()))
-        cursor.close()
-        connect.close()
-        return user_ids
+        with self.get_cursor() as cursor:
+            cursor.execute(
+                'SELECT "id" FROM applicant WHERE "deletedAt" IS NULL')
+            user_ids = list(map(lambda x: x[0], cursor.fetchall()))
+            return user_ids
 
     def get_all_user_viewed_job_ids(self, user_id: str) -> list[str]:
-        connect = self.get_postgresql_connection()
-        cursor = connect.cursor()
-        cursor.execute(
-            'SELECT "positionId" FROM applicant_inspection_record WHERE "applicantId" = %s AND "deletedAt" IS NULL',
-            (user_id,)
-        )
-        job_ids = list(map(lambda x: x[0], cursor.fetchall()))
-        cursor.close()
-        connect.close()
-        return job_ids
+        with self.get_cursor() as cursor:
+            cursor.execute(
+                'SELECT "positionId" FROM applicant_inspection_record WHERE "applicantId" = %s AND "deletedAt" IS NULL',
+                (user_id,)
+            )
+            job_ids = list(map(lambda x: x[0], cursor.fetchall()))
+            return job_ids
 
     def get_all_user_applied_job_ids(self, user_id: str) -> list[str]:
-        connect = self.get_postgresql_connection()
-        cursor = connect.cursor()
-        cursor.execute(
-            'SELECT "positionId" FROM delivery_record WHERE "applicantId" = %s AND "deletedAt" IS NULL',
-            (user_id,)
-        )
-        job_ids = list(map(lambda x: x[0], cursor.fetchall()))
-        cursor.close()
-        connect.close()
-        return job_ids
+        with self.get_cursor() as cursor:
+            cursor.execute(
+                'SELECT "positionId" FROM delivery_record WHERE "applicantId" = %s AND "deletedAt" IS NULL',
+                (user_id,)
+            )
+            job_ids = list(map(lambda x: x[0], cursor.fetchall()))
+            return job_ids
 
     def get_all_user_collect_job_ids(self, user_id: str) -> list[str]:
-        connect = self.get_postgresql_connection()
-        cursor = connect.cursor()
-        cursor.execute(
-            'SELECT "positionId" FROM garner_record WHERE "applicantId" = %s AND "deletedAt" IS NULL',
-            (user_id,)
-        )
-        job_ids = list(map(lambda x: x[0], cursor.fetchall()))
-        cursor.close()
-        connect.close()
-        return job_ids
+        with self.get_cursor() as cursor:
+            cursor.execute(
+                'SELECT "positionId" FROM garner_record WHERE "applicantId" = %s AND "deletedAt" IS NULL',
+                (user_id,)
+            )
+            job_ids = list(map(lambda x: x[0], cursor.fetchall()))
+            return job_ids
 
     def get_user(self, user_id: str) -> User | None:
         if self.use_cache:
