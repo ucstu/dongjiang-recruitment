@@ -1,13 +1,12 @@
-from urllib import request
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from utils.database import db
 from kernel.cronJobs import job, user
 from kernel.passages.itemcf import itemCF
 from kernel.passages.usercf import userCF
+import requests
 import uvicorn
 import json
-import time
 import yaml
 import os
 
@@ -36,6 +35,7 @@ config = yaml.load(
 
 API_BASE_URL = config["service"]["baseUrl"]
 
+
 app = FastAPI()
 
 
@@ -54,18 +54,34 @@ def recompute_parameters():
     return {"msg": "success"}
 
 
-def _send_recommend_message(body):
-    req = request.Request(
-        url=API_BASE_URL + "/common/sendRecommend",
-        data=json.dumps(body).encode("utf-8"),
-        headers={"Content-Type": "application/json"},
-        method="POST"
-    )
-    request.urlopen(req)
+def login_as_admin():
+    url = API_BASE_URL + "/authentication/actions/login"
+    payload = json.dumps({
+        "userName": config["service"]["username"],
+        "password": config["service"]["password"],
+    })
+    headers = {
+        'Content-Type': 'application/json',
+        'Accept': '*/*',
+    }
+    response = requests.request("POST", url, headers=headers, data=payload)
+    return response.json()["body"]["token"]
+
+
+def _send_recommend_message(body, token: str):
+    url = API_BASE_URL + "/common/sendRecommend"
+    payload = json.dumps(body)
+    headers = {
+        'Content-Type': 'application/json',
+        "Authorization": "Bearer " + token,
+        'Accept': '*/*',
+    }
+    requests.request("POST", url, headers=headers, data=payload)
 
 
 @app.get("/recommend/send_recommend_message")
 def send_recommend_message():
+    token = login_as_admin()
     user_ids = db.get_all_user_ids()
     for user_id in user_ids:
         recommend_job = get_recommend_jobs(user_id)
@@ -73,7 +89,7 @@ def send_recommend_message():
             _send_recommend_message({
                 "userId": user_id,
                 "positionId": recommend_job[0][0],
-            })
+            }, token)
     return {"msg": "success"}
 
 
