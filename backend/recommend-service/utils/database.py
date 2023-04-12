@@ -16,8 +16,9 @@ config = yaml.load(
 class DataBase:
     def __init__(self):
         self.use_cache = False
-        self.user_cache = {}
         self.job_cache = {}
+        self.user_cache = {}
+        self.job_content_cache = {}
         # 初始化 postgresql_connection_pool
         postgresql_connection_pool = pool.SimpleConnectionPool(
             5, 100,
@@ -54,13 +55,15 @@ class DataBase:
 
     def start_cache(self):
         self.use_cache = True
-        self.user_cache = {}
         self.job_cache = {}
+        self.user_cache = {}
+        self.job_content_cache = {}
 
     def stop_cache(self):
         self.use_cache = False
-        self.user_cache = {}
         self.job_cache = {}
+        self.user_cache = {}
+        self.job_content_cache = {}
 
     def get_recommend_cache(self, user_id: str) -> list | None:
         cache_from_db = self.cache_collection.find_one({"id": user_id})  # NOQA
@@ -80,6 +83,31 @@ class DataBase:
                 'SELECT "id" FROM position WHERE "deletedAt" IS NULL')
             job_ids = list(map(lambda x: x[0], cursor.fetchall()))
             return job_ids
+
+    def get_job_content(self, job_id: str) -> str:
+        if self.use_cache:
+            if job_id in self.job_content_cache:
+                return self.job_content_cache[job_id]
+            with self.get_cursor() as cursor:
+                cursor.execute(
+                    'SELECT "description" FROM position WHERE "id" = %s AND "deletedAt" IS NULL',
+                    (job_id,)
+                )
+                job_content = cursor.fetchone()
+                if job_content is None:
+                    self.job_content_cache[job_id] = ""
+                else:
+                    self.job_content_cache[job_id] = job_content[0]
+                return self.job_content_cache[job_id]
+        with self.get_cursor() as cursor:
+            cursor.execute(
+                'SELECT "description" FROM position WHERE "id" = %s AND "deletedAt" IS NULL',
+                (job_id,)
+            )
+            job_content = cursor.fetchone()
+            if job_content is None:
+                return ""
+            return job_content[0]
 
     def get_job(self, job_id: str) -> Job | None:
         if self.use_cache:

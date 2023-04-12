@@ -3,8 +3,9 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from models.user import User
     from models.job import Job
-from utils.database import db
 from kernel.algorithm.like import get_user_like_score
+from utils.database import db
+from simhash import Simhash
 import math
 
 
@@ -62,3 +63,15 @@ def get_user_similarity_score(user1: User, user2: User, n: int = 10):
 # 内积相似度算法
 def get_inner_product_similarity_score(embedding1: list[int], embedding2: list[int]):
     return sum(map(lambda x: x[0] * x[1], zip(embedding1, embedding2)))
+
+
+def get_text_similarity_score(text1: str, text2: str):
+    simhash1 = Simhash(text1)
+    simhash2 = Simhash(text2)
+    # 最大hash位数
+    max_hashbit = max(len(bin(simhash1.value)), len(bin(simhash2.value)))
+    # 汉明距离
+    distince = simhash1.distance(simhash2)
+    # 相似度
+    similar = 1 - distince / max_hashbit
+    return similar

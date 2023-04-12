@@ -3,7 +3,7 @@ from models.job import Job
 
 
 def get_job_similarity_score(job1: Job, job2_id: str) -> float:
-    score = job1.get_job_similar_score(job2_id)
+    score = job1.get_content_similar_score(job2_id)
     if score == None:
         return 0
     return score

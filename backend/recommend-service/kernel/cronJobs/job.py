@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from models.user import User
     from models.job import Job
-from kernel.algorithm.similarity import get_job_similarity_score
+from kernel.algorithm.similarity import get_job_similarity_score, get_text_similarity_score
 from kernel.algorithm.like import get_user_like_score
 from utils.database import db
 import threading
@@ -63,6 +63,33 @@ def recompute_job_similar_scores():
     for index in range(0, len(all_job), step):
         thread = threading.Thread(
             target=recompute_job_similar_scores_thread,
+            args=(all_job[index: index + step], all_job)
+        )
+        threads.append(thread)
+        thread.start()
+    for thread in threads:
+        thread.join()
+
+
+def recompute_content_similar_scores_thread(jobs: list[Job], all_job: list[Job]):
+    for job in jobs:
+        content_similar_scores = list()
+        for other_job in all_job:
+            if job.id != other_job.id:
+                similarity_score = get_text_similarity_score(db.get_job_content(job.id), db.get_job_content(other_job.id)) # NOQA
+                if similarity_score > 0:
+                    content_similar_scores.append((other_job.id, similarity_score))
+        job.content_similar_scores = sorted(content_similar_scores, key=lambda x: x[1], reverse=True) # NOQA
+        db.save_job(job)
+
+
+def recompute_content_similar_scores():
+    all_job = list(map(lambda id: db.get_job(id), db.get_all_job_ids()))
+    step = math.ceil(len(all_job) / 30)
+    threads: list[threading.Thread] = list()
+    for index in range(0, len(all_job), step):
+        thread = threading.Thread(
+            target=recompute_content_similar_scores_thread,
             args=(all_job[index: index + step], all_job)
         )
         threads.append(thread)

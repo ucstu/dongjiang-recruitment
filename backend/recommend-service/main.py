@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from kernel.passages.content import content
 from kernel.sortings.mmr import mmr
 from utils.database import db
 from kernel.cronJobs import job, user
@@ -19,6 +20,7 @@ def _recompute_parameters():
     job.recompute_user_like_scores()  # 重新计算用户喜欢分数
     user.recompute_user_similar_scores()  # 重新计算用户相似度
     job.recompute_job_similar_scores()  # 重新计算职位相似度
+    job.recompute_content_similar_scores()  # 重新计算职位内容相似度
     db.clear_recommend_cache()
     db.stop_cache()
 
@@ -105,6 +107,7 @@ def get_recommend_jobs(id: str):
     # 根据用户的历史行为召回候选职位
     item_cf_jobs = itemCF(user, 100, 20)
     user_cf_jobs = userCF(user, 100, 20)
+    content_jobs = content(user, 10, 5)
     # matrix_f_jobs = matrixF(user, 200)
     # 对召回结果进行和并后去重
     recommend_jobs = dict()
@@ -124,8 +127,16 @@ def get_recommend_jobs(id: str):
         else:
             if score > recommend_jobs[job_id][1]:
                 recommend_jobs[job_id][1] = score
+    for job_id, score in content_jobs:
+        if user.get_job_like_score(job_id) is not None:
+            continue
+        if not job_id in recommend_jobs:
+            recommend_jobs[job_id] = (job_id, score)
+        else:
+            if score > recommend_jobs[job_id][1]:
+                recommend_jobs[job_id][1] = score
     # 对数据进行多样性重排
-    recommend_jobs_list = mmr(list(recommend_jobs.values()), 0.75)
+    recommend_jobs_list = mmr(list(recommend_jobs.values()), 0.4)
     db.set_recommend_cache(id, recommend_jobs_list)
     return recommend_jobs_list
 
