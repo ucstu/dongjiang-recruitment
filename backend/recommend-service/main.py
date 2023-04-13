@@ -1,11 +1,11 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from kernel.passages.content import content
-from kernel.sortings.mmr import mmr
-from utils.database import db
-from kernel.cronJobs import job, user
 from kernel.passages.itemcf import itemCF
 from kernel.passages.usercf import userCF
+from kernel.cronJobs import job, user
+from kernel.sortings.mmr import mmr
+from utils.database import db
 import requests
 import uvicorn
 import json
@@ -119,7 +119,7 @@ def get_recommend_jobs(id: str):
             recommend_jobs[job_id] = (job_id, score)
         else:
             if score > recommend_jobs[job_id][1]:
-                recommend_jobs[job_id][1] = score
+                recommend_jobs[job_id] = (job_id, score)
     for job_id, score in user_cf_jobs:
         if user.get_job_like_score(job_id) is not None:
             continue
@@ -127,7 +127,7 @@ def get_recommend_jobs(id: str):
             recommend_jobs[job_id] = (job_id, score)
         else:
             if score > recommend_jobs[job_id][1]:
-                recommend_jobs[job_id][1] = score
+                recommend_jobs[job_id] = (job_id, score)
     for job_id, score in content_jobs:
         if user.get_job_like_score(job_id) is not None:
             continue
@@ -135,7 +135,7 @@ def get_recommend_jobs(id: str):
             recommend_jobs[job_id] = (job_id, score)
         else:
             if score > recommend_jobs[job_id][1]:
-                recommend_jobs[job_id][1] = score
+                recommend_jobs[job_id] = (job_id, score)
     # 对数据进行多样性重排
     recommend_jobs_list = mmr(list(recommend_jobs.values()), 0.4)
     db.set_recommend_cache(id, recommend_jobs_list)
