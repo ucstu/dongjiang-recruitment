@@ -63,7 +63,7 @@
     "@dongjiang-recruitment/typescript-config": "workspace:^1.0.0",
     "@dongjiang-recruitment/vite-config": "workspace:^1.0.0",
     "@types/node": "^18.13.0",
-    "vite": "^4.0.3"
+    "vite": "^4.1.5"
   },
   "author": "ucstu",
   "license": "MIT"
